@@ -1,0 +1,209 @@
+@import 'uap';
+
+// "advertisement" text
+$text-bottom-padding: 6px;
+$text-height: $text-bottom-padding + 10px; // $smallest-font
+$incontent-boxad-desktop-padding-top: 7px;
+$incontent-boxad-desktop-global-navigation-offset-top: 10px;
+$incontent-boxad-desktop-offset-top: 50px + $incontent-boxad-desktop-global-navigation-offset-top;
+$incontent-boxad-desktop-position-top: $incontent-boxad-desktop-offset-top - $incontent-boxad-desktop-padding-top - $text-height;
+$news-feed-space: 36px;
+
+// (FAN-832)
+@mixin ad-padding($top: 0px, $bottom: 0px) {
+	padding: {
+		top: $top;
+		right: 0;
+		bottom: $bottom;
+		left: 0;
+	}
+}
+
+.gpt-ad > div {
+	box-sizing: content-box;
+	@include ad-padding();
+
+	&::before {
+		//@extend %smallest-font;
+		color: grey;
+		content: attr(data-win-advertisement-text);
+		display: block;
+		margin-top: $text-height * -1;
+		padding-bottom: $text-bottom-padding;
+		position: absolute;
+		text-transform: uppercase;
+	}
+}
+
+.gpt-ad {
+	&.slot-animation {
+		transition: max-height 0.8s ease;
+		overflow: hidden;
+	}
+
+	&.slot-responsive {
+		width: 100%;
+
+		> div {
+			position: relative;
+
+			iframe {
+				height: 100%;
+				left: 0;
+				position: absolute;
+				width: 100%;
+				top: 0;
+			}
+		}
+	}
+}
+
+.home-top-leaderboard,
+.article-top-leaderboard,
+.vertical-top-leaderboard,
+.page-top-leaderboard {
+	background: red;
+	display: flex;
+	justify-content: center;
+	position: relative;
+
+	> div {
+		@include ad-padding(7px, 25px);
+	}
+
+	&.featured {
+		background: black;
+	}
+}
+
+.article-top-box-ad-mobile {
+	background: red;
+	display: flex;
+	justify-content: center;
+
+	> div {
+		@include ad-padding(7px, 10px);
+	}
+}
+
+.home-top-leaderboard,
+.vertical-top-leaderboard {
+	> div {
+		@include ad-padding(18px, 25px);
+	}
+}
+
+.home-bottom-leaderboard,
+.article-bottom-leaderboard-desktop,
+.article-bottom-leaderboard-mobile,
+.vertical-bottom-leaderboard,
+.page-bottom-leaderboard {
+	display: flex;
+	justify-content: center;
+}
+
+.article-bottom-leaderboard-desktop-wrapper {
+	background: red;
+	display: flex;
+	justify-content: center;
+
+	.article-bottom-leaderboard-desktop > div {
+		margin: 15px 0;
+	}
+}
+
+.home-top-box-ad,
+.vertical-top-box-ad {
+	margin-bottom: 40px;
+}
+
+.featured-article-rail .article-top-box-ad-desktop > div {
+	padding-bottom: 40px;
+}
+
+.article-top-box-ad-desktop > div {
+	@include ad-padding(7px, 22px);
+}
+
+.tracking-pixels {
+	position: absolute;
+	visibility: hidden;
+}
+
+//@include breakpoint(large) {
+//	.gpt-more-top-stories-box-ad > div {
+//		margin: 50px 0 40px;
+//	}
+//
+//	.article-bottom-box-ad-mobile,
+//	.incontent-boxad-mobile {
+//		display: none;
+//	}
+//
+//	.home-bottom-leaderboard,
+//	.article-bottom-leaderboard-desktop,
+//	.vertical-bottom-leaderboard,
+//	.page-bottom-leaderboard {
+//		margin: 0 0 10px 0;
+//	}
+//}
+//
+//@include breakpoint(large down) {
+//	.gpt-more-top-stories-box-ad,
+//	.home-top-box-ad,
+//	.vertical-top-box-ad,
+//	.article-top-leaderboard-mobile,
+//	.article-bottom-leaderboard-mobile,
+//	.article-top-box-ad-mobile,
+//	.article-bottom-box-ad-mobile,
+//	.incontent-boxad-mobile,
+//	.page-top-box-ad {
+//		background: $section-accent-color;
+//		display: flex;
+//		justify-content: center;
+//		position: static;
+//		width: 100%;
+//
+//		> div {
+//			@include ad-padding(7px, 10px);
+//		}
+//	}
+//
+//	.article-bottom-box-ad-mobile,
+//	.incontent-boxad-mobile {
+//		flex: 1 1 auto;
+//	}
+//
+//	.incontent-boxad-desktop {
+//		display: none;
+//	}
+//
+//	.home-bottom-leaderboard,
+//	.article-bottom-leaderboard-desktop,
+//	.vertical-bottom-leaderboard,
+//	.page-bottom-leaderboard {
+//		background: none;
+//		width: 100%;
+//
+//		margin: 0 0 1px 0;
+//
+//		> div {
+//			margin: 10px 0;
+//		}
+//	}
+//
+//	.gpt-ad.article-bottom-leaderboard-mobile > div {
+//		&.replay-overlay {
+//			height: calc(100% - #{$news-feed-space});
+//		}
+//
+//		background-color: #000;
+//		margin: 0 0 $news-feed-space 0;
+//
+//	}
+//}
+
+// Hide all Krux tracking tags
+.kxinvisible {
+	display: none;
+}

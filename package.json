@@ -1,0 +1,47 @@
+{
+  "name": "ad-engine",
+  "version": "3.0.0",
+  "description": "Wikia AdEngine",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wikia/AdEngine"
+  },
+  "jspm": {
+    "dependencies": {},
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4",
+      "scss": "github:KevCJones/plugin-scss@^0.2.11",
+      "sinon": "npm:sinon@^1.17.4"
+    }
+  },
+  "dependencies": {
+    "ad-engine": "git+ssh://git@github.com:Wikia/ad-engine.git#dev"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.0.0",
+    "eslint": "^3.7.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1",
+    "isparta": "3.1.0",
+    "jspm": "^0.16.39",
+    "karma": "0.13.21",
+    "karma-babel-preprocessor": "5.2.2",
+    "karma-coverage": "0.5.3",
+    "karma-jspm": "2.0.1",
+    "karma-junit-reporter": "^1.1.0",
+    "karma-phantomjs-launcher": "^1.0.1",
+    "karma-qunit": "0.1.5",
+    "karma-sourcemap-loader": "0.3.6",
+    "phantomjs-polyfill-object-assign": "0.0.2",
+    "qunitjs": "1.19.0",
+    "sinon": "1.17.4"
+  },
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint .",
+    "test": "./node_modules/karma/bin/karma start karma.conf.js"
+  }
+}

@@ -1,0 +1,131 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:400,300,700);
+
+html, body {
+	background: #eee;
+	color: #444;
+	font-family: Lato, sans-serif;
+	margin: 0;
+}
+
+.hide {
+	display: none;
+}
+
+.wrapper {
+	background: #fff;
+	box-shadow: 0 2px 26px 3px rgba(0,0,0,0.05);
+	display: flex;
+	height: 100%;
+	flex-flow: row wrap;
+	margin: 0 auto;
+	max-width: 1024px;
+	padding-bottom: 1em;
+	text-align: center;
+}
+
+.wrapper > * {
+	padding: 1em;
+	flex: 1 100%;
+}
+
+.main {
+	text-align: justify;
+	padding: 0 2em;
+}
+
+.aside {
+	text-align: center;
+}
+
+.header {
+	height: auto;
+}
+
+.top-leaderboard, .top-boxad, .incontent-boxad, .rail-module {
+	background: #1976D2;
+	color: #eee;
+	font-size: 1.3em;
+	height: 250px;
+	line-height: 250px;
+	margin: 0 auto;
+	width: 300px;
+}
+
+.top-leaderboard {
+	margin: 15px auto;
+}
+
+.incontent-boxad {
+	margin-top: 15px;
+	position: fixed;
+	top: 0;
+}
+
+.incontent-boxad.pinned-top {
+	position: relative;
+}
+
+.rail-module {
+	background: #1bbab4;
+	height: 600px;
+	line-height: 600px;
+	margin-top: 15px;
+}
+
+#rail-wrapper {
+	height: 100%;
+}
+
+.rail-fixed {
+	position: fixed;
+	top: 15px;
+}
+
+.rail-static {
+	position: static;
+}
+
+@media all and (min-width: 600px) {
+	.aside {
+		flex: 1 auto;
+	}
+}
+
+@media all and (min-width: 800px) {
+	.main {
+		flex: 2 0;
+	}
+	.main {
+		order: 1;
+	}
+	.aside {
+		order: 2;
+		max-width: 300px;
+	}
+	.top-leaderboard {
+		height: 90px;
+		line-height: 90px;
+		width: 728px;
+	}
+}
+
+
+
+/* Templates */
+
+.slot-responsive {
+	width: 100%;
+}
+.slot-responsive > div {
+	position: relative;
+}
+.slot-responsive iframe {
+	height: 100%;
+	left: 0;
+	position: absolute;
+	width: 100%;
+	top: 0;
+}
+.bfaa-template {
+	margin: 0;
+}
