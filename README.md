@@ -66,12 +66,6 @@ In order to keep files updated on example pages use below command:
 npm run watch
 ```
 
-## Run tests
-
-```bash
-npm run test
-```
-
 ## Lint all files
 
 ```bash
