@@ -1,5 +1,9 @@
 # AdProducts
 
+## Dependencies
+
+* [https://github.com/Wikia/ad-engine](AdEngine)
+
 ## Installation
 
 ```bash
@@ -8,7 +12,7 @@ npm install git+ssh://git@github.com:Wikia/ad-products.git@^1.0.0
 
 ## Usage (ES6)
 
-### Load GPT library
+### Register template loader in AdEngine
 
 ```javascript
 import AdEngine from 'ad-engine/ad-engine';
@@ -23,7 +27,7 @@ window.loadCustomAd = TemplateLoader.load;
 
 ## Example pages
 
-Before you open an example page please run below command to build local js and css files.
+Before you open an example page please run below command in order to build local js and css files.
 
 ```bash
 npm install
