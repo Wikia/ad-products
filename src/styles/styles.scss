@@ -2,14 +2,13 @@
 
 // "advertisement" text
 $text-bottom-padding: 6px;
-$text-height: $text-bottom-padding + 10px; // $smallest-font
+$text-height: $text-bottom-padding + 10px;
 $incontent-boxad-desktop-padding-top: 7px;
 $incontent-boxad-desktop-global-navigation-offset-top: 10px;
 $incontent-boxad-desktop-offset-top: 50px + $incontent-boxad-desktop-global-navigation-offset-top;
 $incontent-boxad-desktop-position-top: $incontent-boxad-desktop-offset-top - $incontent-boxad-desktop-padding-top - $text-height;
 $news-feed-space: 36px;
 
-// (FAN-832)
 @mixin ad-padding($top: 0px, $bottom: 0px) {
 	padding: {
 		top: $top;
