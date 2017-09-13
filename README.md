@@ -25,7 +25,9 @@ import AdEngine from 'ad-engine/ad-engine';
 import PluginLoader from 'ad-engine/services/plugin-loader';
 import TemplateLoader from 'ad-products/modules/template-loader';
 
-PluginLoader.add(TemplateLoader, 'loadCustomAd');
+PluginLoader.add(TemplateLoader, {
+	global: 'load'
+});
 
 // Run and configure your ad-engine
 // ...
