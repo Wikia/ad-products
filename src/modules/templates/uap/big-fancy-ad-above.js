@@ -65,7 +65,7 @@ export default class BigFancyAdAbove {
 	}
 
 	recalculatePaddingTop(finalAspectRatio) {
-		document.body.style.paddingTop = 100 / finalAspectRatio + '%';
+		document.body.style.paddingTop = `${100 / finalAspectRatio}%`;
 
 		this.container.style.height = this.container.offsetHeight + 'px';
 		// get offsetWidth from existing DOM element in order to force repaint
