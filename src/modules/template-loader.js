@@ -1,5 +1,3 @@
-'use strict';
-
 import BigFancyAdAbove from './templates/uap/big-fancy-ad-above';
 import BigFancyAdBelow from './templates/uap/big-fancy-ad-below';
 import FloatingRail from './templates/floating-rail';
@@ -20,4 +18,4 @@ export default {
 				break;
 		}
 	}
-}
+};

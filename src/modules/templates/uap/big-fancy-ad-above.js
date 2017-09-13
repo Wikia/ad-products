@@ -1,8 +1,7 @@
-'use strict';
-
-import ResolvedState from './resolved-state';
 import SlotService from 'ad-engine/services/slot-service';
 import SlotTweaker from 'ad-engine/services/slot-tweaker';
+
+import ResolvedState from './resolved-state';
 import ToggleAnimation from './ui/toggle-animation';
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
@@ -40,7 +39,9 @@ export default class BigFancyAdAbove {
 	}
 
 	getBackgroundColor() {
-		return this.params.backgroundColor ? '#' + this.params.backgroundColor.replace('#', '') : '000';
+		const color = `#${this.params.backgroundColor.replace('#', '')}`;
+
+		return this.params.backgroundColor ? color : '#000';
 	}
 
 	adIsReady(iframe) {
@@ -67,9 +68,9 @@ export default class BigFancyAdAbove {
 	recalculatePaddingTop(finalAspectRatio) {
 		document.body.style.paddingTop = `${100 / finalAspectRatio}%`;
 
-		this.container.style.height = this.container.offsetHeight + 'px';
+		this.container.style.height = `${this.container.offsetHeight}px`;
 		// get offsetWidth from existing DOM element in order to force repaint
-		this.container.style.height = this.container.offsetWidth / finalAspectRatio + 'px';
+		this.container.style.height = `${this.container.offsetWidth / finalAspectRatio}px`;
 
 		setTimeout(() => {
 			// clear height so ad is responsive again

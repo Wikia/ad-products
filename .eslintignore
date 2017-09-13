@@ -1,6 +1,8 @@
 jspm_packages/
 node_modules/
 dist/
+spec/
 
 config.js
 karma.conf.js
+webpack.config.js

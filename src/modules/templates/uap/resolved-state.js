@@ -64,5 +64,5 @@ export default {
 			}
 		}
 	},
-	isResolvedState: isResolvedState
+	isResolvedState
 };

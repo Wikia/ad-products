@@ -14,25 +14,25 @@ function createVolumeControl() {
 
 function updateCurrentState(video, volumeControl) {
 	if (video.isMuted() || video.isMobilePlayerMuted()) {
-		volumeControl.speaker.classList.add('mute')
+		volumeControl.speaker.classList.add('mute');
 	} else {
-		volumeControl.speaker.classList.remove('mute')
+		volumeControl.speaker.classList.remove('mute');
 	}
 }
 
 function add(video) {
 	const volumeControl = createVolumeControl();
 
-	video.addEventListener('wikiaVolumeChange', function () {
+	video.addEventListener('wikiaVolumeChange', () => {
 		updateCurrentState(video, volumeControl);
 	});
 
-	video.addEventListener('wikiaAdStarted', function () {
+	video.addEventListener('wikiaAdStarted', () => {
 		updateCurrentState(video, volumeControl);
 		volumeControl.classList.remove('hidden');
 	});
 
-	volumeControl.addEventListener('click', function (e) {
+	volumeControl.addEventListener('click', (e) => {
 		video.volumeToggle();
 		e.preventDefault();
 	});

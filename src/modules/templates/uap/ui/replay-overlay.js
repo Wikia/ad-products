@@ -1,4 +1,4 @@
-let replayOverlayClass = 'replay-overlay';
+const replayOverlayClass = 'replay-overlay';
 
 function add(video, params) {
 	const overlay = document.createElement('div');
@@ -39,7 +39,7 @@ function getOverlayWidth(params) {
 	const adWidth = params.container.offsetWidth,
 		videoWidth = params.hideWhenPlaying.offsetWidth;
 
-	return 100 * videoWidth / adWidth + '%';
+	return `${100 * videoWidth / adWidth}%`;
 }
 
 export default {

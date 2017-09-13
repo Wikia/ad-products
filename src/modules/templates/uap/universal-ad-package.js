@@ -1,11 +1,10 @@
-'use strict';
-
+import { throttle } from 'ad-engine/utils/throttle';
 import Context from 'ad-engine/services/context-service';
-import Porvata from 'ad-engine/video/player/porvata/porvata'
+import Porvata from 'ad-engine/video/player/porvata/porvata';
 import SlotService from 'ad-engine/services/slot-service';
+
 import VideoInterface from './ui/video-interface';
 import UITemplate from './ui/ui-template';
-import { throttle } from 'ad-engine/utils/throttle';
 
 function getVideoSize(slot, params, videoSettings) {
 	const width = videoSettings.isSplitLayout() ? params.videoPlaceholderElement.offsetWidth : slot.clientWidth,
@@ -77,15 +76,15 @@ function loadVideoAd(videoSettings) {
 	return loadPorvata(videoSettings, slotContainer, imageContainer)
 		.then((video) => {
 			function playVideo() {
-				const size = getVideoSize(slotContainer, params, videoSettings);
+				const videoSize = getVideoSize(slotContainer, params, videoSettings);
 
-				video.play(size.width, size.height);
+				video.play(videoSize.width, videoSize.height);
 			}
 
 			window.addEventListener('resize', throttle(() => {
-				const size = getVideoSize(slotContainer, params, videoSettings);
+				const videoSize = getVideoSize(slotContainer, params, videoSettings);
 
-				video.resize(size.width, size.height);
+				video.resize(videoSize.width, videoSize.height);
 			}, 250));
 
 			if (params.videoTriggerElement) {

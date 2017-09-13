@@ -1,6 +1,4 @@
-'use strict';
-
-import {getTopOffset} from 'ad-engine/utils/dimensions';
+import { getTopOffset } from 'ad-engine/utils/dimensions';
 import Context from 'ad-engine/services/context-service';
 import ScrollListener from 'ad-engine/listeners/scroll-listener';
 
@@ -28,7 +26,7 @@ export default class FloatingRail {
 			return;
 		}
 
-		let floatingSpace = Math.min(offset, this.getAvailableSpace());
+		const floatingSpace = Math.min(offset, this.getAvailableSpace());
 
 		ScrollListener.addCallback(() => {
 			const start = this.config.startOffset + getTopOffset(this.railWrapper),
@@ -40,7 +38,7 @@ export default class FloatingRail {
 				this.rail.classList.add('rail-static');
 				this.rail.classList.remove('rail-fixed');
 			} else if (scrollPosition >= end) {
-				this.rail.style.paddingTop = floatingSpace + 'px';
+				this.rail.style.paddingTop = `${floatingSpace}px`;
 				this.rail.classList.remove('rail-static');
 				this.rail.classList.remove('rail-fixed');
 			} else {

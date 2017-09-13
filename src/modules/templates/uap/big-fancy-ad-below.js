@@ -1,8 +1,7 @@
-'use strict';
-
-import ResolvedState from "./resolved-state";
 import SlotService from 'ad-engine/services/slot-service';
 import SlotTweaker from 'ad-engine/services/slot-tweaker';
+
+import ResolvedState from './resolved-state';
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
 

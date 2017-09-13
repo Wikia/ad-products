@@ -5,6 +5,8 @@
         "class-methods-use-this": 0,
         "comma-dangle": 0,
         "func-names": 0,
+        "import/extensions": 0,
+        "import/no-unresolved": 0,
         "import/prefer-default-export": 0,
         "indent": [2, "tab", {"VariableDeclarator": 1, "SwitchCase": 1}],
         "max-len": [2, 120, 2],
