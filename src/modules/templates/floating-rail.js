@@ -8,9 +8,21 @@ const adsInRail = 2,
 let availableSpace = null;
 
 export default class FloatingRail {
-	constructor(params) {
+	static getName() {
+		return 'floatingRail';
+	}
+
+	static getDefaultConfig() {
+		return {
+			enabled: true,
+			railSelector: '#rail',
+			wrapperSelector: '#rail-wrapper',
+			startOffset: 0
+		};
+	}
+
+	constructor() {
 		this.config = Context.get('templates.floatingRail');
-		this.params = params;
 		this.rail = document.querySelector(this.config.railSelector);
 		this.railWrapper = document.querySelector(this.config.wrapperSelector);
 	}
@@ -19,7 +31,9 @@ export default class FloatingRail {
 		return Context.get('templates.floatingRail.enabled') && Context.get('state.isMobile') === false;
 	}
 
-	init() {
+	init(params) {
+		this.params = params;
+
 		const offset = this.params.offset || 0;
 
 		if (!this.railWrapper || !FloatingRail.isEnabled() || this.getAvailableSpace() === 0) {

@@ -1,7 +1,8 @@
-import Context from 'ad-engine/services/context-service';
-
-Context.extend({
+export default {
 	adUnitId: '/5441/wka.life/_project43//article/gpt/{slotName}',
+	custom: {
+		namespace: 'article'
+	},
 	events: {
 		pushOnScroll: {
 			ids: [
@@ -59,17 +60,12 @@ Context.extend({
 	vast: {
 		adUnitId: '/5441/wka.fandom/_fandom//{custom.namespace}/{src}/{pos}'
 	},
-	templates: {
-		floatingRail: {
-			enabled: true,
-			railSelector: '#rail',
-			wrapperSelector: '#rail-wrapper',
-			startOffset: -15
-		}
+	targeting: {
+		s1: '_project43',
+		uap: 'none'
 	},
 	state: {
+		adStack: window.adsQueue,
 		isMobile: false
 	}
-});
-
-export default Context;
+};

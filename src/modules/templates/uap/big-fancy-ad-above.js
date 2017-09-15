@@ -1,4 +1,3 @@
-import SlotService from 'ad-engine/services/slot-service';
 import SlotTweaker from 'ad-engine/services/slot-tweaker';
 
 import ResolvedState from './resolved-state';
@@ -7,22 +6,27 @@ import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
 
 export default class BigFancyAdAbove {
+	static getName() {
+		return 'bfaa';
+	}
+
 	/**
 	 * Constructor
 	 *
-	 * @param {object} params
+	 * @param {object} adSlot
 	 */
-	constructor(params) {
-		this.adSlot = SlotService.getBySlotName('TOP_LEADERBOARD');
+	constructor(adSlot) {
+		this.adSlot = adSlot;
 		this.container = document.getElementById(this.adSlot.getId());
-		this.params = params;
 		this.videoSettings = null;
 	}
 
 	/**
 	 * Initializes the BFAA unit
 	 */
-	init() {
+	init(params) {
+		this.params = params;
+
 		if (!this.container) {
 			return;
 		}

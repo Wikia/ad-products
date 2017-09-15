@@ -22,16 +22,17 @@ Add listed files to your build step:
 
 ```javascript
 import AdEngine from 'ad-engine/ad-engine';
-import PluginLoader from 'ad-engine/services/plugin-loader';
-import TemplateLoader from 'ad-products/modules/template-loader';
+import TemplateService from 'ad-engine/services/template-service';
 
-PluginLoader.add(TemplateLoader, {
-	global: 'load'
+import FloatingRail from 'ad-products/modules/templates/floating-rail';
+
+TemplateService.register(FloatingRail, {
+	startOffset: -15
 });
 
-// Run and configure your ad-engine
+// Configure and run your ad-engine
 // ...
-// new AdEngine().init();
+// new AdEngine(customContext).init();
 // ...
 ```
 
@@ -40,11 +41,51 @@ PluginLoader.add(TemplateLoader, {
 ```html
 <script>
 top.loadCustomAd && top.loadCustomAd({
-	type: 'bfaa',
+	type: 'floatingRail',
 	// ...
 });
 </script>
 ```
+
+## Available templates
+
+### Big Fancy Ad Above
+
+Name: *bfaa*
+
+#### Template parameters:
+
+* W
+* I
+* P
+
+### Floating rail
+
+Name: *floatingRail*
+
+#### Default config:
+
+```json
+{
+	enabled: true,
+	railSelector: '#rail',
+	wrapperSelector: '#rail-wrapper',
+	startOffset: 0
+}
+```
+
+Description:
+
+* enabled - decides whether template is usable
+* railSelector - element which is going to have `position: sticky`
+* wrapperSelector - rail wrapper
+* startOffset - decides when rail starts floating
+
+#### Template parameters:
+
+* W
+* I
+* P
 
 ## Example pages
 
