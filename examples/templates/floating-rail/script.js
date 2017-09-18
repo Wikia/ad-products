@@ -1,13 +1,14 @@
 import AdEngine from 'ad-engine/ad-engine';
-import TemplateLoader from 'ad-products/modules/template-loader';
+import TemplateService from 'ad-engine/services/template-service';
 
-import Context from '../../context';
+import FloatingRail from 'ad-products/modules/templates/floating-rail';
 
-Context.set('state.adStack', window.adsQueue);
-Context.set('targeting.s1', '_project43');
-Context.set('targeting.artid', '264');
-Context.set('templates.floatingRail.enabled', true);
+import customContext from '../../context';
 
-new AdEngine().init();
+customContext.targeting.artid = '264';
 
-window.loadCustomAd = TemplateLoader.load;
+TemplateService.register(FloatingRail, {
+	startOffset: -15
+});
+
+new AdEngine(customContext).init();
