@@ -1,4 +1,3 @@
-import SlotService from 'ad-engine/services/slot-service';
 import SlotTweaker from 'ad-engine/services/slot-tweaker';
 
 import ResolvedState from './resolved-state';
