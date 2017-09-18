@@ -53,11 +53,58 @@ top.loadCustomAd && top.loadCustomAd({
 
 Name: **bfaa**
 
+#### Default config:
+
+```json
+{
+	"desktopNavbarWrapperSelector": ".wds-global-navigation-wrapper",
+	"handleNavbar": false,
+	"mobileNavbarWrapperSelector": ".global-navigation-mobile-wrapper",
+	"slotSibling": ".topic-header",
+	"slotsToEnable": [
+		"BOTTOM_LEADERBOARD",
+		"INCONTENT_BOXAD"
+	]
+}
+```
+
+Description:
+
+* desktopNavbarWrapperSelector - desktop navbar DOM selector
+* handleNavbar - decides whether template should adjust navbar
+* mobileNavbarWrapperSelector - mobile navbar DOM selector
+* slotSibling - DOM sibling element next to BFAA slot
+* slotsToEnable - decides which slots should be enabled on Fan Takeover load
+
 #### Template parameters:
 
-* W
-* I
-* P
+* player
+* slotName
+* src
+* uap
+* lineItemId
+* creativeId
+* backgroundColor
+* autoPlay
+* resolvedStateAutoplay
+* videoTriggers
+* videoPlaceholderElement
+* splitLayoutVideoPosition
+* image1
+* image2
+* aspectRatio
+* resolvedStateAspectRatio
+* videoAspectRatio
+* loadMedrecFromBTF
+* moatTracking
+
+### Big Fancy Ad Below
+
+Name: **bfab**
+
+#### Template parameters:
+
+Check Big Fancy Ad Above.
 
 ### Floating rail
 
