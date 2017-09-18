@@ -28,6 +28,7 @@
   "scripts": {
     "build": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules",
     "lint": "./node_modules/.bin/eslint .",
+    "test": "echo 'FIXME'",
     "watch": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules --watch"
   }
 }
