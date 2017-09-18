@@ -1,4 +1,7 @@
 @import '~ad-products/styles/styles.scss';
+
+/* Client styles ONLY */
+
 @import url(https://fonts.googleapis.com/css?family=Lato:400,300,700);
 
 html, body {
@@ -86,6 +89,15 @@ html, body {
 	position: static;
 }
 
+footer {
+	background: #fff;
+	display: flex;
+	flex-flow: row wrap;
+	margin: 0 auto;
+	max-width: 1024px;
+	text-align: center;
+}
+
 @media all and (min-width: 600px) {
 	.aside {
 		flex: 1 auto;
@@ -110,23 +122,8 @@ html, body {
 	}
 }
 
-
-
 /* Templates */
 
-.slot-responsive {
-	width: 100%;
-}
-.slot-responsive > div {
-	position: relative;
-}
-.slot-responsive iframe {
-	height: 100%;
-	left: 0;
-	position: absolute;
-	width: 100%;
-	top: 0;
-}
 .bfaa-template {
 	margin: 0;
 }

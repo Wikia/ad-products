@@ -6,22 +6,26 @@ import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
 
 export default class BigFancyAdBelow {
+	static getName() {
+		return 'bfab';
+	}
+
 	/**
 	 * Constructor
 	 *
-	 * @param {object} params
+	 * @param {object} adSlot
 	 */
-	constructor(params) {
-		this.adSlot = SlotService.getBySlotName('BOTTOM_LEADERBOARD');
+	constructor(adSlot) {
+		this.adSlot = adSlot;
 		this.container = document.getElementById(this.adSlot.getId());
-		this.params = params;
 		this.videoSettings = null;
 	}
 
 	/**
 	 * Initializes the BFAA unit
 	 */
-	init() {
+	init(params) {
+		this.params = params;
 		if (!this.container) {
 			return;
 		}

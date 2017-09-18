@@ -1,3 +1,5 @@
+@import 'breakpoints';
+
 $player-button-border-space: 10px;
 $player-button-click-area-desktop: 5px;
 $player-button-click-area-mobile: 15px;
@@ -12,13 +14,6 @@ $uap-progress-bar-height: 8px;
 $uap-replay-overlay-color: rgba(0,0,0,0.3);
 $uap-video-animation-duration: 0.4s;
 $uap-video-z-index: 100;
-
-//@include breakpoint(large up) {
-//	.gpt-ad.bfaa-template.on-animation,
-//	.gpt-ad.bfab-template.on-animation {
-//		background: #000;
-//	}
-//}
 
 .gpt-ad.bfaa-template,
 .gpt-ad.bfab-template {
@@ -36,7 +31,6 @@ $uap-video-z-index: 100;
 	}
 
 	.video-player {
-
 		&.video-player-left, &.video-player-right {
 			position: absolute !important;
 			z-index: $uap-video-z-index;
@@ -94,12 +88,6 @@ $uap-video-z-index: 100;
 		background: url($player-button-collapse);
 		cursor: pointer;
 		height: $player-button-size;
-
-		//@include breakpoint(medium up) {
-		//	margin-left: $player-button-click-area-desktop;
-		//	margin-bottom: $player-button-click-area-desktop;
-		//}
-
 		margin: $player-button-border-space $player-button-border-space $player-button-click-area-mobile $player-button-click-area-mobile;
 		position: absolute;
 		right: 0;
@@ -110,15 +98,14 @@ $uap-video-z-index: 100;
 	.volume-button {
 		bottom: $uap-progress-bar-height;
 		cursor: pointer;
-
-		//@include breakpoint(medium up) {
-		//	padding-top: $player-button-click-area-desktop;
-		//	padding-left: $player-button-click-area-desktop;
-		//}
-
 		padding: $player-button-click-area-mobile $player-button-border-space $player-button-border-space $player-button-click-area-mobile;
 		position: absolute;
 		right: 0;
+
+		@media #{$breakpoint-m-up} {
+			padding-top: $player-button-click-area-desktop;
+			padding-left: $player-button-click-area-desktop;
+		}
 
 		.speaker {
 			&.mute {
@@ -165,26 +152,18 @@ body.vuap-loaded {
 	}
 }
 
-.article-bottom-leaderboard-mobile.bfab-template {
-	background: none;
-}
 
-.article-bottom-leaderboard-desktop.bfab-template {
-	margin: 15px 0;
-
-	> div {
-		margin: 0;
+@media #{$breakpoint-l-up} {
+	.gpt-ad.bfaa-template.on-animation,
+	.gpt-ad.bfab-template.on-animation {
+		background: #000;
 	}
 }
 
-//@include breakpoint(large down) {
-//	.bfab-template > div {
-//		margin: 0 0 1px 0;
-//	}
-//
-//	.gpt-ad.bfaa-template, .gpt-ad.bfab-template {
-//		.video-player > iframe {
-//			z-index: -1;
-//		}
-//	}
-//}
+@media #{$breakpoint-l-down} {
+	.gpt-ad.bfaa-template, .gpt-ad.bfab-template {
+		.video-player > iframe {
+			z-index: -1;
+		}
+	}
+}

@@ -10,8 +10,8 @@ module.exports = {
 			'./examples/templates/floating-rail/script.js',
 			'./examples/styles.scss'
 		],
-		uap: [
-			'./examples/templates/uap/script.js',
+		vuap: [
+			'./examples/templates/vuap/script.js',
 			'./examples/styles.scss'
 		]
 	},
