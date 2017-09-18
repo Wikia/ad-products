@@ -7,7 +7,7 @@
     "url": "https://github.com/Wikia/ad-products"
   },
   "dependencies": {
-    "ad-engine": "git+ssh://git@github.com:Wikia/ad-engine.git#ADEN-5479"
+    "ad-engine": "git+ssh://git@github.com/Wikia/ad-engine.git#ADEN-5479"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
