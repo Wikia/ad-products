@@ -6,6 +6,9 @@ import SlotService from 'ad-engine/services/slot-service';
 import VideoInterface from './ui/video-interface';
 import UITemplate from './ui/ui-template';
 
+let uapId = 'none',
+	uapType = 'uap';
+
 function getVideoSize(slot, params, videoSettings) {
 	const width = videoSettings.isSplitLayout() ? params.videoPlaceholderElement.offsetWidth : slot.clientWidth,
 		height = width / params.videoAspectRatio;
@@ -67,8 +70,8 @@ function loadVideoAd(videoSettings) {
 	params.vastTargeting = {
 		src: params.src,
 		pos: params.slotName,
-		passback: 'vuap',
-		uap: adSlot.getTargeting().uap
+		passback: getType(),
+		uap: getUapId()
 	};
 
 	document.body.classList.add('vuap-loaded');
@@ -104,20 +107,51 @@ function loadVideoAd(videoSettings) {
 		});
 }
 
+function getUapId() {
+	return uapId;
+}
+
+function setUapId(id) {
+	uapId = id;
+}
+
+function getType() {
+	return uapType;
+}
+
+function setType(type) {
+	uapType = type;
+}
+
 export default {
-	init(uapId, slotsToEnable = []) {
+	init(params, slotsToEnable = []) {
+		let adProduct = 'uap';
+
+		if (this.isVideoEnabled(params)) {
+			adProduct = 'vuap';
+		}
+
+		params.adProduct = params.adProduct || adProduct;
+
+		setUapId(params.uap);
+		setType(params.adProduct);
+
 		Object.keys(Context.get('slots')).forEach((slotId) => {
-			Context.set(`slots.${slotId}.targeting.uap`, uapId);
+			Context.set(`slots.${slotId}.targeting.uap`, getUapId());
 		});
 
-		slotsToEnable.forEach((slotName) => {
-			SlotService.enable(slotName);
-		});
+		if (getType() !== 'abcd') {
+			slotsToEnable.forEach((slotName) => {
+				SlotService.enable(slotName);
+			});
+		}
 	},
-
+	getType,
+	getUapId,
 	isVideoEnabled(params) {
 		return !!params.videoAspectRatio && (params.videoTriggerElement || params.videoTriggers);
 	},
-
-	loadVideoAd
+	loadVideoAd,
+	setType,
+	setUapId
 };

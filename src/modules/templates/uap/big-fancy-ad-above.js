@@ -46,7 +46,7 @@ export default class BigFancyAdAbove {
 			return;
 		}
 
-		UniversalAdPackage.init(this.params.uap, this.config.slotsToEnable);
+		UniversalAdPackage.init(this.params, this.config.slotsToEnable);
 
 		this.videoSettings = new VideoSettings(this.params);
 

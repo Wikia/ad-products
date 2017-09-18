@@ -1,5 +1,5 @@
 export default {
-	adUnitId: '/5441/wka.life/_project43//article/gpt/{slotName}',
+	adUnitId: '/5441/wka.life/_project43//{custom.namespace}/gpt/{slotName}',
 	custom: {
 		namespace: 'article'
 	},
@@ -19,10 +19,10 @@ export default {
 			sizes: [
 				{
 					viewportSize: [728, 0],
-					sizes: [[728, 90]]
+					sizes: [[728, 90], [3, 3]]
 				}
 			],
-			defaultSizes: [[300, 250]],
+			defaultSizes: [[300, 250], [2, 2]],
 			targeting: {
 				loc: 'top'
 			}
@@ -73,9 +73,10 @@ export default {
 		}
 	},
 	vast: {
-		adUnitId: '/5441/wka.fandom/_fandom//{custom.namespace}/{src}/{pos}'
+		adUnitId: '/5441/wka.life/_project43//{custom.namespace}/gpt/{pos}'
 	},
 	targeting: {
+		outstream: 'none',
 		s1: '_project43',
 		uap: 'none'
 	},
