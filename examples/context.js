@@ -44,6 +44,7 @@ export default {
 			}
 		},
 		'incontent-boxad': {
+			disabled: true,
 			slotName: 'INCONTENT_BOXAD',
 			sizes: [
 				{
@@ -57,6 +58,7 @@ export default {
 			}
 		},
 		'bottom-leaderboard': {
+			disabled: true,
 			slotName: 'BOTTOM_LEADERBOARD',
 			sizes: [
 				{

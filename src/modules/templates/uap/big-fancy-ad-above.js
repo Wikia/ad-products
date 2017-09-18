@@ -1,3 +1,4 @@
+import Context from 'ad-engine/services/context-service';
 import SlotTweaker from 'ad-engine/services/slot-tweaker';
 
 import ResolvedState from './resolved-state';
@@ -10,6 +11,19 @@ export default class BigFancyAdAbove {
 		return 'bfaa';
 	}
 
+	static getDefaultConfig() {
+		return {
+			desktopNavbarWrapperSelector: '.wds-global-navigation-wrapper',
+			handleNavbar: false,
+			mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
+			slotSibling: '.topic-header',
+			slotsToEnable: [
+				'BOTTOM_LEADERBOARD',
+				'INCONTENT_BOXAD'
+			]
+		};
+	}
+
 	/**
 	 * Constructor
 	 *
@@ -17,6 +31,7 @@ export default class BigFancyAdAbove {
 	 */
 	constructor(adSlot) {
 		this.adSlot = adSlot;
+		this.config = Context.get('templates.bfaa');
 		this.container = document.getElementById(this.adSlot.getId());
 		this.videoSettings = null;
 	}
@@ -31,7 +46,7 @@ export default class BigFancyAdAbove {
 			return;
 		}
 
-		UniversalAdPackage.init(this.params.uap);
+		UniversalAdPackage.init(this.params.uap, this.config.slotsToEnable);
 
 		this.videoSettings = new VideoSettings(this.params);
 
@@ -42,6 +57,23 @@ export default class BigFancyAdAbove {
 		SlotTweaker.onReady(this.adSlot, this.adIsReady.bind(this));
 	}
 
+	setupNavbar() {
+		const desktopNavbarWrapper = document.querySelector(this.config.desktopNavbarWrapperSelector);
+		const mobileNavbarWrapper = document.querySelector(this.config.mobileNavbarWrapperSelector);
+		const slotParent = this.container.parentNode;
+		const sibling = document.querySelector(this.config.slotSibling) || this.container.nextElementSibling;
+
+		if (mobileNavbarWrapper) {
+			mobileNavbarWrapper.classList.add('sticky-uap');
+			slotParent.insertBefore(mobileNavbarWrapper, sibling);
+		}
+
+		if (desktopNavbarWrapper) {
+			desktopNavbarWrapper.classList.add('sticky-uap');
+			slotParent.insertBefore(desktopNavbarWrapper, sibling);
+		}
+	}
+
 	getBackgroundColor() {
 		const color = `#${this.params.backgroundColor.replace('#', '')}`;
 
@@ -50,6 +82,9 @@ export default class BigFancyAdAbove {
 
 	adIsReady(iframe) {
 		document.body.style.paddingTop = iframe.parentElement.style.paddingBottom;
+		if (this.config.handleNavbar) {
+			this.setupNavbar();
+		}
 
 		if (UniversalAdPackage.isVideoEnabled(this.params)) {
 			UniversalAdPackage.loadVideoAd(this.videoSettings)

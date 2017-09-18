@@ -5,6 +5,8 @@ function add(video, params) {
 
 	if (params.splitLayoutVideoPosition === 'right') {
 		overlay.style.right = 0;
+	} else {
+		overlay.style.left = 0;
 	}
 
 	overlay.classList.add(replayOverlayClass);
@@ -17,7 +19,6 @@ function add(video, params) {
 	video.addEventListener('wikiaAdCompleted', () => {
 		showOverlay(overlay, params);
 	});
-
 
 	video.container.parentElement.insertBefore(overlay, video.container);
 }

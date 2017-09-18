@@ -73,6 +73,13 @@ function loadVideoAd(videoSettings) {
 
 	document.body.classList.add('vuap-loaded');
 
+	function recalculateVideoSize(video) {
+		return () => {
+			const currentSize = getVideoSize(slotContainer, params, videoSettings);
+			video.resize(currentSize.width, currentSize.height);
+		};
+	}
+
 	return loadPorvata(videoSettings, slotContainer, imageContainer)
 		.then((video) => {
 			function playVideo() {
@@ -81,11 +88,9 @@ function loadVideoAd(videoSettings) {
 				video.play(videoSize.width, videoSize.height);
 			}
 
-			window.addEventListener('resize', throttle(() => {
-				const videoSize = getVideoSize(slotContainer, params, videoSettings);
-
-				video.resize(videoSize.width, videoSize.height);
-			}, 250));
+			window.addEventListener('resize', throttle(recalculateVideoSize(video), 250));
+			// fix for race condition on DOM rendering and video size counting
+			video.addEventListener('start', throttle(recalculateVideoSize(video), 250));
 
 			if (params.videoTriggerElement) {
 				params.videoTriggerElement.addEventListener('click', playVideo);
@@ -100,13 +105,14 @@ function loadVideoAd(videoSettings) {
 }
 
 export default {
-	init(uapId) {
+	init(uapId, slotsToEnable = []) {
 		Object.keys(Context.get('slots')).forEach((slotId) => {
 			Context.set(`slots.${slotId}.targeting.uap`, uapId);
 		});
 
-		SlotService.enable('BOTTOM_LEADERBOARD');
-		SlotService.enable('INCONTENT_BOXAD');
+		slotsToEnable.forEach((slotName) => {
+			SlotService.enable(slotName);
+		});
 	},
 
 	isVideoEnabled(params) {
