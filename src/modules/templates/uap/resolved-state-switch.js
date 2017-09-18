@@ -1,5 +1,5 @@
 import Context from 'ad-engine/services/context-service';
-//import LocalCache from '../../../../../src/scripts/main/utils/local-cache';
+import LocalCache from 'ad-engine/services/local-cache';
 
 const cacheKey = 'adEngine_resolvedStateCounter',
 	cacheTtl = 24 * 3600,
@@ -14,7 +14,7 @@ function createCacheKey() {
 }
 
 function findRecordInCache() {
-	//return LocalCache.get(createCacheKey());
+	return LocalCache.get(createCacheKey());
 }
 
 function wasDefaultStateSeen() {
@@ -26,10 +26,10 @@ function wasDefaultStateSeen() {
 }
 
 function updateInformationAboutSeenDefaultStateAd() {
-	//LocalCache.set(createCacheKey(), {
-	//	adId: readUapId(),
-	//	lastSeenDate: now.getTime()
-	//}, cacheTtl);
+	LocalCache.set(createCacheKey(), {
+		adId: readUapId(),
+		lastSeenDate: now.getTime()
+	}, cacheTtl);
 }
 
 export default {
