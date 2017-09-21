@@ -1,5 +1,5 @@
-import Context from 'ad-engine/services/context-service';
-import SlotTweaker from 'ad-engine/services/slot-tweaker';
+import Context from 'ad-engine/src/services/context-service';
+import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 
 import ResolvedState from './resolved-state';
 import ToggleAnimation from './ui/toggle-animation';

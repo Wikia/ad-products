@@ -1,5 +1,5 @@
-import Context from 'ad-engine/services/context-service';
-import LocalCache from 'ad-engine/services/local-cache';
+import Context from 'ad-engine/src/services/context-service';
+import LocalCache from 'ad-engine/src/services/local-cache';
 
 const cacheKey = 'adEngine_resolvedStateCounter',
 	cacheTtl = 24 * 3600,

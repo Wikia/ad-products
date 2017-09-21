@@ -1,7 +1,7 @@
-import { throttle } from 'ad-engine/utils/throttle';
-import Context from 'ad-engine/services/context-service';
-import Porvata from 'ad-engine/video/player/porvata/porvata';
-import SlotService from 'ad-engine/services/slot-service';
+import { throttle } from 'ad-engine/src/utils/throttle';
+import Context from 'ad-engine/src/services/context-service';
+import Porvata from 'ad-engine/src/video/player/porvata/porvata';
+import SlotService from 'ad-engine/src/services/slot-service';
 
 import VideoInterface from './ui/video-interface';
 import UITemplate from './ui/ui-template';

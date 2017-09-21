@@ -51,7 +51,7 @@ module.exports = {
 	],
 	resolve: {
 		alias: {
-			'ad-engine': path.join(__dirname, 'node_modules/ad-engine/src'),
+			'ad-engine': path.join(__dirname, 'node_modules/ad-engine'),
 			'ad-products': path.join(__dirname, 'src'),
 			node_modules: path.join(__dirname, 'node_modules')
 		}
