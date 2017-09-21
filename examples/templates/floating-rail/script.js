@@ -1,5 +1,5 @@
-import AdEngine from 'ad-engine/ad-engine';
-import TemplateService from 'ad-engine/services/template-service';
+import AdEngine from 'ad-engine/src/ad-engine';
+import TemplateService from 'ad-engine/src/services/template-service';
 
 import FloatingRail from 'ad-products/modules/templates/floating-rail';
 
