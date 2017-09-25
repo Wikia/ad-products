@@ -1,4 +1,4 @@
-import QueryString from 'ad-engine/utils/query-string';
+import QueryString from 'ad-engine/src/utils/query-string';
 import ResolvedStateSwitch from './resolved-state-switch';
 
 function getQueryParam() {

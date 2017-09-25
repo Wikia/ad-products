@@ -1,6 +1,6 @@
-import { getTopOffset } from 'ad-engine/utils/dimensions';
-import Context from 'ad-engine/services/context-service';
-import ScrollListener from 'ad-engine/listeners/scroll-listener';
+import { getTopOffset } from 'ad-engine/src/utils/dimensions';
+import Context from 'ad-engine/src/services/context-service';
+import ScrollListener from 'ad-engine/src/listeners/scroll-listener';
 
 const adsInRail = 2,
 	biggestAdSize = 600;

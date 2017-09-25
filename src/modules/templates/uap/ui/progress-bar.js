@@ -1,4 +1,4 @@
-import SlotTweaker from 'ad-engine/services/slot-tweaker';
+import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 
 function add(video) {
 	const progressBar = document.createElement('div'),

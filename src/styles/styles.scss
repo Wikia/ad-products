@@ -1,5 +1,5 @@
-@import 'mixin';
-@import 'uap';
+@import '_mixin';
+@import '_uap';
 
 .gpt-ad {
 	&.slot-animation {
@@ -17,5 +17,10 @@
 				@include absolute-fill();
 			}
 		}
+	}
+
+	&.hide,
+	& .hide {
+		display: none !important;
 	}
 }

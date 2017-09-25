@@ -6,6 +6,10 @@ const cssExtract = new ExtractTextPlugin('[name]/dist/styles.css');
 
 module.exports = {
 	entry: {
+		'abcd': [
+			'./examples/templates/abcd/script.js',
+			'./examples/styles.scss'
+		],
 		'floating-rail': [
 			'./examples/templates/floating-rail/script.js',
 			'./examples/styles.scss'
@@ -47,7 +51,7 @@ module.exports = {
 	],
 	resolve: {
 		alias: {
-			'ad-engine': path.join(__dirname, 'node_modules/ad-engine/src'),
+			'ad-engine': path.join(__dirname, 'node_modules/ad-engine'),
 			'ad-products': path.join(__dirname, 'src'),
 			node_modules: path.join(__dirname, 'node_modules')
 		}

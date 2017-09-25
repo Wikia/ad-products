@@ -1,4 +1,4 @@
-import SlotTweaker from 'ad-engine/services/slot-tweaker';
+import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 
 import ResolvedState from './resolved-state';
 import UniversalAdPackage from './universal-ad-package';

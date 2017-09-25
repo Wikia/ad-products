@@ -1,14 +1,12 @@
 import AdEngine from 'ad-engine/src/ad-engine';
 import TemplateService from 'ad-engine/src/services/template-service';
 
-import FloatingRail from 'ad-products/modules/templates/floating-rail';
+import BigFancyAdAbove from 'ad-products/modules/templates/uap/big-fancy-ad-above';
 
 import customContext from '../../context';
 
-customContext.targeting.artid = '264';
+customContext.targeting.artid = '390';
 
-TemplateService.register(FloatingRail, {
-	startOffset: -15
-});
+TemplateService.register(BigFancyAdAbove);
 
 new AdEngine(customContext).init();
