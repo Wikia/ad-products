@@ -48,7 +48,7 @@ function loadPorvata(videoSettings, slotContainer, imageContainer) {
 				splitLayoutVideoPosition: params.splitLayoutVideoPosition
 			});
 
-			video.addEventListener('allAdsCompleted', () => {
+			video.addEventListener('wikiaAdCompleted', () => {
 				video.reload();
 			});
 
