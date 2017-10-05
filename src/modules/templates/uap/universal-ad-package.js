@@ -1,4 +1,5 @@
 import { throttle } from 'ad-engine/src/utils/throttle';
+import defer from 'ad-engine/src/utils/defer';
 import Context from 'ad-engine/src/services/context-service';
 import Porvata from 'ad-engine/src/video/player/porvata/porvata';
 import SlotService from 'ad-engine/src/services/slot-service';
@@ -65,16 +66,18 @@ function loadVideoAd(videoSettings) {
 		imageContainer = slotContainer.querySelector('div:last-of-type'),
 		size = getVideoSize(slotContainer, params, videoSettings);
 
-	params.width = size.width;
-	params.height = size.height;
-	params.vastTargeting = {
-		src: params.src,
-		pos: params.slotName,
-		passback: getType(),
-		uap: getUapId()
-	};
-
 	document.body.classList.add('vuap-loaded');
+
+	videoSettings.updateParams({
+		vastTargeting: {
+			src: params.src,
+			pos: params.slotName,
+			passback: getType(),
+			uap: getUapId()
+		},
+		width: size.width,
+		height: size.height
+	});
 
 	function recalculateVideoSize(video) {
 		return () => {
@@ -92,8 +95,6 @@ function loadVideoAd(videoSettings) {
 			}
 
 			window.addEventListener('resize', throttle(recalculateVideoSize(video), 250));
-			// fix for race condition on DOM rendering and video size counting
-			video.addEventListener('start', throttle(recalculateVideoSize(video), 250));
 
 			if (params.videoTriggerElement) {
 				params.videoTriggerElement.addEventListener('click', playVideo);

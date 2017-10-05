@@ -28,7 +28,11 @@ export default class VideoSettings {
 	}
 
 	getParams() {
-		return this.params;
+		return Object.assign({}, this.params);
+	}
+
+	updateParams(params) {
+		this.params = Object.assign({}, this.params, params);
 	}
 
 	isAutoPlay() {
