@@ -66,6 +66,10 @@ $uap-video-z-index: 100;
 		top: 0;
 	}
 
+	.mobile-porvata .video-player > iframe {
+		z-index: -1;
+	}
+
 	.replay-overlay,
 	.pause-overlay {
 		cursor: pointer;
@@ -157,13 +161,5 @@ body.vuap-loaded {
 	.gpt-ad.bfaa-template.on-animation,
 	.gpt-ad.bfab-template.on-animation {
 		background: #000;
-	}
-}
-
-@media #{$breakpoint-l-down} {
-	.gpt-ad.bfaa-template, .gpt-ad.bfab-template {
-		.video-player > iframe {
-			z-index: -1;
-		}
 	}
 }
