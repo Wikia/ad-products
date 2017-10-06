@@ -1,5 +1,4 @@
 import { throttle } from 'ad-engine/src/utils/throttle';
-import defer from 'ad-engine/src/utils/defer';
 import Context from 'ad-engine/src/services/context-service';
 import Porvata from 'ad-engine/src/video/player/porvata/porvata';
 import SlotService from 'ad-engine/src/services/slot-service';
@@ -33,8 +32,8 @@ function loadPorvata(videoSettings, slotContainer, imageContainer) {
 		template = UITemplate.selectTemplate(videoSettings);
 
 	params.container = slotContainer;
-
 	params.autoPlay = videoSettings.isAutoPlay();
+	videoSettings.updateParams(params);
 
 	return Porvata.inject(params)
 		.then((video) => {
@@ -68,16 +67,15 @@ function loadVideoAd(videoSettings) {
 
 	document.body.classList.add('vuap-loaded');
 
-	videoSettings.updateParams({
-		vastTargeting: {
-			src: params.src,
-			pos: params.slotName,
-			passback: getType(),
-			uap: getUapId()
-		},
-		width: size.width,
-		height: size.height
-	});
+	params.vastTargeting = {
+		src: params.src,
+		pos: params.slotName,
+		passback: getType(),
+		uap: getUapId()
+	};
+	params.width = size.width;
+	params.height = size.height;
+	videoSettings.updateParams(params);
 
 	function recalculateVideoSize(video) {
 		return () => {
@@ -88,19 +86,13 @@ function loadVideoAd(videoSettings) {
 
 	return loadPorvata(videoSettings, slotContainer, imageContainer)
 		.then((video) => {
-			function playVideo() {
-				const videoSize = getVideoSize(slotContainer, params, videoSettings);
-
-				video.play(videoSize.width, videoSize.height);
-			}
-
 			window.addEventListener('resize', throttle(recalculateVideoSize(video), 250));
 
 			if (params.videoTriggerElement) {
-				params.videoTriggerElement.addEventListener('click', playVideo);
+				params.videoTriggerElement.addEventListener('click', () => video.play());
 			} else if (params.videoTriggers) {
 				params.videoTriggers.forEach((trigger) => {
-					trigger.addEventListener('click', playVideo);
+					trigger.addEventListener('click', () => video.play());
 				});
 			}
 

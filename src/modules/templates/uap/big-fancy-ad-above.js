@@ -49,11 +49,11 @@ export default class BigFancyAdAbove {
 		UniversalAdPackage.init(this.params, this.config.slotsToEnable);
 
 		this.videoSettings = new VideoSettings(this.params);
-
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
-		ResolvedState.setImage(this.videoSettings);
-		SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio).then(this.adIsReady.bind(this));
+		ResolvedState.setImage(this.videoSettings)
+			.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
+			.then(this.adIsReady.bind(this));
 	}
 
 	setupNavbar() {
