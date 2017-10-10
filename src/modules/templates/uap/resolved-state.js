@@ -2,6 +2,9 @@ import QueryString from 'ad-engine/src/utils/query-string';
 import { once } from 'ad-engine/src/utils/event';
 import ResolvedStateSwitch from './resolved-state-switch';
 
+const DEFAULT_STATE = 'default';
+const RESOLVED_STATE = 'resolved';
+
 function getQueryParam() {
 	return QueryString.get('resolved_state', null);
 }
@@ -14,38 +17,44 @@ function isBlockedByURLParam() {
 	return [false, 'blocked', 'false', '0'].indexOf(getQueryParam()) > -1;
 }
 
-function setResolvedState(params) {
+function setState(state, params) {
+	const { image1, image2 } = params;
 	const promises = [];
+	let srcPropertyName = 'defaultStateSrc';
 
-	params.aspectRatio = params.resolvedStateAspectRatio;
+	if (state === RESOLVED_STATE) {
+		params.aspectRatio = params.resolvedStateAspectRatio;
+		srcPropertyName = 'resolvedStateSrc';
+	}
+
 	promises.push(Promise.resolve(params));
-	params.image1.element.src = params.image1.resolvedStateSrc;
-	promises.push(once(params.image1.element, 'load'));
+	image1.element.src = image1[srcPropertyName];
+	promises.push(Promise.race([
+		once(image1.element, 'load'),
+		once(image1.element, 'error')
+	]));
 
-	if (params.image2 && params.image2.resolvedStateSrc) {
-		params.image2.element.src = params.image2.resolvedStateSrc;
-		promises.push(once(params.image2.element, 'load'));
+	if (image2 && image2[srcPropertyName]) {
+		image2.element.src = image2[srcPropertyName];
+		promises.push(Promise.race([
+			once(image2.element, 'load'),
+			once(image2.element, 'error')
+		]));
 	}
 
 	return Promise.all(promises);
+}
+
+function setDefaultState(params) {
+	return setState(DEFAULT_STATE, params);
+}
+
+function setResolvedState(params) {
+	return setState(RESOLVED_STATE, params);
 }
 
 function templateSupportsResolvedState(params) {
 	return !!(params.image1 && params.image1.resolvedStateSrc);
-}
-
-function setDefaultState(params) {
-	const promises = [];
-
-	params.image1.element.src = params.image1.defaultStateSrc;
-	promises.push(once(params.image1.element, 'load'));
-
-	if (params.image2 && params.image2.defaultStateSrc) {
-		params.image2.element.src = params.image2.defaultStateSrc;
-		promises.push(once(params.image2.element, 'load'));
-	}
-
-	return Promise.all(promises);
 }
 
 function isResolvedState(params) {
