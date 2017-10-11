@@ -1,5 +1,6 @@
 import Context from 'ad-engine/src/services/context-service';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
+import defer from 'ad-engine/src/utils/defer';
 
 import ResolvedState from './resolved-state';
 import ToggleAnimation from './ui/toggle-animation';
@@ -86,7 +87,7 @@ export default class BigFancyAdAbove {
 		}
 
 		if (UniversalAdPackage.isVideoEnabled(this.params)) {
-			UniversalAdPackage.loadVideoAd(this.videoSettings)
+			defer(UniversalAdPackage.loadVideoAd, this.videoSettings)
 				.then((video) => {
 					if (!this.params.splitLayoutVideoPosition) {
 						video.addEventListener('wikiaAdStarted', () => {
