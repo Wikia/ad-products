@@ -32,8 +32,8 @@ function loadPorvata(videoSettings, slotContainer, imageContainer) {
 		template = UITemplate.selectTemplate(videoSettings);
 
 	params.container = slotContainer;
-
 	params.autoPlay = videoSettings.isAutoPlay();
+	videoSettings.updateParams(params);
 
 	return Porvata.inject(params)
 		.then((video) => {
@@ -65,16 +65,17 @@ function loadVideoAd(videoSettings) {
 		imageContainer = slotContainer.querySelector('div:last-of-type'),
 		size = getVideoSize(slotContainer, params, videoSettings);
 
-	params.width = size.width;
-	params.height = size.height;
+	document.body.classList.add('vuap-loaded');
+
 	params.vastTargeting = {
 		src: params.src,
 		pos: params.slotName,
 		passback: getType(),
 		uap: getUapId()
 	};
-
-	document.body.classList.add('vuap-loaded');
+	params.width = size.width;
+	params.height = size.height;
+	videoSettings.updateParams(params);
 
 	function recalculateVideoSize(video) {
 		return () => {
@@ -85,21 +86,13 @@ function loadVideoAd(videoSettings) {
 
 	return loadPorvata(videoSettings, slotContainer, imageContainer)
 		.then((video) => {
-			function playVideo() {
-				const videoSize = getVideoSize(slotContainer, params, videoSettings);
-
-				video.play(videoSize.width, videoSize.height);
-			}
-
 			window.addEventListener('resize', throttle(recalculateVideoSize(video), 250));
-			// fix for race condition on DOM rendering and video size counting
-			video.addEventListener('start', throttle(recalculateVideoSize(video), 250));
 
 			if (params.videoTriggerElement) {
-				params.videoTriggerElement.addEventListener('click', playVideo);
+				params.videoTriggerElement.addEventListener('click', () => video.play());
 			} else if (params.videoTriggers) {
 				params.videoTriggers.forEach((trigger) => {
-					trigger.addEventListener('click', playVideo);
+					trigger.addEventListener('click', () => video.play());
 				});
 			}
 

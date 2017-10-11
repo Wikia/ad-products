@@ -1,5 +1,6 @@
 import Context from 'ad-engine/src/services/context-service';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
+import defer from 'ad-engine/src/utils/defer';
 
 import ResolvedState from './resolved-state';
 import ToggleAnimation from './ui/toggle-animation';
@@ -49,12 +50,11 @@ export default class BigFancyAdAbove {
 		UniversalAdPackage.init(this.params, this.config.slotsToEnable);
 
 		this.videoSettings = new VideoSettings(this.params);
-
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
-		ResolvedState.setImage(this.videoSettings);
-		SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio);
-		SlotTweaker.onReady(this.adSlot, this.adIsReady.bind(this));
+		ResolvedState.setImage(this.videoSettings)
+			.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
+			.then(this.adIsReady.bind(this));
 	}
 
 	setupNavbar() {
@@ -87,7 +87,7 @@ export default class BigFancyAdAbove {
 		}
 
 		if (UniversalAdPackage.isVideoEnabled(this.params)) {
-			UniversalAdPackage.loadVideoAd(this.videoSettings)
+			defer(UniversalAdPackage.loadVideoAd, this.videoSettings) // defers for proper rendering
 				.then((video) => {
 					if (!this.params.splitLayoutVideoPosition) {
 						video.addEventListener('wikiaAdStarted', () => {

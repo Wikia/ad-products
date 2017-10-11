@@ -1,4 +1,5 @@
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
+import defer from 'ad-engine/src/utils/defer';
 
 import ResolvedState from './resolved-state';
 import UniversalAdPackage from './universal-ad-package';
@@ -31,14 +32,14 @@ export default class BigFancyAdBelow {
 
 		this.container.classList.add('bfab-template');
 		this.videoSettings = new VideoSettings(this.params);
-		ResolvedState.setImage(this.videoSettings);
-		SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio);
-		SlotTweaker.onReady(this.adSlot, () => this.adIsReady());
+		ResolvedState.setImage(this.videoSettings)
+			.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
+			.then(this.adIsReady.bind(this));
 	}
 
 	adIsReady() {
 		if (UniversalAdPackage.isVideoEnabled(this.params)) {
-			UniversalAdPackage.loadVideoAd(this.videoSettings);
+			defer(UniversalAdPackage.loadVideoAd, this.videoSettings);
 		}
 	}
 }
