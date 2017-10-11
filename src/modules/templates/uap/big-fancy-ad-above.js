@@ -87,7 +87,7 @@ export default class BigFancyAdAbove {
 		}
 
 		if (UniversalAdPackage.isVideoEnabled(this.params)) {
-			defer(UniversalAdPackage.loadVideoAd, this.videoSettings)
+			defer(UniversalAdPackage.loadVideoAd, this.videoSettings) // defers for proper rendering
 				.then((video) => {
 					if (!this.params.splitLayoutVideoPosition) {
 						video.addEventListener('wikiaAdStarted', () => {
