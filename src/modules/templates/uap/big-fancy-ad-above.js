@@ -6,6 +6,7 @@ import ResolvedState from './resolved-state';
 import ToggleAnimation from './ui/toggle-animation';
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
+import StickyUap from './sticky-uap';
 
 export default class BigFancyAdAbove {
 	static getName() {
@@ -35,6 +36,7 @@ export default class BigFancyAdAbove {
 		this.config = Context.get('templates.bfaa');
 		this.container = document.getElementById(this.adSlot.getId());
 		this.videoSettings = null;
+		this.stickyUap = null;
 	}
 
 	/**
@@ -42,12 +44,18 @@ export default class BigFancyAdAbove {
 	 */
 	init(params) {
 		this.params = params;
+		this.params.isSticky = true;
 
 		if (!this.container) {
 			return;
 		}
 
 		UniversalAdPackage.init(this.params, this.config.slotsToEnable);
+
+		// if sticky enabled
+		if (this.params.isSticky) {
+			this.stickyUap = new StickyUap(this.adSlot);
+		}
 
 		this.videoSettings = new VideoSettings(this.params);
 		this.container.style.backgroundColor = this.getBackgroundColor();
