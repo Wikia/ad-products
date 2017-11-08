@@ -6,6 +6,7 @@ export default class StickyUap {
 	constructor(adSlot) {
 		this.adSlot = adSlot;
 		this.stickinessDelay = 0;
+		this.viewabilityCheckWindow = 5000;
 		this.config = Context.get('templates.bfaa');
 		this.container = document.getElementById(this.adSlot.getId());
 		this.videoSettings = null;
@@ -76,13 +77,13 @@ export default class StickyUap {
 	}
 
 	onStickinessApplyTimeout() {
-		var revertStickiness = function () {},
-			viewabilityCheckWindow = 5000,
+		let revertStickiness = function () {},
 			viewabilityCheckTimeout = null,
 			isOnViewedFired = false;
 
 		function onViewed() {
-			var revertTimeout = setTimeout(onRevertTimeout, 10000);
+			const revertTimeout = setTimeout(onRevertTimeout, 10000),
+				globalNavigation = document.getElementById('globalNavigation');
 
 			function onRevertTimeout() {
 				clearTimeout(revertTimeout);
@@ -97,35 +98,32 @@ export default class StickyUap {
 			// TODO: track
 			//trackEvent(events.VIEWABLE, true);
 
-			var globalNavigation = document.getElementById('globalNavigation');
-			debugger
-
 			// TODO: will it work on f2?
 			if (!globalNavigation || globalNavigation && globalNavigation.classList.contains('bfaa-pinned')) {
 				onRevertTimeout();
 			}
 		}
 
-		document.removeEventListener('scroll', this.onPreleaderboardScroll);
+		function onTabActive() {
+			viewabilityCheckTimeout = setTimeout(onViewed, this.viewabilityCheckWindow);
+			// we wanted to run it only once
+			document.removeEventListener('visibilitychange', onTabActive);
+		}
+
+		console.log("removeEventListener('scroll', this.onPreleaderboardScroll!");
+		document.removeEventListener('scroll', this.onPreleaderboardScrollHandler);
 
 		if (document.hidden) {
 			// let's start ticking from the moment when browser tab is active
-			document.addEventListener('visibilitychange', (e) => {
-				// we want to run it only once
-				if (e.currentTarget.dataset.triggered) return;
-				viewabilityCheckTimeout = setTimeout(onViewed, viewabilityCheckWindow);
-				e.currentTarget.dataset.triggered = true;
-			});
+			document.addEventListener('visibilitychange', onTabActive);
 		} else {
-			viewabilityCheckTimeout = setTimeout(onViewed, viewabilityCheckWindow);
+			viewabilityCheckTimeout = setTimeout(onViewed, this.viewabilityCheckWindow);
 		}
 
 		if (this.adSlot.isViewed) {
 			onViewed();
 		} else {
 			revertStickiness = this.applyStickiness();
-
-			debugger
 
 			this.adSlot.on('slotViewed', () => {
 				// don't send events once again if onViewed was fired by timeout
@@ -136,29 +134,30 @@ export default class StickyUap {
 		}
 	}
 
-	onPreleaderboardScroll(stickinessApplyTimeout) {
-		debugger
-		clearTimeout(stickinessApplyTimeout);
-		debugger;
+	onPreleaderboardScroll() {
+		console.log('onPreleaderboardScroll');
+		const communityHeader = document.getElementsByClassName('wds-community-header')[0];
+
+		if (communityHeader) {
+			const normalizedScrollPosition = document.scrollY - communityHeader.offsetTop,
+				WikiaTopAdsInner = document.getElementsByClassName('WikiaTopAdsInner')[0];
+
+			if (document.scrollY - communityHeader.offsetTop === normalizedScrollPosition ||
+				document.scrollY - communityHeader.offsetTop + WikiaTopAdsInner.height - 90 === normalizedScrollPosition) {
+				// user didn't scroll - ad appeared and moved content down
+				return;
+			}
+		}
+
+		clearTimeout(this.stickinessApplyTimeout);
 		this.onStickinessApplyTimeout();
 	}
 
 	checkViewability() {
-		const desktopNavbarWrapper = document.querySelector(this.config.desktopNavbarWrapperSelector);
+		// after .bind() is called a new function reference is created so we need to keep reference to it
+		this.onPreleaderboardScrollHandler = this.onPreleaderboardScroll.bind(this);
+		this.stickinessApplyTimeout = setTimeout(this.onStickinessApplyTimeout.bind(this), this.stickinessDelay);
 
-		const stickinessApplyTimeout = setTimeout(this.onStickinessApplyTimeout.bind(this), this.stickinessDelay);
-		//var normalizedScrollPosition = top.scrollY - $('.wds-community-header').offset().top;
-
-		//document.addEventListener('scroll', this.onPreleaderboardScroll);
-		// $(top).on('scroll.preleaderboard', function () {
-		// 	if (top.scrollY - $('.wds-community-header').offset().top === normalizedScrollPosition ||
-		// 		top.scrollY - $('.wds-community-header').offset().top + $('.WikiaTopAdsInner').height() - 90 === normalizedScrollPosition) {
-		// 		// user didn't scroll - ad appeared and moved content down
-		// 		return;
-		// 	}
-		//
-		// 	clearTimeout(stickinessApplyTimeout);
-		// 	this.onStickinessApplyTimeout();
-		// });
+		document.addEventListener('scroll', this.onPreleaderboardScrollHandler);
 	}
 }
