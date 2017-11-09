@@ -22,7 +22,9 @@ export default class BigFancyAdAbove {
 			slotsToEnable: [
 				'BOTTOM_LEADERBOARD',
 				'INCONTENT_BOXAD'
-			]
+			],
+			onStickBfaaCallback: () => {},
+			onUnstickBfaaCallback: () => {}
 		};
 	}
 
@@ -54,7 +56,7 @@ export default class BigFancyAdAbove {
 
 		// if sticky enabled
 		if (this.params.isSticky) {
-			this.stickyUap = new StickyUap(this.adSlot);
+			this.stickyUap = new StickyUap(this.adSlot, this.config);
 		}
 
 		this.videoSettings = new VideoSettings(this.params);
