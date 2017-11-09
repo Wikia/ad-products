@@ -6,12 +6,16 @@ const cssExtract = new ExtractTextPlugin('[name]/dist/styles.css');
 
 module.exports = {
 	entry: {
-		'abcd': [
+		abcd: [
 			'./examples/templates/abcd/script.js',
 			'./examples/styles.scss'
 		],
 		'floating-rail': [
 			'./examples/templates/floating-rail/script.js',
+			'./examples/styles.scss'
+		],
+		'sticky-bfaa': [
+			'./examples/templates/sticky-bfaa/script.js',
 			'./examples/styles.scss'
 		],
 		vuap: [
