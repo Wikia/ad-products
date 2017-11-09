@@ -1,4 +1,3 @@
-import Context from 'ad-engine/src/services/context-service';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 import { logger } from 'ad-engine/src/utils/logger';
 
@@ -13,11 +12,7 @@ export default class StickyUap {
 		this.viewabilityApproveWindow = 5000;
 		// time after which we'll remove stickiness even with no user interaction
 		this.stickinessRemovalWindow = 10000;
-		this.config = Context.get('templates.bfaa');
-		this.container = document.getElementById(this.adSlot.getId());
-		this.videoSettings = null;
-		this.onStickBfaaCallback = config.onStickBfaaCallback;
-		this.onUnstickBfaaCallback = config.onUnstickBfaaCallback;
+		this.config = config;
 
 		SlotTweaker.onReady(this.adSlot).then(() => {
 			this.checkViewability();
@@ -26,11 +21,11 @@ export default class StickyUap {
 
 	applyStickiness() {
 		logger(logGroup, 'Applying bfaa stickiness');
-		this.onStickBfaaCallback();
+		this.config.onStickBfaaCallback();
 
 		return function revert() {
 			logger(logGroup, 'Reverting bfaa stickiness');
-			this.onUnstickBfaaCallback();
+			this.config.onUnstickBfaaCallback();
 		};
 	}
 
