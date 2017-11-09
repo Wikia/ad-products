@@ -7,7 +7,7 @@ import FloatingRail from 'ad-products/modules/templates/floating-rail';
 
 import customContext from '../../context';
 
-customContext.targeting.artid = '321';
+customContext.targeting.artid = '318'; //321
 
 TemplateService.register(BigFancyAdAbove, {
 	onStickBfaaCallback: () => {
@@ -28,7 +28,7 @@ TemplateService.register(BigFancyAdAbove, {
 
 		setTimeout(() => {
 			bfaa.style['z-index'] = '';
-			bfaa.style.top = '0';
+			bfaa.style.top = 0;
 			bfaa.classList.remove('sticky-bfaa');
 		}, 1000);
 	}

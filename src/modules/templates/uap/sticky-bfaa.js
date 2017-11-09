@@ -1,9 +1,9 @@
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 import { logger } from 'ad-engine/src/utils/logger';
 
-const logGroup = 'sticky-uap';
+const logGroup = 'sticky-bfaa';
 
-export default class StickyUap {
+export default class StickyBfaa {
 
 	constructor(adSlot, config) {
 		this.adSlot = adSlot;
