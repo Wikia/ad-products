@@ -1,12 +1,18 @@
 import Context from 'ad-engine/src/services/context-service';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
+import { logger } from 'ad-engine/src/utils/logger';
+
+const logGroup = 'sticky-uap';
 
 export default class StickyUap {
 
 	constructor(adSlot, config) {
 		this.adSlot = adSlot;
 		this.stickinessDelay = 0;
-		this.viewabilityCheckWindow = 5000;
+		// time after which we'll unstick slot on user scroll
+		this.viewabilityApproveWindow = 5000;
+		// time after which we'll remove stickiness even with no user interaction
+		this.stickinessRemovalWindow = 10000;
 		this.config = Context.get('templates.bfaa');
 		this.container = document.getElementById(this.adSlot.getId());
 		this.videoSettings = null;
@@ -19,23 +25,23 @@ export default class StickyUap {
 	}
 
 	applyStickiness() {
-		console.log("Applying sctickiness");
+		logger(logGroup, 'Applying bfaa stickiness');
 		this.onStickBfaaCallback();
 
 		return function revert() {
-			console.log("Reverting sctickiness");
+			logger(logGroup, 'Reverting bfaa stickiness');
 			this.onUnstickBfaaCallback();
 		};
 	}
 
 	onStickinessApplyTimeout() {
 		let revertStickiness = function () {},
-			viewabilityCheckTimeout = null,
+			viewabilityApproveTimeout = null,
 			isOnViewedFired = false;
+		const desktopNavbarWrapper = document.querySelector(this.config.desktopNavbarWrapperSelector);
 
 		function onViewed() {
-			const revertTimeout = setTimeout(onRevertTimeout, 10000),
-				globalNavigation = document.getElementById('globalNavigation');
+			const revertTimeout = setTimeout(onRevertTimeout, this.stickinessRemovalWindow);
 
 			function onRevertTimeout() {
 				clearTimeout(revertTimeout);
@@ -44,40 +50,38 @@ export default class StickyUap {
 			}
 
 			isOnViewedFired = true;
-			clearTimeout(viewabilityCheckTimeout);
-			viewabilityCheckTimeout = null;
+			clearTimeout(viewabilityApproveTimeout);
+			viewabilityApproveTimeout = null;
 			document.addEventListener('scroll', onRevertTimeout);
-			// TODO: track
-			//trackEvent(events.VIEWABLE, true);
 
-			// TODO: how will it work on f2?
-			if (!globalNavigation || globalNavigation && globalNavigation.classList.contains('bfaa-pinned')) {
+			if (desktopNavbarWrapper && desktopNavbarWrapper.classList.contains('bfaa-pinned')) {
 				onRevertTimeout();
 			}
 		}
 
 		function onTabActive() {
-			viewabilityCheckTimeout = setTimeout(onViewed, this.viewabilityCheckWindow);
+			viewabilityApproveTimeout = setTimeout(onViewed, this.viewabilityApproveWindow);
 			// we wanted to run it only once
 			document.removeEventListener('visibilitychange', onTabActive);
 		}
 
-		console.log("removeEventListener('scroll', this.onPreleaderboardScroll!");
 		document.removeEventListener('scroll', this.onPreleaderboardScrollHandler);
 
 		if (document.hidden) {
 			// let's start ticking from the moment when browser tab is active
 			document.addEventListener('visibilitychange', onTabActive);
 		} else {
-			viewabilityCheckTimeout = setTimeout(onViewed, this.viewabilityCheckWindow);
+			viewabilityApproveTimeout = setTimeout(onViewed, this.viewabilityApproveWindow);
 		}
 
 		if (this.adSlot.isViewed) {
+			logger(logGroup, `Slot ${this.adSlot.getSlotName()} viewed`);
 			onViewed();
 		} else {
 			revertStickiness = this.applyStickiness().bind(this);
 
 			this.adSlot.on('slotViewed', () => {
+				logger(logGroup, `slotViewed triggered on ${this.adSlot.getSlotName()}`);
 				// don't send events once again if onViewed was fired by timeout
 				if (!isOnViewedFired) {
 					onViewed();
@@ -86,28 +90,13 @@ export default class StickyUap {
 		}
 	}
 
-	onPreleaderboardScroll() {
-		console.log('onPreleaderboardScroll');
-		const communityHeader = document.getElementsByClassName('wds-community-header')[0];
-
-		if (communityHeader) {
-			const normalizedScrollPosition = document.scrollY - communityHeader.offsetTop,
-				WikiaTopAdsInner = document.getElementsByClassName('WikiaTopAdsInner')[0];
-
-			if (document.scrollY - communityHeader.offsetTop === normalizedScrollPosition ||
-				document.scrollY - communityHeader.offsetTop + WikiaTopAdsInner.height - 90 === normalizedScrollPosition) {
-				// user didn't scroll - ad appeared and moved content down
-				return;
-			}
-		}
-
-		clearTimeout(this.stickinessApplyTimeout);
-		this.onStickinessApplyTimeout();
-	}
-
 	checkViewability() {
+		function onPreleaderboardScroll() {
+			clearTimeout(this.stickinessApplyTimeout);
+			this.onStickinessApplyTimeout();
+		}
 		// after .bind() is called a new function reference is created so we need to keep reference to it
-		this.onPreleaderboardScrollHandler = this.onPreleaderboardScroll.bind(this);
+		this.onPreleaderboardScrollHandler = onPreleaderboardScroll.bind(this);
 		this.stickinessApplyTimeout = setTimeout(this.onStickinessApplyTimeout.bind(this), this.stickinessDelay);
 
 		document.addEventListener('scroll', this.onPreleaderboardScrollHandler);
