@@ -23,8 +23,28 @@ export default class BigFancyAdAbove {
 				'BOTTOM_LEADERBOARD',
 				'INCONTENT_BOXAD'
 			],
-			onStickBfaaCallback: () => {},
-			onUnstickBfaaCallback: () => {}
+			onStickBfaaCallback: (adSlot) => {
+				const bfaa = adSlot.getElement();
+
+				bfaa.classList.add('sticky-bfaa');
+
+				setTimeout(() => {
+					bfaa.style.top = 0;
+					bfaa.style.transition = 'top 1s';
+				}, 0);
+			},
+			onUnstickBfaaCallback: (adSlot) => {
+				const bfaa = adSlot.getElement(),
+					adHeight = bfaa.offsetHeight;
+
+				bfaa.style.top = `${window.scrollY === 0 ? 0 : -adHeight}px`;
+
+				setTimeout(() => {
+					bfaa.style['z-index'] = '';
+					bfaa.style.top = 0;
+					bfaa.classList.remove('sticky-bfaa');
+				}, 1000);
+			}
 		};
 	}
 

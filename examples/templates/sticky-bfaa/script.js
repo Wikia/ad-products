@@ -9,31 +9,7 @@ import customContext from '../../context';
 
 customContext.targeting.artid = '318'; //321
 
-TemplateService.register(BigFancyAdAbove, {
-	onStickBfaaCallback: () => {
-		const bfaa = document.getElementById('gpt-top-leaderboard');
-
-		bfaa.classList.add('sticky-bfaa');
-
-		setTimeout(() => {
-			bfaa.style.top = 0;
-			bfaa.style.transition = 'top 1s';
-		}, 0);
-	},
-	onUnstickBfaaCallback: () => {
-		const bfaa = document.getElementById('gpt-top-leaderboard'),
-			adHeight = bfaa.offsetHeight;
-
-		bfaa.style.top = `${window.scrollY === 0 ? 0 : -adHeight}px`;
-
-		setTimeout(() => {
-			bfaa.style['z-index'] = '';
-			bfaa.style.top = 0;
-			bfaa.classList.remove('sticky-bfaa');
-		}, 1000);
-	}
-});
-
+TemplateService.register(BigFancyAdAbove);
 TemplateService.register(BigFancyAdBelow);
 TemplateService.register(FloatingRail);
 

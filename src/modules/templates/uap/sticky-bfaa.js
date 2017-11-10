@@ -21,11 +21,11 @@ export default class StickyBfaa {
 
 	applyStickiness() {
 		logger(logGroup, 'Applying bfaa stickiness');
-		this.config.onStickBfaaCallback();
+		this.config.onStickBfaaCallback(this.adSlot);
 
 		return function revert() {
 			logger(logGroup, 'Reverting bfaa stickiness');
-			this.config.onUnstickBfaaCallback();
+			this.config.onUnstickBfaaCallback(this.adSlot);
 		};
 	}
 
