@@ -7,7 +7,6 @@ export default class StickyBfaa {
 
 	constructor(adSlot, config) {
 		this.adSlot = adSlot;
-		this.stickinessDelay = 0;
 		// time after which we'll unstick slot on user scroll
 		this.viewabilityApproveWindow = 5000;
 		// time after which we'll remove stickiness even with no user interaction
@@ -15,7 +14,7 @@ export default class StickyBfaa {
 		this.config = config;
 
 		SlotTweaker.onReady(this.adSlot).then(() => {
-			this.checkViewability();
+			this.onStickinessApplyTimeout();
 		});
 	}
 
@@ -54,7 +53,6 @@ export default class StickyBfaa {
 			}
 		}
 
-		document.removeEventListener('scroll', this.onPreleaderboardScrollHandler);
 		viewabilityApproveTimeout = setTimeout(onViewed, this.viewabilityApproveWindow);
 
 		if (this.adSlot.isViewed) {
@@ -71,17 +69,5 @@ export default class StickyBfaa {
 				}
 			});
 		}
-	}
-
-	checkViewability() {
-		function onPreleaderboardScroll() {
-			clearTimeout(this.stickinessApplyTimeout);
-			this.onStickinessApplyTimeout();
-		}
-		// after .bind() is called a new function reference is created so we need to keep reference to it
-		this.onPreleaderboardScrollHandler = onPreleaderboardScroll.bind(this);
-		this.stickinessApplyTimeout = setTimeout(this.onStickinessApplyTimeout.bind(this), this.stickinessDelay);
-
-		document.addEventListener('scroll', this.onPreleaderboardScrollHandler);
 	}
 }
