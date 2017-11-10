@@ -54,20 +54,8 @@ export default class StickyBfaa {
 			}
 		}
 
-		function onTabActive() {
-			viewabilityApproveTimeout = setTimeout(onViewed, this.viewabilityApproveWindow);
-			// we wanted to run it only once
-			document.removeEventListener('visibilitychange', onTabActive);
-		}
-
 		document.removeEventListener('scroll', this.onPreleaderboardScrollHandler);
-
-		if (document.hidden) {
-			// let's start ticking from the moment when browser tab is active
-			document.addEventListener('visibilitychange', onTabActive);
-		} else {
-			viewabilityApproveTimeout = setTimeout(onViewed, this.viewabilityApproveWindow);
-		}
+		viewabilityApproveTimeout = setTimeout(onViewed, this.viewabilityApproveWindow);
 
 		if (this.adSlot.isViewed) {
 			logger(logGroup, `Slot ${this.adSlot.getSlotName()} viewed`);
