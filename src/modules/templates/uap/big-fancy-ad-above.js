@@ -75,6 +75,7 @@ export default class BigFancyAdAbove {
 
 		if (this.params.isSticky) {
 			this.stickyBfaa = new StickyBfaa(this.adSlot, this.config);
+			this.stickyBfaa.run();
 		}
 
 		this.videoSettings = new VideoSettings(this.params);

@@ -12,7 +12,9 @@ export default class StickyBfaa {
 		// time after which we'll remove stickiness even with no user interaction
 		this.stickinessRemovalWindow = 10000;
 		this.config = config;
+	}
 
+	run() {
 		SlotTweaker.onReady(this.adSlot).then(() => {
 			this.onStickinessApplyTimeout();
 		});
