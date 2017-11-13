@@ -25,6 +25,7 @@
     "jsdom-global": "^3.0.2",
     "mocha": "^4.0.1",
     "mocha-jsdom": "^1.1.0",
+    "mocha-junit-reporter": "^1.15.0",
     "mocha-webpack": "^1.0.1",
     "node-sass": "^4.5.3",
     "sass-loader": "^6.0.6",
@@ -34,7 +35,7 @@
   "scripts": {
     "build": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules",
     "lint": "./node_modules/.bin/eslint .",
-    "test": "mocha-webpack --webpack-config webpack-mocha.config.js 'src/modules/**/*.spec.js' -r jsdom-global/register",
+    "test": "MOCHA_FILE=./spec/build/units.xml mocha-webpack --webpack-config webpack-mocha.config.js 'src/modules/**/*.spec.js' -r jsdom-global/register --reporter mocha-junit-reporter",
     "watch": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules --watch"
   }
 }
