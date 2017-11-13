@@ -40,7 +40,6 @@ export default class BigFancyAdAbove {
 				bfaa.style.top = `${window.scrollY === 0 ? 0 : -adHeight}px`;
 
 				setTimeout(() => {
-					bfaa.style['z-index'] = '';
 					bfaa.style.top = 0;
 					bfaa.classList.remove('sticky-bfaa');
 				}, 1000);

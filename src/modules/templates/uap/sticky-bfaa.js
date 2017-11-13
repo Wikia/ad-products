@@ -32,7 +32,6 @@ export default class StickyBfaa {
 	}
 
 	onViewed() {
-		const desktopNavbarWrapper = document.querySelector(this.config.desktopNavbarWrapperSelector);
 		const onRevertTimeout = callRevertFromTimeout.bind(this);
 		const revertTimeout = setTimeout(onRevertTimeout, this.stickinessRemovalWindow);
 
@@ -45,10 +44,6 @@ export default class StickyBfaa {
 		this.isOnViewedFired = true;
 		clearTimeout(this.viewabilityApproveTimeout);
 		document.addEventListener('scroll', onRevertTimeout);
-
-		if (desktopNavbarWrapper && desktopNavbarWrapper.classList.contains('bfaa-pinned')) {
-			onRevertTimeout();
-		}
 	}
 
 	onStickinessApplyTimeout() {
