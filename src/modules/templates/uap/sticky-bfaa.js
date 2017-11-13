@@ -7,11 +7,12 @@ export default class StickyBfaa {
 
 	constructor(adSlot, config) {
 		this.adSlot = adSlot;
-		// time after which we'll unstick slot on user scroll
-		this.viewabilityApproveWindow = 5000;
+		this.config = config;
+		this.isOnViewedFired = false;
 		// time after which we'll remove stickiness even with no user interaction
 		this.stickinessRemovalWindow = 10000;
-		this.config = config;
+		// time after which we'll unstick slot on user scroll
+		this.viewabilityApproveWindow = 5000;
 	}
 
 	run() {
@@ -23,51 +24,46 @@ export default class StickyBfaa {
 	applyStickiness() {
 		logger(logGroup, 'Applying bfaa stickiness');
 		this.config.onStickBfaaCallback(this.adSlot);
+	}
 
-		return function revert() {
-			logger(logGroup, 'Reverting bfaa stickiness');
-			this.config.onUnstickBfaaCallback(this.adSlot);
-		};
+	revertStickiness() {
+		logger(logGroup, 'Reverting bfaa stickiness');
+		this.config.onUnstickBfaaCallback(this.adSlot);
+	}
+
+	onViewed() {
+		const desktopNavbarWrapper = document.querySelector(this.config.desktopNavbarWrapperSelector);
+		const onRevertTimeout = callRevertFromTimeout.bind(this);
+		const revertTimeout = setTimeout(onRevertTimeout, this.stickinessRemovalWindow);
+
+		function callRevertFromTimeout() {
+			clearTimeout(revertTimeout);
+			document.removeEventListener('scroll', onRevertTimeout);
+			this.revertStickiness();
+		}
+
+		this.isOnViewedFired = true;
+		clearTimeout(this.viewabilityApproveTimeout);
+		document.addEventListener('scroll', onRevertTimeout);
+
+		if (desktopNavbarWrapper && desktopNavbarWrapper.classList.contains('bfaa-pinned')) {
+			onRevertTimeout();
+		}
 	}
 
 	onStickinessApplyTimeout() {
-		let revertStickiness = function () {},
-			viewabilityApproveTimeout = null,
-			isOnViewedFired = false;
-		const desktopNavbarWrapper = document.querySelector(this.config.desktopNavbarWrapperSelector);
-
-		function onViewed() {
-			const revertTimeout = setTimeout(onRevertTimeout, this.stickinessRemovalWindow);
-
-			function onRevertTimeout() {
-				clearTimeout(revertTimeout);
-				document.removeEventListener('scroll', onRevertTimeout);
-				revertStickiness();
-			}
-
-			isOnViewedFired = true;
-			clearTimeout(viewabilityApproveTimeout);
-			viewabilityApproveTimeout = null;
-			document.addEventListener('scroll', onRevertTimeout);
-
-			if (desktopNavbarWrapper && desktopNavbarWrapper.classList.contains('bfaa-pinned')) {
-				onRevertTimeout();
-			}
-		}
-
-		viewabilityApproveTimeout = setTimeout(onViewed, this.viewabilityApproveWindow);
+		this.viewabilityApproveTimeout = setTimeout(this.onViewed.bind(this), this.viewabilityApproveWindow);
 
 		if (this.adSlot.isViewed) {
 			logger(logGroup, `Slot ${this.adSlot.getSlotName()} viewed`);
-			onViewed();
+			this.onViewed().bind(this)();
 		} else {
-			revertStickiness = this.applyStickiness().bind(this);
-
+			this.applyStickiness.bind(this)();
 			this.adSlot.on('slotViewed', () => {
 				logger(logGroup, `slotViewed triggered on ${this.adSlot.getSlotName()}`);
 				// don't send events once again if onViewed was fired by timeout
-				if (!isOnViewedFired) {
-					onViewed();
+				if (!this.isOnViewedFired) {
+					this.onViewed.bind(this)();
 				}
 			});
 		}
