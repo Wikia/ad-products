@@ -7,7 +7,8 @@ import FloatingRail from 'ad-products/modules/templates/floating-rail';
 
 import customContext from '../../context';
 
-customContext.targeting.artid = '318'; //321
+// http://project43.wikia.com/wiki/DevTemplates/VUAP/ResolveState
+customContext.targeting.artid = '318';
 
 TemplateService.register(BigFancyAdAbove);
 TemplateService.register(BigFancyAdBelow);
