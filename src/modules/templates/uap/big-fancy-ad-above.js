@@ -30,7 +30,6 @@ export default class BigFancyAdAbove {
 
 				setTimeout(() => {
 					bfaa.style.top = 0;
-					bfaa.style.transition = 'top 1s';
 				}, 0);
 			},
 			onUnstickBfaaCallback: (adSlot) => {
@@ -38,6 +37,7 @@ export default class BigFancyAdAbove {
 					adHeight = bfaa.offsetHeight;
 
 				bfaa.style.top = `${window.scrollY === 0 ? 0 : -adHeight}px`;
+				bfaa.style.transition = '';
 
 				setTimeout(() => {
 					bfaa.style.top = 0;
