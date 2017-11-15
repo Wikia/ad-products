@@ -92,12 +92,10 @@ export default class BigFancyAdAbove {
 		const sibling = document.querySelector(this.config.slotSibling) || this.container.nextElementSibling;
 
 		if (mobileNavbarWrapper) {
-			mobileNavbarWrapper.classList.add('sticky-uap');
 			slotParent.insertBefore(mobileNavbarWrapper, sibling);
 		}
 
 		if (desktopNavbarWrapper) {
-			desktopNavbarWrapper.classList.add('sticky-uap');
 			slotParent.insertBefore(desktopNavbarWrapper, sibling);
 		}
 	}
@@ -110,6 +108,8 @@ export default class BigFancyAdAbove {
 
 	adIsReady(iframe) {
 		document.body.style.paddingTop = iframe.parentElement.style.paddingBottom;
+		document.body.classList.add('has-bfaa');
+
 		if (this.config.handleNavbar) {
 			this.setupNavbar();
 		}
