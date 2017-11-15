@@ -1,7 +1,8 @@
 import sinon from 'sinon';
+import {expect} from 'chai';
 import ResolvedState from '../../../src/modules/templates/uap/resolved-state';
 import ResolvedStateSwitch from '../../../src/modules/templates/uap/resolved-state-switch';
-import QueryString from 'ad-engine/utils/query-string';
+import QueryString from 'ad-engine/src/utils/query-string';
 
 const ASPECT_RATIO = 1,
 	BIG_IMAGE = 'bigImage.png',
@@ -81,127 +82,128 @@ function createCorrectParamsWithTwoAssets() {
 	};
 }
 
-blockingUrlParams.forEach(param => {
-	QUnit.test(`Should not be in resolved state when is not blocked by query param ${param}`, (assert) => {
-		sinon.stub(QueryString, 'get');
-		QueryString.get.returns(param);
+describe('ResolvedState', () => {
+	blockingUrlParams.forEach(param => {
+		it(`Should not be in resolved state when is not blocked by query param ${param}`, () => {
+			sinon.stub(QueryString, 'get');
+			QueryString.get.returns(param);
 
-		assert.equal(false, ResolvedState.isResolvedState(createCorrectParams()));
-		QueryString.get.restore();
+			expect(ResolvedState.isResolvedState(createCorrectParams())).to.equal(false);
+			QueryString.get.restore();
+		});
 	});
-});
 
-forcingUrlParams.forEach(param => {
-	QUnit.test(`Should be in resolved state when is forced by query param ${param}`, (assert) => {
-		sinon.stub(QueryString, 'get');
-		QueryString.get.returns(param);
+	forcingUrlParams.forEach(param => {
+		it(`Should be in resolved state when is forced by query param ${param}`, () => {
+			sinon.stub(QueryString, 'get');
+			QueryString.get.returns(param);
 
-		assert.equal(true, ResolvedState.isResolvedState(createCorrectParams()));
-		QueryString.get.restore();
+			expect(ResolvedState.isResolvedState(createCorrectParams())).to.equal(true);
+			QueryString.get.restore();
+		});
 	});
-});
 
-QUnit.test('Should not be in resolved state when no information about seen ad was stored', (assert) => {
-	sinon.stub(ResolvedStateSwitch, 'wasDefaultStateSeen');
-	ResolvedStateSwitch.wasDefaultStateSeen.returns(false);
+	it('Should not be in resolved state when no information about seen ad was stored', () => {
+		sinon.stub(ResolvedStateSwitch, 'wasDefaultStateSeen');
+		ResolvedStateSwitch.wasDefaultStateSeen.returns(false);
 
-	assert.equal(false, ResolvedState.isResolvedState(createCorrectParams()));
-	ResolvedStateSwitch.wasDefaultStateSeen.restore();
-});
+		expect(ResolvedState.isResolvedState(createCorrectParams())).to.equal(false);
+		ResolvedStateSwitch.wasDefaultStateSeen.restore();
+	});
 
-QUnit.test('Should be in resolved state when information about seen ad was stored', (assert) => {
-	sinon.stub(ResolvedStateSwitch, 'wasDefaultStateSeen');
-	ResolvedStateSwitch.wasDefaultStateSeen.returns(true);
+	it('Should be in resolved state when information about seen ad was stored', () => {
+		sinon.stub(ResolvedStateSwitch, 'wasDefaultStateSeen');
+		ResolvedStateSwitch.wasDefaultStateSeen.returns(true);
 
-	assert.equal(true, ResolvedState.isResolvedState(createCorrectParams()));
-	ResolvedStateSwitch.wasDefaultStateSeen.restore();
-});
+		expect(ResolvedState.isResolvedState(createCorrectParams())).to.equal(true);
+		ResolvedStateSwitch.wasDefaultStateSeen.restore();
+	});
 
+	it('Should not modify params if template does not support resolved state', () => {
+		const params = createIncorrectParams();
 
-QUnit.test('Should not modify params if template does not support resolved state', (assert) => {
-	const params = createIncorrectParams();
+		sinon.stub(stubs.videoSettings, 'getParams');
+		stubs.videoSettings.getParams.returns(params);
 
-	sinon.stub(stubs.videoSettings, 'getParams');
-	stubs.videoSettings.getParams.returns(params);
+		ResolvedState.setImage(stubs.videoSettings);
 
-	ResolvedState.setImage(stubs.videoSettings);
+		expect(params.aspectRatio).to.equal(ASPECT_RATIO);
+		expect(params.image1.element.src).to.equal(DEFAULT_IMAGE);
 
-	assert.equal(params.aspectRatio, ASPECT_RATIO);
-	assert.equal(params.image1.element.src, DEFAULT_IMAGE);
+		stubs.videoSettings.getParams.restore();
+	});
 
-	stubs.videoSettings.getParams.restore();
-});
+	it('Should use default state resources when no information about seen ad was stored for add with one image', () => {
+		const params = createCorrectParams();
 
-QUnit.test('Should use default state resources when no information about seen ad was stored for add with one image', (assert) => {
-	const params = createCorrectParams();
+		sinon.stub(stubs.videoSettings, 'isResolvedState');
+		sinon.stub(stubs.videoSettings, 'getParams');
 
-	sinon.stub(stubs.videoSettings, 'isResolvedState');
-	sinon.stub(stubs.videoSettings, 'getParams');
+		stubs.videoSettings.getParams.returns(params);
+		stubs.videoSettings.isResolvedState.returns(false);
 
-	stubs.videoSettings.getParams.returns(params);
-	stubs.videoSettings.isResolvedState.returns(false);
+		ResolvedState.setImage(stubs.videoSettings);
 
-	ResolvedState.setImage(stubs.videoSettings);
+		expect(params.aspectRatio).to.equal(ASPECT_RATIO);
+		expect(params.image1.element.src).to.equal(BIG_IMAGE);
 
-	assert.equal(params.aspectRatio, ASPECT_RATIO);
-	assert.equal(params.image1.element.src, BIG_IMAGE);
+		stubs.videoSettings.getParams.restore();
+		stubs.videoSettings.isResolvedState.restore();
+	});
 
-	stubs.videoSettings.getParams.restore();
-	stubs.videoSettings.isResolvedState.restore();
-});
+	it('Should use resolved state resources when information about seen ad was stored for add with one image', () => {
+		const params = createCorrectParams();
 
-QUnit.test('Should use resolved state resources when information about seen ad was stored for add with one image', (assert) => {
-	const params = createCorrectParams();
+		sinon.stub(stubs.videoSettings, 'isResolvedState');
+		sinon.stub(stubs.videoSettings, 'getParams');
 
-	sinon.stub(stubs.videoSettings, 'isResolvedState');
-	sinon.stub(stubs.videoSettings, 'getParams');
+		stubs.videoSettings.getParams.returns(params);
+		stubs.videoSettings.isResolvedState.returns(true);
 
-	stubs.videoSettings.getParams.returns(params);
-	stubs.videoSettings.isResolvedState.returns(true);
+		ResolvedState.setImage(stubs.videoSettings);
 
-	ResolvedState.setImage(stubs.videoSettings);
+		expect(params.aspectRatio).to.equal(RESOLVED_STATE_ASPECT_RATIO);
+		expect(params.image1.element.src).to.equal(RESOLVED_IMAGE);
 
-	assert.equal(params.aspectRatio, RESOLVED_STATE_ASPECT_RATIO);
-	assert.equal(params.image1.element.src, RESOLVED_IMAGE);
+		stubs.videoSettings.getParams.restore();
+		stubs.videoSettings.isResolvedState.restore();
+	});
 
-	stubs.videoSettings.getParams.restore();
-	stubs.videoSettings.isResolvedState.restore();
-});
+	it('should use default state resources when no information about seen ad was stored using split template', () => {
+		const params = createCorrectParamsWithTwoAssets();
 
-QUnit.test('should use default state resources when no information about seen ad was stored using split template', (assert) => {
-	const params = createCorrectParamsWithTwoAssets();
+		sinon.stub(stubs.videoSettings, 'isResolvedState');
+		sinon.stub(stubs.videoSettings, 'getParams');
 
-	sinon.stub(stubs.videoSettings, 'isResolvedState');
-	sinon.stub(stubs.videoSettings, 'getParams');
+		stubs.videoSettings.getParams.returns(params);
+		stubs.videoSettings.isResolvedState.returns(false);
 
-	stubs.videoSettings.getParams.returns(params);
-	stubs.videoSettings.isResolvedState.returns(false);
+		ResolvedState.setImage(stubs.videoSettings);
 
-	ResolvedState.setImage(stubs.videoSettings);
+		expect(params.aspectRatio).to.equal(ASPECT_RATIO);
+		expect(params.image1.element.src).to.equal(BIG_IMAGE);
+		expect(params.image2.element.src).to.equal(BIG_IMAGE_2);
 
-	assert.equal(params.aspectRatio, ASPECT_RATIO);
-	assert.equal(params.image1.element.src, BIG_IMAGE);
-	assert.equal(params.image2.element.src, BIG_IMAGE_2);
+		stubs.videoSettings.getParams.restore();
+		stubs.videoSettings.isResolvedState.restore();
+	});
 
-	stubs.videoSettings.getParams.restore();
-	stubs.videoSettings.isResolvedState.restore();
-});
+	it('should use resolved state resources when information about seen ad was stored using split template', () => {
+		const params = createCorrectParamsWithTwoAssets();
 
-QUnit.test('should use resolved state resources when information about seen ad was stored using split template', (assert) => {
-	const params = createCorrectParamsWithTwoAssets();
+		sinon.stub(stubs.videoSettings, 'isResolvedState');
+		sinon.stub(stubs.videoSettings, 'getParams');
 
-	sinon.stub(stubs.videoSettings, 'isResolvedState');
-	sinon.stub(stubs.videoSettings, 'getParams');
+		stubs.videoSettings.getParams.returns(params);
+		stubs.videoSettings.isResolvedState.returns(true);
 
-	stubs.videoSettings.getParams.returns(params);
-	stubs.videoSettings.isResolvedState.returns(true);
+		ResolvedState.setImage(stubs.videoSettings);
 
-	ResolvedState.setImage(stubs.videoSettings);
+		expect(params.aspectRatio).to.equal(RESOLVED_STATE_ASPECT_RATIO);
+		expect(params.image1.element.src).to.equal(RESOLVED_IMAGE);
+		expect(params.image2.element.src).to.equal(RESOLVED_IMAGE_2);
 
-	assert.equal(params.aspectRatio, RESOLVED_STATE_ASPECT_RATIO);
-	assert.equal(params.image1.element.src, RESOLVED_IMAGE);
-	assert.equal(params.image2.element.src, RESOLVED_IMAGE_2);
-
-	stubs.videoSettings.getParams.restore();
-	stubs.videoSettings.isResolvedState.restore();
+		stubs.videoSettings.getParams.restore();
+		stubs.videoSettings.isResolvedState.restore();
+	});
 });
