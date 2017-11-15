@@ -6,6 +6,7 @@ import ResolvedState from './resolved-state';
 import ToggleAnimation from './ui/toggle-animation';
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
+import StickyBfaa from './sticky-bfaa';
 
 export default class BigFancyAdAbove {
 	static getName() {
@@ -21,7 +22,28 @@ export default class BigFancyAdAbove {
 			slotsToEnable: [
 				'BOTTOM_LEADERBOARD',
 				'INCONTENT_BOXAD'
-			]
+			],
+			onStickBfaaCallback: (adSlot) => {
+				const bfaa = adSlot.getElement();
+
+				bfaa.classList.add('sticky-bfaa');
+
+				setTimeout(() => {
+					bfaa.style.top = 0;
+				}, 0);
+			},
+			onUnstickBfaaCallback: (adSlot) => {
+				const bfaa = adSlot.getElement(),
+					adHeight = bfaa.offsetHeight;
+
+				bfaa.style.top = `${window.scrollY === 0 ? 0 : -adHeight}px`;
+				bfaa.style.transition = '';
+
+				setTimeout(() => {
+					bfaa.style.top = 0;
+					bfaa.classList.remove('sticky-bfaa');
+				}, 1000);
+			}
 		};
 	}
 
@@ -35,6 +57,7 @@ export default class BigFancyAdAbove {
 		this.config = Context.get('templates.bfaa');
 		this.container = document.getElementById(this.adSlot.getId());
 		this.videoSettings = null;
+		this.stickyBfaa = null;
 	}
 
 	/**
@@ -48,6 +71,11 @@ export default class BigFancyAdAbove {
 		}
 
 		UniversalAdPackage.init(this.params, this.config.slotsToEnable);
+
+		if (this.params.isSticky) {
+			this.stickyBfaa = new StickyBfaa(this.adSlot, this.config);
+			this.stickyBfaa.run();
+		}
 
 		this.videoSettings = new VideoSettings(this.params);
 		this.container.style.backgroundColor = this.getBackgroundColor();
