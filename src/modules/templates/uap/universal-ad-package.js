@@ -68,8 +68,7 @@ function loadVideoAd(videoSettings) {
 	document.body.classList.add('vuap-loaded');
 
 	params.vastTargeting = {
-		passback: getType(),
-		uap: getUapId()
+		passback: getType()
 	};
 	params.width = size.width;
 	params.height = size.height;
