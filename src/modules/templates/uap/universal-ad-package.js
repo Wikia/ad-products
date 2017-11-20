@@ -141,7 +141,7 @@ export default {
 	isVideoEnabled(params) {
 		const triggersArrayIsNotEmpty = Array.isArray(params.videoTriggers) && params.videoTriggers.length > 0;
 
-		return !!params.videoAspectRatio && (params.videoTriggerElement || triggersArrayIsNotEmpty);
+		return !!params.videoAspectRatio && (params.videoPlaceholderElement || triggersArrayIsNotEmpty);
 	},
 	loadVideoAd,
 	setType,
