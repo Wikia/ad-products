@@ -1,5 +1,6 @@
 export default {
-	adUnitId: '/5441/wka.life/_project43//{custom.namespace}/gpt/{slotName}',
+	src: 'test',
+	adUnitId: '/5441/wka.life/_project43//{custom.namespace}/{slotConfig.targeting.src}/{slotConfig.slotName}',
 	custom: {
 		namespace: 'article'
 	},
@@ -73,7 +74,7 @@ export default {
 		}
 	},
 	vast: {
-		adUnitId: '/5441/wka.life/_project43//{custom.namespace}/gpt/{pos}'
+		adUnitId: '/5441/wka.life/_project43//{custom.namespace}/{slotConfig.targeting.src}/{slotConfig.slotName}'
 	},
 	targeting: {
 		outstream: 'none',
