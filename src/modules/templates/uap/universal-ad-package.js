@@ -142,7 +142,8 @@ export default {
 	getType,
 	getUapId,
 	isVideoEnabled(params) {
-		let triggersArrayIsNotEmpty = Array.isArray(params.videoTriggers) && params.videoTriggers.length > 0;
+		const triggersArrayIsNotEmpty = Array.isArray(params.videoTriggers) && params.videoTriggers.length > 0;
+
 		return !!params.videoAspectRatio && (params.videoTriggerElement || triggersArrayIsNotEmpty);
 	},
 	loadVideoAd,
