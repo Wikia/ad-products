@@ -3,30 +3,31 @@ import { getIcon, FULLSCREEN_ON_ICON, FULLSCREEN_OFF_ICON } from './icons';
 
 const FULLSCREEN_ON_CLASS_NAME = 'fullscreen-on';
 
-export function add(video, params, panel) {
+function add(video, params, panel) {
+	if (!params.fullscrenable) {
+		return;
+	}
+
 	const toggleFullscreenButton = document.createElement('div');
 	const container = panel ? panel.getContainer() : video.container;
-	const icons = {
-		OFF: getIcon(FULLSCREEN_OFF_ICON),
-		ON: getIcon(FULLSCREEN_ON_ICON)
-	};
+	const onIcon = getIcon(FULLSCREEN_ON_ICON);
+	const offIcon = getIcon(FULLSCREEN_OFF_ICON);
 
-	icons.OFF.classList.add('fullscreen-off-icon');
-	icons.ON.classList.add('fullscreen-on-icon');
+	onIcon.classList.add('fullscreen-on-icon');
+	offIcon.classList.add('fullscreen-off-icon');
+	toggleFullscreenButton.appendChild(onIcon);
+	toggleFullscreenButton.appendChild(offIcon);
+
 	toggleFullscreenButton.classList.add('toggle-fullscreen');
-	toggleFullscreenButton.appendChild(icons.OFF);
-	toggleFullscreenButton.appendChild(icons.ON);
 	toggleFullscreenButton.addEventListener('click', (event) => {
 		video.toggleFullscreen();
-
-		if (video.isFullscreen()) {
-			toggleFullscreenButton.classList.add(FULLSCREEN_ON_CLASS_NAME);
-		} else {
-			toggleFullscreenButton.classList.remove(FULLSCREEN_ON_CLASS_NAME);
-		}
-
+		toggleFullscreenButton.classList.toggle(FULLSCREEN_ON_CLASS_NAME, video.isFullscreen());
 		event.preventDefault();
 	});
 
 	container.appendChild(toggleFullscreenButton);
 }
+
+export default {
+	add
+};

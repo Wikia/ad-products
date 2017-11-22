@@ -4,6 +4,7 @@ import ReplayOverlay from './replay-overlay';
 import ProgressBar from './progress-bar';
 import ToggleVideo from './toggle-video';
 import ToggleAnimation from './toggle-animation';
+import ToggleFullscreen from './toggle-fullscreen';
 import VolumeControl from './volume-control';
 import Panel from './panel';
 
@@ -11,27 +12,27 @@ const createBottomPanel = (...elements) => new Panel('bottom-panel', elements);
 const autoPlayLayout = [
 		ProgressBar,
 		PauseOverlay,
-		createBottomPanel(VolumeControl),
+		createBottomPanel(ToggleFullscreen, VolumeControl),
 		ToggleAnimation
 	],
 	defaultLayout = [
 		ProgressBar,
 		PauseOverlay,
-		createBottomPanel(VolumeControl),
+		createBottomPanel(ToggleFullscreen, VolumeControl),
 		CloseButton,
 		ToggleAnimation
 	],
 	splitLayout = [
 		ProgressBar,
 		PauseOverlay,
-		createBottomPanel(VolumeControl),
+		createBottomPanel(ToggleFullscreen, VolumeControl),
 		ToggleVideo,
 		ReplayOverlay
 	],
 	clickToPlaySplitLayout = [
 		ProgressBar,
 		PauseOverlay,
-		createBottomPanel(VolumeControl),
+		createBottomPanel(ToggleFullscreen, VolumeControl),
 		ToggleVideo,
 		ReplayOverlay,
 		CloseButton
