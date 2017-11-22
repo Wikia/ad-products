@@ -1,30 +1,40 @@
+import CloseButton from './close-button';
+import PauseOverlay from './pause-overlay';
+import ReplayOverlay from './replay-overlay';
+import ProgressBar from './progress-bar';
+import ToggleVideo from './toggle-video';
+import ToggleAnimation from './toggle-animation';
+import VolumeControl from './volume-control';
+import Panel from './panel';
+
+const createBottomPanel = (...elements) => new Panel('bottom-panel', elements);
 const autoPlayLayout = [
-		'progressBar',
-		'pauseOverlay',
-		'volumeControl',
-		'toggleVideoWithAnimation'
+		ProgressBar,
+		PauseOverlay,
+		createBottomPanel(VolumeControl),
+		ToggleAnimation
 	],
 	defaultLayout = [
-		'progressBar',
-		'pauseOverlay',
-		'volumeControl',
-		'closeButton',
-		'toggleVideoWithAnimation'
+		ProgressBar,
+		PauseOverlay,
+		createBottomPanel(VolumeControl),
+		CloseButton,
+		ToggleAnimation
 	],
 	splitLayout = [
-		'progressBar',
-		'pauseOverlay',
-		'volumeControl',
-		'toggleVideo',
-		'replayOverlay'
+		ProgressBar,
+		PauseOverlay,
+		createBottomPanel(VolumeControl),
+		ToggleVideo,
+		ReplayOverlay
 	],
 	clickToPlaySplitLayout = [
-		'progressBar',
-		'pauseOverlay',
-		'volumeControl',
-		'toggleVideo',
-		'replayOverlay',
-		'closeButton'
+		ProgressBar,
+		PauseOverlay,
+		createBottomPanel(VolumeControl),
+		ToggleVideo,
+		ReplayOverlay,
+		CloseButton
 	];
 
 function selectTemplate(videoSettings) {
