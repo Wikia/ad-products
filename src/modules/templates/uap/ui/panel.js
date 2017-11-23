@@ -5,18 +5,9 @@ export default class Panel {
 		this.panelContainer.className = className;
 	}
 
-	getClassName() {
-		return this.panelContainer.className;
-	}
-
-	getContainer() {
-		return this.panelContainer;
-	}
-
-	add(video, params, panel) {
-		const container = panel ? panel.getContainer() : video.container;
+	add(video, container, params) {
 		this.uiElements.forEach((uiElement) => {
-			uiElement.add(video, params, this);
+			uiElement.add(video, this.panelContainer, params);
 		});
 		container.appendChild(this.panelContainer);
 	}

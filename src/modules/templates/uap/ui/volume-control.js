@@ -20,9 +20,8 @@ function updateCurrentState(video, volumeControl) {
 	}
 }
 
-function add(video, params, panel) {
+function add(video, container) {
 	const volumeControl = createVolumeControl();
-	const container = panel ? panel.getContainer() : video.container;
 
 	video.addEventListener('wikiaVolumeChange', () => {
 		updateCurrentState(video, volumeControl);

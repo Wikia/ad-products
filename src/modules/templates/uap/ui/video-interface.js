@@ -1,6 +1,6 @@
 function setup(video, uiElements, params) {
 	uiElements.forEach((element) => {
-		element.add(video, params);
+		element.add(video, video.container, params);
 	});
 }
 

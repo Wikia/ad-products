@@ -1,6 +1,6 @@
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 
-function add(video) {
+function add(video, container) {
 	const progressBar = document.createElement('div'),
 		currentTime = document.createElement('div');
 
@@ -32,7 +32,7 @@ function add(video) {
 	video.addEventListener('wikiaAdCompleted', progressBar.reset);
 	video.addEventListener('wikiaAdPause', progressBar.pause);
 
-	video.container.appendChild(progressBar);
+	container.appendChild(progressBar);
 }
 
 export default {

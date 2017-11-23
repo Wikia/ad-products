@@ -1,4 +1,4 @@
-function add(video) {
+function add(video, container) {
 	const closeButton = document.createElement('div');
 
 	closeButton.classList.add('close-ad');
@@ -7,7 +7,7 @@ function add(video) {
 		event.preventDefault();
 	});
 
-	video.container.appendChild(closeButton);
+	container.appendChild(closeButton);
 }
 
 export default {

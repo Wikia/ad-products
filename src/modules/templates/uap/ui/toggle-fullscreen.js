@@ -1,17 +1,16 @@
 
-import { getIcon, FULLSCREEN_ON_ICON, FULLSCREEN_OFF_ICON } from './icons';
+import { createIcon, icons } from './icons';
 
 const FULLSCREEN_ON_CLASS_NAME = 'fullscreen-on';
 
-function add(video, params, panel) {
+function add(video, container, params) {
 	if (!params.fullscrenable) {
 		return;
 	}
 
 	const toggleFullscreenButton = document.createElement('div');
-	const container = panel ? panel.getContainer() : video.container;
-	const onIcon = getIcon(FULLSCREEN_ON_ICON);
-	const offIcon = getIcon(FULLSCREEN_OFF_ICON);
+	const onIcon = createIcon(icons.FULLSCREEN_ON);
+	const offIcon = createIcon(icons.FULLSCREEN_OFF);
 
 	onIcon.classList.add('fullscreen-on-icon');
 	offIcon.classList.add('fullscreen-off-icon');
