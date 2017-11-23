@@ -86,12 +86,12 @@ $uap-video-fullscreen-z-index: 9999;
 		cursor: pointer;
 		height: 100%;
 		position: absolute;
+		z-index: 1;
 	}
 
 	.replay-overlay {
-		background: $uap-replay-overlay-color url($player-button-play) center/80px no-repeat;
+		background: $uap-replay-overlay-color url($player-button-play) center/8% no-repeat;
 		display: none;
-		z-index: 1;
 	}
 
 	.pause-overlay {
@@ -100,12 +100,13 @@ $uap-video-fullscreen-z-index: 9999;
 	}
 
 	.close-ad {
-		background: url($player-button-collapse);
 		cursor: pointer;
-		height: $player-button-size;
-		margin: $player-button-border-space $player-button-border-space $player-button-click-area-mobile $player-button-click-area-mobile;
 		position: absolute;
 		right: 0;
+		z-index: 1;
+		background: url($player-button-collapse);
+		height: $player-button-size;
+		margin: $player-button-border-space $player-button-border-space $player-button-click-area-mobile $player-button-click-area-mobile;
 		top: 0;
 		width: $player-button-size;
 	}
@@ -115,6 +116,7 @@ $uap-video-fullscreen-z-index: 9999;
 		bottom: $player-button-border-space;
 		right: $player-button-click-area-desktop;
 		text-align: right;
+		z-index: 1;
 
 		> div {
 			vertical-align: top;
