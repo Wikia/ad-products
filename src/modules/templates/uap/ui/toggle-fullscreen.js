@@ -5,7 +5,8 @@ const FULLSCREEN_ON_CLASS_NAME = 'fullscreen-on';
 
 function add(video, container, params) {
 	if (!params.fullscrenable) {
-		return;
+		// TODO: uncomment before merge
+		// return;
 	}
 
 	const toggleFullscreenButton = document.createElement('div');
