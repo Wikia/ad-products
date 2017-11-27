@@ -3,12 +3,7 @@ import { createIcon, icons } from './icons';
 
 const FULLSCREEN_ON_CLASS_NAME = 'fullscreen-on';
 
-function add(video, container, params) {
-	if (!params.fullscrenable) {
-		// TODO: uncomment before merge
-		// return;
-	}
-
+function add(video, container) {
 	const toggleFullscreenButton = document.createElement('div');
 	const onIcon = createIcon(icons.FULLSCREEN_ON);
 	const offIcon = createIcon(icons.FULLSCREEN_OFF);

@@ -8,53 +8,52 @@ import ToggleFullscreen from './toggle-fullscreen';
 import VolumeControl from './volume-control';
 import Panel from './panel';
 
-const createBottomPanel = (...elements) => new Panel('bottom-panel', elements);
-const autoPlayLayout = [
+const createBottomPanel = () => new Panel('bottom-panel', [
+	ToggleFullscreen,
+	VolumeControl
+]);
+const getTemplates = params => ({
+	autoPlay: [
 		ProgressBar,
 		PauseOverlay,
-		createBottomPanel(ToggleFullscreen, VolumeControl),
+		createBottomPanel(params),
 		ToggleAnimation
 	],
-	defaultLayout = [
+	default: [
 		ProgressBar,
 		PauseOverlay,
-		createBottomPanel(ToggleFullscreen, VolumeControl),
+		createBottomPanel(params),
 		CloseButton,
 		ToggleAnimation
 	],
-	splitLayout = [
+	split: [
 		ProgressBar,
 		PauseOverlay,
-		createBottomPanel(ToggleFullscreen, VolumeControl),
+		createBottomPanel(params),
 		ToggleVideo,
 		ReplayOverlay
 	],
-	clickToPlaySplitLayout = [
+	clickToPlaySplit: [
 		ProgressBar,
 		PauseOverlay,
-		createBottomPanel(ToggleFullscreen, VolumeControl),
+		createBottomPanel(params),
 		ToggleVideo,
 		ReplayOverlay,
 		CloseButton
-	];
+	]
+});
 
-function selectTemplate(videoSettings) {
-	let template = defaultLayout;
+export function selectTemplate(videoSettings) {
+	const templates = getTemplates(videoSettings.getParams());
+	let template = templates.default;
 
 	if (!videoSettings.isAutoPlay() && videoSettings.isSplitLayout()) {
-		template = clickToPlaySplitLayout;
+		template = templates.clickToPlaySplit;
 	} else if (videoSettings.isSplitLayout()) {
-		template = splitLayout;
+		template = templates.split;
 	} else if (videoSettings.isAutoPlay()) {
-		template = autoPlayLayout;
+		template = templates.autoPlay;
 	}
 
 	return template;
 }
-
-export default {
-	autoPlayLayout,
-	defaultLayout,
-	splitLayout,
-	selectTemplate
-};

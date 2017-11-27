@@ -9,7 +9,9 @@ export default class Panel {
 		this.panelContainer = document.createElement('div');
 		this.panelContainer.className = this.className;
 		this.uiElements.forEach((uiElement) => {
-			uiElement.add(video, this.panelContainer, params);
+			if (uiElement) {
+				uiElement.add(video, this.panelContainer, params);
+			}
 		});
 		container.appendChild(this.panelContainer);
 	}
