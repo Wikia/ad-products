@@ -15,8 +15,13 @@ function add(video, container) {
 	toggleFullscreenButton.addEventListener('click', () => {
 		video.toggleFullscreen();
 	});
-	video.addEventListener('wikia.fullscreenChange', () => {
+	video.addEventListener('wikiaFullscreenChange', () => {
 		toggleFullscreenButton.classList.toggle('fullscreen-on', video.isFullscreen());
+	});
+	video.addEventListener('wikiaAdStop', () => {
+		if (video.isFullscreen()) {
+			video.toggleFullscreen();
+		}
 	});
 
 	container.appendChild(toggleFullscreenButton);

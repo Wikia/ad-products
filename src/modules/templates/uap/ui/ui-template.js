@@ -8,8 +8,8 @@ import ToggleFullscreen from './toggle-fullscreen';
 import VolumeControl from './volume-control';
 import Panel from './panel';
 
-const createBottomPanel = ({ fullscrenable = false }) => new Panel('bottom-panel', [
-	fullscrenable ? ToggleFullscreen : null,
+const createBottomPanel = ({ fullscreenable = false }) => new Panel('bottom-panel', [
+	fullscreenable ? ToggleFullscreen : null,
 	VolumeControl
 ]);
 const getTemplates = params => ({

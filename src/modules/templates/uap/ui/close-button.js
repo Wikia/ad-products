@@ -3,10 +3,6 @@ function add(video, container) {
 
 	closeButton.classList.add('close-ad');
 	closeButton.addEventListener('click', (event) => {
-		if (video.isFullscreen()) {
-			video.toggleFullscreen();
-		}
-
 		video.stop();
 		event.preventDefault();
 	});
