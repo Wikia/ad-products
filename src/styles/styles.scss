@@ -2,6 +2,10 @@
 @import '_stickiness';
 @import '_uap';
 
+.stop-scrolling {
+	overflow: hidden;
+}
+
 .gpt-ad {
 	&.slot-animation {
 		transition: max-height 0.8s ease;

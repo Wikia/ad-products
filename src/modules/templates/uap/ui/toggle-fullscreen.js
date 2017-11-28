@@ -1,8 +1,6 @@
 
 import { createIcon, icons } from './icons';
 
-const FULLSCREEN_ON_CLASS_NAME = 'fullscreen-on';
-
 function add(video, container) {
 	const toggleFullscreenButton = document.createElement('div');
 	const onIcon = createIcon(icons.FULLSCREEN_ON);
@@ -14,10 +12,11 @@ function add(video, container) {
 	toggleFullscreenButton.appendChild(offIcon);
 
 	toggleFullscreenButton.classList.add('toggle-fullscreen');
-	toggleFullscreenButton.addEventListener('click', (event) => {
+	toggleFullscreenButton.addEventListener('click', () => {
 		video.toggleFullscreen();
-		toggleFullscreenButton.classList.toggle(FULLSCREEN_ON_CLASS_NAME, video.isFullscreen());
-		event.preventDefault();
+	});
+	video.addEventListener('wikia.fullscreenChange', () => {
+		toggleFullscreenButton.classList.toggle('fullscreen-on', video.isFullscreen());
 	});
 
 	container.appendChild(toggleFullscreenButton);

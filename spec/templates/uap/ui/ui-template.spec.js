@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 import VideoSettings from '../../../../src/modules/templates/uap/video-settings';
-import UITemplate from '../../../../src/modules/templates/uap/ui/ui-template';
+import {selectTemplate} from '../../../../src/modules/templates/uap/ui/ui-template';
 import CloseButton from '../../../../src/modules/templates/uap/ui/close-button';
 import ReplayOverlay from '../../../../src/modules/templates/uap/ui/replay-overlay';
 import ToggleFullscreen from '../../../../src/modules/templates/uap/ui/toggle-fullscreen';
@@ -16,8 +16,8 @@ describe('UITemplate', () => {
 		sinon.stub(videoSettings, 'isSplitLayout');
 		videoSettings.isSplitLayout.returns(false);
 
-		expect(UITemplate.selectTemplate(videoSettings).includes(CloseButton)).to.equal(true);
-		expect(UITemplate.selectTemplate(videoSettings).includes(ReplayOverlay)).to.equal(false);
+		expect(selectTemplate(videoSettings).includes(CloseButton)).to.equal(true);
+		expect(selectTemplate(videoSettings).includes(ReplayOverlay)).to.equal(false);
 	});
 
 	it('Should hide close button element if there is autoplay for not split ad', () => {
@@ -29,8 +29,8 @@ describe('UITemplate', () => {
 		sinon.stub(videoSettings, 'isSplitLayout');
 		videoSettings.isSplitLayout.returns(false);
 
-		expect(UITemplate.selectTemplate(videoSettings).includes(CloseButton)).to.equal(false);
-		expect(UITemplate.selectTemplate(videoSettings).includes(ReplayOverlay)).to.equal(false);
+		expect(selectTemplate(videoSettings).includes(CloseButton)).to.equal(false);
+		expect(selectTemplate(videoSettings).includes(ReplayOverlay)).to.equal(false);
 	});
 
 	it('Should hide close button element if there is auto play for split ad', () => {
@@ -42,8 +42,8 @@ describe('UITemplate', () => {
 		sinon.stub(videoSettings, 'isSplitLayout');
 		videoSettings.isSplitLayout.returns(true);
 
-		expect(UITemplate.selectTemplate(videoSettings).includes(CloseButton)).to.equal(false);
-		expect(UITemplate.selectTemplate(videoSettings).includes(ReplayOverlay)).to.equal(true);
+		expect(selectTemplate(videoSettings).includes(CloseButton)).to.equal(false);
+		expect(selectTemplate(videoSettings).includes(ReplayOverlay)).to.equal(true);
 	});
 
 	it('Should show replay button and close for click to play and split', () => {
@@ -55,7 +55,7 @@ describe('UITemplate', () => {
 		sinon.stub(videoSettings, 'isSplitLayout');
 		videoSettings.isSplitLayout.returns(true);
 
-		expect(UITemplate.selectTemplate(videoSettings).includes(CloseButton)).to.equal(true);
-		expect(UITemplate.selectTemplate(videoSettings).includes(ReplayOverlay)).to.equal(true);
+		expect(selectTemplate(videoSettings).includes(CloseButton)).to.equal(true);
+		expect(selectTemplate(videoSettings).includes(ReplayOverlay)).to.equal(true);
 	});
 });
