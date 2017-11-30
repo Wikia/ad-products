@@ -204,6 +204,28 @@ $uap-video-fullscreen-z-index: 9999;
 		}
 	}
 
+	.learn-more {
+		color: #fff;
+		display: none;
+		position: absolute;
+		opacity: 0.75;
+		right: 0;
+		top: 0;
+		z-index: 3;
+
+		.learn-more-icon {
+			cursor: pointer;
+			fill: $uap-button-color;
+			height: $player-button-size;
+			overflow: hidden;
+			width: $player-button-size;
+		}
+	}
+
+	&.mobile-porvata .learn-more {
+		display: unset;
+	}
+
 	.volume-button {
 		bottom: $uap-progress-bar-height;
 		cursor: pointer;

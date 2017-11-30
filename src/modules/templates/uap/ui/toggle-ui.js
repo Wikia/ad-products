@@ -7,7 +7,9 @@ function add(video, container) {
 		overlay = document.createElement('div'),
 		setAutomaticToggle = () => {
 			timeout = setTimeout(() => {
-				video.container.classList.remove('ui-visible');
+				if (video.isPlaying()) {
+					video.container.classList.remove('ui-visible');
+				}
 			}, overlayTimeout);
 		};
 
@@ -18,9 +20,6 @@ function add(video, container) {
 
 			clearTimeout(timeout);
 			setAutomaticToggle();
-		});
-		video.addEventListener('pause', () => {
-			clearTimeout(timeout);
 		});
 		video.addEventListener('resume', setAutomaticToggle);
 	} else {

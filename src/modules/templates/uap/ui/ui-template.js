@@ -1,8 +1,9 @@
 import CloseButton from './close-button';
+import LearnMore from './learn-more';
 import PauseControl from './pause-control';
 import PauseOverlay from './pause-overlay';
-import ReplayOverlay from './replay-overlay';
 import ProgressBar from './progress-bar';
+import ReplayOverlay from './replay-overlay';
 import ToggleAnimation from './toggle-animation';
 import ToggleFullscreen from './toggle-fullscreen';
 import ToggleUI from './toggle-ui';
@@ -59,6 +60,7 @@ const getTemplates = params => ({
 		createBottomPanel(params),
 		ToggleVideo,
 		ToggleUI,
+		LearnMore,
 		ReplayOverlay,
 		//ToggleAnimation
 	]
