@@ -1,21 +1,33 @@
-const overlayTimeout = 2000;
+const overlayTimeout = 5000;
 
 function add(video, container) {
-	const overlay = document.createElement('div');
+	const isMobile = video.container.parentNode.classList.contains('mobile-porvata'),
+		overlay = document.createElement('div');
+
+	let timeout = null;
 
 	overlay.classList.add('toggle-ui-overlay');
-	overlay.addEventListener('click', () => {
-		if (video.container.parentNode.classList.contains('mobile-porvata')) {
+	if (isMobile) {
+		overlay.addEventListener('click', () => {
 			video.container.classList.toggle('ui-visible');
 
-			setTimeout(() => {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => {
 				video.container.classList.remove('ui-visible');
 			}, overlayTimeout);
-		} else {
+		});
+	} else {
+		video.container.addEventListener('mouseenter', () => {
+			video.container.classList.add('ui-visible');
+		});
+		video.container.addEventListener('mouseleave', () => {
+			video.container.classList.remove('ui-visible');
+		});
+		overlay.addEventListener('click', () => {
 			// TODO: give me click through url
 			top.open('http://fandom.com', '_blank');
-		}
-	});
+		});
+	}
 
 	container.appendChild(overlay);
 }

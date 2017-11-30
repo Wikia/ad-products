@@ -1,4 +1,3 @@
-
 import { createIcon, icons } from './icons';
 
 function add(video, container) {

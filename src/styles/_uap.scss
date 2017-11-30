@@ -144,12 +144,6 @@ $uap-video-fullscreen-z-index: 9999;
 		}
 	}
 
-	.ui-visible {
-		.dynamic-panel {
-			display: block;
-		}
-	}
-
 	.toggle-ui-overlay {
 		cursor: pointer;
 		height: 100%;
@@ -205,15 +199,13 @@ $uap-video-fullscreen-z-index: 9999;
 		}
 	}
 
-	&.theme-hivi {
-		.ui-visible .toggle-ui-overlay, .video-player:hover .toggle-ui-overlay {
+	&.theme-hivi .ui-visible {
+		.toggle-ui-overlay {
 			background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 20%, rgba(0, 0, 0, 0) 40%);
 		}
 
-		.video-player:hover  {
-			.dynamic-panel {
-				display: block;
-			}
+		.dynamic-panel {
+			display: block;
 		}
 	}
 }
