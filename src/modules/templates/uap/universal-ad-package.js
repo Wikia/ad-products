@@ -31,7 +31,6 @@ function loadPorvata(videoSettings, slotContainer, imageContainer) {
 	const params = videoSettings.getParams(),
 		template = selectTemplate(videoSettings);
 
-	params.container = slotContainer;
 	params.autoPlay = videoSettings.isAutoPlay();
 	videoSettings.updateParams(params);
 
@@ -72,6 +71,7 @@ function loadVideoAd(videoSettings) {
 	};
 	params.width = size.width;
 	params.height = size.height;
+	params.container = slotContainer;
 	videoSettings.updateParams(params);
 
 	function recalculateVideoSize(video) {

@@ -58,6 +58,7 @@ $uap-video-fullscreen-z-index: 9999;
 			left: 0;
 			position: absolute;
 			width: 100%;
+			z-index: 2;
 		}
 
 		.current-time {
@@ -77,7 +78,7 @@ $uap-video-fullscreen-z-index: 9999;
 		top: 0;
 	}
 
-	.mobile-porvata .video-player > iframe {
+	&.mobile-porvata .video-player > iframe {
 		z-index: -1;
 	}
 
@@ -129,12 +130,46 @@ $uap-video-fullscreen-z-index: 9999;
 		}
 	}
 
+	.dynamic-panel {
+		bottom: 8px;
+		display: none;
+		pointer-events:none;
+		right: 0;
+		text-align: left;
+		width: 100%;
+		z-index: 3;
+
+		& > div {
+			pointer-events: all;
+		}
+	}
+
+	.ui-visible {
+		.dynamic-panel {
+			display: block;
+		}
+	}
+
+	.toggle-ui-overlay {
+		cursor: pointer;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		user-select: none;
+		width: 100%;
+		z-index: 1;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-webkit-user-select: none;
+	}
+
 	.toggle-fullscreen {
 		cursor: pointer;
+		fill: $uap-button-color;
+		float: right;
+		height: $player-button-size;
 		overflow: hidden;
 		opacity: 0.75;
-		fill: $uap-button-color;
-		height: $player-button-size;
 		width: $player-button-size;
 
 		.fullscreen-off-icon {
@@ -167,6 +202,18 @@ $uap-video-fullscreen-z-index: 9999;
 			overflow: hidden;
 			position: relative;
 			width: $player-button-size;
+		}
+	}
+
+	&.theme-hivi {
+		.ui-visible .toggle-ui-overlay, .video-player:hover .toggle-ui-overlay {
+			background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 20%, rgba(0, 0, 0, 0) 40%);
+		}
+
+		.video-player:hover  {
+			.dynamic-panel {
+				display: block;
+			}
 		}
 	}
 }

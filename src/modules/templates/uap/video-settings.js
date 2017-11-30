@@ -4,6 +4,7 @@ export default class VideoSettings {
 
 	constructor(params) {
 		this.params = params;
+		this.params.theme = 'hivi'; // TODO: Remove me
 
 		Object.defineProperty(this, 'resolvedState', {
 			value: ResolvedState.isResolvedState(this.params),
