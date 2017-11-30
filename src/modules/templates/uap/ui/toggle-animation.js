@@ -29,7 +29,7 @@ function showVideo(video, params) {
 	toggle(video.container, params.image);
 }
 
-function add(video, params) {
+function add(video, container, params) {
 	video.addEventListener('wikiaAdStarted', () => {
 		showVideo(video, params);
 	});

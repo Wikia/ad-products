@@ -1,10 +1,10 @@
-function add(video) {
+function add(video, container) {
 	video.addEventListener('wikiaAdStarted', () => {
-		video.container.classList.remove('hide');
+		container.classList.remove('hide');
 	});
 
 	video.addEventListener('wikiaAdCompleted', () => {
-		video.container.classList.add('hide');
+		container.classList.add('hide');
 	});
 }
 

@@ -1,49 +1,59 @@
-const autoPlayLayout = [
-		'progressBar',
-		'pauseOverlay',
-		'volumeControl',
-		'toggleVideoWithAnimation'
-	],
-	defaultLayout = [
-		'progressBar',
-		'pauseOverlay',
-		'volumeControl',
-		'closeButton',
-		'toggleVideoWithAnimation'
-	],
-	splitLayout = [
-		'progressBar',
-		'pauseOverlay',
-		'volumeControl',
-		'toggleVideo',
-		'replayOverlay'
-	],
-	clickToPlaySplitLayout = [
-		'progressBar',
-		'pauseOverlay',
-		'volumeControl',
-		'toggleVideo',
-		'replayOverlay',
-		'closeButton'
-	];
+import CloseButton from './close-button';
+import PauseOverlay from './pause-overlay';
+import ReplayOverlay from './replay-overlay';
+import ProgressBar from './progress-bar';
+import ToggleVideo from './toggle-video';
+import ToggleAnimation from './toggle-animation';
+import ToggleFullscreen from './toggle-fullscreen';
+import VolumeControl from './volume-control';
+import Panel from './panel';
 
-function selectTemplate(videoSettings) {
-	let template = defaultLayout;
+const createBottomPanel = ({ fullscreenable = false }) => new Panel('bottom-panel', [
+	fullscreenable ? ToggleFullscreen : null,
+	VolumeControl
+]);
+const getTemplates = params => ({
+	autoPlay: [
+		ProgressBar,
+		PauseOverlay,
+		createBottomPanel(params),
+		ToggleAnimation
+	],
+	default: [
+		ProgressBar,
+		PauseOverlay,
+		createBottomPanel(params),
+		CloseButton,
+		ToggleAnimation
+	],
+	split: [
+		ProgressBar,
+		PauseOverlay,
+		createBottomPanel(params),
+		ToggleVideo,
+		ReplayOverlay
+	],
+	clickToPlaySplit: [
+		ProgressBar,
+		PauseOverlay,
+		createBottomPanel(params),
+		ToggleVideo,
+		ReplayOverlay,
+		CloseButton
+	]
+});
+
+export function selectTemplate(videoSettings) {
+	const templates = getTemplates(videoSettings.getParams());
+	let template = templates.default;
 
 	if (!videoSettings.isAutoPlay() && videoSettings.isSplitLayout()) {
-		template = clickToPlaySplitLayout;
+		template = templates.clickToPlaySplit;
 	} else if (videoSettings.isSplitLayout()) {
-		template = splitLayout;
+		template = templates.split;
 	} else if (videoSettings.isAutoPlay()) {
-		template = autoPlayLayout;
+		template = templates.autoPlay;
 	}
 
 	return template;
 }
-
-export default {
-	autoPlayLayout,
-	defaultLayout,
-	splitLayout,
-	selectTemplate
-};

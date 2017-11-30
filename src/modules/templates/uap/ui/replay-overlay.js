@@ -1,6 +1,6 @@
 const replayOverlayClass = 'replay-overlay';
 
-function add(video, params) {
+function add(video, container, params) {
 	const overlay = document.createElement('div');
 
 	if (params.splitLayoutVideoPosition === 'right') {
@@ -20,7 +20,7 @@ function add(video, params) {
 		showOverlay(overlay, params);
 	});
 
-	video.container.parentElement.insertBefore(overlay, video.container);
+	container.parentElement.insertBefore(overlay, container);
 }
 
 function showOverlay(overlay, params) {

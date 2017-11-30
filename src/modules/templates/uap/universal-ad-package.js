@@ -4,7 +4,7 @@ import Porvata from 'ad-engine/src/video/player/porvata/porvata';
 import SlotService from 'ad-engine/src/services/slot-service';
 
 import VideoInterface from './ui/video-interface';
-import UITemplate from './ui/ui-template';
+import { selectTemplate } from './ui/ui-template';
 
 let uapId = 'none',
 	uapType = 'uap';
@@ -29,7 +29,7 @@ function adjustVideoAdContainer(params) {
 
 function loadPorvata(videoSettings, slotContainer, imageContainer) {
 	const params = videoSettings.getParams(),
-		template = UITemplate.selectTemplate(videoSettings);
+		template = selectTemplate(videoSettings);
 
 	params.container = slotContainer;
 	params.autoPlay = videoSettings.isAutoPlay();

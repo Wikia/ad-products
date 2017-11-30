@@ -1,4 +1,4 @@
-function add(video) {
+function add(video, container) {
 	const overlay = document.createElement('div');
 
 	overlay.classList.add('pause-overlay');
@@ -10,7 +10,7 @@ function add(video) {
 		}
 	});
 
-	video.container.appendChild(overlay);
+	container.appendChild(overlay);
 }
 
 export default {
