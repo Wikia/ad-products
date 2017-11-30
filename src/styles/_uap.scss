@@ -181,6 +181,29 @@ $uap-video-fullscreen-z-index: 9999;
 		}
 	}
 
+	.play-pause-button {
+		cursor: pointer;
+		fill: $uap-button-color;
+		height: $player-button-size;
+		overflow: hidden;
+		opacity: 0.75;
+		width: $player-button-size;
+
+		.play-icon {
+			display: none;
+		}
+
+		&.is-paused {
+			.play-icon {
+				display: unset;
+			}
+
+			.pause-icon {
+				display: none;
+			}
+		}
+	}
+
 	.volume-button {
 		bottom: $uap-progress-bar-height;
 		cursor: pointer;

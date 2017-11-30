@@ -1,10 +1,15 @@
 const overlayTimeout = 5000;
 
 function add(video, container) {
-	const isMobile = video.container.parentNode.classList.contains('mobile-porvata'),
-		overlay = document.createElement('div');
-
 	let timeout = null;
+
+	const isMobile = video.container.parentNode.classList.contains('mobile-porvata'),
+		overlay = document.createElement('div'),
+		setAutomaticToggle = () => {
+			timeout = setTimeout(() => {
+				video.container.classList.remove('ui-visible');
+			}, overlayTimeout);
+		};
 
 	overlay.classList.add('toggle-ui-overlay');
 	if (isMobile) {
@@ -12,10 +17,12 @@ function add(video, container) {
 			video.container.classList.toggle('ui-visible');
 
 			clearTimeout(timeout);
-			timeout = setTimeout(() => {
-				video.container.classList.remove('ui-visible');
-			}, overlayTimeout);
+			setAutomaticToggle();
 		});
+		video.addEventListener('pause', () => {
+			clearTimeout(timeout);
+		});
+		video.addEventListener('resume', setAutomaticToggle);
 	} else {
 		video.container.addEventListener('mouseenter', () => {
 			video.container.classList.add('ui-visible');

@@ -1,4 +1,5 @@
 import CloseButton from './close-button';
+import PauseControl from './pause-control';
 import PauseOverlay from './pause-overlay';
 import ReplayOverlay from './replay-overlay';
 import ProgressBar from './progress-bar';
@@ -18,7 +19,7 @@ const createBottomPanel = ({ theme = null }) => {
 	}
 
 	return new Panel(panelClassName, [
-		isHiVi ? VolumeControl : null,
+		PauseControl,
 		VolumeControl,
 		isHiVi ? ToggleFullscreen : null
 	]);
