@@ -2,15 +2,13 @@ import { createIcon, icons } from './icons';
 
 function add(video, container) {
 	const pauseButton = document.createElement('div'),
-		pauseIcon = createIcon(icons.PAUSE),
-		playIcon = createIcon(icons.PLAY);
+		pauseIcon = createIcon(icons.PAUSE, ['play-off-icon', 'porvata-icon', 'porvata-off-icon']),
+		playIcon = createIcon(icons.PLAY, ['play-on-icon', 'porvata-icon', 'porvata-on-icon']);
 
-	playIcon.classList.add('play-icon');
-	pauseIcon.classList.add('pause-icon');
 	pauseButton.appendChild(playIcon);
 	pauseButton.appendChild(pauseIcon);
 
-	pauseButton.classList.add('play-pause-button');
+	pauseButton.className = 'play-pause-button porvata-switchable-icon';
 	pauseButton.addEventListener('click', () => {
 		if (video.isPaused()) {
 			video.resume();
@@ -19,13 +17,13 @@ function add(video, container) {
 		}
 	});
 	video.addEventListener('pause', () => {
-		pauseButton.classList.add('is-paused');
+		pauseButton.classList.remove('is-on');
 	});
 	video.addEventListener('resume', () => {
-		pauseButton.classList.remove('is-paused');
+		pauseButton.classList.add('is-on');
 	});
 	video.addEventListener('start', () => {
-		pauseButton.classList.remove('is-paused');
+		pauseButton.classList.add('is-on');
 	});
 
 	container.appendChild(pauseButton);

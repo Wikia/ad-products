@@ -4,10 +4,9 @@ const text = 'Learn more';
 
 function add(video, container) {
 	const learnMore = document.createElement('div'),
-		icon = createIcon(icons.LEARN_MORE),
+		icon = createIcon(icons.LEARN_MORE, ['learn-more-icon', 'porvata-icon']),
 		label = document.createElement('span');
 
-	icon.classList.add('learn-more-icon');
 	label.innerText = text;
 	learnMore.appendChild(label);
 	learnMore.appendChild(icon);

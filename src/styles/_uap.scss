@@ -157,48 +157,39 @@ $uap-video-fullscreen-z-index: 9999;
 		-webkit-user-select: none;
 	}
 
-	.toggle-fullscreen {
-		cursor: pointer;
-		fill: $uap-button-color;
+	.toggle-fullscreen-button {
 		float: right;
-		height: $player-button-size;
-		overflow: hidden;
 		opacity: 0.75;
-		width: $player-button-size;
-
-		.fullscreen-off-icon {
-			display: none;
-		}
-
-		&.fullscreen-on {
-			.fullscreen-off-icon {
-				display: unset;
-			}
-
-			.fullscreen-on-icon {
-				display: none;
-			}
-		}
 	}
 
 	.play-pause-button {
+		opacity: 0.75;
+	}
+
+	.volume-button {
+		bottom: $uap-progress-bar-height;
+		cursor: pointer;
+	}
+
+	.porvata-icon {
 		cursor: pointer;
 		fill: $uap-button-color;
 		height: $player-button-size;
 		overflow: hidden;
-		opacity: 0.75;
 		width: $player-button-size;
+	}
 
-		.play-icon {
+	.porvata-switchable-icon {
+		.porvata-off-icon {
 			display: none;
 		}
 
-		&.is-paused {
-			.play-icon {
+		&.is-on {
+			.porvata-off-icon {
 				display: unset;
 			}
 
-			.pause-icon {
+			.porvata-on-icon {
 				display: none;
 			}
 		}
@@ -212,36 +203,10 @@ $uap-video-fullscreen-z-index: 9999;
 		right: 0;
 		top: 0;
 		z-index: 3;
-
-		.learn-more-icon {
-			cursor: pointer;
-			fill: $uap-button-color;
-			height: $player-button-size;
-			overflow: hidden;
-			width: $player-button-size;
-		}
 	}
 
 	&.mobile-porvata .learn-more {
 		display: unset;
-	}
-
-	.volume-button {
-		bottom: $uap-progress-bar-height;
-		cursor: pointer;
-
-		.speaker {
-			&.mute {
-				background: url($player-button-sound-off)
-			}
-
-			background: url($player-button-sound-on);
-			display: block;
-			height: $player-button-size;
-			overflow: hidden;
-			position: relative;
-			width: $player-button-size;
-		}
 	}
 
 	&.theme-hivi .ui-visible {
