@@ -73,8 +73,7 @@ export function selectTemplate(videoSettings) {
 
 	if (params.theme === 'hivi') {
 		template = 'hivi';
-	} else
-	if (!videoSettings.isAutoPlay() && videoSettings.isSplitLayout()) {
+	} else if (!videoSettings.isAutoPlay() && videoSettings.isSplitLayout()) {
 		template = 'click-to-play-split';
 	} else if (videoSettings.isSplitLayout()) {
 		template = 'split';
