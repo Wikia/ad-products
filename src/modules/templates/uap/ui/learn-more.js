@@ -1,11 +1,11 @@
 import { createIcon, icons } from './icons';
 
-const text = 'Learn more';
+const text = 'Learn More';
 
 function add(video, container) {
 	const learnMore = document.createElement('div'),
 		icon = createIcon(icons.LEARN_MORE, ['learn-more-icon', 'porvata-icon']),
-		label = document.createElement('span');
+		label = document.createElement('div');
 
 	label.innerText = text;
 	learnMore.appendChild(label);
