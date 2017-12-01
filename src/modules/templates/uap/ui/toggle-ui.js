@@ -1,6 +1,6 @@
 const overlayTimeout = 5000;
 
-function add(video, container) {
+function add(video, container, params) {
 	let timeout = null;
 
 	const isMobile = video.container.parentNode.classList.contains('mobile-porvata'),
@@ -30,8 +30,7 @@ function add(video, container) {
 			video.container.classList.remove('ui-visible');
 		});
 		overlay.addEventListener('click', () => {
-			// TODO: give me click through url
-			top.open('http://fandom.com', '_blank');
+			top.open(params.clickThroughURL, '_blank');
 		});
 	}
 

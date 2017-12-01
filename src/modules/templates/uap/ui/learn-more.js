@@ -2,7 +2,7 @@ import { createIcon, icons } from './icons';
 
 const text = 'Learn More';
 
-function add(video, container) {
+function add(video, container, params) {
 	const learnMore = document.createElement('div'),
 		icon = createIcon(icons.LEARN_MORE, ['learn-more-icon', 'porvata-icon']),
 		label = document.createElement('div');
@@ -13,8 +13,7 @@ function add(video, container) {
 
 	learnMore.classList.add('learn-more');
 	learnMore.addEventListener('click', () => {
-		// TODO: give me click through url
-		top.open('http://fandom.com', '_blank');
+		top.open(params.clickThroughURL, '_blank');
 	});
 
 	container.appendChild(learnMore);
