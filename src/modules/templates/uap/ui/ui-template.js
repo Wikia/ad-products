@@ -58,11 +58,10 @@ const getTemplates = params => ({
 	hivi: [
 		ProgressBar,
 		createBottomPanel(params),
-		ToggleVideo,
+		params.videoPlaceholderElement ? ToggleVideo : ToggleAnimation,
 		ToggleUI,
 		LearnMore,
-		ReplayOverlay,
-		//ToggleAnimation
+		ReplayOverlay
 	]
 });
 
@@ -84,6 +83,9 @@ export function selectTemplate(videoSettings) {
 	}
 
 	params.container.classList.add(`theme-${template}`);
+	if (params.isDarkTheme) {
+		params.container.classList.add('theme-dark');
+	}
 
 	return templates[template];
 }

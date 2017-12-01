@@ -17,6 +17,14 @@ $uap-video-animation-duration: 0.4s;
 $uap-video-z-index: 100;
 $uap-video-fullscreen-z-index: 9999;
 
+$hivi-uap-dark-button-color: #000;
+$hivi-uap-light-button-color: #fff;
+$hivi-uap-progress-bar-color: #7c7c7c;
+$hivi-uap-progress-bar-current-time-color: #fff;
+$hivi-uap-progress-bar-height: 4px;
+$hivi-button-size: 16px;
+$hivi-player-button-border-space: 6px;
+
 .gpt-ad.bfaa-template,
 .gpt-ad.bfab-template {
 	display: block;
@@ -137,7 +145,7 @@ $uap-video-fullscreen-z-index: 9999;
 	.dynamic-panel {
 		bottom: 8px;
 		display: none;
-		pointer-events:none;
+		pointer-events: none;
 		right: 0;
 		text-align: left;
 		width: 100%;
@@ -212,13 +220,49 @@ $uap-video-fullscreen-z-index: 9999;
 		display: unset;
 	}
 
-	&.theme-hivi .ui-visible {
-		.toggle-ui-overlay {
-			background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 20%, rgba(0, 0, 0, 0) 40%);
+	&.theme-hivi {
+		.ui-visible {
+			.toggle-ui-overlay {
+				background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 15%, rgba(0, 0, 0, 0) 30%);
+			}
+
+			.dynamic-panel {
+				display: block;
+			}
 		}
 
-		.dynamic-panel {
-			display: block;
+		.porvata-icon {
+			fill: $hivi-uap-light-button-color;
+			height: $hivi-button-size;
+			opacity: 1;
+			width: $hivi-button-size;
+		}
+
+		.progress-bar {
+			background: $hivi-uap-progress-bar-color;
+			height: $hivi-uap-progress-bar-height;
+		}
+
+		.current-time {
+			background: $hivi-uap-progress-bar-current-time-color;
+		}
+
+		.bottom-panel > div {
+			padding: $hivi-player-button-border-space $player-button-click-area-mobile;
+
+			@media #{$breakpoint-m-up} {
+				padding: $hivi-player-button-border-space $player-button-click-area-desktop;
+			}
+		}
+
+		&.theme-dark {
+			.ui-visible .toggle-ui-overlay {
+				background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%);
+			}
+
+			.porvata-icon {
+				fill: $hivi-uap-dark-button-color;
+			}
 		}
 	}
 }

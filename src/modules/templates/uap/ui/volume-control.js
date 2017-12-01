@@ -1,9 +1,10 @@
 import { createIcon, icons } from './icons';
 
-function createVolumeControl() {
-	const volume = document.createElement('div'),
-		offIcon = createIcon(icons.VOLUME_OFF, ['volume-off-icon', 'porvata-icon', 'porvata-off-icon']),
-		onIcon = createIcon(icons.VOLUME_ON, ['volume-on-icon', 'porvata-icon', 'porvata-on-icon']);
+function createVolumeControl(params) {
+	const iconPrefix = params.theme === 'hivi' ? 'HIVI_' : '',
+		volume = document.createElement('div'),
+		offIcon = createIcon(icons[`${iconPrefix}VOLUME_OFF`], ['volume-off-icon', 'porvata-icon', 'porvata-off-icon']),
+		onIcon = createIcon(icons[`${iconPrefix}VOLUME_ON`], ['volume-on-icon', 'porvata-icon', 'porvata-on-icon']);
 
 	volume.className = 'volume-button porvata-switchable-icon hidden';
 	volume.appendChild(offIcon);
@@ -20,8 +21,8 @@ function updateCurrentState(video, volumeControl) {
 	}
 }
 
-function add(video, container) {
-	const volumeControl = createVolumeControl();
+function add(video, container, params) {
+	const volumeControl = createVolumeControl(video.params);
 
 	video.addEventListener('wikiaVolumeChange', () => {
 		updateCurrentState(video, volumeControl);
