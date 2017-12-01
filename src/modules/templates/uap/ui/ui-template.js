@@ -20,7 +20,7 @@ const createBottomPanel = ({ theme = null }) => {
 	}
 
 	return new Panel(panelClassName, [
-		PauseControl,
+		isHiVi ? PauseControl : null,
 		VolumeControl,
 		isHiVi ? ToggleFullscreen : null
 	]);
