@@ -132,9 +132,10 @@ $hivi-uap-player-button-border-space: 6px;
 		z-index: 1;
 
 		> div {
-			vertical-align: top;
+			cursor: pointer;
 			display: inline-block;
 			padding: $player-button-border-space $player-button-click-area-mobile;
+			vertical-align: top;
 
 			@media #{$breakpoint-m-up} {
 				padding: $player-button-click-area-desktop $player-button-click-area-desktop;
@@ -208,6 +209,7 @@ $hivi-uap-player-button-border-space: 6px;
 
 	.learn-more {
 		color: #fff;
+		cursor: pointer;
 		display: none;
 		position: absolute;
 		opacity: 0.75;
