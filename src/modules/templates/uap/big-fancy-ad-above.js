@@ -34,16 +34,17 @@ export default class BigFancyAdAbove {
 				}, 0);
 			},
 			onUnstickBfaaCallback: (adSlot) => {
-				const bfaa = adSlot.getElement(),
-					adHeight = bfaa.offsetHeight;
-
-				bfaa.style.top = `${window.scrollY === 0 ? 0 : -adHeight}px`;
-				bfaa.style.transition = '';
-
-				setTimeout(() => {
-					bfaa.style.top = 0;
-					bfaa.classList.remove('sticky-bfaa');
-				}, 1000);
+				// TODO uncomment me
+				// const bfaa = adSlot.getElement(),
+				// 	adHeight = bfaa.offsetHeight;
+				//
+				// bfaa.style.top = `${window.scrollY === 0 ? 0 : -adHeight}px`;
+				// bfaa.style.transition = '';
+				//
+				// setTimeout(() => {
+				// 	bfaa.style.top = 0;
+				// 	bfaa.classList.remove('sticky-bfaa');
+				// }, 1000);
 			}
 		};
 	}
@@ -78,33 +79,41 @@ export default class BigFancyAdAbove {
 			this.stickyBfaa.run();
 		}
 
-		if (this.params.theme === 'hivi') {
-			ScrollListener.addCallback(() => this.updateOnScroll());
-		}
-
 		this.videoSettings = new VideoSettings(this.params);
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
-		ResolvedState.setImage(this.videoSettings)
-			.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
-			.then(this.adIsReady.bind(this));
+
+		if (params.template === 'hivi') {
+			SlotTweaker.onReady(this.adSlot)
+				.then(this.adIsReady.bind(this));
+		} else {
+			ResolvedState.setImage(this.videoSettings)
+				.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
+				.then(this.adIsReady.bind(this));
+		}
 	}
 
 	updateOnScroll() {
 		let offset = window.pageYOffset;
-
-		this.updateThumbnailMargins(offset);
 		this.updateSlotPadding(offset);
 	}
 
-	updateThumbnailMargins() {
-
-	}
-
 	updateSlotPadding(offset) {
-		let d = (400 - offset) / 400;
+		let d = (400 - offset) / 400; // TODO use common logic with scrollToResolve
 		let diff = (10 - 4) * d;
 		var finalAspectRatio = 10 - diff;
+
+		if (finalAspectRatio > 10) {
+			finalAspectRatio = 10;
+			this.params.image1.element.style.display = 'block';
+			this.params.image2.element.style.display = 'none';
+
+		} else if (finalAspectRatio < 4) {
+			this.params.image1.element.style.display = 'none';
+			this.params.image2.element.style.display = 'block';
+
+			finalAspectRatio = 4;
+		}
 
 		SlotTweaker.makeResponsive(this.adSlot, finalAspectRatio);
 		this.recalculatePaddingTop(finalAspectRatio);
@@ -155,6 +164,78 @@ export default class BigFancyAdAbove {
 					return video;
 				});
 		}
+
+		if (this.params.theme === 'hivi') {
+			this.scrollToResolve(false);
+			ScrollListener.addCallback(() => this.updateOnScroll());
+		};
+	}
+
+	scrollToResolve(isMobile) {
+		let globalConfig = {
+			desktop: {
+				aspectRatio: {
+					default: 1600 / 400,
+					resolved: 1600 / 160
+				},
+				state: {
+					height: {
+						default: 92,
+						resolved: 100
+					},
+					top: {
+						default: 4,
+						resolved: 0
+					}
+				}
+			},
+			mobile: {
+				aspectRatio: {
+					default: 16 / 9,
+					resolved: 3 / 1
+				},
+				state: {
+					height: {
+						default: 100,
+						resolved: 65
+					},
+					right: {
+						default: 0,
+						resolved: 2.5
+					},
+					bottom: {
+						default: 0,
+						resolved: 7
+					}
+				}
+			}
+		};
+
+		let config = globalConfig[isMobile ? 'mobile' : 'desktop'],
+			container = this.params.adContainer,
+			thumbnail = this.params.thumbnail;
+
+		function onResize() {
+			let currentAspectRatio = container.offsetWidth / container.offsetHeight,
+				aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved,
+				currentDiff = config.aspectRatio.default - currentAspectRatio,
+				currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff),
+				diff;
+
+			function handleProperty(name) {
+				if (config.state[name]) {
+					diff = config.state[name].default - config.state[name].resolved;
+					thumbnail.style[name] = (config.state[name].default - (diff * currentState)) + '%';
+				}
+			}
+
+			Object.keys(config.state).forEach(function (property) {
+				handleProperty(property);
+			});
+		}
+
+		window.addEventListener('scroll', onResize);
+		onResize();
 	}
 
 	recalculatePaddingTop(finalAspectRatio) {

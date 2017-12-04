@@ -294,7 +294,8 @@ $hivi-uap-player-button-border-space: 6px;
 		}
 
 		.video-player, .replay-overlay {
-			right: 6%;
+			right: 23%;
+			transform: translateX(50%);
 			top: 4%;
 			height: 92%;
 		}
