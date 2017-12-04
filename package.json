@@ -1,13 +1,13 @@
 {
   "name": "ad-products",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Wikia ad products",
   "repository": {
     "type": "git",
     "url": "https://github.com/Wikia/ad-products"
   },
   "dependencies": {
-    "ad-engine": "git+ssh://git@github.com/Wikia/ad-engine.git#v6.2.0"
+    "ad-engine": "git+ssh://git@github.com/Wikia/ad-engine.git#v7.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
