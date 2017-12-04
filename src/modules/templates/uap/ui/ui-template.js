@@ -61,7 +61,7 @@ const getTemplates = params => ({
 		params.videoPlaceholderElement ? ToggleVideo : ToggleAnimation,
 		ToggleUI,
 		LearnMore,
-		ReplayOverlay
+		params.videoPlaceholderElement ? ReplayOverlay : null
 	]
 });
 
