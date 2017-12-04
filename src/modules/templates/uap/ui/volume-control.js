@@ -1,27 +1,28 @@
-function createVolumeControl() {
-	const volume = document.createElement('div'),
-		speaker = document.createElement('a');
+import { createIcon, icons } from './icons';
 
-	speaker.className = 'speaker';
-	speaker.appendChild(document.createElement('span'));
-	volume.className = 'volume-button hidden';
+function createVolumeControl(params) {
+	const iconPrefix = params.theme === 'hivi' ? 'HIVI_' : '',
+		volume = document.createElement('div'),
+		offIcon = createIcon(icons[`${iconPrefix}VOLUME_OFF`], ['volume-off-icon', 'porvata-icon', 'porvata-off-icon']),
+		onIcon = createIcon(icons[`${iconPrefix}VOLUME_ON`], ['volume-on-icon', 'porvata-icon', 'porvata-on-icon']);
 
-	volume.appendChild(speaker);
-	volume.speaker = speaker;
+	volume.className = 'volume-button porvata-switchable-icon hidden';
+	volume.appendChild(offIcon);
+	volume.appendChild(onIcon);
 
 	return volume;
 }
 
 function updateCurrentState(video, volumeControl) {
 	if (video.isMuted() || video.isMobilePlayerMuted()) {
-		volumeControl.speaker.classList.add('mute');
+		volumeControl.classList.add('is-on');
 	} else {
-		volumeControl.speaker.classList.remove('mute');
+		volumeControl.classList.remove('is-on');
 	}
 }
 
 function add(video, container) {
-	const volumeControl = createVolumeControl();
+	const volumeControl = createVolumeControl(video.params);
 
 	video.addEventListener('wikiaVolumeChange', () => {
 		updateCurrentState(video, volumeControl);

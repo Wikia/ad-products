@@ -1,8 +1,8 @@
 @import '_breakpoints';
 
 $player-button-border-space: 10px;
-$player-button-click-area-desktop: 5px;
-$player-button-click-area-mobile: 15px;
+$player-button-click-area-desktop: 10px;
+$player-button-click-area-mobile: 12px;
 $player-button-collapse: 'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfNF9jb3B5XzIiIGRhdGEtbmFtZT0iTGF5ZXIgNCBjb3B5IDIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDI4IDI4Ij48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjtvcGFjaXR5OjAuNDt9LmNscy0ye2ZpbGw6IzIzMWYyMDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmNsb3NlX2J1dHRvbjwvdGl0bGU+PGNpcmNsZSBjbGFzcz0iY2xzLTEiIGN4PSIxNC4wOSIgY3k9IjE0LjA5IiByPSIxMy43NCIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTE2LDIuOTNBMTMuMDcsMTMuMDcsMCwxLDEsMi45MywxNiwxMy4wOCwxMy4wOCwwLDAsMSwxNiwyLjkzTTE2LDJBMTQsMTQsMCwxLDAsMzAsMTYsMTQsMTQsMCwwLDAsMTYsMloiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yIC0yKSIvPjxnIGlkPSJQYWdlLTEiPjxnIGlkPSJTVElDS0VSU0hFRVQiPjxnIGlkPSJJY29ucyI+PGcgaWQ9IkNyb3NzIj48cGF0aCBpZD0iQ2xvc2UiIGNsYXNzPSJjbHMtMiIgZD0iTTIyLjI5LDguMjksMTYsMTQuNTksOS43MSw4LjI5QTEsMSwwLDAsMCw4LjI5LDkuNzFMMTQuNTksMTYsOC4yOSwyMi4yOWExLDEsMCwxLDAsMS40MSwxLjQxTDE2LDE3LjQxbDYuMjksNi4yOWExLDEsMCwxLDAsMS40MS0xLjQxTDE3LjQxLDE2bDYuMjktNi4yOWExLDEsMCwwLDAtMS40MS0xLjQxWiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIgLTIpIi8+PC9nPjwvZz48L2c+PC9nPjwvc3ZnPg==';
 $player-button-play: 'data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCI+DQogICAgPGNpcmNsZSBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjQiIGN4PSIxNCIgY3k9IjE0IiByPSIxMy43NCIvPg0KICAgIDxwYXRoIGZpbGw9IiMyMzFmMjAiDQogICAgICAgICAgZD0iTTE2LDIuOTRBMTMuMDcsMTMuMDcsMCwxLDEsMywxNiwxMy4wOCwxMy4wOCwwLDAsMSwxNiwyLjk0TTE2LDJBMTQsMTQsMCwxLDAsMzAsMTYsMTQsMTQsMCwwLDAsMTYsMloiDQogICAgICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIuMDQgLTIuMDEpIi8+DQogICAgPHBvbHlnb24gZmlsbD0iIzIzMWYyMCIgcG9pbnRzPSIyMC4xNyAxNCA5LjYzIDIwLjIzIDkuNjMgNy43NyAyMC4xNyAxNCIvPg0KPC9zdmc+';
 $player-button-size: 24px;
@@ -16,6 +16,14 @@ $uap-replay-overlay-color: rgba(0,0,0,0.3);
 $uap-video-animation-duration: 0.4s;
 $uap-video-z-index: 100;
 $uap-video-fullscreen-z-index: 9999;
+
+$hivi-uap-dark-button-color: #000;
+$hivi-uap-light-button-color: #fff;
+$hivi-uap-progress-bar-color: #7c7c7c;
+$hivi-uap-progress-bar-current-time-color: #fff;
+$hivi-uap-progress-bar-height: 4px;
+$hivi-uap-button-size: 16px;
+$hivi-uap-player-button-border-space: 6px;
 
 .gpt-ad.bfaa-template,
 .gpt-ad.bfab-template {
@@ -58,6 +66,7 @@ $uap-video-fullscreen-z-index: 9999;
 			left: 0;
 			position: absolute;
 			width: 100%;
+			z-index: 2;
 		}
 
 		.current-time {
@@ -77,7 +86,7 @@ $uap-video-fullscreen-z-index: 9999;
 		top: 0;
 	}
 
-	.mobile-porvata .video-player > iframe {
+	&.mobile-porvata .video-player > iframe {
 		z-index: -1;
 	}
 
@@ -106,67 +115,182 @@ $uap-video-fullscreen-z-index: 9999;
 		z-index: 1;
 		background: url($player-button-collapse);
 		height: $player-button-size;
-		margin: $player-button-border-space $player-button-border-space $player-button-click-area-mobile $player-button-click-area-mobile;
+		margin: $player-button-border-space $player-button-click-area-mobile;
 		top: 0;
 		width: $player-button-size;
+
+		@media #{$breakpoint-m-up} {
+			margin: $player-button-click-area-desktop $player-button-click-area-desktop;
+		}
 	}
 
 	.bottom-panel {
 		position: absolute;
-		bottom: $player-button-border-space;
-		right: $player-button-click-area-desktop;
+		bottom: $uap-progress-bar-height;
+		right: 0;
 		text-align: right;
 		z-index: 1;
 
 		> div {
-			vertical-align: top;
+			cursor: pointer;
 			display: inline-block;
-			margin: $player-button-border-space $player-button-click-area-mobile;
-	
+			padding: $player-button-border-space $player-button-click-area-mobile;
+			vertical-align: top;
+
 			@media #{$breakpoint-m-up} {
-				margin: $player-button-border-space $player-button-click-area-desktop;
+				padding: $player-button-click-area-desktop $player-button-click-area-desktop;
 			}
 		}
 	}
 
-	.toggle-fullscreen {
+	.dynamic-panel {
+		bottom: 8px;
+		display: none;
+		pointer-events: none;
+		right: 0;
+		text-align: left;
+		width: 100%;
+		z-index: 3;
+
+		& > div {
+			pointer-events: all;
+		}
+	}
+
+	.toggle-ui-overlay {
 		cursor: pointer;
-		overflow: hidden;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		user-select: none;
+		width: 100%;
+		z-index: 1;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-webkit-user-select: none;
+	}
+
+	.toggle-fullscreen-button {
+		float: right;
 		opacity: 0.75;
+	}
+
+	.play-pause-button {
+		opacity: 0.75;
+	}
+
+	.volume-button {
+		opacity: 0.9;
+	}
+
+	.porvata-icon {
+		cursor: pointer;
 		fill: $uap-button-color;
 		height: $player-button-size;
+		overflow: hidden;
 		width: $player-button-size;
+	}
 
-		.fullscreen-off-icon {
+	.porvata-switchable-icon {
+		.porvata-off-icon {
 			display: none;
 		}
 
-		&.fullscreen-on {
-			.fullscreen-off-icon {
+		&.is-on {
+			.porvata-off-icon {
 				display: unset;
 			}
 
-			.fullscreen-on-icon {
+			.porvata-on-icon {
 				display: none;
 			}
 		}
 	}
 
-	.volume-button {
-		bottom: $uap-progress-bar-height;
+	.learn-more {
+		color: #fff;
 		cursor: pointer;
+		display: none;
+		position: absolute;
+		opacity: 0.75;
+		right: 0;
+		top: 0;
+		z-index: 3;
+	}
 
-		.speaker {
-			&.mute {
-				background: url($player-button-sound-off)
+	&.theme-mobile .learn-more {
+		display: unset;
+	}
+
+	&.theme-hivi {
+		.ui-visible {
+			.toggle-ui-overlay {
+				background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 15%, rgba(0, 0, 0, 0) 30%);
 			}
 
-			background: url($player-button-sound-on);
-			display: block;
-			height: $player-button-size;
-			overflow: hidden;
-			position: relative;
-			width: $player-button-size;
+			.dynamic-panel {
+				display: block;
+			}
+		}
+
+		.porvata-icon {
+			fill: $hivi-uap-light-button-color;
+			height: $hivi-uap-button-size;
+			opacity: 1;
+			width: $hivi-uap-button-size;
+		}
+
+		.play-pause-button, .volume-button, .toggle-fullscreen-button, .learn-more {
+			opacity: 0.95;
+		}
+
+		.learn-more {
+			& > div {
+				color: #fff;
+				display: block;
+				font-size: 12px;
+				margin-right: 30px;
+				margin-top: 5px;
+			}
+
+			.learn-more-icon {
+				height: $hivi-uap-button-size - 4px;
+				position: absolute;
+				right: 0;
+				top: 0;
+				width: $hivi-uap-button-size - 4px;
+			}
+		}
+
+		.progress-bar {
+			background: $hivi-uap-progress-bar-color;
+			height: $hivi-uap-progress-bar-height;
+		}
+
+		.current-time {
+			background: $hivi-uap-progress-bar-current-time-color;
+		}
+
+		.bottom-panel > div, .learn-more-icon {
+			padding: $hivi-uap-player-button-border-space $player-button-click-area-mobile;
+
+			@media #{$breakpoint-m-up} {
+				padding: $hivi-uap-player-button-border-space $player-button-click-area-desktop;
+			}
+		}
+
+		&.theme-dark {
+			.learn-more > div {
+				color: #000;
+			}
+
+			.ui-visible .toggle-ui-overlay {
+				background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%);
+			}
+
+			.porvata-icon {
+				fill: $hivi-uap-dark-button-color;
+			}
 		}
 	}
 }

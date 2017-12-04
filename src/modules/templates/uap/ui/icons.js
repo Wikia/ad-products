@@ -2,9 +2,13 @@ import svgs from './icons.json';
 
 const parser = new window.DOMParser();
 
-export function createIcon(iconName) {
+export function createIcon(iconName, classNames = []) {
 	if (svgs[iconName]) {
-		return parser.parseFromString(svgs[iconName], 'image/svg+xml').documentElement;
+		const element = parser.parseFromString(svgs[iconName], 'image/svg+xml').documentElement;
+
+		classNames.forEach(className => element.classList.add(className));
+
+		return element;
 	}
 
 	return null;
