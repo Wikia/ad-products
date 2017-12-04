@@ -78,6 +78,14 @@ $hivi-uap-player-button-border-space: 6px;
 		}
 	}
 
+	button {
+		background: none;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		padding: 0;
+	}
+
 	iframe {
 		height: 100%;
 		left: 0;
@@ -88,6 +96,11 @@ $hivi-uap-player-button-border-space: 6px;
 
 	&.mobile-porvata .video-player > iframe {
 		z-index: -1;
+	}
+
+	.button-control .icon {
+		width: 100%;
+		height: auto;
 	}
 
 	.replay-overlay,
@@ -106,6 +119,17 @@ $hivi-uap-player-button-border-space: 6px;
 	.pause-overlay {
 		top: 0;
 		width: 100%;
+	}
+
+	.button-unstick {
+		display: none;
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: $hivi-uap-player-button-border-space;
+		fill: $hivi-uap-light-button-color;
+		width: $hivi-uap-button-size;
+		height: $hivi-uap-button-size;
 	}
 
 	.close-ad {
@@ -223,6 +247,10 @@ $hivi-uap-player-button-border-space: 6px;
 	}
 
 	&.theme-hivi {
+		&.sticky-bfaa .button-unstick {
+			display: unset;
+		}
+
 		.ui-visible {
 			.toggle-ui-overlay {
 				background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 15%, rgba(0, 0, 0, 0) 30%);

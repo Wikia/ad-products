@@ -1,13 +1,16 @@
 import Button from './button';
+import UiComponent from './ui-component';
 import { icons, createIcon } from './icons';
 
-export default class CloseButton extends Button {
+export default class CloseButton extends UiComponent {
 	get classNames() {
 		return ['button-close', ...super.classNames];
 	}
 
 	render() {
-		const button = super.render();
+		const { onClick } = this.props;
+		const classNames = this.classNames;
+		const button = new Button({ onClick, classNames }).render();
 		const closeIcon = createIcon(icons.CROSS, ['icon']);
 
 		button.appendChild(closeIcon);

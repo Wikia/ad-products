@@ -4,6 +4,7 @@ import defer from 'ad-engine/src/utils/defer';
 
 import ResolvedState from './resolved-state';
 import ToggleAnimation from './ui/video/toggle-animation';
+import CloseButton from './ui/close-button';
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
 import StickyBfaa from './sticky-bfaa';
@@ -89,17 +90,25 @@ export default class BigFancyAdAbove {
 
 		UniversalAdPackage.init(this.params, this.config.slotsToEnable);
 
-		if (this.params.isSticky) {
-			this.stickyBfaa = new StickyBfaa(this.adSlot, this.config);
-			this.stickyBfaa.run();
-		}
-
+		this.isResolvedState = ResolvedState.isResolvedState(params);
 		this.videoSettings = new VideoSettings(this.params);
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
 		ResolvedState.setImage(this.videoSettings)
 			.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
 			.then(this.adIsReady.bind(this));
+
+		if (this.params.isSticky && this.isResolvedState) {
+			this.stickyBfaa = new StickyBfaa(this.adSlot, this.config);
+
+			const closeButton = new CloseButton({
+				classNames: ['button-unstick'],
+				onClick: () => this.stickyBfaa.revertStickiness()
+			});
+
+			this.container.appendChild(closeButton.render());
+			this.stickyBfaa.run();
+		}
 	}
 
 	setupNavbar() {
