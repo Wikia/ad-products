@@ -1,3 +1,4 @@
+import Client from 'ad-engine/src/utils/client';
 import CloseButton from './close-button';
 import LearnMore from './learn-more';
 import PauseControl from './pause-control';
@@ -84,6 +85,9 @@ export function selectTemplate(videoSettings) {
 	params.container.classList.add(`theme-${template}`);
 	if (params.isDarkTheme) {
 		params.container.classList.add('theme-dark');
+	}
+	if (Client.isSmartphone() || Client.isTablet()) {
+		params.container.classList.add('theme-mobile');
 	}
 
 	return templates[template];

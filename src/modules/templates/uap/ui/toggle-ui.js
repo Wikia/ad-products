@@ -3,7 +3,7 @@ const overlayTimeout = 5000;
 function add(video, container, params) {
 	let timeout = null;
 
-	const isMobile = video.container.parentNode.classList.contains('mobile-porvata'),
+	const isMobile = video.container.parentNode.classList.contains('theme-mobile'),
 		overlay = document.createElement('div'),
 		setAutomaticToggle = () => {
 			timeout = setTimeout(() => {
