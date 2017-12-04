@@ -240,13 +240,17 @@ $hivi-uap-player-button-border-space: 6px;
 			width: $hivi-uap-button-size;
 		}
 
+		.play-pause-button, .volume-button, .toggle-fullscreen-button, .learn-more {
+			opacity: 0.95;
+		}
+
 		.learn-more {
 			& > div {
 				color: #fff;
 				display: block;
 				font-size: 12px;
 				margin-right: 30px;
-				margin-top: 4px;
+				margin-top: 5px;
 			}
 
 			.learn-more-icon {
