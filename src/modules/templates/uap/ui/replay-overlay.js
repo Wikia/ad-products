@@ -3,12 +3,6 @@ const replayOverlayClass = 'replay-overlay';
 function add(video, container, params) {
 	const overlay = document.createElement('div');
 
-	if (params.splitLayoutVideoPosition === 'right') {
-		overlay.style.right = 0;
-	} else {
-		overlay.style.left = 0;
-	}
-
 	overlay.classList.add(replayOverlayClass);
 	overlay.addEventListener('click', () => video.play());
 

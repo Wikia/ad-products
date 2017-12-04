@@ -5,9 +5,10 @@ const logGroup = 'sticky-bfaa';
 
 export default class StickyBfaa {
 
-	constructor(adSlot, config) {
+	constructor(adSlot, config, params) {
 		this.adSlot = adSlot;
 		this.config = config;
+		this.params = params;
 		this.isOnViewedFired = false;
 		// time after which we'll remove stickiness even with no user interaction
 		this.stickinessRemovalWindow = 10000;
@@ -23,12 +24,12 @@ export default class StickyBfaa {
 
 	applyStickiness() {
 		logger(logGroup, 'Applying bfaa stickiness');
-		this.config.onStickBfaaCallback(this.adSlot);
+		this.config.onStickBfaaCallback(this.adSlot, this.params);
 	}
 
 	revertStickiness() {
 		logger(logGroup, 'Reverting bfaa stickiness');
-		this.config.onUnstickBfaaCallback(this.adSlot);
+		this.config.onUnstickBfaaCallback(this.adSlot, this.params);
 	}
 
 	onViewed() {

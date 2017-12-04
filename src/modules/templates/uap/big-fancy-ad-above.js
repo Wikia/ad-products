@@ -1,4 +1,5 @@
 import Context from 'ad-engine/src/services/context-service';
+import ScrollListener from 'ad-engine/src/listeners/scroll-listener';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 import defer from 'ad-engine/src/utils/defer';
 
@@ -73,8 +74,12 @@ export default class BigFancyAdAbove {
 		UniversalAdPackage.init(this.params, this.config.slotsToEnable);
 
 		if (this.params.isSticky) {
-			this.stickyBfaa = new StickyBfaa(this.adSlot, this.config);
+			this.stickyBfaa = new StickyBfaa(this.adSlot, this.config, this.params);
 			this.stickyBfaa.run();
+		}
+
+		if (this.params.theme === 'hivi') {
+			ScrollListener.addCallback(() => this.updateOnScroll());
 		}
 
 		this.videoSettings = new VideoSettings(this.params);
@@ -83,6 +88,26 @@ export default class BigFancyAdAbove {
 		ResolvedState.setImage(this.videoSettings)
 			.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
 			.then(this.adIsReady.bind(this));
+	}
+
+	updateOnScroll() {
+		let offset = window.pageYOffset;
+
+		this.updateThumbnailMargins(offset);
+		this.updateSlotPadding(offset);
+	}
+
+	updateThumbnailMargins() {
+
+	}
+
+	updateSlotPadding(offset) {
+		let d = (400 - offset) / 400;
+		let diff = (10 - 4) * d;
+		var finalAspectRatio = 10 - diff;
+
+		SlotTweaker.makeResponsive(this.adSlot, finalAspectRatio);
+		this.recalculatePaddingTop(finalAspectRatio);
 	}
 
 	setupNavbar() {
