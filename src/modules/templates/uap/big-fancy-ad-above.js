@@ -20,7 +20,7 @@ export default class BigFancyAdAbove {
 			const bfaa = adSlot.getElement();
 			const adHeight = bfaa.offsetHeight;
 
-			bfaa.classList.add('bfaa-sticky');
+			bfaa.classList.add('sticky-bfaa');
 			bfaa.style.top = calculateStickyTopPosition(adHeight);
 
 			setTimeout(() => {
@@ -45,7 +45,7 @@ export default class BigFancyAdAbove {
 				window.cancelAnimationFrame(animationFrameId);
 				bfaa.style.top = '';
 				bfaa.style.transition = '';
-				bfaa.classList.remove('bfaa-sticky');
+				bfaa.classList.remove('sticky-bfaa');
 			}, this.stickyAnimationDuration);
 		}
 
