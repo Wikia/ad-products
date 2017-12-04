@@ -6,9 +6,13 @@ import CloseButton from '../../../../src/modules/templates/uap/ui/close-button';
 import ReplayOverlay from '../../../../src/modules/templates/uap/ui/replay-overlay';
 import ToggleFullscreen from '../../../../src/modules/templates/uap/ui/toggle-fullscreen';
 
+function getContainer() {
+	return document.createElement('div');
+}
+
 describe('UITemplate', () => {
 	it('Should show close button element if there is no autoplay and there is no split screen', () => {
-		const videoSettings = new VideoSettings({autoPlay: true});
+		const videoSettings = new VideoSettings({autoPlay: true, container: getContainer()});
 
 		sinon.stub(videoSettings, 'isAutoPlay');
 		videoSettings.isAutoPlay.returns(false);
@@ -21,7 +25,7 @@ describe('UITemplate', () => {
 	});
 
 	it('Should hide close button element if there is autoplay for not split ad', () => {
-		const videoSettings = new VideoSettings({});
+		const videoSettings = new VideoSettings({container: getContainer()});
 
 		sinon.stub(videoSettings, 'isAutoPlay');
 		videoSettings.isAutoPlay.returns(true);
@@ -34,7 +38,7 @@ describe('UITemplate', () => {
 	});
 
 	it('Should hide close button element if there is auto play for split ad', () => {
-		const videoSettings = new VideoSettings({});
+		const videoSettings = new VideoSettings({container: getContainer()});
 
 		sinon.stub(videoSettings, 'isAutoPlay');
 		videoSettings.isAutoPlay.returns(true);
@@ -47,7 +51,7 @@ describe('UITemplate', () => {
 	});
 
 	it('Should show replay button and close for click to play and split', () => {
-		const videoSettings = new VideoSettings({});
+		const videoSettings = new VideoSettings({container: getContainer()});
 
 		sinon.stub(videoSettings, 'isAutoPlay');
 		videoSettings.isAutoPlay.returns(false);

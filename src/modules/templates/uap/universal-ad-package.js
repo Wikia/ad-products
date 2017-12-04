@@ -31,7 +31,6 @@ function loadPorvata(videoSettings, slotContainer, imageContainer) {
 	const params = videoSettings.getParams(),
 		template = selectTemplate(videoSettings);
 
-	params.container = slotContainer;
 	params.autoPlay = videoSettings.isAutoPlay();
 	videoSettings.updateParams(params);
 
@@ -42,6 +41,7 @@ function loadPorvata(videoSettings, slotContainer, imageContainer) {
 				autoPlay: videoSettings.isAutoPlay(),
 				image: imageContainer,
 				container: slotContainer,
+				clickThroughURL: params.clickThroughURL,
 				aspectRatio: params.aspectRatio,
 				videoAspectRatio: params.videoAspectRatio,
 				hideWhenPlaying: params.videoPlaceholderElement || params.image,
@@ -72,6 +72,7 @@ function loadVideoAd(videoSettings) {
 	};
 	params.width = size.width;
 	params.height = size.height;
+	params.container = slotContainer;
 	videoSettings.updateParams(params);
 
 	function recalculateVideoSize(video) {
