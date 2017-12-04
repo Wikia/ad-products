@@ -6,7 +6,7 @@ export function createIcon(iconName, classNames = []) {
 	if (svgs[iconName]) {
 		const element = parser.parseFromString(svgs[iconName], 'image/svg+xml').documentElement;
 
-		classNames.forEach(className => element.classList.add(className));
+		element.classList.add(...classNames);
 
 		return element;
 	}

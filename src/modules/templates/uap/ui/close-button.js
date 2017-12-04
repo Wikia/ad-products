@@ -1,15 +1,17 @@
-function add(video, container) {
-	const closeButton = document.createElement('div');
+import Button from './button';
+import { icons, createIcon } from './icons';
 
-	closeButton.classList.add('close-ad');
-	closeButton.addEventListener('click', (event) => {
-		video.stop();
-		event.preventDefault();
-	});
+export default class CloseButton extends Button {
+	get classNames() {
+		return ['button-close', ...super.classNames];
+	}
 
-	container.appendChild(closeButton);
+	render() {
+		const button = super.render();
+		const closeIcon = createIcon(icons.CROSS, ['icon']);
+
+		button.appendChild(closeIcon);
+
+		return button;
+	}
 }
-
-export default {
-	add
-};

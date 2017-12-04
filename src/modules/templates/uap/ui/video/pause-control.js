@@ -1,4 +1,4 @@
-import { createIcon, icons } from './icons';
+import { createIcon, icons } from '../icons';
 
 function add(video, container) {
 	const pauseButton = document.createElement('div'),

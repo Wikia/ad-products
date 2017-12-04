@@ -2,9 +2,7 @@ import { throttle } from 'ad-engine/src/utils/throttle';
 import Context from 'ad-engine/src/services/context-service';
 import Porvata from 'ad-engine/src/video/player/porvata/porvata';
 import SlotService from 'ad-engine/src/services/slot-service';
-
-import VideoInterface from './ui/video-interface';
-import { selectTemplate } from './ui/ui-template';
+import * as videoUserInterface from './ui/video';
 
 let uapId = 'none',
 	uapType = 'uap';
@@ -29,7 +27,7 @@ function adjustVideoAdContainer(params) {
 
 function loadPorvata(videoSettings, slotContainer, imageContainer) {
 	const params = videoSettings.getParams(),
-		template = selectTemplate(videoSettings);
+		template = videoUserInterface.selectTemplate(videoSettings);
 
 	params.autoPlay = videoSettings.isAutoPlay();
 	videoSettings.updateParams(params);
@@ -37,7 +35,7 @@ function loadPorvata(videoSettings, slotContainer, imageContainer) {
 	return Porvata.inject(params)
 		.then((video) => {
 			video.container.style.position = 'relative';
-			VideoInterface.setup(video, template, {
+			videoUserInterface.setup(video, template, {
 				autoPlay: videoSettings.isAutoPlay(),
 				image: imageContainer,
 				container: slotContainer,

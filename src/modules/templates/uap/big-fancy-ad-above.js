@@ -3,7 +3,7 @@ import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 import defer from 'ad-engine/src/utils/defer';
 
 import ResolvedState from './resolved-state';
-import ToggleAnimation from './ui/toggle-animation';
+import ToggleAnimation from './ui/video/toggle-animation';
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
 import StickyBfaa from './sticky-bfaa';
