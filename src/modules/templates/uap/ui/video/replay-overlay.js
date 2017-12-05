@@ -16,7 +16,7 @@ function add(video, container, params) {
 		showOverlay(overlay, params);
 	});
 
-	if(video.params.theme && video.params.theme == "hivi") {
+	if (video.params.theme && video.params.theme === 'hivi') {
 		addReplayIcon(overlay);
 
 		container = video.params.thumbnail;
@@ -27,7 +27,7 @@ function add(video, container, params) {
 }
 
 function showOverlay(overlay, params) {
-	if(!params.splitLayoutVideoPosition) {
+	if (!params.splitLayoutVideoPosition) {
 		overlay.style.width = overlay.style.width || getOverlayWidth(params);
 	}
 	// make overlay visible after ad finishes
@@ -49,18 +49,18 @@ function getOverlayWidth(params) {
 }
 
 function addReplayIcon(overlay) {
-	let replayIcon = createIcon(icons.REPLAY, []);
-	replayIcon.style.position = "absolute";
-	replayIcon.style.fill = "#fff";
+	const replayIcon = createIcon(icons.REPLAY, []);
+	replayIcon.style.position = 'absolute';
+	replayIcon.style.fill = '#fff';
 
 	// 12px == half of the icon's width
-	replayIcon.style.left = "calc(50% - 12px)";
-	replayIcon.style.top = "calc(50% - 12px)";
+	replayIcon.style.left = 'calc(50% - 12px)';
+	replayIcon.style.top = 'calc(50% - 12px)';
 
 	overlay.appendChild(replayIcon);
 }
 
 export default {
-	name: "replay-overlay",
+	name: 'replay-overlay',
 	add
 };
