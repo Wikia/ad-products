@@ -211,6 +211,10 @@ export default class BigFancyAdAbove {
 		if (UniversalAdPackage.isVideoEnabled(this.params)) {
 			defer(UniversalAdPackage.loadVideoAd, this.videoSettings) // defers for proper rendering
 				.then((video) => {
+					if (this.params.theme === 'hivi') {
+						video.addEventListener('wikiaAdStarted', () => this.updateOnScroll());
+					}
+
 					if (!this.params.splitLayoutVideoPosition) {
 						video.addEventListener('wikiaAdStarted', () => {
 							this.recalculatePaddingTop(this.params.videoAspectRatio);
