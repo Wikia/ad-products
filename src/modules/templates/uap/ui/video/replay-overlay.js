@@ -1,3 +1,5 @@
+import { createIcon, icons } from './icons';
+
 const replayOverlayClass = 'replay-overlay';
 
 function add(video, container, params) {
@@ -15,6 +17,8 @@ function add(video, container, params) {
 	});
 
 	if(video.params.theme && video.params.theme == "hivi") {
+		addReplayIcon(overlay);
+
 		container = video.params.thumbnail;
 		container.appendChild(overlay);
 	} else {
@@ -42,6 +46,16 @@ function getOverlayWidth(params) {
 		videoWidth = params.hideWhenPlaying.offsetWidth;
 
 	return `${100 * videoWidth / adWidth}%`;
+}
+
+function addReplayIcon(overlay) {
+	let replayIcon = createIcon(icons.REPLAY, []);
+	replayIcon.style.position = "absolute";
+	replayIcon.style.left = "50%";
+	replayIcon.style.top = "50%";
+	replayIcon.style.fill = "#fff";
+
+	overlay.appendChild(replayIcon);
 }
 
 export default {
