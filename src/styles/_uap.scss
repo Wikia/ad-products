@@ -256,10 +256,6 @@ $hivi-uap-player-button-border-space: 6px;
 	}
 
 	&.theme-hivi {
-		&.sticky-bfaa .button-unstick {
-			display: unset;
-		}
-
 		.ui-visible {
 			.toggle-ui-overlay {
 				background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 15%, rgba(0, 0, 0, 0) 30%);
@@ -348,6 +344,10 @@ $hivi-uap-player-button-border-space: 6px;
 			}
 		}
 
+		&.theme-resolved.sticky-bfaa .button-unstick {
+			display: unset;
+		}
+
 		.video-player, .replay-overlay {
 			right: 23.2%;
 			transform: translateX(50%);
@@ -398,7 +398,6 @@ body.vuap-loaded {
 		left: 0;
 	}
 }
-
 
 @media #{$breakpoint-l-up} {
 	.gpt-ad.bfaa-template.on-animation,
