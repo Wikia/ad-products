@@ -150,16 +150,12 @@ export default class BigFancyAdAbove {
 			}
 		});
 
-		if (config.background.resolved) {
-			if (currentState >= hiviResolvedThreshold && !isResolved) {
-				this.container.classList.add('theme-resolved');
-				this.params.image2.element.classList.remove('hidden-state');
-				console.warn('Going to resolve');
-			} else if (currentState < hiviResolvedThreshold && isResolved) {
-				this.container.classList.remove('theme-resolved');
-				this.params.image2.element.classList.add('hidden-state');
-				console.warn('Going to default');
-			}
+		if (currentState >= hiviResolvedThreshold && !isResolved) {
+			this.container.classList.add('theme-resolved');
+			this.params.image2.element.classList.remove('hidden-state');
+		} else if (currentState < hiviResolvedThreshold && isResolved) {
+			this.container.classList.remove('theme-resolved');
+			this.params.image2.element.classList.add('hidden-state');
 		}
 
 		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
