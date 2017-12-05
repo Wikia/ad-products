@@ -242,10 +242,6 @@ $hivi-uap-player-button-border-space: 6px;
 	}
 
 	&.theme-hivi {
-		&.sticky-bfaa .button-unstick {
-			display: unset;
-		}
-
 		.ui-visible {
 			.toggle-ui-overlay {
 				background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 15%, rgba(0, 0, 0, 0) 30%);
@@ -326,6 +322,10 @@ $hivi-uap-player-button-border-space: 6px;
 			.porvata-icon, {
 				fill: $hivi-uap-dark-button-color;
 			}
+		}
+
+		&.theme-resolved.sticky-bfaa .button-unstick {
+			display: unset;
 		}
 
 		.video-player, .replay-overlay {
