@@ -66,6 +66,7 @@ export default class BigFancyAdAbove {
 	 * Initializes the BFAA unit
 	 */
 	init(params) {
+		console.warn(params);
 		this.params = params;
 
 		if (!this.container) {
@@ -100,46 +101,8 @@ export default class BigFancyAdAbove {
 		}
 	}
 
-	updateOnScroll(isMobile) {
-		const globalConfig = {
-				desktop: {
-					aspectRatio: {
-						default: 1600 / 400,
-						resolved: 1600 / 160
-					},
-					state: {
-						height: {
-							default: 92,
-							resolved: 100
-						},
-						top: {
-							default: 4,
-							resolved: 0
-						}
-					}
-				},
-				mobile: {
-					aspectRatio: {
-						default: 16 / 9,
-						resolved: 3 / 1
-					},
-					state: {
-						height: {
-							default: 100,
-							resolved: 65
-						},
-						right: {
-							default: 0,
-							resolved: 2.5
-						},
-						bottom: {
-							default: 0,
-							resolved: 7
-						}
-					}
-				}
-			},
-			config = globalConfig[isMobile ? 'mobile' : 'desktop'],
+	updateOnScroll() {
+		const config = this.params.config,
 			currentWidth = document.body.offsetWidth,
 			maxHeight = currentWidth / config.aspectRatio.default,
 			minHeight = currentWidth / config.aspectRatio.resolved,
@@ -155,10 +118,12 @@ export default class BigFancyAdAbove {
 			}
 		});
 
-		if (currentState >= 0.995) {
-			this.params.image2.element.classList.remove('hidden-state');
-		} else {
-			this.params.image2.element.classList.add('hidden-state');
+		if (config.background.resolved) {
+			if (currentState >= 0.995) {
+				this.params.image2.element.classList.remove('hidden-state');
+			} else {
+				this.params.image2.element.classList.add('hidden-state');
+			}
 		}
 
 		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
@@ -212,7 +177,7 @@ export default class BigFancyAdAbove {
 		}
 
 		if (this.params.theme === 'hivi') {
-			ScrollListener.addCallback(() => this.updateOnScroll(false));
+			ScrollListener.addCallback(() => this.updateOnScroll());
 		}
 	}
 
