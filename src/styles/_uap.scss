@@ -30,6 +30,7 @@ $hivi-uap-player-button-border-space: 6px;
 .gpt-ad.bfaa-template,
 .gpt-ad.bfab-template {
 	display: block;
+	transform: translateZ(0);
 
 	& > div {
 		padding: 0;

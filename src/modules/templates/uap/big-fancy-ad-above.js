@@ -35,23 +35,23 @@ export default class BigFancyAdAbove {
 		}
 
 		function onUnstickBfaaCallback(adSlot) {
-			 //const bfaa = adSlot.getElement();
-			 //const adHeight = bfaa.offsetHeight;
-			 //
-			 //let animationFrameId = null;
-			 //const setTopPosition = () => {
-			 //	bfaa.style.top = calculateStickyTopPosition(adHeight);
-			 //	animationFrameId = window.requestAnimationFrame(setTopPosition);
-			 //};
-			 //
-			 //animationFrameId = window.requestAnimationFrame(setTopPosition);
-			 //
-			 //setTimeout(() => {
-			 //	window.cancelAnimationFrame(animationFrameId);
-			 //	bfaa.style.top = '';
-			 //	bfaa.style.transition = '';
-			 //	bfaa.classList.remove('sticky-bfaa');
-			 //}, this.stickyAnimationDuration);
+			const bfaa = adSlot.getElement();
+			const adHeight = bfaa.offsetHeight;
+
+			let animationFrameId = null;
+			const setTopPosition = () => {
+				bfaa.style.top = calculateStickyTopPosition(adHeight);
+				animationFrameId = window.requestAnimationFrame(setTopPosition);
+			};
+
+			animationFrameId = window.requestAnimationFrame(setTopPosition);
+
+			setTimeout(() => {
+				window.cancelAnimationFrame(animationFrameId);
+				bfaa.style.top = '';
+				bfaa.style.transition = '';
+				bfaa.classList.remove('sticky-bfaa');
+			}, this.stickyAnimationDuration);
 		}
 
 		return {
@@ -126,9 +126,11 @@ export default class BigFancyAdAbove {
 	}
 
 	updateOnScroll() {
-		const config = this.params.config,
+		const adElement = this.adSlot.getElement(),
+			config = this.params.config,
 			currentWidth = document.body.offsetWidth,
 			isResolved = !this.params.image2.element.classList.contains('hidden-state'),
+			isSticky = adElement.classList.contains('sticky-bfaa'),
 			maxHeight = currentWidth / config.aspectRatio.default,
 			minHeight = currentWidth / config.aspectRatio.resolved,
 			aspectScroll = Math.max(minHeight, maxHeight - window.scrollY),
@@ -163,7 +165,9 @@ export default class BigFancyAdAbove {
 		}
 
 		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
-		this.recalculatePaddingTop(currentAspectRatio);
+		if (!isSticky) {
+			this.adSlot.getElement().style.top = `${maxHeight - aspectScroll}px`;
+		}
 	}
 
 	handleProperty(config, currentState, name) {
