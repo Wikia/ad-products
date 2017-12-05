@@ -27,7 +27,7 @@ function add(video, container, params) {
 }
 
 function showOverlay(overlay, params) {
-	if (!params.splitLayoutVideoPosition) {
+	if (!params.container.classList.contains('theme-hivi')) {
 		overlay.style.width = overlay.style.width || getOverlayWidth(params);
 	}
 	// make overlay visible after ad finishes
