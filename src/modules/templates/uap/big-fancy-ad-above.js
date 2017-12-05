@@ -10,6 +10,8 @@ import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
 import StickyBfaa from './sticky-bfaa';
 
+const hiviResolvedThreshold = 0.995;
+
 export default class BigFancyAdAbove {
 	static getName() {
 		return 'bfaa';
@@ -83,7 +85,6 @@ export default class BigFancyAdAbove {
 	 * Initializes the BFAA unit
 	 */
 	init(params) {
-		console.warn(params);
 		this.params = params;
 
 		if (!this.container) {
@@ -127,6 +128,7 @@ export default class BigFancyAdAbove {
 	updateOnScroll() {
 		const config = this.params.config,
 			currentWidth = document.body.offsetWidth,
+			isResolved = !this.params.image2.element.classList.contains('hidden-state'),
 			maxHeight = currentWidth / config.aspectRatio.default,
 			minHeight = currentWidth / config.aspectRatio.resolved,
 			aspectScroll = Math.max(minHeight, maxHeight - window.scrollY),
@@ -142,10 +144,12 @@ export default class BigFancyAdAbove {
 		});
 
 		if (config.background.resolved) {
-			if (currentState >= 0.995) {
+			if (currentState >= hiviResolvedThreshold && !isResolved) {
 				this.params.image2.element.classList.remove('hidden-state');
-			} else {
+				console.warn('Going to resolve');
+			} else if (currentState < hiviResolvedThreshold && isResolved) {
 				this.params.image2.element.classList.add('hidden-state');
+				console.warn('Going to default');
 			}
 		}
 
@@ -201,6 +205,8 @@ export default class BigFancyAdAbove {
 
 		if (this.params.theme === 'hivi') {
 			ScrollListener.addCallback(() => this.updateOnScroll());
+			// Manually run update on scroll once
+			this.updateOnScroll();
 		}
 	}
 
