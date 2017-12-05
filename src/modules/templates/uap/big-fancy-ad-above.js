@@ -125,13 +125,6 @@ export default class BigFancyAdAbove {
 		}
 	}
 
-	handleProperty(config, currentState, name) {
-		if (config.state[name]) {
-			const diff = config.state[name].default - config.state[name].resolved;
-			this.params.thumbnail.style[name] = `${(config.state[name].default - (diff * currentState))}%`;
-		}
-	}
-
 	updateOnScroll() {
 		const config = this.params.config,
 			currentWidth = document.body.offsetWidth,
@@ -144,11 +137,22 @@ export default class BigFancyAdAbove {
 			currentDiff = config.aspectRatio.default - currentAspectRatio,
 			currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff);
 
+		const diff = config.state.height.default - config.state.height.resolved;
+		const value = (config.state.height.default - (diff * currentState)) / 100;
+
 		Object.keys(config.state).forEach((property) => {
 			if (config.state[property]) {
 				this.handleProperty(config, currentState, property);
 			}
 		});
+
+		if (!this.videoPlayer) {
+			this.videoPlayer = this.adSlot.getElement().querySelector('.video-player');
+		}
+
+		if (this.videoPlayer) {
+			this.videoPlayer.style.width = this.params.videoAspectRatio * (aspectScroll * value) + 'px';
+		}
 
 		if (currentState >= hiviResolvedThreshold && !isResolved) {
 			this.container.classList.add('theme-resolved');
@@ -160,6 +164,19 @@ export default class BigFancyAdAbove {
 
 		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
 		this.recalculatePaddingTop(currentAspectRatio);
+	}
+
+	handleProperty(config, currentState, name) {
+		if (config.state[name]) {
+			const diff = config.state[name].default - config.state[name].resolved;
+			const value = `${(config.state[name].default - (diff * currentState))}%`;
+			this.params.thumbnail.style[name] = value;
+
+			if (this.videoPlayer) {
+
+				this.videoPlayer.style[name] = value;
+			}
+		}
 	}
 
 	setupNavbar() {
