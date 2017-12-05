@@ -1,67 +1,74 @@
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
+import { SLOT_VIEWED_EVENT } from 'ad-engine/src/models/ad-slot';
 import { logger } from 'ad-engine/src/utils/logger';
 
 const logGroup = 'sticky-bfaa';
 
-export default class StickyBfaa {
+// time after which we'll remove stickiness even with no user interaction
+const STICKINESS_REMOVAL_WINDOW = 10000;
+// time after which we'll unstick slot on user scroll even if it's not viewed
+const VIEWABILITY_APPROVAL_WINDOW = 5000;
 
-	constructor(adSlot, config, params) {
+export default class StickyBfaa {
+	constructor(adSlot, config) {
 		this.adSlot = adSlot;
 		this.config = config;
-		this.params = params;
-		this.isOnViewedFired = false;
-		// time after which we'll remove stickiness even with no user interaction
-		this.stickinessRemovalWindow = 10000;
-		// time after which we'll unstick slot on user scroll
-		this.viewabilityApproveWindow = 5000;
+		this.onViewed = this.onViewed.bind(this);
+		this.viewabilityApproveTimeout = null;
+		this.isSticky = false;
 	}
 
 	run() {
 		SlotTweaker.onReady(this.adSlot).then(() => {
-			this.onStickinessApplyTimeout();
+			if (document.hidden) {
+				window.addEventListener('visibilitychange', () => this.onAdReady(), { once: true });
+			} else {
+				this.onAdReady();
+			}
 		});
 	}
 
 	applyStickiness() {
-		logger(logGroup, 'Applying bfaa stickiness');
-		this.config.onStickBfaaCallback(this.adSlot, this.params);
+		if (!this.isSticky) {
+			logger(logGroup, 'Applying bfaa stickiness');
+			this.isSticky = true;
+			this.config.onStickBfaaCallback(this.adSlot);
+		} else {
+			logger(logGroup, 'bfaa stickiness is already applied');
+		}
 	}
 
 	revertStickiness() {
-		logger(logGroup, 'Reverting bfaa stickiness');
-		this.config.onUnstickBfaaCallback(this.adSlot, this.params);
+		if (this.isSticky) {
+			logger(logGroup, 'Reverting bfaa stickiness');
+			this.isSticky = false;
+			this.config.onUnstickBfaaCallback(this.adSlot);
+		} else {
+			logger(logGroup, 'bfaa stickiness is already reverted');
+		}
 	}
 
 	onViewed() {
-		const onRevertTimeout = callRevertFromTimeout.bind(this);
-		const revertTimeout = setTimeout(onRevertTimeout, this.stickinessRemovalWindow);
-
-		function callRevertFromTimeout() {
+		let revertTimeout = null;
+		const adContainer = this.adSlot.getElement();
+		const shouldRevertImmediately = Math.abs(window.scrollY - adContainer.offsetTop) < (adContainer.offsetHeight / 2);
+		const onRevertTimeout = () => {
 			clearTimeout(revertTimeout);
 			document.removeEventListener('scroll', onRevertTimeout);
 			this.revertStickiness();
-		}
+		};
 
-		this.isOnViewedFired = true;
+		this.adSlot.removeListener(SLOT_VIEWED_EVENT, this.onViewed);
 		clearTimeout(this.viewabilityApproveTimeout);
 		document.addEventListener('scroll', onRevertTimeout);
+		revertTimeout = setTimeout(onRevertTimeout, (shouldRevertImmediately ? 0 : STICKINESS_REMOVAL_WINDOW));
+
+		logger(logGroup, `slotViewed triggered on ${this.adSlot.getSlotName()}`);
 	}
 
-	onStickinessApplyTimeout() {
-		this.viewabilityApproveTimeout = setTimeout(this.onViewed.bind(this), this.viewabilityApproveWindow);
-
-		if (this.adSlot.isViewed) {
-			logger(logGroup, `Slot ${this.adSlot.getSlotName()} viewed`);
-			this.onViewed().bind(this)();
-		} else {
-			this.applyStickiness.bind(this)();
-			this.adSlot.on('slotViewed', () => {
-				logger(logGroup, `slotViewed triggered on ${this.adSlot.getSlotName()}`);
-				// don't send events once again if onViewed was fired by timeout
-				if (!this.isOnViewedFired) {
-					this.onViewed.bind(this)();
-				}
-			});
-		}
+	onAdReady() {
+		this.viewabilityApproveTimeout = setTimeout(this.onViewed, VIEWABILITY_APPROVAL_WINDOW);
+		this.applyStickiness();
+		this.adSlot.once(SLOT_VIEWED_EVENT, this.onViewed);
 	}
 }
