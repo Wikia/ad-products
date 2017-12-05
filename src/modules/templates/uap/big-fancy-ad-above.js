@@ -35,23 +35,23 @@ export default class BigFancyAdAbove {
 		}
 
 		function onUnstickBfaaCallback(adSlot) {
-			// const bfaa = adSlot.getElement();
-			// const adHeight = bfaa.offsetHeight;
-			
-			// let animationFrameId = null;
-			// const setTopPosition = () => {
-			// 	bfaa.style.top = calculateStickyTopPosition(adHeight);
-			// 	animationFrameId = window.requestAnimationFrame(setTopPosition);
-			// };
-			
-			// animationFrameId = window.requestAnimationFrame(setTopPosition);
-			
-			// setTimeout(() => {
-			// 	window.cancelAnimationFrame(animationFrameId);
-			// 	bfaa.style.top = '';
-			// 	bfaa.style.transition = '';
-			// 	bfaa.classList.remove('sticky-bfaa');
-			// }, this.stickyAnimationDuration);
+			 //const bfaa = adSlot.getElement();
+			 //const adHeight = bfaa.offsetHeight;
+			 //
+			 //let animationFrameId = null;
+			 //const setTopPosition = () => {
+			 //	bfaa.style.top = calculateStickyTopPosition(adHeight);
+			 //	animationFrameId = window.requestAnimationFrame(setTopPosition);
+			 //};
+			 //
+			 //animationFrameId = window.requestAnimationFrame(setTopPosition);
+			 //
+			 //setTimeout(() => {
+			 //	window.cancelAnimationFrame(animationFrameId);
+			 //	bfaa.style.top = '';
+			 //	bfaa.style.transition = '';
+			 //	bfaa.classList.remove('sticky-bfaa');
+			 //}, this.stickyAnimationDuration);
 		}
 
 		return {

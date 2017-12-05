@@ -234,11 +234,11 @@ $hivi-uap-player-button-border-space: 6px;
 		opacity: 0.75;
 		right: 0;
 		top: 0;
-		z-index: 3;
 	}
 
 	.advertisement-label {
 		color: #fff;
+		display: none;
 		font-size: 9px;
 		font-weight: bold;
 		height: auto;
@@ -251,19 +251,24 @@ $hivi-uap-player-button-border-space: 6px;
 		text-transform: uppercase;
 		top: 0;
 		width: auto;
+		z-index: $uap-video-fullscreen-z-index + 1;
 	}
 
 	&.theme-mobile .advertisement-label {
 		font-size: 6px;
 		line-height: 6px;
-		padding: 2px 6px;
+		padding: 5px;
 	}
 
 	&.theme-mobile .learn-more {
-		display: unset;
+			display: unset;
 	}
 
 	&.theme-hivi {
+		.advertisement-label {
+			display: unset;
+		}
+
 		.ui-visible {
 			.toggle-ui-overlay {
 				background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 15%, rgba(0, 0, 0, 0) 30%);
@@ -350,6 +355,12 @@ $hivi-uap-player-button-border-space: 6px;
 				color: $hivi-uap-dark-button-color;
 				fill: $hivi-uap-dark-button-color;
 			}
+		}
+
+		&.theme-mobile .video-player {
+			right: 0;
+			top: auto;
+			transform: none;
 		}
 
 		&.theme-resolved.sticky-bfaa .button-unstick {
