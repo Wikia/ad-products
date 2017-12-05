@@ -373,6 +373,13 @@ $hivi-uap-player-button-border-space: 6px;
 			top: 4%;
 			height: 92%;
 		}
+
+		.video-player-fullscreen.video-player {
+			right: 0;
+			transform: none;
+			top: 0;
+			height: 100%;
+		}
 	}
 
 	&.theme-split-right {
