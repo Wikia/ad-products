@@ -93,30 +93,76 @@ export default class BigFancyAdAbove {
 		}
 	}
 
-	updateOnScroll() {
-		let offset = window.pageYOffset;
-		this.updateSlotPadding(offset);
+	handleProperty(config, currentState, name) {
+		if (config.state[name]) {
+			const diff = config.state[name].default - config.state[name].resolved;
+			this.params.thumbnail.style[name] = `${(config.state[name].default - (diff * currentState))}%`;
+		}
 	}
 
-	updateSlotPadding(offset) {
-		let d = (400 - offset) / 400; // TODO use common logic with scrollToResolve
-		let diff = (10 - 4) * d;
-		var finalAspectRatio = 10 - diff;
+	updateOnScroll(isMobile) {
+		const globalConfig = {
+				desktop: {
+					aspectRatio: {
+						default: 1600 / 400,
+						resolved: 1600 / 160
+					},
+					state: {
+						height: {
+							default: 92,
+							resolved: 100
+						},
+						top: {
+							default: 4,
+							resolved: 0
+						}
+					}
+				},
+				mobile: {
+					aspectRatio: {
+						default: 16 / 9,
+						resolved: 3 / 1
+					},
+					state: {
+						height: {
+							default: 100,
+							resolved: 65
+						},
+						right: {
+							default: 0,
+							resolved: 2.5
+						},
+						bottom: {
+							default: 0,
+							resolved: 7
+						}
+					}
+				}
+			},
+			config = globalConfig[isMobile ? 'mobile' : 'desktop'],
+			currentWidth = document.body.offsetWidth,
+			maxHeight = currentWidth / config.aspectRatio.default,
+			minHeight = currentWidth / config.aspectRatio.resolved,
+			aspectScroll = Math.max(minHeight, maxHeight - window.scrollY),
+			currentAspectRatio = currentWidth / aspectScroll,
+			aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved,
+			currentDiff = config.aspectRatio.default - currentAspectRatio,
+			currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff);
 
-		if (finalAspectRatio > 10) {
-			finalAspectRatio = 10;
-			this.params.image1.element.style.display = 'block';
-			this.params.image2.element.style.display = 'none';
+		Object.keys(config.state).forEach((property) => {
+			if (config.state[property]) {
+				this.handleProperty(config, currentState, property);
+			}
+		});
 
-		} else if (finalAspectRatio < 4) {
-			this.params.image1.element.style.display = 'none';
-			this.params.image2.element.style.display = 'block';
-
-			finalAspectRatio = 4;
+		if (currentState >= 0.995) {
+			this.params.image2.element.classList.remove('hidden-state');
+		} else {
+			this.params.image2.element.classList.add('hidden-state');
 		}
 
-		SlotTweaker.makeResponsive(this.adSlot, finalAspectRatio);
-		this.recalculatePaddingTop(finalAspectRatio);
+		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
+		this.recalculatePaddingTop(currentAspectRatio);
 	}
 
 	setupNavbar() {
@@ -166,76 +212,8 @@ export default class BigFancyAdAbove {
 		}
 
 		if (this.params.theme === 'hivi') {
-			this.scrollToResolve(false);
-			ScrollListener.addCallback(() => this.updateOnScroll());
-		};
-	}
-
-	scrollToResolve(isMobile) {
-		let globalConfig = {
-			desktop: {
-				aspectRatio: {
-					default: 1600 / 400,
-					resolved: 1600 / 160
-				},
-				state: {
-					height: {
-						default: 92,
-						resolved: 100
-					},
-					top: {
-						default: 4,
-						resolved: 0
-					}
-				}
-			},
-			mobile: {
-				aspectRatio: {
-					default: 16 / 9,
-					resolved: 3 / 1
-				},
-				state: {
-					height: {
-						default: 100,
-						resolved: 65
-					},
-					right: {
-						default: 0,
-						resolved: 2.5
-					},
-					bottom: {
-						default: 0,
-						resolved: 7
-					}
-				}
-			}
-		};
-
-		let config = globalConfig[isMobile ? 'mobile' : 'desktop'],
-			container = this.params.adContainer,
-			thumbnail = this.params.thumbnail;
-
-		function onResize() {
-			let currentAspectRatio = container.offsetWidth / container.offsetHeight,
-				aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved,
-				currentDiff = config.aspectRatio.default - currentAspectRatio,
-				currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff),
-				diff;
-
-			function handleProperty(name) {
-				if (config.state[name]) {
-					diff = config.state[name].default - config.state[name].resolved;
-					thumbnail.style[name] = (config.state[name].default - (diff * currentState)) + '%';
-				}
-			}
-
-			Object.keys(config.state).forEach(function (property) {
-				handleProperty(property);
-			});
+			ScrollListener.addCallback(() => this.updateOnScroll(false));
 		}
-
-		window.addEventListener('scroll', onResize);
-		onResize();
 	}
 
 	recalculatePaddingTop(finalAspectRatio) {

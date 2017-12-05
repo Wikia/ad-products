@@ -78,7 +78,7 @@ export default {
 	setImage(videoSettings) {
 		const params = videoSettings.getParams();
 
-		if (templateSupportsResolvedState(params)) {
+		if (false && templateSupportsResolvedState(params)) {
 			if (videoSettings.isResolvedState()) {
 				return setResolvedState(params).then(([updatedParams, ...args]) => {
 					videoSettings.updateParams(updatedParams);
