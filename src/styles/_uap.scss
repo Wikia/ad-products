@@ -251,6 +251,12 @@ $hivi-uap-player-button-border-space: 6px;
 		width: auto;
 	}
 
+	&.theme-mobile .advertisement-label {
+		font-size: 6px;
+		line-height: 6px;
+		padding: 2px 6px;
+	}
+
 	&.theme-mobile .learn-more {
 		display: unset;
 	}
