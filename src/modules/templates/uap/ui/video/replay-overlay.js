@@ -49,18 +49,10 @@ function getOverlayWidth(params) {
 }
 
 function addReplayIcon(overlay) {
-	const replayIcon = createIcon(icons.REPLAY, []);
-	replayIcon.style.position = 'absolute';
-	replayIcon.style.fill = '#fff';
-
-	// 12px == half of the icon's width
-	replayIcon.style.left = 'calc(50% - 12px)';
-	replayIcon.style.top = 'calc(50% - 12px)';
-
+	const replayIcon = createIcon(icons.REPLAY, ['replay-icon']);
 	overlay.appendChild(replayIcon);
 }
 
 export default {
-	name: 'replay-overlay',
 	add
 };
