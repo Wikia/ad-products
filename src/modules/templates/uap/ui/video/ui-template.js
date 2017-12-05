@@ -34,14 +34,21 @@ const getTemplates = params => ({
 		createBottomPanel(params),
 		ToggleAnimation
 	],
-	default: [
+	'default': [
 		ProgressBar,
 		PauseOverlay,
 		createBottomPanel(params),
 		CloseButton,
 		ToggleAnimation
 	],
-	split: [
+	'split-left': [
+		ProgressBar,
+		PauseOverlay,
+		createBottomPanel(params),
+		ToggleVideo,
+		ReplayOverlay
+	],
+	'split-right': [
 		ProgressBar,
 		PauseOverlay,
 		createBottomPanel(params),
@@ -77,7 +84,7 @@ export function selectTemplate(videoSettings) {
 	} else if (!videoSettings.isAutoPlay() && videoSettings.isSplitLayout()) {
 		template = 'click-to-play-split';
 	} else if (videoSettings.isSplitLayout()) {
-		template = 'split';
+		template = params.splitLayoutVideoPosition === 'right' ? 'split-right' : 'split-left';
 	} else if (videoSettings.isAutoPlay()) {
 		template = 'auto-play';
 	}

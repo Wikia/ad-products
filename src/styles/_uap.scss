@@ -327,6 +327,25 @@ $hivi-uap-player-button-border-space: 6px;
 				fill: $hivi-uap-dark-button-color;
 			}
 		}
+
+		.video-player, .replay-overlay {
+			right: 23%;
+			transform: translateX(50%);
+			top: 4%;
+			height: 92%;
+		}
+	}
+
+	&.theme-split-right {
+		.replay-overlay {
+			right: 0;
+		}
+	}
+
+	&.theme-split-left {
+		.replay-overlay {
+			left: 0;
+		}
 	}
 }
 

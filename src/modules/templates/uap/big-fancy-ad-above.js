@@ -1,4 +1,5 @@
 import Context from 'ad-engine/src/services/context-service';
+import ScrollListener from 'ad-engine/src/listeners/scroll-listener';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 import defer from 'ad-engine/src/utils/defer';
 
@@ -31,23 +32,23 @@ export default class BigFancyAdAbove {
 		}
 
 		function onUnstickBfaaCallback(adSlot) {
-			const bfaa = adSlot.getElement();
-			const adHeight = bfaa.offsetHeight;
-
-			let animationFrameId = null;
-			const setTopPosition = () => {
-				bfaa.style.top = calculateStickyTopPosition(adHeight);
-				animationFrameId = window.requestAnimationFrame(setTopPosition);
-			};
-
-			animationFrameId = window.requestAnimationFrame(setTopPosition);
-
-			setTimeout(() => {
-				window.cancelAnimationFrame(animationFrameId);
-				bfaa.style.top = '';
-				bfaa.style.transition = '';
-				bfaa.classList.remove('sticky-bfaa');
-			}, this.stickyAnimationDuration);
+			// const bfaa = adSlot.getElement();
+			// const adHeight = bfaa.offsetHeight;
+			
+			// let animationFrameId = null;
+			// const setTopPosition = () => {
+			// 	bfaa.style.top = calculateStickyTopPosition(adHeight);
+			// 	animationFrameId = window.requestAnimationFrame(setTopPosition);
+			// };
+			
+			// animationFrameId = window.requestAnimationFrame(setTopPosition);
+			
+			// setTimeout(() => {
+			// 	window.cancelAnimationFrame(animationFrameId);
+			// 	bfaa.style.top = '';
+			// 	bfaa.style.transition = '';
+			// 	bfaa.classList.remove('sticky-bfaa');
+			// }, this.stickyAnimationDuration);
 		}
 
 		return {
@@ -82,6 +83,7 @@ export default class BigFancyAdAbove {
 	 * Initializes the BFAA unit
 	 */
 	init(params) {
+		console.warn(params);
 		this.params = params;
 
 		if (!this.container) {
@@ -89,16 +91,20 @@ export default class BigFancyAdAbove {
 		}
 
 		UniversalAdPackage.init(this.params, this.config.slotsToEnable);
-
-		this.isResolvedState = ResolvedState.isResolvedState(params);
 		this.videoSettings = new VideoSettings(this.params);
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
-		ResolvedState.setImage(this.videoSettings)
-			.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
-			.then(this.adIsReady.bind(this));
 
-		if (this.params.isSticky && this.isResolvedState) {
+		if (params.template === 'hivi') {
+			SlotTweaker.onReady(this.adSlot)
+				.then(this.adIsReady.bind(this));
+		} else {
+			ResolvedState.setImage(this.videoSettings)
+				.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
+				.then(this.adIsReady.bind(this));
+		}
+
+		if (this.params.isSticky) {
 			this.stickyBfaa = new StickyBfaa(this.adSlot, this.config);
 
 			const closeButton = new CloseButton({
@@ -109,6 +115,42 @@ export default class BigFancyAdAbove {
 			this.container.appendChild(closeButton.render());
 			this.stickyBfaa.run();
 		}
+	}
+
+	handleProperty(config, currentState, name) {
+		if (config.state[name]) {
+			const diff = config.state[name].default - config.state[name].resolved;
+			this.params.thumbnail.style[name] = `${(config.state[name].default - (diff * currentState))}%`;
+		}
+	}
+
+	updateOnScroll() {
+		const config = this.params.config,
+			currentWidth = document.body.offsetWidth,
+			maxHeight = currentWidth / config.aspectRatio.default,
+			minHeight = currentWidth / config.aspectRatio.resolved,
+			aspectScroll = Math.max(minHeight, maxHeight - window.scrollY),
+			currentAspectRatio = currentWidth / aspectScroll,
+			aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved,
+			currentDiff = config.aspectRatio.default - currentAspectRatio,
+			currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff);
+
+		Object.keys(config.state).forEach((property) => {
+			if (config.state[property]) {
+				this.handleProperty(config, currentState, property);
+			}
+		});
+
+		if (config.background.resolved) {
+			if (currentState >= 0.995) {
+				this.params.image2.element.classList.remove('hidden-state');
+			} else {
+				this.params.image2.element.classList.add('hidden-state');
+			}
+		}
+
+		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
+		this.recalculatePaddingTop(currentAspectRatio);
 	}
 
 	setupNavbar() {
@@ -155,6 +197,10 @@ export default class BigFancyAdAbove {
 
 					return video;
 				});
+		}
+
+		if (this.params.theme === 'hivi') {
+			ScrollListener.addCallback(() => this.updateOnScroll());
 		}
 	}
 
