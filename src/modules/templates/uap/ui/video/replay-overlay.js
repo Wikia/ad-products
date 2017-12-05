@@ -1,4 +1,4 @@
-import { createIcon, icons } from './icons';
+import { createIcon, icons } from './../icons';
 
 const replayOverlayClass = 'replay-overlay';
 
@@ -51,9 +51,11 @@ function getOverlayWidth(params) {
 function addReplayIcon(overlay) {
 	let replayIcon = createIcon(icons.REPLAY, []);
 	replayIcon.style.position = "absolute";
-	replayIcon.style.left = "50%";
-	replayIcon.style.top = "50%";
 	replayIcon.style.fill = "#fff";
+
+	// 12px == half of the icon's width
+	replayIcon.style.left = "calc(50% - 12px)";
+	replayIcon.style.top = "calc(50% - 12px)";
 
 	overlay.appendChild(replayIcon);
 }
