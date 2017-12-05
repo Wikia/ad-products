@@ -13,7 +13,11 @@ function add(video, container) {
 		video.toggleFullscreen();
 	});
 	video.addEventListener('wikiaFullscreenChange', () => {
-		toggleFullscreenButton.classList.toggle('is-on', video.isFullscreen());
+		if (video.isFullscreen()) {
+			toggleFullscreenButton.classList.add('is-on');
+		} else {
+			toggleFullscreenButton.classList.remove('is-on');
+		}
 	});
 	video.addEventListener('wikiaAdStop', () => {
 		if (video.isFullscreen()) {

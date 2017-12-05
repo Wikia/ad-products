@@ -23,6 +23,8 @@ $hivi-uap-progress-bar-color: #7c7c7c;
 $hivi-uap-progress-bar-current-time-color: #fff;
 $hivi-uap-progress-bar-height: 4px;
 $hivi-uap-button-size: 16px;
+$hivi-uap-mobile-button-size: 24px;
+$hivi-uap-button-border-space: 6px;
 $hivi-uap-player-button-border-space: 6px;
 
 .gpt-ad.bfaa-template,
@@ -98,9 +100,12 @@ $hivi-uap-player-button-border-space: 6px;
 		z-index: -1;
 	}
 
-	.button-control .icon {
-		width: 100%;
-		height: auto;
+	.button-unstick {
+		display: none;
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: $hivi-uap-button-border-space;
 	}
 
 	.replay-overlay,
@@ -119,17 +124,6 @@ $hivi-uap-player-button-border-space: 6px;
 	.pause-overlay {
 		top: 0;
 		width: 100%;
-	}
-
-	.button-unstick {
-		display: none;
-		position: absolute;
-		top: 0;
-		right: 0;
-		margin: $hivi-uap-player-button-border-space;
-		fill: $hivi-uap-light-button-color;
-		width: $hivi-uap-button-size;
-		height: $hivi-uap-button-size;
 	}
 
 	.close-ad {
@@ -207,6 +201,7 @@ $hivi-uap-player-button-border-space: 6px;
 		opacity: 0.9;
 	}
 
+	.button-control .icon,
 	.porvata-icon {
 		cursor: pointer;
 		fill: $uap-button-color;
@@ -261,11 +256,22 @@ $hivi-uap-player-button-border-space: 6px;
 			}
 		}
 
+		.button-control .icon,
 		.porvata-icon {
 			fill: $hivi-uap-light-button-color;
 			height: $hivi-uap-button-size;
-			opacity: 1;
 			width: $hivi-uap-button-size;
+			opacity: 1;
+		}
+
+		.button-unstick .icon {
+			width: $hivi-uap-mobile-button-size;
+			height: $hivi-uap-mobile-button-size;
+
+			@media #{$breakpoint-m-up} {
+				width: $hivi-uap-button-size;
+				height: $hivi-uap-button-size;
+			}
 		}
 
 		.play-pause-button, .volume-button, .toggle-fullscreen-button, .learn-more {
@@ -316,7 +322,8 @@ $hivi-uap-player-button-border-space: 6px;
 				background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%);
 			}
 
-			.porvata-icon {
+			.button-control .icon,
+			.porvata-icon, {
 				fill: $hivi-uap-dark-button-color;
 			}
 		}
