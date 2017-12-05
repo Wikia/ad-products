@@ -12,9 +12,6 @@ customContext.targeting.artid = '318';
 
 TemplateService.register(BigFancyAdAbove);
 TemplateService.register(BigFancyAdBelow);
-TemplateService.register(FloatingRail, {
-	startOffset: -15
-});
+TemplateService.register(FloatingRail);
 
 new AdEngine(customContext).init();
-
