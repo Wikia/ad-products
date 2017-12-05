@@ -237,6 +237,20 @@ $hivi-uap-player-button-border-space: 6px;
 		z-index: 3;
 	}
 
+	.advertisement-label {
+		color: #fff;
+		font-size: 9px;
+		height: auto;
+		left: 0;
+		line-height: 9px;
+		opacity: 0.75;
+		padding: 6px;
+		position: absolute;
+		text-transform: uppercase;
+		top: 0;
+		width: auto;
+	}
+
 	&.theme-mobile .learn-more {
 		display: unset;
 	}
@@ -256,8 +270,10 @@ $hivi-uap-player-button-border-space: 6px;
 			}
 		}
 
+		.advertisement-label,
 		.button-control .icon,
 		.porvata-icon {
+			color: $hivi-uap-light-button-color;
 			fill: $hivi-uap-light-button-color;
 			height: $hivi-uap-button-size;
 			width: $hivi-uap-button-size;
@@ -274,13 +290,18 @@ $hivi-uap-player-button-border-space: 6px;
 			}
 		}
 
-		.play-pause-button, .volume-button, .toggle-fullscreen-button, .learn-more {
+		.advertisement-label,
+		.learn-more,
+		.play-pause-button,
+		.toggle-fullscreen-button,
+		.volume-button {
 			opacity: 0.95;
 		}
 
 		.learn-more {
+			color: #fff;
+
 			& > div {
-				color: #fff;
 				display: block;
 				font-size: 12px;
 				margin-right: 30px;
@@ -314,22 +335,21 @@ $hivi-uap-player-button-border-space: 6px;
 		}
 
 		&.theme-dark {
-			.learn-more > div {
-				color: #000;
-			}
-
 			.ui-visible .toggle-ui-overlay {
 				background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%);
 			}
 
+			.advertisement-label,
 			.button-control .icon,
-			.porvata-icon, {
+			.learn-more,
+			.porvata-icon {
+				color: $hivi-uap-dark-button-color;
 				fill: $hivi-uap-dark-button-color;
 			}
 		}
 
 		.video-player, .replay-overlay {
-			right: 23%;
+			right: 23.2%;
 			transform: translateX(50%);
 			top: 4%;
 			height: 92%;

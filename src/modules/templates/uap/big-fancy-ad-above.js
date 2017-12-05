@@ -5,6 +5,7 @@ import defer from 'ad-engine/src/utils/defer';
 
 import ResolvedState from './resolved-state';
 import ToggleAnimation from './ui/video/toggle-animation';
+import AdvertisementLabel from './ui/advertisement-label';
 import CloseButton from './ui/close-button';
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
@@ -115,6 +116,12 @@ export default class BigFancyAdAbove {
 
 			this.container.appendChild(closeButton.render());
 			this.stickyBfaa.run();
+		}
+
+		if (this.params.theme === 'hivi') {
+			const advertisementLabel = new AdvertisementLabel();
+
+			this.container.appendChild(advertisementLabel.render());
 		}
 	}
 
