@@ -33,9 +33,6 @@ export default class BigFancyAdBelow {
 
 		this.container.classList.add('bfab-template');
 		this.videoSettings = new VideoSettings(this.params);
-		ResolvedState.setImage(this.videoSettings)
-			.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
-			.then(this.adIsReady.bind(this));
 
 		if (params.template === 'hivi') {
 			SlotTweaker.onReady(this.adSlot)
