@@ -34,7 +34,7 @@ const getTemplates = params => ({
 		createBottomPanel(params),
 		ToggleAnimation
 	],
-	'default': [
+	default: [
 		ProgressBar,
 		PauseOverlay,
 		createBottomPanel(params),
