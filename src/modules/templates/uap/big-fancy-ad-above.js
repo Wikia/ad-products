@@ -142,15 +142,15 @@ export default class BigFancyAdAbove {
 		const diff = config.state.height.default - config.state.height.resolved;
 		const value = (config.state.height.default - (diff * currentState)) / 100;
 
+		if (!this.videoPlayer) {
+			this.videoPlayer = adElement.querySelector('.video-player');
+		}
+
 		Object.keys(config.state).forEach((property) => {
 			if (config.state[property]) {
 				this.handleProperty(config, currentState, property);
 			}
 		});
-
-		if (!this.videoPlayer) {
-			this.videoPlayer = this.adSlot.getElement().querySelector('.video-player');
-		}
 
 		if (this.videoPlayer) {
 			this.videoPlayer.style.width = `${this.params.videoAspectRatio * (aspectScroll * value)}px`;
