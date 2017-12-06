@@ -153,7 +153,7 @@ export default class BigFancyAdAbove {
 		}
 
 		if (this.videoPlayer) {
-			this.videoPlayer.style.width = this.params.videoAspectRatio * (aspectScroll * value) + 'px';
+			this.videoPlayer.style.width = `${this.params.videoAspectRatio * (aspectScroll * value)}px`;
 		}
 
 		if (currentState >= hiviResolvedThreshold && !isResolved) {
@@ -177,7 +177,6 @@ export default class BigFancyAdAbove {
 			this.params.thumbnail.style[name] = value;
 
 			if (this.videoPlayer) {
-
 				this.videoPlayer.style[name] = value;
 			}
 		}

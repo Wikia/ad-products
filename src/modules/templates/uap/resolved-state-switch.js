@@ -26,10 +26,10 @@ function wasDefaultStateSeen() {
 }
 
 function updateInformationAboutSeenDefaultStateAd() {
-	 LocalCache.set(createCacheKey(), {
-	 	adId: readUapId(),
-	 	lastSeenDate: now.getTime()
-	 }, cacheTtl);
+	LocalCache.set(createCacheKey(), {
+		adId: readUapId(),
+		lastSeenDate: now.getTime()
+	}, cacheTtl);
 }
 
 export default {
