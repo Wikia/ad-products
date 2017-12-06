@@ -15,7 +15,7 @@ $uap-progress-bar-height: 8px;
 $uap-replay-overlay-color: rgba(0,0,0,0.3);
 $uap-video-animation-duration: 0.4s;
 $uap-video-z-index: 100;
-$uap-video-fullscreen-z-index: 9999;
+$uap-video-fullscreen-z-index: 2147483647;
 
 $hivi-uap-dark-button-color: #000;
 $hivi-uap-light-button-color: #fff;
@@ -235,6 +235,7 @@ $hivi-uap-player-button-border-space: 6px;
 		opacity: 0.75;
 		right: 0;
 		top: 0;
+		z-index: $uap-video-fullscreen-z-index + 1;
 	}
 
 	.advertisement-label {
