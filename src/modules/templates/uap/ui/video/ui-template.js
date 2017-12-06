@@ -93,7 +93,7 @@ export function selectTemplate(videoSettings) {
 	if (params.isDarkTheme) {
 		params.container.classList.add('theme-dark');
 	}
-	if (Client.isSmartphone() || Client.isTablet()) {
+	if (params.isMobile || Client.isSmartphone() || Client.isTablet()) {
 		params.container.classList.add('theme-mobile');
 	}
 
