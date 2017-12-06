@@ -93,8 +93,11 @@ export function selectTemplate(videoSettings) {
 	if (params.isDarkTheme) {
 		params.container.classList.add('theme-dark');
 	}
-	if (params.isMobile || Client.isSmartphone() || Client.isTablet()) {
-		params.container.classList.add('theme-mobile');
+	if (params.isMobile) {
+		params.container.classList.add('theme-mobile-layout');
+	}
+	if (Client.isSmartphone() || Client.isTablet()) {
+		params.container.classList.add('theme-mobile-device');
 	}
 
 	return templates[template];

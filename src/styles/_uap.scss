@@ -256,13 +256,13 @@ $hivi-uap-player-button-border-space: 6px;
 		z-index: $uap-video-fullscreen-z-index + 1;
 	}
 
-	&.theme-mobile .advertisement-label {
+	&.theme-mobile-device .advertisement-label {
 		font-size: 6px;
 		line-height: 6px;
 		padding: 5px;
 	}
 
-	&.theme-mobile .learn-more {
+	&.theme-mobile-device .learn-more {
 			display: unset;
 	}
 
@@ -359,7 +359,7 @@ $hivi-uap-player-button-border-space: 6px;
 			}
 		}
 
-		&.theme-mobile .video-player {
+		&.theme-mobile-layout .video-player {
 			right: 0;
 			top: auto;
 			transform: none;
