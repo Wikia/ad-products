@@ -14,6 +14,10 @@ module.exports = {
 			'./examples/templates/floating-rail/script.js',
 			'./examples/styles.scss'
 		],
+		'hivi-uap': [
+			'./examples/templates/hivi-uap/script.js',
+			'./examples/styles.scss'
+		],
 		'sticky-bfaa': [
 			'./examples/templates/sticky-bfaa/script.js',
 			'./examples/styles.scss'

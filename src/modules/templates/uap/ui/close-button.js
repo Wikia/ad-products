@@ -1,15 +1,20 @@
-function add(video, container) {
-	const closeButton = document.createElement('div');
+import Button from './button';
+import UiComponent from './ui-component';
+import { icons, createIcon } from './icons';
 
-	closeButton.classList.add('close-ad');
-	closeButton.addEventListener('click', (event) => {
-		video.stop();
-		event.preventDefault();
-	});
+export default class CloseButton extends UiComponent {
+	get classNames() {
+		return ['button-close', ...super.classNames];
+	}
 
-	container.appendChild(closeButton);
+	render() {
+		const { onClick } = this.props;
+		const classNames = this.classNames;
+		const button = new Button({ onClick, classNames }).render();
+		const closeIcon = createIcon(icons.CROSS, ['icon']);
+
+		button.appendChild(closeIcon);
+
+		return button;
+	}
 }
-
-export default {
-	add
-};

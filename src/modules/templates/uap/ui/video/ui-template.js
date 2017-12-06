@@ -41,7 +41,14 @@ const getTemplates = params => ({
 		CloseButton,
 		ToggleAnimation
 	],
-	split: [
+	'split-left': [
+		ProgressBar,
+		PauseOverlay,
+		createBottomPanel(params),
+		ToggleVideo,
+		ReplayOverlay
+	],
+	'split-right': [
 		ProgressBar,
 		PauseOverlay,
 		createBottomPanel(params),
@@ -77,7 +84,7 @@ export function selectTemplate(videoSettings) {
 	} else if (!videoSettings.isAutoPlay() && videoSettings.isSplitLayout()) {
 		template = 'click-to-play-split';
 	} else if (videoSettings.isSplitLayout()) {
-		template = 'split';
+		template = params.splitLayoutVideoPosition === 'right' ? 'split-right' : 'split-left';
 	} else if (videoSettings.isAutoPlay()) {
 		template = 'auto-play';
 	}
@@ -86,8 +93,11 @@ export function selectTemplate(videoSettings) {
 	if (params.isDarkTheme) {
 		params.container.classList.add('theme-dark');
 	}
+	if (params.isMobile) {
+		params.container.classList.add('theme-mobile-layout');
+	}
 	if (Client.isSmartphone() || Client.isTablet()) {
-		params.container.classList.add('theme-mobile');
+		params.container.classList.add('theme-mobile-device');
 	}
 
 	return templates[template];

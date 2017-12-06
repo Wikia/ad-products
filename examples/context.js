@@ -23,7 +23,7 @@ export default {
 					sizes: [[728, 90], [3, 3]]
 				}
 			],
-			defaultSizes: [[300, 250], [2, 2]],
+			defaultSizes: [[2, 2]],
 			targeting: {
 				loc: 'top'
 			}

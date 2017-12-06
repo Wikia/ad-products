@@ -1,4 +1,4 @@
-import { createIcon, icons } from './icons';
+import { createIcon, icons } from '../icons';
 
 function createVolumeControl(params) {
 	const iconPrefix = params.theme === 'hivi' ? 'HIVI_' : '',

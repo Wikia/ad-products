@@ -15,7 +15,7 @@ $uap-progress-bar-height: 8px;
 $uap-replay-overlay-color: rgba(0,0,0,0.3);
 $uap-video-animation-duration: 0.4s;
 $uap-video-z-index: 100;
-$uap-video-fullscreen-z-index: 9999;
+$uap-video-fullscreen-z-index: 2147483647;
 
 $hivi-uap-dark-button-color: #000;
 $hivi-uap-light-button-color: #fff;
@@ -23,11 +23,14 @@ $hivi-uap-progress-bar-color: #7c7c7c;
 $hivi-uap-progress-bar-current-time-color: #fff;
 $hivi-uap-progress-bar-height: 4px;
 $hivi-uap-button-size: 16px;
+$hivi-uap-mobile-button-size: 24px;
+$hivi-uap-button-border-space: 6px;
 $hivi-uap-player-button-border-space: 6px;
 
 .gpt-ad.bfaa-template,
 .gpt-ad.bfab-template {
 	display: block;
+	transform: translateZ(0);
 
 	& > div {
 		padding: 0;
@@ -78,6 +81,14 @@ $hivi-uap-player-button-border-space: 6px;
 		}
 	}
 
+	button {
+		background: none;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		padding: 0;
+	}
+
 	iframe {
 		height: 100%;
 		left: 0;
@@ -88,6 +99,14 @@ $hivi-uap-player-button-border-space: 6px;
 
 	&.mobile-porvata .video-player > iframe {
 		z-index: -1;
+	}
+
+	.button-unstick {
+		display: none;
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: $hivi-uap-button-border-space;
 	}
 
 	.replay-overlay,
@@ -183,6 +202,7 @@ $hivi-uap-player-button-border-space: 6px;
 		opacity: 0.9;
 	}
 
+	.button-control .icon,
 	.porvata-icon {
 		cursor: pointer;
 		fill: $uap-button-color;
@@ -215,14 +235,42 @@ $hivi-uap-player-button-border-space: 6px;
 		opacity: 0.75;
 		right: 0;
 		top: 0;
-		z-index: 3;
+		z-index: $uap-video-fullscreen-z-index + 1;
 	}
 
-	&.theme-mobile .learn-more {
-		display: unset;
+	.advertisement-label {
+		color: #fff;
+		display: none;
+		font-size: 9px;
+		font-weight: bold;
+		height: auto;
+		left: 0;
+		letter-spacing: 0.5px;
+		line-height: 9px;
+		opacity: 0.75;
+		padding: 6px;
+		position: absolute;
+		text-transform: uppercase;
+		top: 0;
+		width: auto;
+		z-index: $uap-video-fullscreen-z-index + 1;
+	}
+
+	&.theme-mobile-device .advertisement-label {
+		font-size: 6px;
+		line-height: 6px;
+		padding: 5px;
+	}
+
+	&.theme-mobile-device .learn-more {
+			display: unset;
 	}
 
 	&.theme-hivi {
+		.advertisement-label {
+			display: unset;
+		}
+
 		.ui-visible {
 			.toggle-ui-overlay {
 				background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 15%, rgba(0, 0, 0, 0) 30%);
@@ -233,20 +281,38 @@ $hivi-uap-player-button-border-space: 6px;
 			}
 		}
 
+		.advertisement-label,
+		.button-control .icon,
 		.porvata-icon {
+			color: $hivi-uap-light-button-color;
 			fill: $hivi-uap-light-button-color;
 			height: $hivi-uap-button-size;
-			opacity: 1;
 			width: $hivi-uap-button-size;
+			opacity: 1;
 		}
 
-		.play-pause-button, .volume-button, .toggle-fullscreen-button, .learn-more {
+		.button-unstick .icon {
+			width: $hivi-uap-mobile-button-size;
+			height: $hivi-uap-mobile-button-size;
+
+			@media #{$breakpoint-m-up} {
+				width: $hivi-uap-button-size;
+				height: $hivi-uap-button-size;
+			}
+		}
+
+		.advertisement-label,
+		.learn-more,
+		.play-pause-button,
+		.toggle-fullscreen-button,
+		.volume-button {
 			opacity: 0.95;
 		}
 
 		.learn-more {
+			color: #fff;
+
 			& > div {
-				color: #fff;
 				display: block;
 				font-size: 12px;
 				margin-right: 30px;
@@ -280,17 +346,53 @@ $hivi-uap-player-button-border-space: 6px;
 		}
 
 		&.theme-dark {
-			.learn-more > div {
-				color: #000;
-			}
-
 			.ui-visible .toggle-ui-overlay {
 				background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%);
 			}
 
+			.advertisement-label,
+			.button-control .icon,
+			.learn-more,
 			.porvata-icon {
+				color: $hivi-uap-dark-button-color;
 				fill: $hivi-uap-dark-button-color;
 			}
+		}
+
+		&.theme-mobile-layout .video-player {
+			right: 0;
+			top: auto;
+			transform: none;
+		}
+
+		&.theme-resolved.sticky-bfaa .button-unstick {
+			display: unset;
+		}
+
+		.video-player, .replay-overlay {
+			right: 23.2%;
+			transform: translateX(50%);
+			top: 4%;
+			height: 92%;
+		}
+
+		.video-player-fullscreen.video-player {
+			right: 0;
+			transform: none;
+			top: 0;
+			height: 100%;
+		}
+	}
+
+	&.theme-split-right {
+		.replay-overlay {
+			right: 0;
+		}
+	}
+
+	&.theme-split-left {
+		.replay-overlay {
+			left: 0;
 		}
 	}
 }
@@ -324,7 +426,6 @@ body.vuap-loaded {
 		left: 0;
 	}
 }
-
 
 @media #{$breakpoint-l-up} {
 	.gpt-ad.bfaa-template.on-animation,
