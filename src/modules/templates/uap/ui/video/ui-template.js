@@ -27,7 +27,7 @@ const createBottomPanel = ({ theme = null }) => {
 	]);
 };
 
-const getTemplates = params => ({
+const getTemplates = (params, videoSettings) => ({
 	'auto-play': [
 		ProgressBar,
 		PauseOverlay,
@@ -46,30 +46,16 @@ const getTemplates = params => ({
 		PauseOverlay,
 		createBottomPanel(params),
 		ToggleVideo,
-		ReplayOverlay
+		ReplayOverlay,
+		!videoSettings.isAutoPlay() ? CloseButton : null
 	],
 	'split-right': [
 		ProgressBar,
 		PauseOverlay,
 		createBottomPanel(params),
 		ToggleVideo,
-		ReplayOverlay
-	],
-	'resolved-split-left': [
-		ProgressBar,
-		PauseOverlay,
-		createBottomPanel(params),
-		ToggleVideo,
 		ReplayOverlay,
-		CloseButton
-	],
-	'resolved-split-right': [
-		ProgressBar,
-		PauseOverlay,
-		createBottomPanel(params),
-		ToggleVideo,
-		ReplayOverlay,
-		CloseButton
+		!videoSettings.isAutoPlay() ? CloseButton : null
 	],
 	hivi: [
 		ProgressBar,
@@ -83,14 +69,12 @@ const getTemplates = params => ({
 
 export function selectTemplate(videoSettings) {
 	const params = videoSettings.getParams(),
-		templates = getTemplates(params);
+		templates = getTemplates(params, videoSettings);
 
 	let template = 'default';
 
 	if (params.theme === 'hivi') {
 		template = 'hivi';
-	} else if (!videoSettings.isAutoPlay() && videoSettings.isSplitLayout()) {
-		template = params.splitLayoutVideoPosition === 'right' ? 'resolved-split-right' : 'resolved-split-left';
 	} else if (videoSettings.isSplitLayout()) {
 		template = params.splitLayoutVideoPosition === 'right' ? 'split-right' : 'split-left';
 	} else if (videoSettings.isAutoPlay()) {
