@@ -1,17 +1,12 @@
 import Context from 'ad-engine/src/services/context-service';
-import ScrollListener from 'ad-engine/src/listeners/scroll-listener';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 import defer from 'ad-engine/src/utils/defer';
 
 import ResolvedState from './resolved-state';
-import ToggleAnimation from './ui/video/toggle-animation';
-import AdvertisementLabel from './ui/advertisement-label';
-import CloseButton from './ui/close-button';
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
-import StickyBfaa from './sticky-bfaa';
-
-const hiviResolvedThreshold = 0.995;
+import { ClassicBfaa } from './themes/classic';
+import { HiViBfaa } from './themes/hivi';
 
 export default class BigFancyAdAbove {
 	static getName() {
@@ -79,7 +74,7 @@ export default class BigFancyAdAbove {
 		this.config = Context.get('templates.bfaa');
 		this.container = document.getElementById(this.adSlot.getId());
 		this.videoSettings = null;
-		this.stickyBfaa = null;
+		this.theme = null;
 	}
 
 	/**
@@ -97,88 +92,15 @@ export default class BigFancyAdAbove {
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
 
-		if (params.template === 'hivi') {
+		if (this.params.theme === 'hivi') {
+			this.theme = new HiViBfaa(this.adSlot, this.params);
 			SlotTweaker.onReady(this.adSlot)
-				.then(this.adIsReady.bind(this));
+				.then(iframe => this.adIsReady(iframe));
 		} else {
+			this.theme = new ClassicBfaa(this.adSlot, this.params);
 			ResolvedState.setImage(this.videoSettings)
 				.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
-				.then(this.adIsReady.bind(this));
-		}
-
-		if (this.params.isSticky) {
-			this.stickyBfaa = new StickyBfaa(this.adSlot, this.config);
-
-			const closeButton = new CloseButton({
-				classNames: ['button-unstick'],
-				onClick: () => this.stickyBfaa.revertStickiness()
-			});
-
-			this.container.appendChild(closeButton.render());
-			this.stickyBfaa.run();
-		}
-
-		if (this.params.theme === 'hivi') {
-			const advertisementLabel = new AdvertisementLabel();
-
-			this.container.appendChild(advertisementLabel.render());
-		}
-	}
-
-	updateOnScroll() {
-		const adElement = this.adSlot.getElement(),
-			config = this.params.config,
-			currentWidth = document.body.offsetWidth,
-			isResolved = !this.params.image2.element.classList.contains('hidden-state'),
-			isSticky = adElement.classList.contains('sticky-bfaa'),
-			maxHeight = currentWidth / config.aspectRatio.default,
-			minHeight = currentWidth / config.aspectRatio.resolved,
-			aspectScroll = Math.max(minHeight, maxHeight - window.scrollY),
-			currentAspectRatio = currentWidth / aspectScroll,
-			aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved,
-			currentDiff = config.aspectRatio.default - currentAspectRatio,
-			currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff);
-
-		const diff = config.state.height.default - config.state.height.resolved;
-		const value = (config.state.height.default - (diff * currentState)) / 100;
-
-		if (!this.videoPlayer) {
-			this.videoPlayer = adElement.querySelector('.video-player');
-		}
-
-		Object.keys(config.state).forEach((property) => {
-			if (config.state[property]) {
-				this.handleProperty(config, currentState, property);
-			}
-		});
-
-		if (this.videoPlayer) {
-			this.videoPlayer.style.width = `${this.params.videoAspectRatio * (aspectScroll * value)}px`;
-		}
-
-		if (currentState >= hiviResolvedThreshold && !isResolved) {
-			this.container.classList.add('theme-resolved');
-			this.params.image2.element.classList.remove('hidden-state');
-		} else if (currentState < hiviResolvedThreshold && isResolved) {
-			this.container.classList.remove('theme-resolved');
-			this.params.image2.element.classList.add('hidden-state');
-		}
-
-		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
-		if (!isSticky) {
-			this.adSlot.getElement().style.top = `${maxHeight - aspectScroll}px`;
-		}
-	}
-
-	handleProperty(config, currentState, name) {
-		if (config.state[name]) {
-			const diff = config.state[name].default - config.state[name].resolved;
-			const value = `${(config.state[name].default - (diff * currentState))}%`;
-			this.params.thumbnail.style[name] = value;
-
-			if (this.videoPlayer) {
-				this.videoPlayer.style[name] = value;
-			}
+				.then(iframe => this.adIsReady(iframe));
 		}
 	}
 
@@ -214,41 +136,11 @@ export default class BigFancyAdAbove {
 		if (UniversalAdPackage.isVideoEnabled(this.params)) {
 			defer(UniversalAdPackage.loadVideoAd, this.videoSettings) // defers for proper rendering
 				.then((video) => {
-					if (this.params.theme === 'hivi') {
-						video.addEventListener('wikiaAdStarted', () => this.updateOnScroll());
-					}
-
-					if (!this.params.splitLayoutVideoPosition) {
-						video.addEventListener('wikiaAdStarted', () => {
-							this.recalculatePaddingTop(this.params.videoAspectRatio);
-						});
-
-						video.addEventListener('wikiaAdCompleted', () => {
-							this.recalculatePaddingTop(this.params.aspectRatio);
-						});
-					}
-
+					this.theme.videoIsReady(video);
 					return video;
 				});
 		}
 
-		if (this.params.theme === 'hivi') {
-			ScrollListener.addCallback(() => this.updateOnScroll());
-			// Manually run update on scroll once
-			this.updateOnScroll();
-		}
-	}
-
-	recalculatePaddingTop(finalAspectRatio) {
-		document.body.style.paddingTop = `${100 / finalAspectRatio}%`;
-
-		this.container.style.height = `${this.container.offsetHeight}px`;
-		// get offsetWidth from existing DOM element in order to force repaint
-		this.container.style.height = `${this.container.offsetWidth / finalAspectRatio}px`;
-
-		setTimeout(() => {
-			// clear height so ad is responsive again
-			this.container.style.height = '';
-		}, ToggleAnimation.duration);
+		this.theme.adIsReady(iframe);
 	}
 }
