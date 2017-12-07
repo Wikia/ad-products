@@ -55,7 +55,15 @@ const getTemplates = params => ({
 		ToggleVideo,
 		ReplayOverlay
 	],
-	'click-to-play-split': [
+	'resolved-split-left': [
+		ProgressBar,
+		PauseOverlay,
+		createBottomPanel(params),
+		ToggleVideo,
+		ReplayOverlay,
+		CloseButton
+	],
+	'resolved-split-right': [
 		ProgressBar,
 		PauseOverlay,
 		createBottomPanel(params),
@@ -82,7 +90,7 @@ export function selectTemplate(videoSettings) {
 	if (params.theme === 'hivi') {
 		template = 'hivi';
 	} else if (!videoSettings.isAutoPlay() && videoSettings.isSplitLayout()) {
-		template = 'click-to-play-split';
+		template = params.splitLayoutVideoPosition === 'right' ? 'resolved-split-right' : 'resolved-split-left';
 	} else if (videoSettings.isSplitLayout()) {
 		template = params.splitLayoutVideoPosition === 'right' ? 'split-right' : 'split-left';
 	} else if (videoSettings.isAutoPlay()) {
