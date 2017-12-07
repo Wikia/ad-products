@@ -379,7 +379,10 @@ $hivi-uap-player-button-border-space: 6px;
 		.video-player-fullscreen.video-player {
 			right: 0;
 			transform: none;
-			top: 0;
+			// Below line requires "!important" because we are setting
+			// style.width on .video-player in UAP:HiVi in order to
+			// control video/thumbnail position
+			top: 0 !important;
 			height: 100%;
 		}
 	}
