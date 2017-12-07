@@ -1,4 +1,4 @@
-export class BfaaTheme {
+export class BigFancyAdTheme {
 	constructor(adSlot, params) {
 		this.adSlot = adSlot;
 		this.container = this.adSlot.getElement();

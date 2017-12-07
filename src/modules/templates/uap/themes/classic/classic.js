@@ -1,7 +1,7 @@
-import ToggleAnimation from '../ui/video/toggle-animation';
-import { BfaaTheme } from './theme';
+import ToggleAnimation from '../../ui/video/toggle-animation';
+import { BigFancyAdTheme } from '../theme';
 
-export class ClassicBfaa extends BfaaTheme {
+export class ClassicBfaa extends BigFancyAdTheme {
 	videoIsReady(video) {
 		if (!this.params.splitLayoutVideoPosition) {
 			video.addEventListener('wikiaAdStarted', () => {
@@ -26,4 +26,8 @@ export class ClassicBfaa extends BfaaTheme {
 			this.container.style.height = '';
 		}, ToggleAnimation.duration);
 	}
+}
+
+export class ClassicBfab extends BigFancyAdTheme {
+
 }

@@ -1,10 +1,10 @@
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 import defer from 'ad-engine/src/utils/defer';
 
-import AdvertisementLabel from './ui/advertisement-label';
-import ResolvedState from './resolved-state';
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
+import { ClassicBfab, ResolvedState } from './themes/classic';
+import { HiViBfab } from './themes/hivi';
 
 export default class BigFancyAdBelow {
 	static getName() {
@@ -19,6 +19,7 @@ export default class BigFancyAdBelow {
 	constructor(adSlot) {
 		this.adSlot = adSlot;
 		this.container = document.getElementById(this.adSlot.getId());
+		this.theme = null;
 		this.videoSettings = null;
 	}
 
@@ -27,6 +28,7 @@ export default class BigFancyAdBelow {
 	 */
 	init(params) {
 		this.params = params;
+
 		if (!this.container) {
 			return;
 		}
@@ -34,25 +36,27 @@ export default class BigFancyAdBelow {
 		this.container.classList.add('bfab-template');
 		this.videoSettings = new VideoSettings(this.params);
 
-		if (params.template === 'hivi') {
+		if (this.params.theme === 'hivi') {
+			this.theme = new HiViBfab(this.adSlot, this.params);
 			SlotTweaker.onReady(this.adSlot)
-				.then(this.adIsReady.bind(this));
+				.then(iframe => this.adIsReady(iframe));
 		} else {
+			this.theme = new ClassicBfab(this.adSlot, this.params);
 			ResolvedState.setImage(this.videoSettings)
 				.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
-				.then(this.adIsReady.bind(this));
-		}
-
-		if (this.params.theme === 'hivi') {
-			const advertisementLabel = new AdvertisementLabel();
-
-			this.container.appendChild(advertisementLabel.render());
+				.then(iframe => this.adIsReady(iframe));
 		}
 	}
 
-	adIsReady() {
+	adIsReady(iframe) {
 		if (UniversalAdPackage.isVideoEnabled(this.params)) {
-			defer(UniversalAdPackage.loadVideoAd, this.videoSettings);
+			defer(UniversalAdPackage.loadVideoAd, this.videoSettings)
+				.then((video) => {
+					this.theme.videoIsReady(video);
+					return video;
+				});
 		}
+
+		this.theme.adIsReady(iframe);
 	}
 }

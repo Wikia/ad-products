@@ -2,10 +2,9 @@ import Context from 'ad-engine/src/services/context-service';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 import defer from 'ad-engine/src/utils/defer';
 
-import ResolvedState from './resolved-state';
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
-import { ClassicBfaa } from './themes/classic';
+import { ClassicBfaa, ResolvedState } from './themes/classic';
 import { HiViBfaa } from './themes/hivi';
 
 export default class BigFancyAdAbove {

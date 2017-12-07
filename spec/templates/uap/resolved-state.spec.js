@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 import {expect} from 'chai';
-import ResolvedState from '../../../src/modules/templates/uap/resolved-state';
-import ResolvedStateSwitch from '../../../src/modules/templates/uap/resolved-state-switch';
+import ResolvedState from '../../../src/modules/templates/uap/themes/classic/resolved-state';
+import ResolvedStateSwitch from '../../../src/modules/templates/uap/themes/classic/resolved-state-switch';
 import QueryString from 'ad-engine/src/utils/query-string';
 
 const ASPECT_RATIO = 1,

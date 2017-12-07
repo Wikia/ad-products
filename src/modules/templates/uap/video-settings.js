@@ -1,4 +1,4 @@
-import ResolvedState from './resolved-state';
+import { ResolvedState } from './themes/classic';
 
 export default class VideoSettings {
 

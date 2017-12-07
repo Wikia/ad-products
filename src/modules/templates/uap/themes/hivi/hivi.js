@@ -1,91 +1,18 @@
 import Context from 'ad-engine/src/services/context-service';
 import ScrollListener from 'ad-engine/src/listeners/scroll-listener';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
-import { SLOT_VIEWED_EVENT } from 'ad-engine/src/models/ad-slot';
-import { logger } from 'ad-engine/src/utils/logger';
 
-import AdvertisementLabel from '../ui/advertisement-label';
-import CloseButton from '../ui/close-button';
-import { BfaaTheme } from './theme';
+import AdvertisementLabel from '../../ui/advertisement-label';
+import CloseButton from '../../ui/close-button';
+import { BigFancyAdTheme } from '../theme';
+import StickyBfaa from './sticky-bfaa';
 
 const HIVI_RESOLVED_THRESHOLD = 0.995;
 
-class StickyBfaa {
-	constructor(adSlot, config) {
-		this.adSlot = adSlot;
-		this.config = config;
-		this.onViewed = this.onViewed.bind(this);
-		this.viewabilityApproveTimeout = null;
-		this.isSticky = false;
-		this.logger = (...args) => logger(StickyBfaa.LOG_GROUP, ...args);
-	}
-
-	run() {
-		SlotTweaker.onReady(this.adSlot).then(() => {
-			if (document.hidden) {
-				window.addEventListener('visibilitychange', () => this.onAdReady(), { once: true });
-			} else {
-				this.onAdReady();
-			}
-		});
-	}
-
-	applyStickiness() {
-		if (!this.isSticky) {
-			this.logger('Applying bfaa stickiness');
-			this.isSticky = true;
-			this.config.onStickBfaaCallback(this.adSlot);
-		} else {
-			this.logger('bfaa stickiness is already applied');
-		}
-	}
-
-	revertStickiness() {
-		if (this.isSticky) {
-			this.logger('Reverting bfaa stickiness');
-			this.isSticky = false;
-			this.config.onUnstickBfaaCallback(this.adSlot);
-		} else {
-			this.logger('bfaa stickiness is already reverted');
-		}
-	}
-
-	onViewed() {
-		let revertTimeout = null;
-		const adContainer = this.adSlot.getElement();
-		const shouldRevertImmediately = Math.abs(window.scrollY - adContainer.offsetTop) < (adContainer.offsetHeight / 2);
-		const onRevertTimeout = () => {
-			clearTimeout(revertTimeout);
-			document.removeEventListener('scroll', onRevertTimeout);
-			this.revertStickiness();
-		};
-
-		this.adSlot.removeListener(SLOT_VIEWED_EVENT, this.onViewed);
-		clearTimeout(this.viewabilityApproveTimeout);
-		document.addEventListener('scroll', onRevertTimeout);
-		revertTimeout = setTimeout(onRevertTimeout, (shouldRevertImmediately ? 0 : StickyBfaa.STICKINESS_REMOVAL_WINDOW));
-
-		this.logger(`slotViewed triggered on ${this.adSlot.getSlotName()}`);
-	}
-
-	onAdReady() {
-		this.viewabilityApproveTimeout = setTimeout(this.onViewed, StickyBfaa.VIEWABILITY_APPROVAL_WINDOW);
-		this.applyStickiness();
-		this.adSlot.once(SLOT_VIEWED_EVENT, this.onViewed);
-	}
-}
-
-Object.assign(StickyBfaa, {
-	// time after which we'll remove stickiness even with no user interaction
-	STICKINESS_REMOVAL_WINDOW: 10000,
-	// time after which we'll unstick slot on user scroll even if it's not viewed
-	VIEWABILITY_APPROVAL_WINDOW: 5000,
-	LOG_GROUP: 'sticky-bfaa'
-});
-
-export class HiViBfaa extends BfaaTheme {
+export class HiViBfaa extends BigFancyAdTheme {
 	constructor(adSlot, params) {
 		super(adSlot, params);
+
 		this.stickyBfaa = null;
 		this.config = Context.get('templates.bfaa');
 
@@ -172,4 +99,13 @@ export class HiViBfaa extends BfaaTheme {
 		}
 	}
 
+}
+
+export class HiViBfab extends BigFancyAdTheme {
+	constructor(adSlot, params) {
+		super(adSlot, params);
+
+		const advertisementLabel = new AdvertisementLabel();
+		this.container.appendChild(advertisementLabel.render());
+	}
 }
