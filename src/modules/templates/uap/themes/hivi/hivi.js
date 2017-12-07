@@ -9,7 +9,7 @@ import StickyBfaa from './sticky-bfaa';
 
 const HIVI_RESOLVED_THRESHOLD = 0.995;
 
-export class HiViBfaa extends BigFancyAdTheme {
+export class BfaaTheme extends BigFancyAdTheme {
 	constructor(adSlot, params) {
 		super(adSlot, params);
 
@@ -32,13 +32,13 @@ export class HiViBfaa extends BigFancyAdTheme {
 		}
 	}
 
-	adIsReady() {
+	onAdReady() {
 		ScrollListener.addCallback(() => this.updateOnScroll());
 		// Manually run update on scroll once
 		this.updateOnScroll();
 	}
 
-	videoIsReady(video) {
+	onVideoReady(video) {
 		video.addEventListener('wikiaAdStarted', () => this.updateOnScroll());
 	}
 
@@ -101,7 +101,7 @@ export class HiViBfaa extends BigFancyAdTheme {
 
 }
 
-export class HiViBfab extends BigFancyAdTheme {
+export class BfabTheme extends BigFancyAdTheme {
 	constructor(adSlot, params) {
 		super(adSlot, params);
 

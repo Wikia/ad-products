@@ -1,8 +1,8 @@
 import ToggleAnimation from '../../ui/video/toggle-animation';
 import { BigFancyAdTheme } from '../theme';
 
-export class ClassicBfaa extends BigFancyAdTheme {
-	videoIsReady(video) {
+export class BfaaTheme extends BigFancyAdTheme {
+	onVideoReady(video) {
 		if (!this.params.splitLayoutVideoPosition) {
 			video.addEventListener('wikiaAdStarted', () => {
 				this.recalculatePaddingTop(this.params.videoAspectRatio);
@@ -28,6 +28,6 @@ export class ClassicBfaa extends BigFancyAdTheme {
 	}
 }
 
-export class ClassicBfab extends BigFancyAdTheme {
+export class BfabTheme extends BigFancyAdTheme {
 
 }

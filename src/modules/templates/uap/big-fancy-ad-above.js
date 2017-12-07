@@ -1,11 +1,10 @@
 import Context from 'ad-engine/src/services/context-service';
-import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 import defer from 'ad-engine/src/utils/defer';
 
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
-import { ClassicBfaa, ResolvedState } from './themes/classic';
-import { HiViBfaa } from './themes/hivi';
+import * as classicTheme from './themes/classic';
+import * as hiviTheme from './themes/hivi';
 
 export default class BigFancyAdAbove {
 	static getName() {
@@ -86,21 +85,15 @@ export default class BigFancyAdAbove {
 			return;
 		}
 
-		UniversalAdPackage.init(this.params, this.config.slotsToEnable);
-		this.videoSettings = new VideoSettings(this.params);
+		const uapTheme = (params.theme === 'hivi') ? hiviTheme : classicTheme;
+		const videoSettings = new VideoSettings(params);
+
+		UniversalAdPackage.init(params, this.config.slotsToEnable);
+		this.videoSettings = videoSettings;
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
-
-		if (this.params.theme === 'hivi') {
-			this.theme = new HiViBfaa(this.adSlot, this.params);
-			SlotTweaker.onReady(this.adSlot)
-				.then(iframe => this.adIsReady(iframe));
-		} else {
-			this.theme = new ClassicBfaa(this.adSlot, this.params);
-			ResolvedState.setImage(this.videoSettings)
-				.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
-				.then(iframe => this.adIsReady(iframe));
-		}
+		this.theme = new uapTheme.BfaaTheme(this.adSlot, params);
+		uapTheme.adIsReady({ adSlot: this.adSlot, videoSettings, params }).then(iframe => this.onAdReady(iframe));
 	}
 
 	setupNavbar() {
@@ -124,7 +117,7 @@ export default class BigFancyAdAbove {
 		return this.params.backgroundColor ? color : '#000';
 	}
 
-	adIsReady(iframe) {
+	onAdReady(iframe) {
 		document.body.style.paddingTop = iframe.parentElement.style.paddingBottom;
 		document.body.classList.add('has-bfaa');
 
@@ -135,11 +128,11 @@ export default class BigFancyAdAbove {
 		if (UniversalAdPackage.isVideoEnabled(this.params)) {
 			defer(UniversalAdPackage.loadVideoAd, this.videoSettings) // defers for proper rendering
 				.then((video) => {
-					this.theme.videoIsReady(video);
+					this.theme.onVideoReady(video);
 					return video;
 				});
 		}
 
-		this.theme.adIsReady(iframe);
+		this.theme.onAdReady(iframe);
 	}
 }

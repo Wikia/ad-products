@@ -5,7 +5,7 @@ export class BigFancyAdTheme {
 		this.params = params;
 	}
 
-	adIsReady() {}
+	onAdReady() {}
 
-	videoIsReady() {}
+	onVideoReady() {}
 }
