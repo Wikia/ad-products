@@ -9,7 +9,7 @@ CURRENT_BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
 
 CURRENT_VERSION=$(npm info ad-products version)
 
-echo -e "\033[32mPublishing $CURRENT_VERSION version\033[0m"
+echo -e "\033[32mPublishing $CURRENT_VERSION version\033[0m\n"
 
 git push origin dev
 git push origin $CURRENT_VERSION
