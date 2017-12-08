@@ -6,3 +6,4 @@ spec/
 config.js
 karma.conf.js
 webpack.config.js
+webpack.build.config.js

@@ -5,3 +5,6 @@ node_modules
 coverage
 spec/build
 npm-debug.log
+
+dist/ignore_me.js
+dist/ignore_me.scss

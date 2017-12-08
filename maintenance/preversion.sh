@@ -10,8 +10,6 @@ CURRENT_BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
 npm run test
 npm run lint
 
-# Work in progress
-echo "I'll build a package here"
-echo "Built package" > dist/package.js
+./node_modules/webpack/bin/webpack.js --config ./webpack.build.config.js -p
 
 git add dist/
