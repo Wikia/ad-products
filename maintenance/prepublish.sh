@@ -7,9 +7,9 @@ if [ $CURRENT_BRANCH != "dev" ]; then
 	exit 1
 fi
 
-CURRENT_VERSION=$(npm info ad-products version)
+CURRENT_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat package.json)")
 
 echo -e "\033[32mPublishing $CURRENT_VERSION version\033[0m\n"
 
 git push origin dev
-git push origin $CURRENT_VERSION
+git push origin v$CURRENT_VERSION
