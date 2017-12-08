@@ -14,6 +14,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		super(adSlot, params);
 
 		this.stickyBfaa = null;
+		this.video = null;
 		this.config = Context.get('templates.bfaa');
 
 		const advertisementLabel = new AdvertisementLabel();
@@ -39,6 +40,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	onVideoReady(video) {
+		this.video = video;
 		video.addEventListener('wikiaAdStarted', () => this.updateOnScroll());
 	}
 
@@ -59,18 +61,14 @@ export class BfaaTheme extends BigFancyAdTheme {
 		const diff = config.state.height.default - config.state.height.resolved;
 		const value = (config.state.height.default - (diff * currentState)) / 100;
 
-		if (!this.videoPlayer) {
-			this.videoPlayer = adElement.querySelector('.video-player');
-		}
-
 		Object.keys(config.state).forEach((property) => {
 			if (config.state[property]) {
 				this.handleProperty(config, currentState, property);
 			}
 		});
 
-		if (this.videoPlayer) {
-			this.videoPlayer.style.width = `${this.params.videoAspectRatio * (aspectScroll * value)}px`;
+		if (this.video && !this.video.isFullscreen()) {
+			this.video.container.style.width = `${this.params.videoAspectRatio * (aspectScroll * value)}px`;
 		}
 
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
@@ -93,8 +91,8 @@ export class BfaaTheme extends BigFancyAdTheme {
 			const value = `${(config.state[name].default - (diff * currentState))}%`;
 			this.params.thumbnail.style[name] = value;
 
-			if (this.videoPlayer) {
-				this.videoPlayer.style[name] = value;
+			if (this.video) {
+				this.video.container.style[name] = value;
 			}
 		}
 	}
