@@ -85,15 +85,18 @@ export default class BigFancyAdAbove {
 			return;
 		}
 
-		const uapTheme = (params.theme === 'hivi') ? hiviTheme : classicTheme;
-		const videoSettings = new VideoSettings(params);
+		const uapTheme = (this.params.theme === 'hivi') ? hiviTheme : classicTheme;
 
-		UniversalAdPackage.init(params, this.config.slotsToEnable);
-		this.videoSettings = videoSettings;
+		UniversalAdPackage.init(this.params, this.config.slotsToEnable);
+		this.videoSettings = new VideoSettings(this.params);
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
-		this.theme = new uapTheme.BfaaTheme(this.adSlot, params);
-		uapTheme.adIsReady({ adSlot: this.adSlot, videoSettings, params }).then(iframe => this.onAdReady(iframe));
+		this.theme = new uapTheme.BfaaTheme(this.adSlot, this.params);
+		uapTheme.adIsReady({
+			adSlot: this.adSlot,
+			videoSettings: this.videoSettings,
+			params: this.params
+		}).then(iframe => this.onAdReady(iframe));
 	}
 
 	setupNavbar() {

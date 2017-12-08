@@ -32,13 +32,16 @@ export default class BigFancyAdBelow {
 			return;
 		}
 
-		const uapTheme = (params.theme === 'hivi') ? hiviTheme : classicTheme;
-		const videoSettings = new VideoSettings(params);
+		const uapTheme = (this.params.theme === 'hivi') ? hiviTheme : classicTheme;
 
 		this.container.classList.add('bfab-template');
-		this.videoSettings = videoSettings;
-		this.theme = new uapTheme.BfabTheme(this.adSlot, params);
-		uapTheme.adIsReady({ adSlot: this.adSlot, videoSettings, params }).then(iframe => this.onAdReady(iframe));
+		this.videoSettings = new VideoSettings(params);
+		this.theme = new uapTheme.BfabTheme(this.adSlot, this.params);
+		uapTheme.adIsReady({
+			adSlot: this.adSlot,
+			videoSettings: this.videoSettings,
+			params: this.params
+		}).then(iframe => this.onAdReady(iframe));
 	}
 
 	onAdReady(iframe) {
