@@ -1,13 +1,13 @@
 {
   "name": "ad-products",
-  "version": "2.1.1",
+  "version": "2.1.3",
   "description": "Wikia ad products",
   "repository": {
     "type": "git",
     "url": "https://github.com/Wikia/ad-products"
   },
   "dependencies": {
-    "ad-engine": "git+ssh://git@github.com/Wikia/ad-engine.git#v7.0.1"
+    "ad-engine": "7.x.x"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -34,9 +34,14 @@
     "style-loader": "^0.18.2",
     "webpack": "^3.5.6"
   },
+  "publishConfig": {
+    "registry": "https://artifactory.wikia-inc.com/artifactory/api/npm/npm-local/"
+  },
   "scripts": {
     "build": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules",
     "lint": "./node_modules/.bin/eslint .",
+    "prepublishOnly": "./maintenance/prepublish.sh",
+    "preversion": "./maintenance/preversion.sh",
     "test": "mocha-webpack --webpack-config webpack-mocha.config.js './spec/**/*.spec.js' -r jsdom-global/register",
     "test-coverage": "nyc mocha-webpack --webpack-config webpack-mocha.config.js './spec/**/*.spec.js' -r jsdom-global/register --reporter mocha-junit-reporter --reporter-options mochaFile=./spec/build/tests.xml",
     "watch": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules --watch"
