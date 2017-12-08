@@ -40,6 +40,7 @@
   "scripts": {
     "build": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules",
     "lint": "./node_modules/.bin/eslint .",
+    "preversion": "./maintenance/preversion.sh",
     "test": "mocha-webpack --webpack-config webpack-mocha.config.js './spec/**/*.spec.js' -r jsdom-global/register",
     "test-coverage": "nyc mocha-webpack --webpack-config webpack-mocha.config.js './spec/**/*.spec.js' -r jsdom-global/register --reporter mocha-junit-reporter --reporter-options mochaFile=./spec/build/tests.xml",
     "watch": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules --watch"
