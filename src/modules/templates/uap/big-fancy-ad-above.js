@@ -79,6 +79,7 @@ export default class BigFancyAdAbove {
 		this.config = Context.get('templates.bfaa');
 		this.container = document.getElementById(this.adSlot.getId());
 		this.videoSettings = null;
+		this.video = null;
 		this.stickyBfaa = null;
 	}
 
@@ -142,18 +143,14 @@ export default class BigFancyAdAbove {
 		const diff = config.state.height.default - config.state.height.resolved;
 		const value = (config.state.height.default - (diff * currentState)) / 100;
 
-		if (!this.videoPlayer) {
-			this.videoPlayer = adElement.querySelector('.video-player');
-		}
-
 		Object.keys(config.state).forEach((property) => {
 			if (config.state[property]) {
 				this.handleProperty(config, currentState, property);
 			}
 		});
 
-		if (this.videoPlayer) {
-			this.videoPlayer.style.width = `${this.params.videoAspectRatio * (aspectScroll * value)}px`;
+		if (this.video && !this.video.isFullscreen()) {
+			this.video.container.style.width = `${this.params.videoAspectRatio * (aspectScroll * value)}px`;
 		}
 
 		if (currentState >= hiviResolvedThreshold && !isResolved) {
@@ -176,8 +173,8 @@ export default class BigFancyAdAbove {
 			const value = `${(config.state[name].default - (diff * currentState))}%`;
 			this.params.thumbnail.style[name] = value;
 
-			if (this.videoPlayer) {
-				this.videoPlayer.style[name] = value;
+			if (this.video) {
+				this.video.container.style[name] = value;
 			}
 		}
 	}
@@ -214,6 +211,8 @@ export default class BigFancyAdAbove {
 		if (UniversalAdPackage.isVideoEnabled(this.params)) {
 			defer(UniversalAdPackage.loadVideoAd, this.videoSettings) // defers for proper rendering
 				.then((video) => {
+					this.video = video;
+
 					if (this.params.theme === 'hivi') {
 						video.addEventListener('wikiaAdStarted', () => this.updateOnScroll());
 					}
