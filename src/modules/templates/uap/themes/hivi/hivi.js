@@ -16,21 +16,28 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.stickyBfaa = null;
 		this.video = null;
 		this.config = Context.get('templates.bfaa');
-
-		const advertisementLabel = new AdvertisementLabel();
-		this.container.appendChild(advertisementLabel.render());
+		this.addAdvertisementLabel();
 
 		if (this.params.isSticky) {
 			this.stickyBfaa = new StickyBfaa(this.adSlot, this.config);
-
-			const closeButton = new CloseButton({
-				classNames: ['button-unstick'],
-				onClick: () => this.stickyBfaa.revertStickiness()
-			});
-
-			this.container.appendChild(closeButton.render());
+			this.addUnstickButton();
 			this.stickyBfaa.run();
 		}
+	}
+
+	addAdvertisementLabel() {
+		const advertisementLabel = new AdvertisementLabel();
+
+		this.container.appendChild(advertisementLabel.render());
+	}
+
+	addUnstickButton() {
+		const closeButton = new CloseButton({
+			classNames: ['button-unstick'],
+			onClick: () => this.stickyBfaa.revertStickiness()
+		});
+
+		this.container.appendChild(closeButton.render());
 	}
 
 	onAdReady() {
@@ -103,7 +110,12 @@ export class BfabTheme extends BigFancyAdTheme {
 	constructor(adSlot, params) {
 		super(adSlot, params);
 
+		this.addAdvertisementLabel();
+	}
+
+	addAdvertisementLabel() {
 		const advertisementLabel = new AdvertisementLabel();
+
 		this.container.appendChild(advertisementLabel.render());
 	}
 }
