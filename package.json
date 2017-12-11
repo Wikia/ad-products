@@ -32,7 +32,8 @@
     "sass-loader": "^6.0.6",
     "sinon": "^4.1.2",
     "style-loader": "^0.18.2",
-    "webpack": "^3.5.6"
+    "webpack": "^3.5.6",
+    "webpack-dev-server": "^2.9.7"
   },
   "publishConfig": {
     "registry": "https://artifactory.wikia-inc.com/artifactory/api/npm/npm-local/"
@@ -42,6 +43,7 @@
     "lint": "./node_modules/.bin/eslint .",
     "prepublishOnly": "./maintenance/prepublish.sh",
     "preversion": "./maintenance/preversion.sh",
+    "serve": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --colors --inline --open --content-base=./examples/templates",
     "test": "mocha-webpack --webpack-config webpack-mocha.config.js './spec/**/*.spec.js' -r jsdom-global/register",
     "test-coverage": "nyc mocha-webpack --webpack-config webpack-mocha.config.js './spec/**/*.spec.js' -r jsdom-global/register --reporter mocha-junit-reporter --reporter-options mochaFile=./spec/build/tests.xml",
     "watch": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules --watch"
