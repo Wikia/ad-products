@@ -1,5 +1,5 @@
-import UniversalAdPackage from './universal-ad-package';
 import LocalCache from 'ad-engine/src/services/local-cache';
+import UniversalAdPackage from './universal-ad-package';
 
 const cacheKey = 'adEngine_resolvedStateCounter',
 	cacheTtl = 24 * 3600,
