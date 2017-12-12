@@ -284,11 +284,17 @@ $hivi-uap-player-button-border-space: 6px;
 		.advertisement-label,
 		.button-control .icon,
 		.porvata-icon {
+			box-sizing: content-box;
+			-webkit-box-sizing: content-box;
 			color: $hivi-uap-light-button-color;
 			fill: $hivi-uap-light-button-color;
+			opacity: 1;
+		}
+
+		.button-control .icon,
+		.porvata-icon {
 			height: $hivi-uap-button-size;
 			width: $hivi-uap-button-size;
-			opacity: 1;
 		}
 
 		.button-unstick .icon {
