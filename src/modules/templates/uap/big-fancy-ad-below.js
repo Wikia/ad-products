@@ -1,10 +1,9 @@
-import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 import defer from 'ad-engine/src/utils/defer';
 
-import AdvertisementLabel from './ui/advertisement-label';
-import ResolvedState from './resolved-state';
 import UniversalAdPackage from './universal-ad-package';
 import VideoSettings from './video-settings';
+import * as classicTheme from './themes/classic';
+import * as hiviTheme from './themes/hivi';
 
 export default class BigFancyAdBelow {
 	static getName() {
@@ -19,6 +18,7 @@ export default class BigFancyAdBelow {
 	constructor(adSlot) {
 		this.adSlot = adSlot;
 		this.container = document.getElementById(this.adSlot.getId());
+		this.theme = null;
 		this.videoSettings = null;
 	}
 
@@ -27,32 +27,32 @@ export default class BigFancyAdBelow {
 	 */
 	init(params) {
 		this.params = params;
+
 		if (!this.container) {
 			return;
 		}
 
+		const uapTheme = (this.params.theme === 'hivi') ? hiviTheme : classicTheme;
+
 		this.container.classList.add('bfab-template');
-		this.videoSettings = new VideoSettings(this.params);
-
-		if (params.template === 'hivi') {
-			SlotTweaker.onReady(this.adSlot)
-				.then(this.adIsReady.bind(this));
-		} else {
-			ResolvedState.setImage(this.videoSettings)
-				.then(() => SlotTweaker.makeResponsive(this.adSlot, this.params.aspectRatio))
-				.then(this.adIsReady.bind(this));
-		}
-
-		if (this.params.theme === 'hivi') {
-			const advertisementLabel = new AdvertisementLabel();
-
-			this.container.appendChild(advertisementLabel.render());
-		}
+		this.videoSettings = new VideoSettings(params);
+		this.theme = new uapTheme.BfabTheme(this.adSlot, this.params);
+		uapTheme.adIsReady({
+			adSlot: this.adSlot,
+			videoSettings: this.videoSettings,
+			params: this.params
+		}).then(iframe => this.onAdReady(iframe));
 	}
 
-	adIsReady() {
+	onAdReady(iframe) {
 		if (UniversalAdPackage.isVideoEnabled(this.params)) {
-			defer(UniversalAdPackage.loadVideoAd, this.videoSettings);
+			defer(UniversalAdPackage.loadVideoAd, this.videoSettings)
+				.then((video) => {
+					this.theme.onVideoReady(video);
+					return video;
+				});
 		}
+
+		this.theme.onAdReady(iframe);
 	}
 }
