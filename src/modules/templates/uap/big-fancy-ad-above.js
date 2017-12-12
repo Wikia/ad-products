@@ -64,6 +64,7 @@ export default class BigFancyAdAbove {
 				'INCONTENT_BOXAD'
 			],
 			stickyAnimationDuration: 500,
+			onInit: () => {},
 			onStickBfaaCallback,
 			onUnstickBfaaCallback
 		};
@@ -124,6 +125,8 @@ export default class BigFancyAdAbove {
 
 			this.container.appendChild(advertisementLabel.render());
 		}
+
+		this.config.onInit(this.adSlot, this.params, this.config);
 	}
 
 	updateOnScroll() {

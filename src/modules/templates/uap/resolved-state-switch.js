@@ -1,16 +1,12 @@
-import Context from 'ad-engine/src/services/context-service';
+import UniversalAdPackage from './universal-ad-package';
 import LocalCache from 'ad-engine/src/services/local-cache';
 
 const cacheKey = 'adEngine_resolvedStateCounter',
 	cacheTtl = 24 * 3600,
 	now = new Date();
 
-function readUapId() {
-	return Context.get('slots.top-leaderboard.targeting.uap');
-}
-
 function createCacheKey() {
-	return `${cacheKey}_${readUapId()}`;
+	return `${cacheKey}_${UniversalAdPackage.getUapId()}`;
 }
 
 function findRecordInCache() {
@@ -27,7 +23,7 @@ function wasDefaultStateSeen() {
 
 function updateInformationAboutSeenDefaultStateAd() {
 	LocalCache.set(createCacheKey(), {
-		adId: readUapId(),
+		adId: UniversalAdPackage.getUapId(),
 		lastSeenDate: now.getTime()
 	}, cacheTtl);
 }
