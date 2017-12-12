@@ -202,6 +202,11 @@ $hivi-uap-player-button-border-space: 6px;
 		opacity: 0.9;
 	}
 
+	.button-control {
+		height: auto;
+		line-height: normal;
+	}
+
 	.button-control .icon,
 	.porvata-icon {
 		cursor: pointer;
