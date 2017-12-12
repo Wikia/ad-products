@@ -415,8 +415,13 @@ $hivi-uap-player-button-border-space: 6px;
 	}
 }
 
-body.vuap-loaded {
+body.ctp-vuap-loaded {
 	transition: padding $uap-video-animation-duration ease;
+}
+
+.sticky-bfaa {
+	position: fixed;
+	top: 0;
 }
 
 .gpt-ad.bfaa-template {

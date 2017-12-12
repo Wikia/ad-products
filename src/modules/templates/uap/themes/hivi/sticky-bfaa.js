@@ -7,7 +7,6 @@ export default class StickyBfaa {
 		this.adSlot = adSlot;
 		this.config = config;
 		this.onViewed = this.onViewed.bind(this);
-		this.viewabilityApproveTimeout = null;
 		this.isSticky = false;
 		this.logger = (...args) => logger(StickyBfaa.LOG_GROUP, ...args);
 	}
@@ -53,7 +52,6 @@ export default class StickyBfaa {
 		};
 
 		this.adSlot.removeListener(SLOT_VIEWED_EVENT, this.onViewed);
-		clearTimeout(this.viewabilityApproveTimeout);
 		document.addEventListener('scroll', onRevertTimeout);
 		revertTimeout = setTimeout(onRevertTimeout, (shouldRevertImmediately ? 0 : StickyBfaa.STICKINESS_REMOVAL_WINDOW));
 
@@ -61,7 +59,6 @@ export default class StickyBfaa {
 	}
 
 	onAdReady() {
-		this.viewabilityApproveTimeout = setTimeout(this.onViewed, StickyBfaa.VIEWABILITY_APPROVAL_WINDOW);
 		this.applyStickiness();
 		this.adSlot.once(SLOT_VIEWED_EVENT, this.onViewed);
 	}
@@ -70,7 +67,5 @@ export default class StickyBfaa {
 Object.assign(StickyBfaa, {
 	// time after which we'll remove stickiness even with no user interaction
 	STICKINESS_REMOVAL_WINDOW: 10000,
-	// time after which we'll unstick slot on user scroll even if it's not viewed
-	VIEWABILITY_APPROVAL_WINDOW: 5000,
 	LOG_GROUP: 'sticky-bfaa'
 });

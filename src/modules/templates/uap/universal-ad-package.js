@@ -63,8 +63,6 @@ function loadVideoAd(videoSettings) {
 		imageContainer = slotContainer.querySelector('div:last-of-type'),
 		size = getVideoSize(slotContainer, params, videoSettings);
 
-	document.body.classList.add('vuap-loaded');
-
 	params.vastTargeting = {
 		passback: getType()
 	};

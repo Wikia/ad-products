@@ -79,6 +79,8 @@ export function selectTemplate(videoSettings) {
 		template = params.splitLayoutVideoPosition === 'right' ? 'split-right' : 'split-left';
 	} else if (videoSettings.isAutoPlay()) {
 		template = 'auto-play';
+	} else {
+		document.body.classList.add('ctp-vuap-loaded');
 	}
 
 	params.container.classList.add(`theme-${template}`);
