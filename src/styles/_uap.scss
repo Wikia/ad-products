@@ -380,6 +380,10 @@ $hivi-uap-player-button-border-space: 6px;
 			display: unset;
 		}
 
+		&.theme-resolved .learn-more {
+			display: none;
+		}
+
 		.video-player, .replay-overlay {
 			right: 23.2%;
 			transform: translateX(50%);
