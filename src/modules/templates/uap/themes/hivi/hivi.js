@@ -15,6 +15,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 
 		this.stickyBfaa = null;
 		this.video = null;
+		this.videoCompleted = false;
 		this.config = Context.get('templates.bfaa');
 		this.addAdvertisementLabel();
 
@@ -49,17 +50,21 @@ export class BfaaTheme extends BigFancyAdTheme {
 	onVideoReady(video) {
 		this.video = video;
 		video.addEventListener('wikiaAdStarted', () => this.updateOnScroll());
+		video.addEventListener('wikiaAdCompleted', () => {
+			this.videoCompleted = true;
+			this.updateOnScroll();
+		});
 	}
 
 	updateOnScroll() {
 		const adElement = this.container,
 			config = this.params.config,
 			currentWidth = document.body.offsetWidth,
-			isResolved = !this.params.image2.element.classList.contains('hidden-state'),
-			isSticky = adElement.classList.contains('sticky-bfaa'),
+			isResolved = adElement.classList.contains('theme-resolved'),
+			isSticky = this.stickyBfaa.isSticky(),
 			maxHeight = currentWidth / config.aspectRatio.default,
 			minHeight = currentWidth / config.aspectRatio.resolved,
-			aspectScroll = Math.max(minHeight, maxHeight - window.scrollY),
+			aspectScroll = this.videoCompleted ? minHeight : Math.max(minHeight, maxHeight - window.scrollY),
 			currentAspectRatio = currentWidth / aspectScroll,
 			aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved,
 			currentDiff = config.aspectRatio.default - currentAspectRatio,
@@ -78,18 +83,20 @@ export class BfaaTheme extends BigFancyAdTheme {
 			this.video.container.style.width = `${this.params.videoAspectRatio * (aspectScroll * value)}px`;
 		}
 
-		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
+		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved || this.videoCompleted) {
 			this.container.classList.add('theme-resolved');
 			this.params.image2.element.classList.remove('hidden-state');
+
+			if (!isSticky) {
+				adElement.style.top = `${maxHeight - minHeight}px`;
+			}
 		} else if (currentState < HIVI_RESOLVED_THRESHOLD && isResolved) {
 			this.container.classList.remove('theme-resolved');
 			this.params.image2.element.classList.add('hidden-state');
+			adElement.style.top = '';
 		}
 
 		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
-		if (!isSticky) {
-			this.adSlot.getElement().style.top = `${maxHeight - aspectScroll}px`;
-		}
 	}
 
 	handleProperty(config, currentState, name) {

@@ -272,6 +272,13 @@ $hivi-uap-player-button-border-space: 6px;
 	}
 
 	&.theme-hivi {
+		position: fixed;
+		top: 0;
+
+		&.theme-resolved:not(.sticky-bfaa) {
+			position: absolute;
+		}
+
 		.advertisement-label {
 			display: unset;
 		}
