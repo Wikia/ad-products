@@ -36,7 +36,7 @@
     "webpack-dev-server": "^2.9.7"
   },
   "publishConfig": {
-    "registry": "https://artifactory.wikia-inc.com/artifactory/api/npm/npm-local/"
+    "registry": "https://artifactory.wikia-inc.com/artifactory/api/npm/wikia-npm/"
   },
   "scripts": {
     "build": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules",
