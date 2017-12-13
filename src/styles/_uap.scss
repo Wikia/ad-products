@@ -202,6 +202,11 @@ $hivi-uap-player-button-border-space: 6px;
 		opacity: 0.9;
 	}
 
+	.button-control {
+		height: auto;
+		line-height: normal;
+	}
+
 	.button-control .icon,
 	.porvata-icon {
 		cursor: pointer;
@@ -284,11 +289,17 @@ $hivi-uap-player-button-border-space: 6px;
 		.advertisement-label,
 		.button-control .icon,
 		.porvata-icon {
+			box-sizing: content-box;
+			-webkit-box-sizing: content-box;
 			color: $hivi-uap-light-button-color;
 			fill: $hivi-uap-light-button-color;
+			opacity: 1;
+		}
+
+		.button-control .icon,
+		.porvata-icon {
 			height: $hivi-uap-button-size;
 			width: $hivi-uap-button-size;
-			opacity: 1;
 		}
 
 		.button-unstick .icon {
@@ -369,6 +380,10 @@ $hivi-uap-player-button-border-space: 6px;
 			display: unset;
 		}
 
+		&.theme-resolved .learn-more {
+			display: none;
+		}
+
 		.video-player, .replay-overlay {
 			right: 23.2%;
 			transform: translateX(50%);
@@ -400,8 +415,13 @@ $hivi-uap-player-button-border-space: 6px;
 	}
 }
 
-body.vuap-loaded {
+body.ctp-vuap-loaded {
 	transition: padding $uap-video-animation-duration ease;
+}
+
+.sticky-bfaa {
+	position: fixed;
+	top: 0;
 }
 
 .gpt-ad.bfaa-template {

@@ -12,39 +12,12 @@ export default class BigFancyAdAbove {
 	}
 
 	static getDefaultConfig() {
-		const calculateStickyTopPosition = adHeight => `${(window.scrollY <= adHeight) ? -window.scrollY : -adHeight}px`;
-
 		function onStickBfaaCallback(adSlot) {
-			const bfaa = adSlot.getElement();
-			const adHeight = bfaa.offsetHeight;
-
-			bfaa.classList.add('sticky-bfaa');
-			bfaa.style.top = calculateStickyTopPosition(adHeight);
-
-			setTimeout(() => {
-				bfaa.style.transition = `top ${this.stickyAnimationDuration / 1000}s ease`;
-				bfaa.style.top = 0;
-			}, 0);
+			adSlot.getElement().classList.add('sticky-bfaa');
 		}
 
 		function onUnstickBfaaCallback(adSlot) {
-			const bfaa = adSlot.getElement();
-			const adHeight = bfaa.offsetHeight;
-
-			let animationFrameId = null;
-			const setTopPosition = () => {
-				bfaa.style.top = calculateStickyTopPosition(adHeight);
-				animationFrameId = window.requestAnimationFrame(setTopPosition);
-			};
-
-			animationFrameId = window.requestAnimationFrame(setTopPosition);
-
-			setTimeout(() => {
-				window.cancelAnimationFrame(animationFrameId);
-				bfaa.style.top = '';
-				bfaa.style.transition = '';
-				bfaa.classList.remove('sticky-bfaa');
-			}, this.stickyAnimationDuration);
+			adSlot.getElement().classList.remove('sticky-bfaa');
 		}
 
 		return {
@@ -57,6 +30,7 @@ export default class BigFancyAdAbove {
 				'INCONTENT_BOXAD'
 			],
 			stickyAnimationDuration: 500,
+			onInit: () => {},
 			onStickBfaaCallback,
 			onUnstickBfaaCallback
 		};
@@ -97,6 +71,8 @@ export default class BigFancyAdAbove {
 			videoSettings: this.videoSettings,
 			params: this.params
 		}).then(iframe => this.onAdReady(iframe));
+
+		this.config.onInit(this.adSlot, this.params, this.config);
 	}
 
 	setupNavbar() {
