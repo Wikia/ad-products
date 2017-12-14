@@ -39,6 +39,7 @@ function loadPorvata(videoSettings, slotContainer, imageContainer) {
 				autoPlay: videoSettings.isAutoPlay(),
 				image: imageContainer,
 				container: slotContainer,
+				thumbnail: params.thumbnail,
 				clickThroughURL: params.clickThroughURL,
 				aspectRatio: params.aspectRatio,
 				videoAspectRatio: params.videoAspectRatio,
