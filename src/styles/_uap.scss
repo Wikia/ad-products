@@ -272,13 +272,6 @@ $hivi-uap-player-button-border-space: 6px;
 	}
 
 	&.theme-hivi {
-		position: fixed;
-		top: 0;
-
-		&.theme-resolved:not(.sticky-bfaa) {
-			position: absolute;
-		}
-
 		.advertisement-label {
 			display: unset;
 		}
@@ -439,6 +432,11 @@ body.ctp-vuap-loaded {
 	width: 100%;
 	transition: height $uap-video-animation-duration ease;
 	top: 0;
+
+	&.theme-hivi:not(.theme-resolved) {
+		position: fixed;
+		top: 0;
+	}
 
 	video {
 		left: 0;
