@@ -16,6 +16,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.stickyBfaa = null;
 		this.video = null;
 		this.config = Context.get('templates.bfaa');
+		this.isLocked = false;
 		this.addAdvertisementLabel();
 
 		if (this.params.isSticky) {
@@ -41,7 +42,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	onAdReady() {
-		ScrollListener.addCallback(() => this.updateOnScroll());
+		this.listener = ScrollListener.addCallback(() => this.updateOnScroll());
 		// Manually run update on scroll once
 		this.updateOnScroll();
 	}
@@ -59,7 +60,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 			isSticky = adElement.classList.contains('sticky-bfaa'),
 			maxHeight = currentWidth / config.aspectRatio.default,
 			minHeight = currentWidth / config.aspectRatio.resolved,
-			aspectScroll = Math.max(minHeight, maxHeight - window.scrollY),
+			aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - window.scrollY),
 			currentAspectRatio = currentWidth / aspectScroll,
 			aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved,
 			currentDiff = config.aspectRatio.default - currentAspectRatio,
@@ -74,22 +75,49 @@ export class BfaaTheme extends BigFancyAdTheme {
 			}
 		});
 
-		if (this.video && !this.video.isFullscreen()) {
-			this.video.container.style.width = `${this.params.videoAspectRatio * (aspectScroll * value)}px`;
-		}
+		this.adjustVideoSize(aspectScroll * value);
 
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
-			this.container.classList.add('theme-resolved');
-			this.params.image2.element.classList.remove('hidden-state');
+			this.setResolvedState();
 		} else if (currentState < HIVI_RESOLVED_THRESHOLD && isResolved) {
-			this.container.classList.remove('theme-resolved');
-			this.params.image2.element.classList.add('hidden-state');
+			this.switchImagesInAd(false);
+		}
+
+		if (!isSticky && !this.isLocked) {
+			this.adSlot.getElement().style.top = `${maxHeight - aspectScroll}px`;
 		}
 
 		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
-		if (!isSticky) {
-			this.adSlot.getElement().style.top = `${maxHeight - aspectScroll}px`;
+	}
+
+	adjustVideoSize(value) {
+		if (this.video && !this.video.isFullscreen()) {
+			this.video.container.style.width = `${this.params.videoAspectRatio * value}px`;
 		}
+	}
+
+	switchImagesInAd(isResolved) {
+		if (isResolved) {
+			this.container.classList.add('theme-resolved');
+			this.params.image2.element.classList.remove('hidden-state');
+		} else {
+			this.container.classList.remove('theme-resolved');
+			this.params.image2.element.classList.add('hidden-state');
+		}
+	}
+
+	setResolvedState() {
+		this.switchImagesInAd(true);
+		this.adjustBodySize(this.params.config.aspectRatio.resolved);
+
+		ScrollListener.removeCallback(this.listener);
+		this.isLocked = true;
+	}
+
+	adjustBodySize(aspectRatio) {
+		this.adSlot.getElement().style.top = '0';
+		document.body.style.paddingTop = `${100 / aspectRatio}%`;
+		SlotTweaker.makeResponsive(this.adSlot, aspectRatio);
 	}
 
 	handleProperty(config, currentState, name) {
