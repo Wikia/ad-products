@@ -78,7 +78,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.adjustVideoSize(aspectScroll * value);
 
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
-			this.setResolvedState();
+			this.setResolvedState(isSticky);
 		} else if (currentState < HIVI_RESOLVED_THRESHOLD && isResolved) {
 			this.switchImagesInAd(false);
 		}
@@ -106,12 +106,15 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 	}
 
-	setResolvedState() {
+	setResolvedState(isSticky) {
 		this.switchImagesInAd(true);
 		this.adjustBodySize(this.params.config.aspectRatio.resolved);
-
 		ScrollListener.removeCallback(this.listener);
 		this.isLocked = true;
+
+		if (!isSticky) {
+			window.scrollTo(0, 0);
+		}
 	}
 
 	adjustBodySize(aspectRatio) {
