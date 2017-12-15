@@ -125,4 +125,17 @@ export class BfabTheme extends BigFancyAdTheme {
 
 		this.container.appendChild(advertisementLabel.render());
 	}
+
+	onAdReady() {
+		SlotTweaker.makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
+	}
+
+	onVideoReady(video) {
+		video.addEventListener('wikiaAdCompleted', () => this.resolve());
+	}
+
+	resolve() {
+		this.params.image2.element.classList.remove('hidden-state');
+		SlotTweaker.makeResponsive(this.adSlot, this.params.config.aspectRatio.resolved);
+	}
 }
