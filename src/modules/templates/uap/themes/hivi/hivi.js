@@ -14,15 +14,19 @@ export class BfaaTheme extends BigFancyAdTheme {
 		super(adSlot, params);
 
 		this.stickyBfaa = null;
+		this.scrollListener = null;
 		this.video = null;
 		this.videoCompleted = false;
 		this.config = Context.get('templates.bfaa');
 		this.isLocked = false;
+		this.desktopNavbarWrapper = null;
+		this.mobileNavbarWrapper = null;
 		this.addAdvertisementLabel();
 
 		if (this.params.isSticky) {
-			this.stickyBfaa = new StickyBfaa(this.adSlot, this.config);
+			this.stickyBfaa = new StickyBfaa(this.adSlot);
 			this.addUnstickButton();
+			this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
 			this.stickyBfaa.run();
 		}
 	}
@@ -43,7 +47,9 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	onAdReady() {
-		this.listener = ScrollListener.addCallback(() => this.updateOnScroll());
+		this.scrollListener = ScrollListener.addCallback(() => this.updateOnScroll());
+		this.desktopNavbarWrapper = document.querySelector(this.config.desktopNavbarWrapperSelector);
+		this.mobileNavbarWrapper = document.querySelector(this.config.mobileNavbarWrapperSelector);
 		// Manually run update on scroll once
 		this.updateOnScroll();
 	}
@@ -52,17 +58,36 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.video = video;
 		video.addEventListener('wikiaAdStarted', () => this.updateOnScroll());
 		video.addEventListener('wikiaAdCompleted', () => {
-			this.isLocked = true;
-			this.updateOnScroll();
+			this.setResolvedState();
+		});
+	}
+
+	onStickinessChange(isSticky) {
+		const stickinessCallback = isSticky ? this.config.onStickBfaaCallback : this.config.onUnstickBfaaCallback;
+		stickinessCallback(this.adSlot);
+		this.moveNavbar(isSticky && this.isLocked);
+	}
+
+	moveNavbar(move = false) {
+		window.requestAnimationFrame(() => {
+			const adContainerHeight = this.container.offsetHeight;
+			const styleTop = move ? `${adContainerHeight}px` : '';
+
+			if (this.desktopNavbarWrapper) {
+				this.desktopNavbarWrapper.style.top = styleTop;
+			}
+
+			if (this.mobileNavbarWrapper) {
+				this.mobileNavbarWrapper.style.top = styleTop;
+			}
 		});
 	}
 
 	updateOnScroll() {
-		const adElement = this.container,
-			config = this.params.config,
+		const config = this.params.config,
 			currentWidth = document.body.offsetWidth,
-			isResolved = adElement.classList.contains('theme-resolved'),
-			isSticky = this.stickyBfaa.isSticky(),
+			isResolved = this.container.classList.contains('theme-resolved'),
+			isSticky = this.stickyBfaa && this.stickyBfaa.isSticky(),
 			maxHeight = currentWidth / config.aspectRatio.default,
 			minHeight = currentWidth / config.aspectRatio.resolved,
 			aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - window.scrollY),
@@ -89,7 +114,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 
 		if (!isSticky && !this.isLocked) {
-			this.adSlot.getElement().style.top = `${maxHeight - aspectScroll}px`;
+			this.container.style.top = `${maxHeight - aspectScroll}px`;
 		}
 
 		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
@@ -108,14 +133,14 @@ export class BfaaTheme extends BigFancyAdTheme {
 		} else {
 			this.container.classList.remove('theme-resolved');
 			this.params.image2.element.classList.add('hidden-state');
-			adElement.style.top = '';
 		}
 	}
 
 	setResolvedState(isSticky) {
+		ScrollListener.removeCallback(this.scrollListener);
 		this.switchImagesInAd(true);
 		this.adjustBodySize(this.params.config.aspectRatio.resolved);
-		ScrollListener.removeCallback(this.listener);
+		this.moveNavbar(isSticky);
 		this.isLocked = true;
 
 		if (!isSticky) {
@@ -161,10 +186,11 @@ export class BfabTheme extends BigFancyAdTheme {
 	}
 
 	onVideoReady(video) {
-		video.addEventListener('wikiaAdCompleted', () => this.resolve());
+		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState());
 	}
 
-	resolve() {
+	setResolvedState() {
+		this.container.classList.add('theme-resolved');
 		this.params.image2.element.classList.remove('hidden-state');
 		SlotTweaker.makeResponsive(this.adSlot, this.params.config.aspectRatio.resolved);
 	}

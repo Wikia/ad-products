@@ -1,11 +1,13 @@
+import { EventEmitter } from 'events';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
 import { SLOT_VIEWED_EVENT } from 'ad-engine/src/models/ad-slot';
 import { logger } from 'ad-engine/src/utils/logger';
 
-export default class StickyBfaa {
-	constructor(adSlot, config) {
+export default class StickyBfaa extends EventEmitter {
+	constructor(adSlot) {
+		super();
+
 		this.adSlot = adSlot;
-		this.config = config;
 		this.onViewed = this.onViewed.bind(this);
 		this.sticky = false;
 		this.logger = (...args) => logger(StickyBfaa.LOG_GROUP, ...args);
@@ -21,11 +23,15 @@ export default class StickyBfaa {
 		});
 	}
 
+	isSticky() {
+		return this.sticky;
+	}
+
 	applyStickiness() {
 		if (!this.sticky) {
 			this.logger('Applying bfaa stickiness');
 			this.sticky = true;
-			this.config.onStickBfaaCallback(this.adSlot);
+			this.emit(StickyBfaa.STICKINESS_CHANGE_EVENT, this.sticky);
 		} else {
 			this.logger('bfaa stickiness is already applied');
 		}
@@ -35,14 +41,10 @@ export default class StickyBfaa {
 		if (this.sticky) {
 			this.logger('Reverting bfaa stickiness');
 			this.sticky = false;
-			this.config.onUnstickBfaaCallback(this.adSlot);
+			this.emit(StickyBfaa.STICKINESS_CHANGE_EVENT, this.sticky);
 		} else {
 			this.logger('bfaa stickiness is already reverted');
 		}
-	}
-
-	isSticky() {
-		return this.sticky;
 	}
 
 	onViewed() {
@@ -71,5 +73,6 @@ export default class StickyBfaa {
 Object.assign(StickyBfaa, {
 	// time after which we'll remove stickiness even with no user interaction
 	STICKINESS_REMOVAL_WINDOW: 10000,
-	LOG_GROUP: 'sticky-bfaa'
+	LOG_GROUP: 'sticky-bfaa',
+	STICKINESS_CHANGE_EVENT: Symbol('stickinessChange')
 });
