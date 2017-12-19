@@ -83,10 +83,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 			this.switchImagesInAd(false);
 		}
 
-		if (!isSticky && !this.isLocked) {
-			this.adSlot.getElement().style.top = `${maxHeight - aspectScroll}px`;
-		}
-
 		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
 	}
 
