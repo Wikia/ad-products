@@ -15,7 +15,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 
 		this.stickyBfaa = null;
 		this.video = null;
-		this.videoCompleted = false;
 		this.config = Context.get('templates.bfaa');
 		this.isLocked = false;
 		this.addAdvertisementLabel();
@@ -51,10 +50,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 	onVideoReady(video) {
 		this.video = video;
 		video.addEventListener('wikiaAdStarted', () => this.updateOnScroll());
-		video.addEventListener('wikiaAdCompleted', () => {
-			this.isLocked = true;
-			this.updateOnScroll();
-		});
+		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState());
 	}
 
 	updateOnScroll() {
@@ -88,10 +84,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 			this.switchImagesInAd(false);
 		}
 
-		if (!isSticky && !this.isLocked) {
-			this.adSlot.getElement().style.top = `${maxHeight - aspectScroll}px`;
-		}
-
 		SlotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
 	}
 
@@ -108,7 +100,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 		} else {
 			this.container.classList.remove('theme-resolved');
 			this.params.image2.element.classList.add('hidden-state');
-			adElement.style.top = '';
 		}
 	}
 
@@ -124,7 +115,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	adjustBodySize(aspectRatio) {
-		this.adSlot.getElement().style.top = '0';
+		this.container.style.top = '';
 		document.body.style.paddingTop = `${100 / aspectRatio}%`;
 		SlotTweaker.makeResponsive(this.adSlot, aspectRatio);
 	}
@@ -161,11 +152,16 @@ export class BfabTheme extends BigFancyAdTheme {
 	}
 
 	onVideoReady(video) {
-		video.addEventListener('wikiaAdCompleted', () => this.resolve());
+		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState(video));
 	}
 
-	resolve() {
-		this.params.image2.element.classList.remove('hidden-state');
-		SlotTweaker.makeResponsive(this.adSlot, this.params.config.aspectRatio.resolved);
+	setResolvedState(video) {
+		const { thumbnail, config, image2 } = this.params;
+
+		this.container.classList.add('theme-resolved');
+		image2.element.classList.remove('hidden-state');
+		SlotTweaker.makeResponsive(this.adSlot, config.aspectRatio.resolved).then(() => {
+			video.resize(thumbnail.offsetWidth, thumbnail.offsetHeight);
+		});
 	}
 }
