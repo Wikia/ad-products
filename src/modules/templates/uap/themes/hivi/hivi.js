@@ -51,7 +51,11 @@ export class BfaaTheme extends BigFancyAdTheme {
 	onVideoReady(video) {
 		this.video = video;
 		video.addEventListener('wikiaAdStarted', () => this.updateOnScroll());
-		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState());
+		video.addEventListener('wikiaAdCompleted', () => {
+			if (!this.isLocked) {
+				this.setResolvedState();
+			}
+		});
 	}
 
 	updateOnScroll() {
@@ -109,6 +113,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		const offset = Math.round(width / aspectRatio.default - width / aspectRatio.resolved);
 		const onScroll = debounce(() => {
 			window.removeEventListener('scroll', onScroll);
+			this.updateOnScroll();
 			this.adjustBodySize(aspectRatio.resolved);
 			window.scrollBy(0, -offset);
 		}, 50);
