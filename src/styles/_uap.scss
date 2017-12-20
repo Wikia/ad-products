@@ -433,6 +433,11 @@ body.ctp-vuap-loaded {
 	transition: height $uap-video-animation-duration ease;
 	top: 0;
 
+	&.theme-hivi:not(.theme-resolved) {
+		position: fixed;
+		top: 0;
+	}
+
 	video {
 		left: 0;
 	}

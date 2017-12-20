@@ -7,12 +7,15 @@
     "url": "https://github.com/Wikia/ad-products"
   },
   "dependencies": {
-    "ad-engine": "^7.0.1"
+    "ad-engine": "^7.0.1",
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.0.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-lodash": "^3.3.2",
+    "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "css-loader": "^0.28.7",
     "eslint": "^3.7.1",
@@ -43,7 +46,7 @@
     "lint": "./node_modules/.bin/eslint .",
     "prepublishOnly": "./maintenance/prepublish.sh",
     "preversion": "./maintenance/preversion.sh",
-    "serve": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --colors --inline --open --content-base=./examples/templates",
+    "serve": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --colors --inline --open --watch --content-base=./examples/templates",
     "test": "mocha-webpack --webpack-config webpack-mocha.config.js './spec/**/*.spec.js' -r jsdom-global/register",
     "test-coverage": "nyc mocha-webpack --webpack-config webpack-mocha.config.js './spec/**/*.spec.js' -r jsdom-global/register --reporter mocha-junit-reporter --reporter-options mochaFile=./spec/build/tests.xml",
     "watch": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules --watch"
