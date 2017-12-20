@@ -1,6 +1,7 @@
 import Context from 'ad-engine/src/services/context-service';
 import ScrollListener from 'ad-engine/src/listeners/scroll-listener';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
+import { debounce } from 'lodash';
 
 import AdvertisementLabel from '../../ui/advertisement-label';
 import CloseButton from '../../ui/close-button';
@@ -42,7 +43,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	onAdReady() {
-		this.listener = ScrollListener.addCallback(() => this.updateOnScroll());
+		this.scrollListener = ScrollListener.addCallback(() => this.updateOnScroll());
 		// Manually run update on scroll once
 		this.updateOnScroll();
 	}
@@ -54,11 +55,9 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	updateOnScroll() {
-		const adElement = this.container,
-			config = this.params.config,
+		const config = this.params.config,
 			currentWidth = document.body.offsetWidth,
-			isResolved = adElement.classList.contains('theme-resolved'),
-			isSticky = this.stickyBfaa.isSticky(),
+			isResolved = this.container.classList.contains('theme-resolved'),
 			maxHeight = currentWidth / config.aspectRatio.default,
 			minHeight = currentWidth / config.aspectRatio.resolved,
 			aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - window.scrollY),
@@ -79,7 +78,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.adjustVideoSize(aspectScroll * value);
 
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
-			this.setResolvedState(isSticky);
+			this.setResolvedState();
 		} else if (currentState < HIVI_RESOLVED_THRESHOLD && isResolved) {
 			this.switchImagesInAd(false);
 		}
@@ -103,14 +102,25 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 	}
 
-	setResolvedState(isSticky) {
-		this.switchImagesInAd(true);
-		this.adjustBodySize(this.params.config.aspectRatio.resolved);
-		ScrollListener.removeCallback(this.listener);
+	setResolvedState() {
+		const isSticky = this.container.classList.contains('sticky-bfaa');
+		const width = this.container.offsetWidth;
+		const aspectRatio = this.params.config.aspectRatio;
+		const offset = Math.round(width / aspectRatio.default - width / aspectRatio.resolved);
+		const onScroll = debounce(() => {
+			window.removeEventListener('scroll', onScroll);
+			this.adjustBodySize(aspectRatio.resolved);
+			window.scrollBy(0, -offset);
+		}, 50);
+
+		ScrollListener.removeCallback(this.scrollListener);
 		this.isLocked = true;
+		window.addEventListener('scroll', onScroll);
+		this.switchImagesInAd(true);
+		onScroll();
 
 		if (!isSticky) {
-			window.scrollTo(0, 0);
+			this.container.style.top = `${offset}px`;
 		}
 	}
 
