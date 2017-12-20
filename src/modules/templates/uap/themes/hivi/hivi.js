@@ -1,7 +1,7 @@
 import Context from 'ad-engine/src/services/context-service';
 import ScrollListener from 'ad-engine/src/listeners/scroll-listener';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
-import { debounce } from 'lodash';
+import { debounce, mapValues } from 'lodash';
 
 import AdvertisementLabel from '../../ui/advertisement-label';
 import CloseButton from '../../ui/close-button';
@@ -73,13 +73,8 @@ export class BfaaTheme extends BigFancyAdTheme {
 		const diff = config.state.height.default - config.state.height.resolved;
 		const value = (config.state.height.default - (diff * currentState)) / 100;
 
-		Object.keys(config.state).forEach((property) => {
-			if (config.state[property]) {
-				this.handleProperty(config, currentState, property);
-			}
-		});
-
 		this.adjustVideoSize(aspectScroll * value);
+		this.setThumbnailStyle(currentState);
 
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
 			this.setResolvedState();
@@ -93,6 +88,19 @@ export class BfaaTheme extends BigFancyAdTheme {
 	adjustVideoSize(value) {
 		if (this.video && !this.video.isFullscreen()) {
 			this.video.container.style.width = `${this.params.videoAspectRatio * value}px`;
+		}
+	}
+
+	setThumbnailStyle(state) {
+		const style = mapValues(this.params.config.state, (styleProperty) => {
+			const diff = styleProperty.default - styleProperty.resolved;
+			return `${(styleProperty.default - diff * state)}%`;
+		});
+
+		Object.assign(this.params.thumbnail.style, style);
+
+		if (this.video) {
+			Object.assign(this.video.container.style, style);
 		}
 	}
 
@@ -134,19 +142,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 		document.body.style.paddingTop = `${100 / aspectRatio}%`;
 		SlotTweaker.makeResponsive(this.adSlot, aspectRatio);
 	}
-
-	handleProperty(config, currentState, name) {
-		if (config.state[name]) {
-			const diff = config.state[name].default - config.state[name].resolved;
-			const value = `${(config.state[name].default - (diff * currentState))}%`;
-			this.params.thumbnail.style[name] = value;
-
-			if (this.video) {
-				this.video.container.style[name] = value;
-			}
-		}
-	}
-
 }
 
 export class BfabTheme extends BigFancyAdTheme {
@@ -171,12 +166,29 @@ export class BfabTheme extends BigFancyAdTheme {
 	}
 
 	setResolvedState(video) {
-		const { thumbnail, config, image2 } = this.params;
+		const { config, image2 } = this.params;
 
 		this.container.classList.add('theme-resolved');
 		image2.element.classList.remove('hidden-state');
 		SlotTweaker.makeResponsive(this.adSlot, config.aspectRatio.resolved).then(() => {
-			video.resize(thumbnail.offsetWidth, thumbnail.offsetHeight);
+			this.setThumbnailStyle(video);
 		});
+	}
+
+	setThumbnailStyle(video) {
+		const thumbnail = this.params.thumbnail;
+		const style = mapValues(this.params.config.state, (styleProperty) => {
+			const diff = styleProperty.default - styleProperty.resolved;
+			return `${(styleProperty.default - diff)}%`;
+		});
+
+		Object.assign(thumbnail.style, style);
+
+		if (video) {
+			window.requestAnimationFrame(() => {
+				video.resize(thumbnail.offsetWidth, thumbnail.offsetHeight);
+				Object.assign(video.container.style, style);
+			});
+		}
 	}
 }
