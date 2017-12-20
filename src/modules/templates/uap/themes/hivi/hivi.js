@@ -21,6 +21,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.isLocked = false;
 		this.desktopNavbarWrapper = null;
 		this.mobileNavbarWrapper = null;
+		this.onResolvedStateScroll = null;
 		this.addAdvertisementLabel();
 
 		if (this.params.isSticky) {
@@ -57,30 +58,28 @@ export class BfaaTheme extends BigFancyAdTheme {
 	onVideoReady(video) {
 		this.video = video;
 		video.addEventListener('wikiaAdStarted', () => this.updateOnScroll());
-		video.addEventListener('wikiaAdCompleted', () => {
-			this.setResolvedState();
-		});
+		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState());
 	}
 
 	onStickinessChange(isSticky) {
 		const stickinessCallback = isSticky ? this.config.onStickBfaaCallback : this.config.onUnstickBfaaCallback;
 		stickinessCallback(this.adSlot);
-		this.moveNavbar(isSticky && this.isLocked);
+
+		if (!isSticky) {
+			this.moveNavbar(0);
+		}
 	}
 
-	moveNavbar(move = false) {
-		window.requestAnimationFrame(() => {
-			const adContainerHeight = this.container.offsetHeight;
-			const styleTop = move ? `${adContainerHeight}px` : '';
+	moveNavbar(value) {
+		const styleTop = value ? `${value - 1}px` : '';
 
-			if (this.desktopNavbarWrapper) {
-				this.desktopNavbarWrapper.style.top = styleTop;
-			}
+		if (this.desktopNavbarWrapper) {
+			this.desktopNavbarWrapper.style.top = styleTop;
+		}
 
-			if (this.mobileNavbarWrapper) {
-				this.mobileNavbarWrapper.style.top = styleTop;
-			}
-		});
+		if (this.mobileNavbarWrapper) {
+			this.mobileNavbarWrapper.style.top = styleTop;
+		}
 	}
 
 	updateOnScroll() {
@@ -109,6 +108,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
 			this.setResolvedState();
 		} else if (currentState < HIVI_RESOLVED_THRESHOLD && isResolved) {
+			this.container.style.top = '';
 			this.switchImagesInAd(false);
 		}
 
@@ -132,23 +132,37 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	setResolvedState() {
-		const isSticky = this.container.classList.contains('sticky-bfaa');
+		const isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 		const width = this.container.offsetWidth;
 		const aspectRatio = this.params.config.aspectRatio;
-		const offset = Math.round(width / aspectRatio.default - width / aspectRatio.resolved);
-		const onScroll = debounce(() => {
-			window.removeEventListener('scroll', onScroll);
+		const resolvedHeight = width / aspectRatio.resolved;
+		const offset = Math.round(width / aspectRatio.default - resolvedHeight);
+
+		if (this.onResolvedStateScroll) {
+			window.removeEventListener('scroll', this.onResolvedStateScroll);
+			this.onResolvedStateScroll.cancel();
+		}
+
+		this.onResolvedStateScroll = debounce(() => {
+			if (window.scrollY < offset) {
+				return;
+			}
+
+			this.isLocked = true;
+			ScrollListener.removeCallback(this.scrollListener);
+			window.removeEventListener('scroll', this.onResolvedStateScroll);
+			this.onResolvedStateScroll = null;
 			this.adjustBodySize(aspectRatio.resolved);
 			window.scrollBy(0, -offset);
 		}, 50);
 
-		ScrollListener.removeCallback(this.scrollListener);
-		this.isLocked = true;
-		window.addEventListener('scroll', onScroll);
+		window.addEventListener('scroll', this.onResolvedStateScroll);
 		this.switchImagesInAd(true);
-		onScroll();
+		this.onResolvedStateScroll();
 
-		if (!isSticky) {
+		if (isSticky) {
+			this.moveNavbar(resolvedHeight);
+		} else {
 			this.container.style.top = `${offset}px`;
 		}
 	}
