@@ -176,19 +176,20 @@ export class BfabTheme extends BigFancyAdTheme {
 	}
 
 	setThumbnailStyle(video) {
-        const thumbnail = this.params.thumbnail;
+		const thumbnail = this.params.thumbnail;
+
 		forEach(this.params.config.state, (value, styleProperty) => {
 			thumbnail.style[styleProperty] = `${value.resolved}%`;
 
-            if (video) {
-                video.container.style[styleProperty] = `${value.resolved}%`;
-            }
+			if (video) {
+				video.container.style[styleProperty] = `${value.resolved}%`;
+			}
 		});
 
 		if (video) {
-            window.requestAnimationFrame(() => {
-			    video.resize(thumbnail.offsetWidth, thumbnail.offsetHeight);
-            });
+			window.requestAnimationFrame(() => {
+				video.resize(thumbnail.offsetWidth, thumbnail.offsetHeight);
+			});
 		}
 	}
 }
