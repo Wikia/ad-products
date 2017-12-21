@@ -56,6 +56,11 @@ export class BfaaTheme extends BigFancyAdTheme {
 				this.setResolvedState();
 			}
 		});
+		video.addEventListener('wikiaFullscreenChange', () => {
+			if (!video.isFullscreen()) {
+				this.updateOnScroll();
+			}
+		});
 	}
 
 	updateOnScroll() {
