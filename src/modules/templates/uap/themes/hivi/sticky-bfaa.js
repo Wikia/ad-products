@@ -7,7 +7,7 @@ export default class StickyBfaa {
 		this.adSlot = adSlot;
 		this.config = config;
 		this.onViewed = this.onViewed.bind(this);
-		this.isSticky = false;
+		this.sticky = false;
 		this.logger = (...args) => logger(StickyBfaa.LOG_GROUP, ...args);
 	}
 
@@ -22,9 +22,9 @@ export default class StickyBfaa {
 	}
 
 	applyStickiness() {
-		if (!this.isSticky) {
+		if (!this.sticky) {
 			this.logger('Applying bfaa stickiness');
-			this.isSticky = true;
+			this.sticky = true;
 			this.config.onStickBfaaCallback(this.adSlot);
 		} else {
 			this.logger('bfaa stickiness is already applied');
@@ -32,13 +32,17 @@ export default class StickyBfaa {
 	}
 
 	revertStickiness() {
-		if (this.isSticky) {
+		if (this.sticky) {
 			this.logger('Reverting bfaa stickiness');
-			this.isSticky = false;
+			this.sticky = false;
 			this.config.onUnstickBfaaCallback(this.adSlot);
 		} else {
 			this.logger('bfaa stickiness is already reverted');
 		}
+	}
+
+	isSticky() {
+		return this.sticky;
 	}
 
 	onViewed() {
