@@ -1,7 +1,7 @@
 import Context from 'ad-engine/src/services/context-service';
 import ScrollListener from 'ad-engine/src/listeners/scroll-listener';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
-import { debounce, forEach, mapValues } from 'lodash';
+import { debounce, mapValues } from 'lodash';
 
 import AdvertisementLabel from '../../ui/advertisement-label';
 import CloseButton from '../../ui/close-button';
@@ -177,16 +177,12 @@ export class BfabTheme extends BigFancyAdTheme {
 
 	setThumbnailStyle(video) {
 		const thumbnail = this.params.thumbnail;
+		const style = mapValues(this.params.config.state, styleProperty => `${styleProperty.resolved}%`);
 
-		forEach(this.params.config.state, (value, styleProperty) => {
-			thumbnail.style[styleProperty] = `${value.resolved}%`;
-
-			if (video) {
-				video.container.style[styleProperty] = `${value.resolved}%`;
-			}
-		});
+		Object.assign(thumbnail.style, style);
 
 		if (video) {
+			Object.assign(video.container.style, style);
 			window.requestAnimationFrame(() => {
 				video.resize(thumbnail.offsetWidth, thumbnail.offsetHeight);
 			});
