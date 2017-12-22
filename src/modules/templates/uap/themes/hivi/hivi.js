@@ -9,7 +9,6 @@ import { BigFancyAdTheme } from '../theme';
 import StickyBfaa from './sticky-bfaa';
 import ResolvedState from '../../resolved-state';
 import ResolvedStateSwitch from '../../resolved-state-switch';
-import {debounce} from 'lodash';
 
 const HIVI_RESOLVED_THRESHOLD = 0.995;
 
@@ -159,7 +158,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	adjustSizesToResolved(offset) {
-		let aspectRatio = this.params.config.aspectRatio.resolved;
+		const aspectRatio = this.params.config.aspectRatio.resolved;
 		this.container.style.top = '';
 		document.body.style.paddingTop = `${100 / aspectRatio}%`;
 		SlotTweaker.makeResponsive(this.adSlot, aspectRatio);
