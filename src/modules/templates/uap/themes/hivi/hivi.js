@@ -7,6 +7,9 @@ import AdvertisementLabel from '../../ui/advertisement-label';
 import CloseButton from '../../ui/close-button';
 import { BigFancyAdTheme } from '../theme';
 import StickyBfaa from './sticky-bfaa';
+import ResolvedState from '../../resolved-state';
+import ResolvedStateSwitch from '../../resolved-state-switch';
+import {debounce} from 'lodash';
 
 const HIVI_RESOLVED_THRESHOLD = 0.995;
 
@@ -43,14 +46,19 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	onAdReady() {
-		this.scrollListener = ScrollListener.addCallback(() => this.updateOnScroll());
-		// Manually run update on scroll once
-		this.updateOnScroll();
+		if (ResolvedState.isResolvedState(this.params)) {
+			this.setResolvedState(true);
+		} else {
+			ResolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
+			this.scrollListener = ScrollListener.addCallback(() => this.updateAdSizes());
+			// Manually run update on scroll once
+			this.updateAdSizes();
+		}
 	}
 
 	onVideoReady(video) {
 		this.video = video;
-		video.addEventListener('wikiaAdStarted', () => this.updateOnScroll());
+		video.addEventListener('wikiaAdStarted', () => this.updateAdSizes());
 		video.addEventListener('wikiaAdCompleted', () => {
 			if (!this.isLocked) {
 				this.setResolvedState();
@@ -58,12 +66,12 @@ export class BfaaTheme extends BigFancyAdTheme {
 		});
 		video.addEventListener('wikiaFullscreenChange', () => {
 			if (!video.isFullscreen()) {
-				this.updateOnScroll();
+				this.updateAdSizes();
 			}
 		});
 	}
 
-	updateOnScroll() {
+	updateAdSizes() {
 		const config = this.params.config,
 			currentWidth = document.body.offsetWidth,
 			isResolved = this.container.classList.contains('theme-resolved'),
@@ -119,21 +127,23 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 	}
 
-	setResolvedState() {
+	setResolvedState(isChangeInstant) {
 		const isSticky = this.container.classList.contains('sticky-bfaa');
-		const width = this.container.offsetWidth;
-		const aspectRatio = this.params.config.aspectRatio;
-		const offset = Math.round(width / aspectRatio.default - width / aspectRatio.resolved);
+		const offset = this.getHeightDifferenceBetweenStates();
 		const onScroll = debounce(() => {
 			window.removeEventListener('scroll', onScroll);
-			this.updateOnScroll();
-			this.adjustBodySize(aspectRatio.resolved);
-			window.scrollBy(0, -offset);
+			this.updateAdSizes();
+			this.adjustSizesToResolved(offset);
 		}, 50);
+
+		if (isChangeInstant) {
+			this.adjustSizesToResolved(offset);
+		} else {
+			window.addEventListener('scroll', onScroll);
+		}
 
 		ScrollListener.removeCallback(this.scrollListener);
 		this.isLocked = true;
-		window.addEventListener('scroll', onScroll);
 		this.switchImagesInAd(true);
 		onScroll();
 
@@ -142,10 +152,18 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 	}
 
-	adjustBodySize(aspectRatio) {
+	getHeightDifferenceBetweenStates() {
+		const width = this.container.offsetWidth;
+		const aspectRatio = this.params.config.aspectRatio;
+		return Math.round(width / aspectRatio.default - width / aspectRatio.resolved);
+	}
+
+	adjustSizesToResolved(offset) {
+		let aspectRatio = this.params.config.aspectRatio.resolved;
 		this.container.style.top = '';
 		document.body.style.paddingTop = `${100 / aspectRatio}%`;
 		SlotTweaker.makeResponsive(this.adSlot, aspectRatio);
+		window.scrollBy(0, -offset);
 	}
 }
 
