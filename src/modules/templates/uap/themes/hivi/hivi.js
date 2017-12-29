@@ -21,8 +21,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.video = null;
 		this.config = Context.get('templates.bfaa');
 		this.isLocked = false;
-		this.desktopNavbarWrapper = null;
-		this.mobileNavbarWrapper = null;
 		this.onResolvedStateScroll = null;
 		this.addAdvertisementLabel();
 
@@ -50,8 +48,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	onAdReady() {
-		this.desktopNavbarWrapper = document.querySelector(this.config.desktopNavbarWrapperSelector);
-		this.mobileNavbarWrapper = document.querySelector(this.config.mobileNavbarWrapperSelector);
 		if (ResolvedState.isResolvedState(this.params)) {
 			this.setResolvedState(true);
 		} else {
@@ -82,19 +78,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		stickinessCallback(this.adSlot);
 
 		if (!isSticky) {
-			this.moveNavbar(0);
-		}
-	}
-
-	moveNavbar(value) {
-		const styleTop = value ? `${value - 1}px` : '';
-
-		if (this.desktopNavbarWrapper) {
-			this.desktopNavbarWrapper.style.top = styleTop;
-		}
-
-		if (this.mobileNavbarWrapper) {
-			this.mobileNavbarWrapper.style.top = styleTop;
+			this.config.moveNavbar(0);
 		}
 	}
 
@@ -155,12 +139,12 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 	}
 
-	setResolvedState() {
+	setResolvedState(isChangeInstant) {
 		const isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 		const width = this.container.offsetWidth;
 		const aspectRatio = this.params.config.aspectRatio;
 		const resolvedHeight = width / aspectRatio.resolved;
-		const offset = Math.round(width / aspectRatio.default - resolvedHeight);
+		const offset = this.getHeightDifferenceBetweenStates();
 
 		if (this.onResolvedStateScroll) {
 			window.removeEventListener('scroll', this.onResolvedStateScroll);
@@ -172,20 +156,25 @@ export class BfaaTheme extends BigFancyAdTheme {
 				return;
 			}
 
-			this.isLocked = true;
-			ScrollListener.removeCallback(this.scrollListener);
 			window.removeEventListener('scroll', this.onResolvedStateScroll);
 			this.onResolvedStateScroll = null;
-			this.adjustBodySize(aspectRatio.resolved);
-			window.scrollBy(0, -offset);
+			this.updateAdSizes();
+			this.adjustSizesToResolved(offset);
 		}, 50);
 
-		window.addEventListener('scroll', this.onResolvedStateScroll);
+		if (isChangeInstant) {
+			this.adjustSizesToResolved(offset);
+		} else {
+			window.addEventListener('scroll', this.onResolvedStateScroll);
+		}
+
+		this.isLocked = true;
+		ScrollListener.removeCallback(this.scrollListener);
 		this.switchImagesInAd(true);
 		this.onResolvedStateScroll();
 
 		if (isSticky) {
-			this.moveNavbar(resolvedHeight);
+			this.config.moveNavbar(resolvedHeight);
 		} else {
 			this.container.style.top = `${offset}px`;
 		}

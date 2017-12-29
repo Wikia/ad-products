@@ -12,12 +12,28 @@ export default class BigFancyAdAbove {
 	}
 
 	static getDefaultConfig() {
+		const getDesktopNavbar = () => document.getElementById('globalNavigation');
+
 		function onStickBfaaCallback(adSlot) {
 			adSlot.getElement().classList.add('sticky-bfaa');
+			getDesktopNavbar().style.position = 'fixed';
 		}
 
 		function onUnstickBfaaCallback(adSlot) {
 			adSlot.getElement().classList.remove('sticky-bfaa');
+			getDesktopNavbar().style.position = '';
+		}
+
+		function moveNavbar(offset) {
+			const styleTop = offset ? `${offset}px` : '';
+			const isMercury = Boolean(window.Mercury);
+
+			if (isMercury) {
+				const adsMobile = window.Mercury.Modules.Ads.getInstance();
+				adsMobile.setSiteHeadOffset(offset);
+			} else {
+				getDesktopNavbar().style.top = styleTop;
+			}
 		}
 
 		return {
@@ -31,8 +47,10 @@ export default class BigFancyAdAbove {
 			],
 			stickyAnimationDuration: 500,
 			onInit: () => {},
+			getDesktopNavbar,
 			onStickBfaaCallback,
-			onUnstickBfaaCallback
+			onUnstickBfaaCallback,
+			moveNavbar
 		};
 	}
 
