@@ -54,7 +54,7 @@ function setResolvedState(params) {
 }
 
 function templateSupportsResolvedState(params) {
-	return !!(params.image1 && params.image1.resolvedStateSrc);
+	return !!(params.image1 && params.image1.resolvedStateSrc) || params.theme === 'hivi';
 }
 
 function isResolvedState(params) {

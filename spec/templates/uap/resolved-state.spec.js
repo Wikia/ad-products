@@ -206,4 +206,28 @@ describe('ResolvedState', () => {
 		stubs.videoSettings.getParams.restore();
 		stubs.videoSettings.isResolvedState.restore();
 	});
+
+	it('should support hivi template in resolved state', () => {
+		sinon.stub(ResolvedStateSwitch, 'wasDefaultStateSeen');
+		ResolvedStateSwitch.wasDefaultStateSeen.returns(true);
+
+		const params = {
+			theme: 'hivi'
+		};
+
+		expect(ResolvedState.isResolvedState(params)).to.equal(true);
+		ResolvedStateSwitch.wasDefaultStateSeen.restore();
+	});
+
+	it('should not support non existing template in resolved state', () => {
+		sinon.stub(ResolvedStateSwitch, 'wasDefaultStateSeen');
+		ResolvedStateSwitch.wasDefaultStateSeen.returns(true);
+
+		const params = {
+			theme: 'non-existing-template'
+		};
+
+		expect(ResolvedState.isResolvedState(params)).to.equal(false);
+		ResolvedStateSwitch.wasDefaultStateSeen.restore();
+	});
 });
