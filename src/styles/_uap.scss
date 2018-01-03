@@ -363,10 +363,13 @@ $hivi-uap-player-button-border-space: 6px;
 
 			.advertisement-label,
 			.button-control .icon,
-			.learn-more,
 			.porvata-icon {
 				color: $hivi-uap-dark-button-color;
 				fill: $hivi-uap-dark-button-color;
+			}
+
+			.learn-more-icon {
+				fill: $hivi-uap-light-button-color;
 			}
 		}
 
