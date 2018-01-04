@@ -146,6 +146,9 @@ export class BfaaTheme extends BigFancyAdTheme {
 		const resolvedHeight = width / aspectRatio.resolved;
 		const offset = this.getHeightDifferenceBetweenStates();
 
+		this.isLocked = true;
+		ScrollListener.removeCallback(this.scrollListener);
+
 		if (this.onResolvedStateScroll) {
 			window.removeEventListener('scroll', this.onResolvedStateScroll);
 			this.onResolvedStateScroll.cancel();
@@ -158,7 +161,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 
 			window.removeEventListener('scroll', this.onResolvedStateScroll);
 			this.onResolvedStateScroll = null;
-			this.updateAdSizes();
 			this.adjustSizesToResolved(offset);
 		}, 50);
 
@@ -168,8 +170,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 			window.addEventListener('scroll', this.onResolvedStateScroll);
 		}
 
-		this.isLocked = true;
-		ScrollListener.removeCallback(this.scrollListener);
 		this.switchImagesInAd(true);
 		this.onResolvedStateScroll();
 
@@ -192,6 +192,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		document.body.style.paddingTop = `${100 / aspectRatio}%`;
 		SlotTweaker.makeResponsive(this.adSlot, aspectRatio);
 		window.scrollBy(0, -offset);
+		this.updateAdSizes();
 	}
 }
 
