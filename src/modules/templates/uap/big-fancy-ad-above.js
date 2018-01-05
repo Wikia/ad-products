@@ -32,7 +32,8 @@ export default class BigFancyAdAbove {
 			stickyAnimationDuration: 500,
 			onInit: () => {},
 			onStickBfaaCallback,
-			onUnstickBfaaCallback
+			onUnstickBfaaCallback,
+			moveNavbar: () => {}
 		};
 	}
 

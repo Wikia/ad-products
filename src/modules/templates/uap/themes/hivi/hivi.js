@@ -17,14 +17,17 @@ export class BfaaTheme extends BigFancyAdTheme {
 		super(adSlot, params);
 
 		this.stickyBfaa = null;
+		this.scrollListener = null;
 		this.video = null;
 		this.config = Context.get('templates.bfaa');
 		this.isLocked = false;
+		this.onResolvedStateScroll = null;
 		this.addAdvertisementLabel();
 
 		if (this.params.isSticky) {
-			this.stickyBfaa = new StickyBfaa(this.adSlot, this.config);
+			this.stickyBfaa = new StickyBfaa(this.adSlot);
 			this.addUnstickButton();
+			this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
 			this.stickyBfaa.run();
 		}
 	}
@@ -60,7 +63,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		video.addEventListener('wikiaAdStarted', () => this.updateAdSizes());
 		video.addEventListener('wikiaAdCompleted', () => {
 			if (!this.isLocked) {
-				this.setResolvedState();
+				this.setResolvedState(true);
 			}
 		});
 		video.addEventListener('wikiaFullscreenChange', () => {
@@ -70,18 +73,27 @@ export class BfaaTheme extends BigFancyAdTheme {
 		});
 	}
 
-	updateAdSizes() {
-		const config = this.params.config,
-			currentWidth = document.body.offsetWidth,
-			isResolved = this.container.classList.contains('theme-resolved'),
-			maxHeight = currentWidth / config.aspectRatio.default,
-			minHeight = currentWidth / config.aspectRatio.resolved,
-			aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - window.scrollY),
-			currentAspectRatio = currentWidth / aspectScroll,
-			aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved,
-			currentDiff = config.aspectRatio.default - currentAspectRatio,
-			currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff);
+	onStickinessChange(isSticky) {
+		const stickinessCallback = isSticky ? this.config.onStickBfaaCallback : this.config.onUnstickBfaaCallback;
 
+		stickinessCallback(this.adSlot);
+
+		if (!isSticky) {
+			this.config.moveNavbar(0);
+		}
+	}
+
+	updateAdSizes() {
+		const config = this.params.config;
+		const currentWidth = document.body.offsetWidth;
+		const isResolved = this.container.classList.contains('theme-resolved');
+		const maxHeight = currentWidth / config.aspectRatio.default;
+		const minHeight = currentWidth / config.aspectRatio.resolved;
+		const aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - window.scrollY);
+		const currentAspectRatio = currentWidth / aspectScroll;
+		const aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved;
+		const currentDiff = config.aspectRatio.default - currentAspectRatio;
+		const currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff);
 		const diff = config.state.height.default - config.state.height.resolved;
 		const value = (config.state.height.default - (diff * currentState)) / 100;
 
@@ -91,6 +103,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
 			this.setResolvedState();
 		} else if (currentState < HIVI_RESOLVED_THRESHOLD && isResolved) {
+			this.container.style.top = '';
 			this.switchImagesInAd(false);
 		}
 
@@ -126,43 +139,63 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 	}
 
-	setResolvedState(isChangeInstant) {
-		const isSticky = this.container.classList.contains('sticky-bfaa');
+	setResolvedState(immediately) {
+		const isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
+		const width = this.container.offsetWidth;
+		const aspectRatio = this.params.config.aspectRatio;
+		const resolvedHeight = width / aspectRatio.resolved;
 		const offset = this.getHeightDifferenceBetweenStates();
-		const onScroll = debounce(() => {
-			window.removeEventListener('scroll', onScroll);
-			this.updateAdSizes();
+		const resolve = () => {
+			this.isLocked = true;
+			ScrollListener.removeCallback(this.scrollListener);
 			this.adjustSizesToResolved(offset);
-		}, 50);
+		};
 
-		if (isChangeInstant) {
-			this.adjustSizesToResolved(offset);
+		if (this.onResolvedStateScroll) {
+			window.removeEventListener('scroll', this.onResolvedStateScroll);
+			this.onResolvedStateScroll.cancel();
+		}
+
+		if (immediately) {
+			resolve();
 		} else {
-			window.addEventListener('scroll', onScroll);
+			this.onResolvedStateScroll = debounce(() => {
+				if (window.scrollY < offset) {
+					return;
+				}
+
+				window.removeEventListener('scroll', this.onResolvedStateScroll);
+				this.onResolvedStateScroll = null;
+				resolve();
+			}, 50);
+			window.addEventListener('scroll', this.onResolvedStateScroll);
+			this.onResolvedStateScroll();
 		}
 
-		ScrollListener.removeCallback(this.scrollListener);
-		this.isLocked = true;
+		if (isSticky) {
+			this.config.moveNavbar(resolvedHeight);
+		} else {
+			this.container.style.top = `${Math.min(window.scrollY, offset)}px`;
+		}
+
 		this.switchImagesInAd(true);
-		onScroll();
-
-		if (!isSticky) {
-			this.container.style.top = `${offset}px`;
-		}
 	}
 
 	getHeightDifferenceBetweenStates() {
 		const width = this.container.offsetWidth;
 		const aspectRatio = this.params.config.aspectRatio;
+
 		return Math.round(width / aspectRatio.default - width / aspectRatio.resolved);
 	}
 
 	adjustSizesToResolved(offset) {
 		const aspectRatio = this.params.config.aspectRatio.resolved;
+
 		this.container.style.top = '';
 		document.body.style.paddingTop = `${100 / aspectRatio}%`;
 		SlotTweaker.makeResponsive(this.adSlot, aspectRatio);
 		window.scrollBy(0, -offset);
+		this.updateAdSizes();
 	}
 }
 
