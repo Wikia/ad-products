@@ -1,3 +1,4 @@
+import Context from 'ad-engine/src/services/context-service';
 import defer from 'ad-engine/src/utils/defer';
 
 import UniversalAdPackage from './universal-ad-package';
@@ -10,6 +11,12 @@ export default class BigFancyAdBelow {
 		return 'bfab';
 	}
 
+	static getDefaultConfig() {
+		return {
+			onInit: () => {}
+		};
+	}
+
 	/**
 	 * Constructor
 	 *
@@ -17,6 +24,7 @@ export default class BigFancyAdBelow {
 	 */
 	constructor(adSlot) {
 		this.adSlot = adSlot;
+		this.config = Context.get('templates.bfaa');
 		this.container = document.getElementById(this.adSlot.getId());
 		this.theme = null;
 		this.videoSettings = null;
@@ -42,6 +50,8 @@ export default class BigFancyAdBelow {
 			videoSettings: this.videoSettings,
 			params: this.params
 		}).then(iframe => this.onAdReady(iframe));
+
+		this.config.onInit(this.adSlot, this.params, this.config);
 	}
 
 	onAdReady(iframe) {
