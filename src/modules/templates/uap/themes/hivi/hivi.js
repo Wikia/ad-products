@@ -63,7 +63,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		video.addEventListener('wikiaAdStarted', () => this.updateAdSizes());
 		video.addEventListener('wikiaAdCompleted', () => {
 			if (!this.isLocked) {
-				this.setResolvedState();
+				this.setResolvedState(true);
 			}
 		});
 		video.addEventListener('wikiaFullscreenChange', () => {
@@ -175,7 +175,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		if (isSticky) {
 			this.config.moveNavbar(resolvedHeight);
 		} else {
-			this.container.style.top = `${offset}px`;
+			this.container.style.top = `${Math.min(window.scrollY, offset)}px`;
 		}
 
 		this.switchImagesInAd(true);
