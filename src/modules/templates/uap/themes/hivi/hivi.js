@@ -139,15 +139,17 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 	}
 
-	setResolvedState(isChangeInstant) {
+	setResolvedState(immediately) {
 		const isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 		const width = this.container.offsetWidth;
 		const aspectRatio = this.params.config.aspectRatio;
 		const resolvedHeight = width / aspectRatio.resolved;
 		const offset = this.getHeightDifferenceBetweenStates();
-
-		this.isLocked = true;
-		ScrollListener.removeCallback(this.scrollListener);
+		const resolve = () => {
+			this.isLocked = true;
+			ScrollListener.removeCallback(this.scrollListener);
+			this.adjustSizesToResolved(offset);
+		};
 
 		if (this.onResolvedStateScroll) {
 			window.removeEventListener('scroll', this.onResolvedStateScroll);
@@ -161,11 +163,11 @@ export class BfaaTheme extends BigFancyAdTheme {
 
 			window.removeEventListener('scroll', this.onResolvedStateScroll);
 			this.onResolvedStateScroll = null;
-			this.adjustSizesToResolved(offset);
+			resolve();
 		}, 50);
 
-		if (isChangeInstant) {
-			this.adjustSizesToResolved(offset);
+		if (immediately) {
+			resolve();
 		} else {
 			window.addEventListener('scroll', this.onResolvedStateScroll);
 		}
