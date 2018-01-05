@@ -75,6 +75,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 
 	onStickinessChange(isSticky) {
 		const stickinessCallback = isSticky ? this.config.onStickBfaaCallback : this.config.onUnstickBfaaCallback;
+
 		stickinessCallback(this.adSlot);
 
 		if (!isSticky) {
@@ -83,17 +84,16 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	updateAdSizes() {
-		const config = this.params.config,
-			currentWidth = document.body.offsetWidth,
-			isResolved = this.container.classList.contains('theme-resolved'),
-			maxHeight = currentWidth / config.aspectRatio.default,
-			minHeight = currentWidth / config.aspectRatio.resolved,
-			aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - window.scrollY),
-			currentAspectRatio = currentWidth / aspectScroll,
-			aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved,
-			currentDiff = config.aspectRatio.default - currentAspectRatio,
-			currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff);
-
+		const config = this.params.config;
+		const currentWidth = document.body.offsetWidth;
+		const isResolved = this.container.classList.contains('theme-resolved');
+		const maxHeight = currentWidth / config.aspectRatio.default;
+		const minHeight = currentWidth / config.aspectRatio.resolved;
+		const aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - window.scrollY);
+		const currentAspectRatio = currentWidth / aspectScroll;
+		const aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved;
+		const currentDiff = config.aspectRatio.default - currentAspectRatio;
+		const currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff);
 		const diff = config.state.height.default - config.state.height.resolved;
 		const value = (config.state.height.default - (diff * currentState)) / 100;
 
@@ -156,40 +156,41 @@ export class BfaaTheme extends BigFancyAdTheme {
 			this.onResolvedStateScroll.cancel();
 		}
 
-		this.onResolvedStateScroll = debounce(() => {
-			if (window.scrollY < offset) {
-				return;
-			}
-
-			window.removeEventListener('scroll', this.onResolvedStateScroll);
-			this.onResolvedStateScroll = null;
-			resolve();
-		}, 50);
-
 		if (immediately) {
 			resolve();
 		} else {
-			window.addEventListener('scroll', this.onResolvedStateScroll);
-		}
+			this.onResolvedStateScroll = debounce(() => {
+				if (window.scrollY < offset) {
+					return;
+				}
 
-		this.switchImagesInAd(true);
-		this.onResolvedStateScroll();
+				window.removeEventListener('scroll', this.onResolvedStateScroll);
+				this.onResolvedStateScroll = null;
+				resolve();
+			}, 50);
+			window.addEventListener('scroll', this.onResolvedStateScroll);
+			this.onResolvedStateScroll();
+		}
 
 		if (isSticky) {
 			this.config.moveNavbar(resolvedHeight);
 		} else {
 			this.container.style.top = `${offset}px`;
 		}
+
+		this.switchImagesInAd(true);
 	}
 
 	getHeightDifferenceBetweenStates() {
 		const width = this.container.offsetWidth;
 		const aspectRatio = this.params.config.aspectRatio;
+
 		return Math.round(width / aspectRatio.default - width / aspectRatio.resolved);
 	}
 
 	adjustSizesToResolved(offset) {
 		const aspectRatio = this.params.config.aspectRatio.resolved;
+
 		this.container.style.top = '';
 		document.body.style.paddingTop = `${100 / aspectRatio}%`;
 		SlotTweaker.makeResponsive(this.adSlot, aspectRatio);
