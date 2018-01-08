@@ -168,3 +168,15 @@ npm run watch
 ```bash
 npm run lint
 ```
+
+## Developing ad-products and ad-engine together
+
+Use [npm link](https://docs.npmjs.com/cli/link)
+
+0. Checkout both repositiories
+1. Go to `ad-engine` directory and type
+```npm link```
+2. Go to `ad-products` directory and type
+```npm link ad-engine```
+
+From now changes in `ad-engine` repo will be visible on `ad-products` demo pages.
