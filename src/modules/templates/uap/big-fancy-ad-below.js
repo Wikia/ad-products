@@ -24,7 +24,7 @@ export default class BigFancyAdBelow {
 	 */
 	constructor(adSlot) {
 		this.adSlot = adSlot;
-		this.config = Context.get('templates.bfaa');
+		this.config = Context.get('templates.bfab');
 		this.container = document.getElementById(this.adSlot.getId());
 		this.theme = null;
 		this.videoSettings = null;
