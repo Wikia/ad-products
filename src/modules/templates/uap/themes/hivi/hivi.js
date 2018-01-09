@@ -1,3 +1,4 @@
+import Client from 'ad-engine/src/utils/client';
 import Context from 'ad-engine/src/services/context-service';
 import ScrollListener from 'ad-engine/src/listeners/scroll-listener';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
@@ -51,7 +52,8 @@ export class BfaaTheme extends BigFancyAdTheme {
 		if (ResolvedState.isResolvedState(this.params)) {
 			this.setResolvedState(true);
 		} else {
-			const isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
+			const isSafari = /^((?!chrome|android).)*safari/i.test(Client.getBrowser());
+			console.log('isSafari: ', isSafari);
 
 			ResolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
 			this.scrollListener = ScrollListener.addCallback(
