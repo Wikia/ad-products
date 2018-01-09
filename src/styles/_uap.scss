@@ -107,6 +107,10 @@ $hivi-uap-player-button-border-space: 6px;
 		top: 0;
 		right: 0;
 		margin: $hivi-uap-button-border-space;
+
+		@media #{$breakpoint-m-up} {
+			right: 34px;
+		}
 	}
 
 	.replay-overlay,
