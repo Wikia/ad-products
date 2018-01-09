@@ -37,6 +37,7 @@ $hivi-uap-player-button-border-space: 6px;
 		position: relative;
 		text-align: center;
 		width: 100%;
+		transition: padding-bottom .01s;
 
 		&::before {
 			display: none;
