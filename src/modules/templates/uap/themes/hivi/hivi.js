@@ -53,7 +53,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 			this.setResolvedState(true);
 		} else {
 			const isSafari = /^((?!chrome|android).)*safari/i.test(Client.getBrowser());
-			console.log('isSafari: ', isSafari);
 
 			ResolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
 			this.scrollListener = ScrollListener.addCallback(
