@@ -1,12 +1,11 @@
-import QueryString from 'ad-engine/src/utils/query-string';
-import { once } from 'ad-engine/src/utils/event';
-import ResolvedStateSwitch from './resolved-state-switch';
+import { utils } from '@wikia/ad-engine';
+import { resolvedStateSwitch } from './resolved-state-switch';
 
 const DEFAULT_STATE = 'default';
 const RESOLVED_STATE = 'resolved';
 
 function getQueryParam() {
-	return QueryString.get('resolved_state', null);
+	return utils.queryString.get('resolved_state', null);
 }
 
 function isForcedByURLParam() {
@@ -30,15 +29,15 @@ function setState(state, params) {
 	promises.push(Promise.resolve(params));
 	image1.element.src = image1[srcPropertyName];
 	promises.push(Promise.race([
-		once(image1.element, 'load'),
-		once(image1.element, 'error')
+		utils.once(image1.element, 'load'),
+		utils.once(image1.element, 'error')
 	]));
 
 	if (image2 && image2[srcPropertyName]) {
 		image2.element.src = image2[srcPropertyName];
 		promises.push(Promise.race([
-			once(image2.element, 'load'),
-			once(image2.element, 'error')
+			utils.once(image2.element, 'load'),
+			utils.once(image2.element, 'error')
 		]));
 	}
 
@@ -65,7 +64,7 @@ function isResolvedState(params) {
 		let defaultStateSeen = true;
 
 		if (showResolvedState) {
-			defaultStateSeen = ResolvedStateSwitch.wasDefaultStateSeen() || isForcedByURLParam();
+			defaultStateSeen = resolvedStateSwitch.wasDefaultStateSeen() || isForcedByURLParam();
 		}
 
 		result = showResolvedState && defaultStateSeen;
@@ -74,7 +73,7 @@ function isResolvedState(params) {
 	return result;
 }
 
-export default {
+export const resolvedState = {
 	setImage(videoSettings) {
 		const params = videoSettings.getParams();
 
@@ -86,7 +85,7 @@ export default {
 				});
 			}
 
-			ResolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
+			resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
 			return setDefaultState(params);
 		}
 

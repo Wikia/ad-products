@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import VideoSettings from '../../../src/modules/templates/uap/video-settings';
+import { VideoSettings } from '../../../src/templates/uap/video-settings';
 
 describe('VideoSettings', () => {
 	it('returns correct autoplay value', () => {

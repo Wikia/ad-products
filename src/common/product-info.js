@@ -1,7 +1,7 @@
-import Context from 'ad-engine/src/services/context-service';
+import { context } from '@wikia/ad-engine';
 
 function findSlotGroup(product) {
-	const slotGroups = Context.get('slotGroups'),
+	const slotGroups = context.get('slotGroups'),
 		result = Object.keys(slotGroups).filter(name => slotGroups[name].indexOf(product) !== -1);
 
 	return result.length === 1 ? result[0] : null;

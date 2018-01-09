@@ -1,13 +1,11 @@
-import { getTopOffset } from 'ad-engine/src/utils/dimensions';
-import Context from 'ad-engine/src/services/context-service';
-import ScrollListener from 'ad-engine/src/listeners/scroll-listener';
+import { context, ScrollListener, utils } from '@wikia/ad-engine';
 
-const adsInRail = 2,
-	biggestAdSize = 600;
+const adsInRail = 2;
+const biggestAdSize = 600;
 
 let availableSpace = null;
 
-export default class FloatingRail {
+export class FloatingRail {
 	static getName() {
 		return 'floatingRail';
 	}
@@ -22,13 +20,13 @@ export default class FloatingRail {
 	}
 
 	constructor() {
-		this.config = Context.get('templates.floatingRail');
+		this.config = context.get('templates.floatingRail');
 		this.rail = document.querySelector(this.config.railSelector);
 		this.railWrapper = document.querySelector(this.config.wrapperSelector);
 	}
 
 	static isEnabled() {
-		return Context.get('templates.floatingRail.enabled') && Context.get('state.isMobile') === false;
+		return context.get('templates.floatingRail.enabled') && context.get('state.isMobile') === false;
 	}
 
 	init(params) {
@@ -43,7 +41,7 @@ export default class FloatingRail {
 		const floatingSpace = Math.min(offset, this.getAvailableSpace());
 
 		ScrollListener.addCallback(() => {
-			const start = this.config.startOffset + getTopOffset(this.railWrapper),
+			const start = this.config.startOffset + utils.getTopOffset(this.railWrapper),
 				end = start + floatingSpace,
 				scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 

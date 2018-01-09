@@ -1,15 +1,13 @@
-import { throttle } from 'ad-engine/src/utils/throttle';
-import Context from 'ad-engine/src/services/context-service';
-import Porvata from 'ad-engine/src/video/player/porvata/porvata';
-import SlotService from 'ad-engine/src/services/slot-service';
+import { throttle } from 'lodash';
+import { context, Porvata, slotService } from '@wikia/ad-engine';
 import * as videoUserInterface from './ui/video';
 
-let uapId = 'none',
-	uapType = 'uap';
+let uapId = 'none';
+let uapType = 'uap';
 
 function getVideoSize(slot, params, videoSettings) {
-	const width = videoSettings.isSplitLayout() ? params.videoPlaceholderElement.offsetWidth : slot.clientWidth,
-		height = width / params.videoAspectRatio;
+	const width = videoSettings.isSplitLayout() ? params.videoPlaceholderElement.offsetWidth : slot.clientWidth;
+	const height = width / params.videoAspectRatio;
 
 	return {
 		width,
@@ -26,8 +24,8 @@ function adjustVideoAdContainer(params) {
 }
 
 function loadPorvata(videoSettings, slotContainer, imageContainer) {
-	const params = videoSettings.getParams(),
-		template = videoUserInterface.selectTemplate(videoSettings);
+	const params = videoSettings.getParams();
+	const template = videoUserInterface.selectTemplate(videoSettings);
 
 	params.autoPlay = videoSettings.isAutoPlay();
 	videoSettings.updateParams(params);
@@ -58,11 +56,11 @@ function loadPorvata(videoSettings, slotContainer, imageContainer) {
 }
 
 function loadVideoAd(videoSettings) {
-	const params = videoSettings.getParams(),
-		adSlot = SlotService.getBySlotName(params.slotName),
-		slotContainer = document.getElementById(adSlot.getId()),
-		imageContainer = slotContainer.querySelector('div:last-of-type'),
-		size = getVideoSize(slotContainer, params, videoSettings);
+	const params = videoSettings.getParams();
+	const adSlot = slotService.getBySlotName(params.slotName);
+	const slotContainer = document.getElementById(adSlot.getId());
+	const imageContainer = slotContainer.querySelector('div:last-of-type');
+	const size = getVideoSize(slotContainer, params, videoSettings);
 
 	params.vastTargeting = {
 		passback: getType()
@@ -111,7 +109,7 @@ function setType(type) {
 	uapType = type;
 }
 
-export default {
+export const universalAdPackage = {
 	init(params, slotsToEnable = []) {
 		let adProduct = 'uap';
 
@@ -124,13 +122,13 @@ export default {
 		setUapId(params.uap);
 		setType(params.adProduct);
 
-		Object.keys(Context.get('slots')).forEach((slotId) => {
-			Context.set(`slots.${slotId}.targeting.uap`, getUapId());
+		Object.keys(context.get('slots')).forEach((slotId) => {
+			context.set(`slots.${slotId}.targeting.uap`, getUapId());
 		});
 
 		if (getType() !== 'abcd') {
 			slotsToEnable.forEach((slotName) => {
-				SlotService.enable(slotName);
+				slotService.enable(slotName);
 			});
 		}
 	},
