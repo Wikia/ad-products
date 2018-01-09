@@ -101,6 +101,7 @@ function getUapId() {
 
 function setUapId(id) {
 	uapId = id;
+	updateSlotsTargeting(id);
 }
 
 function getType() {
@@ -109,6 +110,23 @@ function getType() {
 
 function setType(type) {
 	uapType = type;
+}
+
+function updateSlotsTargeting(id) {
+	let slots = Context.get('slots');
+	Object.keys(slots).forEach((slotId) => {
+		if (!slots[slotId].nonUapSlot) {
+			Context.set(`slots.${slotId}.targeting.uap`, id);
+		}
+	});
+}
+
+function enableSlots(slotsToEnable) {
+	if (getType() !== 'abcd') {
+		slotsToEnable.forEach((slotName) => {
+			SlotService.enable(slotName);
+		});
+	}
 }
 
 export default {
@@ -123,16 +141,7 @@ export default {
 
 		setUapId(params.uap);
 		setType(params.adProduct);
-
-		Object.keys(Context.get('slots')).forEach((slotId) => {
-			Context.set(`slots.${slotId}.targeting.uap`, getUapId());
-		});
-
-		if (getType() !== 'abcd') {
-			slotsToEnable.forEach((slotName) => {
-				SlotService.enable(slotName);
-			});
-		}
+		enableSlots(slotsToEnable);
 	},
 	getType,
 	getUapId,
