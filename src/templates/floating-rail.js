@@ -1,4 +1,4 @@
-import { context, ScrollListener, utils } from '@wikia/ad-engine';
+import { context, scrollListener, utils } from '@wikia/ad-engine';
 
 const adsInRail = 2;
 const biggestAdSize = 600;
@@ -40,7 +40,7 @@ export class FloatingRail {
 
 		const floatingSpace = Math.min(offset, this.getAvailableSpace());
 
-		ScrollListener.addCallback(() => {
+		scrollListener.addCallback(() => {
 			const start = this.config.startOffset + utils.getTopOffset(this.railWrapper),
 				end = start + floatingSpace,
 				scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;

@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import { autobind } from 'core-decorators';
 import { AdSlot, slotTweaker, utils } from '@wikia/ad-engine';
 
 export class StickyBfaa extends EventEmitter {
@@ -11,7 +12,6 @@ export class StickyBfaa extends EventEmitter {
 		super();
 
 		this.adSlot = adSlot;
-		this.onViewed = this.onViewed.bind(this);
 		this.sticky = false;
 		this.logger = (...args) => utils.logger(StickyBfaa.LOG_GROUP, ...args);
 	}
@@ -50,6 +50,7 @@ export class StickyBfaa extends EventEmitter {
 		}
 	}
 
+	@autobind
 	onViewed() {
 		let revertTimeout = null;
 		const adContainer = this.adSlot.getElement();

@@ -719,7 +719,7 @@ Object.keys(_hivi).forEach(function (key) {
   });
 });
 
-var _ready = __webpack_require__(43);
+var _ready = __webpack_require__(44);
 
 Object.keys(_ready).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -766,7 +766,7 @@ Object.keys(_templates).forEach(function (key) {
   });
 });
 
-__webpack_require__(45);
+__webpack_require__(46);
 
 /***/ }),
 /* 13 */
@@ -929,7 +929,7 @@ var FloatingRail = exports.FloatingRail = function () {
 
 			var floatingSpace = Math.min(offset, this.getAvailableSpace());
 
-			_adEngine.ScrollListener.addCallback(function () {
+			_adEngine.scrollListener.addCallback(function () {
 				var start = _this.config.startOffset + _adEngine.utils.getTopOffset(_this.railWrapper),
 				    end = start + floatingSpace,
 				    scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
@@ -995,7 +995,7 @@ Object.keys(_bigFancyAdAbove).forEach(function (key) {
   });
 });
 
-var _bigFancyAdBelow = __webpack_require__(44);
+var _bigFancyAdBelow = __webpack_require__(45);
 
 Object.keys(_bigFancyAdBelow).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -2542,7 +2542,11 @@ exports.StickyBfaa = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _desc, _value, _class;
+
 var _events = __webpack_require__(42);
+
+var _coreDecorators = __webpack_require__(43);
 
 var _adEngine = __webpack_require__(0);
 
@@ -2552,7 +2556,36 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var StickyBfaa = exports.StickyBfaa = function (_EventEmitter) {
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+	var desc = {};
+	Object['ke' + 'ys'](descriptor).forEach(function (key) {
+		desc[key] = descriptor[key];
+	});
+	desc.enumerable = !!desc.enumerable;
+	desc.configurable = !!desc.configurable;
+
+	if ('value' in desc || desc.initializer) {
+		desc.writable = true;
+	}
+
+	desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+		return decorator(target, property, desc) || desc;
+	}, desc);
+
+	if (context && desc.initializer !== void 0) {
+		desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+		desc.initializer = undefined;
+	}
+
+	if (desc.initializer === void 0) {
+		Object['define' + 'Property'](target, property, desc);
+		desc = null;
+	}
+
+	return desc;
+}
+
+var StickyBfaa = exports.StickyBfaa = (_class = function (_EventEmitter) {
 	_inherits(StickyBfaa, _EventEmitter);
 
 	function StickyBfaa(adSlot) {
@@ -2561,7 +2594,6 @@ var StickyBfaa = exports.StickyBfaa = function (_EventEmitter) {
 		var _this = _possibleConstructorReturn(this, (StickyBfaa.__proto__ || Object.getPrototypeOf(StickyBfaa)).call(this));
 
 		_this.adSlot = adSlot;
-		_this.onViewed = _this.onViewed.bind(_this);
 		_this.sticky = false;
 		_this.logger = function () {
 			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -2646,8 +2678,7 @@ var StickyBfaa = exports.StickyBfaa = function (_EventEmitter) {
 	}]);
 
 	return StickyBfaa;
-}(_events.EventEmitter);
-
+}(_events.EventEmitter), (_applyDecoratedDescriptor(_class.prototype, 'onViewed', [_coreDecorators.autobind], Object.getOwnPropertyDescriptor(_class.prototype, 'onViewed'), _class.prototype)), _class);
 StickyBfaa.STICKINESS_REMOVAL_WINDOW = 10000;
 StickyBfaa.LOG_GROUP = 'sticky-bfaa';
 StickyBfaa.STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
@@ -2962,6 +2993,12 @@ function isUndefined(arg) {
 
 /***/ }),
 /* 43 */
+/***/ (function(module, exports) {
+
+module.exports = require("core-decorators");
+
+/***/ }),
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2982,7 +3019,7 @@ function adIsReady(_ref) {
 }
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3096,7 +3133,7 @@ var BigFancyAdBelow = exports.BigFancyAdBelow = function () {
 }();
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

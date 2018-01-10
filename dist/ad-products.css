@@ -77,6 +77,10 @@
     top: 0;
     right: 0;
     margin: 6px; }
+    @media only screen and (min-width: 768px) {
+      .gpt-ad.bfaa-template .button-unstick,
+      .gpt-ad.bfab-template .button-unstick {
+        right: 17px; } }
   .gpt-ad.bfaa-template .replay-overlay,
   .gpt-ad.bfaa-template .pause-overlay,
   .gpt-ad.bfab-template .replay-overlay,
