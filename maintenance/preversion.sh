@@ -9,7 +9,6 @@ fi
 
 npm run test
 npm run lint
-
-./node_modules/webpack/bin/webpack.js --config ./webpack.build.config.js -p
+npm run build --production
 
 git add dist/

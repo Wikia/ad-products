@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@wikia/ad-engine": "^8.0.1",
-    "core-decorators": "0.20.0",
+    "core-decorators": "^0.20.0",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
@@ -58,8 +58,8 @@
     "prepublishOnly": "./maintenance/prepublish.sh",
     "preversion": "./maintenance/preversion.sh",
     "serve": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --colors --inline --open --content-base=./examples/templates",
-    "test": "mocha-webpack --webpack-config webpack-mocha.config.js './spec/**/*.spec.js' -r jsdom-global/register",
-    "test-coverage": "nyc mocha-webpack --webpack-config webpack-mocha.config.js './spec/**/*.spec.js' -r jsdom-global/register --reporter mocha-junit-reporter --reporter-options mochaFile=./spec/build/tests.xml",
+    "test": "mocha-webpack --webpack-env test './spec/**/*.spec.js' -r jsdom-global/register",
+    "test-coverage": "nyc mocha-webpack --webpack-env test './spec/**/*.spec.js' -r jsdom-global/register --reporter mocha-junit-reporter --reporter-options mochaFile=./spec/build/tests.xml",
     "watch": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules --watch"
   },
   "nyc": {

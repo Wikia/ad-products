@@ -7,41 +7,41 @@ const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const pkg = require('./package.json');
 
-const isProduction = (process.env.NODE_ENV === 'production');
-const configs = {
-	common: {
-		context: __dirname,
-		module: {
-			rules: [
-				{
-					test: /\.s?css$/,
-					loader: ExtractTextPlugin.extract({
-						fallback: 'style-loader',
-						use: [
-							'css-loader',
-							'sass-loader'
-						]
-					}),
-					exclude: /node_modules/
-				},
-				{
-					test: /.js$/,
-					use: 'babel-loader',
-					exclude: /node_modules/
-				}
-			]
-		}
-	},
+const common = {
+	context: __dirname,
+	module: {
+		rules: [
+			{
+				test: /\.s?css$/,
+				loader: ExtractTextPlugin.extract({
+					fallback: 'style-loader',
+					use: [
+						'css-loader',
+						'sass-loader'
+					]
+				}),
+				exclude: /node_modules/
+			},
+			{
+				test: /.js$/,
+				use: 'babel-loader',
+				exclude: /node_modules/
+			}
+		]
+	}
+};
+
+const environments = {
 	production: {
 		entry: {
 			'ad-products': './src/index.js'
 		},
-		externals: Object.keys(pkg.dependencies),
 		devtool: 'source-map',
+		externals: Object.keys(pkg.dependencies),
 		output: {
 			path: path.resolve(__dirname, 'dist'),
 			filename: '[name].js',
-			library: 'adproducts',
+			library: 'adProducts',
 			libraryTarget: 'commonjs2'
 		},
 		plugins: [
@@ -72,10 +72,21 @@ const configs = {
 				[pkg.name]: path.join(__dirname, 'src')
 			}
 		}
-	}
+	},
+	test: {}
 };
 
-module.exports = merge([
-	configs.common,
-	isProduction ? configs.production : configs.development
-]);
+module.exports = function (env) {
+	const isProduction = (process.env.NODE_ENV === 'production') || (env && env.production);
+	const isTest = (env && env.test);
+
+	let environment = environments.development;
+
+	if (isProduction) {
+		environment = environments.production;
+	} else if (isTest) {
+		environment = environments.test;
+	}
+
+	return merge(common, environment);
+};
