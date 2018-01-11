@@ -32,10 +32,13 @@ describe('UniversalAdPackage', () => {
 	});
 
 	it('should not update slot with blocked uap parameter', () => {
-		Context.get.withArgs('slots').returns({TOP_LEADERBOARD: {}, NON_UAP_SLOT: {}, TOP_RIGHT_BOXAD: {}});
-		Context.get.withArgs('slots.TOP_LEADERBOARD.nonUapSlot').returns(undefined);
-		Context.get.withArgs('slots.TOP_RIGHT_BOXAD.nonUapSlot').returns(undefined);
-		Context.get.withArgs('slots.NON_UAP_SLOT.nonUapSlot').returns(true);
+		Context.get.withArgs('slots').returns({
+			TOP_LEADERBOARD: {},
+			NON_UAP_SLOT: {
+				nonUapSlot: true
+			},
+			TOP_RIGHT_BOXAD: {}
+		});
 
 		UniversalAdPackage.init({
 			'uap': UAP_ID

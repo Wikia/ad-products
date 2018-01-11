@@ -113,7 +113,7 @@ function setType(type) {
 }
 
 function updateSlotsTargeting(id) {
-	let slots = Context.get('slots');
+	const slots = Context.get('slots');
 	Object.keys(slots).forEach((slotId) => {
 		if (!slots[slotId].nonUapSlot) {
 			Context.set(`slots.${slotId}.targeting.uap`, id);
