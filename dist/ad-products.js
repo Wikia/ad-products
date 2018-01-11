@@ -233,6 +233,7 @@ function getUapId() {
 
 function setUapId(id) {
 	uapId = id;
+	updateSlotsTargeting(id);
 }
 
 function getType() {
@@ -241,6 +242,23 @@ function getType() {
 
 function setType(type) {
 	uapType = type;
+}
+
+function updateSlotsTargeting(id) {
+	var slots = _adEngine.context.get('slots');
+	Object.keys(slots).forEach(function (slotId) {
+		if (!slots[slotId].nonUapSlot) {
+			_adEngine.context.set('slots.' + slotId + '.targeting.uap', id);
+		}
+	});
+}
+
+function enableSlots(slotsToEnable) {
+	if (getType() !== 'abcd') {
+		slotsToEnable.forEach(function (slotName) {
+			_adEngine.slotService.enable(slotName);
+		});
+	}
 }
 
 var universalAdPackage = exports.universalAdPackage = {
@@ -257,16 +275,7 @@ var universalAdPackage = exports.universalAdPackage = {
 
 		setUapId(params.uap);
 		setType(params.adProduct);
-
-		Object.keys(_adEngine.context.get('slots')).forEach(function (slotId) {
-			_adEngine.context.set('slots.' + slotId + '.targeting.uap', getUapId());
-		});
-
-		if (getType() !== 'abcd') {
-			slotsToEnable.forEach(function (slotName) {
-				_adEngine.slotService.enable(slotName);
-			});
-		}
+		enableSlots(slotsToEnable);
 	},
 
 	getType: getType,
