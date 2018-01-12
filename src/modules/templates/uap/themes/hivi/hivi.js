@@ -72,10 +72,8 @@ export class BfaaTheme extends BigFancyAdTheme {
 			}
 		});
 
-		if (this.params.stickyUntilVideoViewed) {
-			video.addEventListener('viewable_impression', () => {
-				this.stickyBfaa.onViewed();
-			});
+		if (this.stickyBfaa) {
+			this.stickyBfaa.onVideoReady(video);
 		}
 	}
 

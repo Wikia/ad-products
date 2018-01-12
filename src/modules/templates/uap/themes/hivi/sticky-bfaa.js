@@ -4,11 +4,11 @@ import { SLOT_VIEWED_EVENT } from 'ad-engine/src/models/ad-slot';
 import { logger } from 'ad-engine/src/utils/logger';
 
 export default class StickyBfaa extends EventEmitter {
-	constructor(adSlot, disableOnViewed = false) {
+	constructor(adSlot, stickyUntilVideoViewed = false) {
 		super();
 
 		this.adSlot = adSlot;
-		this.disableOnViewed = disableOnViewed;
+		this.stickyUntilVideoViewed = stickyUntilVideoViewed;
 		this.onViewed = this.onViewed.bind(this);
 		this.sticky = false;
 		this.logger = (...args) => logger(StickyBfaa.LOG_GROUP, ...args);
@@ -67,8 +67,14 @@ export default class StickyBfaa extends EventEmitter {
 
 	onAdReady() {
 		this.applyStickiness();
-		if (!this.disableOnViewed) {
+		if (!this.stickyUntilVideoViewed) {
 			this.adSlot.once(SLOT_VIEWED_EVENT, this.onViewed);
+		}
+	}
+
+	onVideoReady(video) {
+		if (this.stickyUntilVideoViewed) {
+			video.addEventListener('viewable_impression', this.onViewed);
 		}
 	}
 }
