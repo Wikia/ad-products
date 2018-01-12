@@ -61,11 +61,15 @@ const environments = {
 		},
 		devtool: 'cheap-module-eval-source-map',
 		output: {
-			path: path.resolve(__dirname, 'examples/templates'),
-			filename: '[name]/dist/bundle.js'
+			path: path.resolve(__dirname, 'examples'),
+			filename: 'templates/[name]/dist/bundle.js'
 		},
 		plugins: [
-			new ExtractTextPlugin({ filename: '[name]/dist/styles.css' })
+			new ExtractTextPlugin({ filename: '[name]/dist/styles.css' }),
+			new webpack.optimize.CommonsChunkPlugin({
+				name: 'vendor',
+				filename: '[name]/dist/vendor.js'
+			})
 		],
 		resolve: {
 			alias: {

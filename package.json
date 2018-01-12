@@ -57,9 +57,9 @@
     "lint": "./node_modules/.bin/eslint .",
     "prepublishOnly": "./maintenance/prepublish.sh",
     "preversion": "./maintenance/preversion.sh",
-    "serve": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --colors --inline --open --content-base=./examples/templates",
-    "test": "mocha-webpack --webpack-env test './spec/**/*.spec.js' -r jsdom-global/register",
-    "test-coverage": "nyc mocha-webpack --webpack-env test './spec/**/*.spec.js' -r jsdom-global/register --reporter mocha-junit-reporter --reporter-options mochaFile=./spec/build/tests.xml",
+    "serve": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --watch --inline --open-page=templates/ --content-base=./examples",
+    "test": "mocha-webpack './spec/**/*.spec.js' -r jsdom-global/register --webpack-env.test",
+    "test-coverage": "nyc mocha-webpack './spec/**/*.spec.js' -r jsdom-global/register --webpack-env.test --reporter mocha-junit-reporter --reporter-options mochaFile=./spec/build/tests.xml",
     "watch": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules --watch"
   },
   "nyc": {
