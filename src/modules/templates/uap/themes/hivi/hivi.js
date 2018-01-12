@@ -71,10 +71,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 				this.updateAdSizes();
 			}
 		});
-
-		if (this.stickyBfaa) {
-			this.stickyBfaa.onVideoReady(video);
-		}
 	}
 
 	onStickinessChange(isSticky) {
