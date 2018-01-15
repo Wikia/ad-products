@@ -8,10 +8,11 @@ export class StickyBfaa extends EventEmitter {
 	static LOG_GROUP = 'sticky-bfaa';
 	static STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
 
-	constructor(adSlot) {
+	constructor(adSlot, stickyUntilVideoViewed = false) {
 		super();
 
 		this.adSlot = adSlot;
+		this.stickyUntilVideoViewed = stickyUntilVideoViewed;
 		this.sticky = false;
 		this.logger = (...args) => utils.logger(StickyBfaa.LOG_GROUP, ...args);
 	}
@@ -70,6 +71,6 @@ export class StickyBfaa extends EventEmitter {
 
 	onAdReady() {
 		this.applyStickiness();
-		this.adSlot.once(AdSlot.SLOT_VIEWED_EVENT, this.onViewed);
+		this.adSlot.once(this.stickyUntilVideoViewed ? AdSlot.VIDEO_VIEWED_EVENT : AdSlot.SLOT_VIEWED_EVENT, this.onViewed);
 	}
 }

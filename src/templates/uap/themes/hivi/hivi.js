@@ -23,7 +23,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.addAdvertisementLabel();
 
 		if (this.params.isSticky) {
-			this.stickyBfaa = new StickyBfaa(this.adSlot);
+			this.stickyBfaa = new StickyBfaa(this.adSlot, this.params.stickyUntilVideoViewed);
 			this.addUnstickButton();
 			this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
 			this.stickyBfaa.run();

@@ -2056,7 +2056,7 @@ var BfaaTheme = exports.BfaaTheme = function (_BigFancyAdTheme) {
 		_this.addAdvertisementLabel();
 
 		if (_this.params.isSticky) {
-			_this.stickyBfaa = new _stickyBfaa.StickyBfaa(_this.adSlot);
+			_this.stickyBfaa = new _stickyBfaa.StickyBfaa(_this.adSlot, _this.params.stickyUntilVideoViewed);
 			_this.addUnstickButton();
 			_this.stickyBfaa.on(_stickyBfaa.StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
 				return _this.onStickinessChange(isSticky);
@@ -2598,11 +2598,14 @@ var StickyBfaa = exports.StickyBfaa = (_class = function (_EventEmitter) {
 	_inherits(StickyBfaa, _EventEmitter);
 
 	function StickyBfaa(adSlot) {
+		var stickyUntilVideoViewed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
 		_classCallCheck(this, StickyBfaa);
 
 		var _this = _possibleConstructorReturn(this, (StickyBfaa.__proto__ || Object.getPrototypeOf(StickyBfaa)).call(this));
 
 		_this.adSlot = adSlot;
+		_this.stickyUntilVideoViewed = stickyUntilVideoViewed;
 		_this.sticky = false;
 		_this.logger = function () {
 			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -2682,7 +2685,7 @@ var StickyBfaa = exports.StickyBfaa = (_class = function (_EventEmitter) {
 		key: 'onAdReady',
 		value: function onAdReady() {
 			this.applyStickiness();
-			this.adSlot.once(_adEngine.AdSlot.SLOT_VIEWED_EVENT, this.onViewed);
+			this.adSlot.once(this.stickyUntilVideoViewed ? _adEngine.AdSlot.VIDEO_VIEWED_EVENT : _adEngine.AdSlot.SLOT_VIEWED_EVENT, this.onViewed);
 		}
 	}]);
 

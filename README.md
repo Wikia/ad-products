@@ -7,7 +7,7 @@
 ## Installation
 
 ```bash
-npm install git+ssh://git@github.com:Wikia/ad-products.git@^1.0.0 --save
+npm install @wikia/ad-products --save
 ```
 
 ## Usage (ES6)
@@ -21,12 +21,10 @@ Add listed files to your build step:
 ### Register template loader plugin in AdEngine
 
 ```javascript
-import AdEngine from 'ad-engine/ad-engine';
-import TemplateService from 'ad-engine/services/template-service';
+import { AdEngine, templateService } from '@wikia/ad-engine';
+import { FloatingRail } from '@wikia/ad-products';
 
-import FloatingRail from 'ad-products/modules/templates/floating-rail';
-
-TemplateService.register(FloatingRail, {
+templateService.register(FloatingRail, {
 	startOffset: -15
 });
 
@@ -177,6 +175,6 @@ Use [npm link](https://docs.npmjs.com/cli/link)
 1. Go to `ad-engine` directory and type
 ```npm link```
 2. Go to `ad-products` directory and type
-```npm link ad-engine```
+```npm link @wikia/ad-engine```
 
 From now changes in `ad-engine` repo will be visible on `ad-products` demo pages.
