@@ -1,13 +1,14 @@
 import { EventEmitter } from 'events';
 import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
-import { SLOT_VIEWED_EVENT } from 'ad-engine/src/models/ad-slot';
+import { SLOT_VIEWED_EVENT, VIDEO_VIEWED_EVENT } from 'ad-engine/src/models/ad-slot';
 import { logger } from 'ad-engine/src/utils/logger';
 
 export default class StickyBfaa extends EventEmitter {
-	constructor(adSlot) {
+	constructor(adSlot, stickyUntilVideoViewed = false) {
 		super();
 
 		this.adSlot = adSlot;
+		this.stickyUntilVideoViewed = stickyUntilVideoViewed;
 		this.onViewed = this.onViewed.bind(this);
 		this.sticky = false;
 		this.logger = (...args) => logger(StickyBfaa.LOG_GROUP, ...args);
@@ -66,7 +67,7 @@ export default class StickyBfaa extends EventEmitter {
 
 	onAdReady() {
 		this.applyStickiness();
-		this.adSlot.once(SLOT_VIEWED_EVENT, this.onViewed);
+		this.adSlot.once(this.stickyUntilVideoViewed ? VIDEO_VIEWED_EVENT : SLOT_VIEWED_EVENT, this.onViewed);
 	}
 }
 
