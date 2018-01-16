@@ -76,7 +76,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 	onStickinessChange(isSticky) {
 		const stickinessCallback = isSticky ? this.config.onStickBfaaCallback : this.config.onUnstickBfaaCallback;
 
-		stickinessCallback(this.adSlot);
+		stickinessCallback.call(this.config, this.adSlot, this.params);
 
 		if (!isSticky) {
 			this.config.moveNavbar(0);
@@ -139,17 +139,21 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 	}
 
+	lock() {
+		const offset = this.getHeightDifferenceBetweenStates();
+
+		this.isLocked = true;
+		this.container.classList.add('theme-locked');
+		ScrollListener.removeCallback(this.scrollListener);
+		this.adjustSizesToResolved(offset);
+	}
+
 	setResolvedState(immediately) {
 		const isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 		const width = this.container.offsetWidth;
 		const aspectRatio = this.params.config.aspectRatio;
 		const resolvedHeight = width / aspectRatio.resolved;
 		const offset = this.getHeightDifferenceBetweenStates();
-		const resolve = () => {
-			this.isLocked = true;
-			ScrollListener.removeCallback(this.scrollListener);
-			this.adjustSizesToResolved(offset);
-		};
 
 		if (this.onResolvedStateScroll) {
 			window.removeEventListener('scroll', this.onResolvedStateScroll);
@@ -157,7 +161,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 
 		if (immediately) {
-			resolve();
+			this.lock();
 		} else {
 			this.onResolvedStateScroll = debounce(() => {
 				if (window.scrollY < offset) {
@@ -166,7 +170,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 
 				window.removeEventListener('scroll', this.onResolvedStateScroll);
 				this.onResolvedStateScroll = null;
-				resolve();
+				this.lock();
 			}, 50);
 			window.addEventListener('scroll', this.onResolvedStateScroll);
 			this.onResolvedStateScroll();
