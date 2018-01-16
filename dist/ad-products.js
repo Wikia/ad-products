@@ -1028,6 +1028,15 @@ Object.keys(_universalAdPackage).forEach(function (key) {
   });
 });
 
+var _resolvedState = __webpack_require__(3);
+
+Object.defineProperty(exports, 'resolvedState', {
+  enumerable: true,
+  get: function get() {
+    return _resolvedState.resolvedState;
+  }
+});
+
 /***/ }),
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -2128,7 +2137,7 @@ var BfaaTheme = exports.BfaaTheme = function (_BigFancyAdTheme) {
 		value: function onStickinessChange(isSticky) {
 			var stickinessCallback = isSticky ? this.config.onStickBfaaCallback : this.config.onUnstickBfaaCallback;
 
-			stickinessCallback(this.adSlot);
+			stickinessCallback.call(this.config, this.adSlot, this.params);
 
 			if (!isSticky) {
 				this.config.moveNavbar(0);
@@ -2195,6 +2204,16 @@ var BfaaTheme = exports.BfaaTheme = function (_BigFancyAdTheme) {
 			}
 		}
 	}, {
+		key: 'lock',
+		value: function lock() {
+			var offset = this.getHeightDifferenceBetweenStates();
+
+			this.isLocked = true;
+			this.container.classList.add('theme-locked');
+			_adEngine.scrollListener.removeCallback(this.scrollListener);
+			this.adjustSizesToResolved(offset);
+		}
+	}, {
 		key: 'setResolvedState',
 		value: function setResolvedState(immediately) {
 			var _this5 = this;
@@ -2204,11 +2223,6 @@ var BfaaTheme = exports.BfaaTheme = function (_BigFancyAdTheme) {
 			var aspectRatio = this.params.config.aspectRatio;
 			var resolvedHeight = width / aspectRatio.resolved;
 			var offset = this.getHeightDifferenceBetweenStates();
-			var resolve = function resolve() {
-				_this5.isLocked = true;
-				_adEngine.scrollListener.removeCallback(_this5.scrollListener);
-				_this5.adjustSizesToResolved(offset);
-			};
 
 			if (this.onResolvedStateScroll) {
 				window.removeEventListener('scroll', this.onResolvedStateScroll);
@@ -2216,7 +2230,7 @@ var BfaaTheme = exports.BfaaTheme = function (_BigFancyAdTheme) {
 			}
 
 			if (immediately) {
-				resolve();
+				this.lock();
 			} else {
 				this.onResolvedStateScroll = (0, _lodash.debounce)(function () {
 					if (window.scrollY < offset) {
@@ -2225,7 +2239,7 @@ var BfaaTheme = exports.BfaaTheme = function (_BigFancyAdTheme) {
 
 					window.removeEventListener('scroll', _this5.onResolvedStateScroll);
 					_this5.onResolvedStateScroll = null;
-					resolve();
+					_this5.lock();
 				}, 50);
 				window.addEventListener('scroll', this.onResolvedStateScroll);
 				this.onResolvedStateScroll();
