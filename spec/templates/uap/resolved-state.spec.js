@@ -1,8 +1,8 @@
 import sinon from 'sinon';
-import {expect} from 'chai';
-import ResolvedState from '../../../src/modules/templates/uap/resolved-state';
-import ResolvedStateSwitch from '../../../src/modules/templates/uap/resolved-state-switch';
-import QueryString from 'ad-engine/src/utils/query-string';
+import { expect } from 'chai';
+import { resolvedState } from '../../../src/templates/uap/resolved-state';
+import { resolvedStateSwitch } from '../../../src/templates/uap/resolved-state-switch';
+import { utils } from '@wikia/ad-engine';
 
 const ASPECT_RATIO = 1,
 	BIG_IMAGE = 'bigImage.png',
@@ -85,38 +85,38 @@ function createCorrectParamsWithTwoAssets() {
 describe('ResolvedState', () => {
 	blockingUrlParams.forEach(param => {
 		it(`Should not be in resolved state when is not blocked by query param ${param}`, () => {
-			sinon.stub(QueryString, 'get');
-			QueryString.get.returns(param);
+			sinon.stub(utils.queryString, 'get');
+			utils.queryString.get.returns(param);
 
-			expect(ResolvedState.isResolvedState(createCorrectParams())).to.equal(false);
-			QueryString.get.restore();
+			expect(resolvedState.isResolvedState(createCorrectParams())).to.equal(false);
+			utils.queryString.get.restore();
 		});
 	});
 
 	forcingUrlParams.forEach(param => {
 		it(`Should be in resolved state when is forced by query param ${param}`, () => {
-			sinon.stub(QueryString, 'get');
-			QueryString.get.returns(param);
+			sinon.stub(utils.queryString, 'get');
+			utils.queryString.get.returns(param);
 
-			expect(ResolvedState.isResolvedState(createCorrectParams())).to.equal(true);
-			QueryString.get.restore();
+			expect(resolvedState.isResolvedState(createCorrectParams())).to.equal(true);
+			utils.queryString.get.restore();
 		});
 	});
 
 	it('Should not be in resolved state when no information about seen ad was stored', () => {
-		sinon.stub(ResolvedStateSwitch, 'wasDefaultStateSeen');
-		ResolvedStateSwitch.wasDefaultStateSeen.returns(false);
+		sinon.stub(resolvedStateSwitch, 'wasDefaultStateSeen');
+		resolvedStateSwitch.wasDefaultStateSeen.returns(false);
 
-		expect(ResolvedState.isResolvedState(createCorrectParams())).to.equal(false);
-		ResolvedStateSwitch.wasDefaultStateSeen.restore();
+		expect(resolvedState.isResolvedState(createCorrectParams())).to.equal(false);
+		resolvedStateSwitch.wasDefaultStateSeen.restore();
 	});
 
 	it('Should be in resolved state when information about seen ad was stored', () => {
-		sinon.stub(ResolvedStateSwitch, 'wasDefaultStateSeen');
-		ResolvedStateSwitch.wasDefaultStateSeen.returns(true);
+		sinon.stub(resolvedStateSwitch, 'wasDefaultStateSeen');
+		resolvedStateSwitch.wasDefaultStateSeen.returns(true);
 
-		expect(ResolvedState.isResolvedState(createCorrectParams())).to.equal(true);
-		ResolvedStateSwitch.wasDefaultStateSeen.restore();
+		expect(resolvedState.isResolvedState(createCorrectParams())).to.equal(true);
+		resolvedStateSwitch.wasDefaultStateSeen.restore();
 	});
 
 	it('Should not modify params if template does not support resolved state', () => {
@@ -125,7 +125,7 @@ describe('ResolvedState', () => {
 		sinon.stub(stubs.videoSettings, 'getParams');
 		stubs.videoSettings.getParams.returns(params);
 
-		ResolvedState.setImage(stubs.videoSettings);
+		resolvedState.setImage(stubs.videoSettings);
 
 		expect(params.aspectRatio).to.equal(ASPECT_RATIO);
 		expect(params.image1.element.src).to.equal(DEFAULT_IMAGE);
@@ -142,7 +142,7 @@ describe('ResolvedState', () => {
 		stubs.videoSettings.getParams.returns(params);
 		stubs.videoSettings.isResolvedState.returns(false);
 
-		ResolvedState.setImage(stubs.videoSettings);
+		resolvedState.setImage(stubs.videoSettings);
 
 		expect(params.aspectRatio).to.equal(ASPECT_RATIO);
 		expect(params.image1.element.src).to.equal(BIG_IMAGE);
@@ -160,7 +160,7 @@ describe('ResolvedState', () => {
 		stubs.videoSettings.getParams.returns(params);
 		stubs.videoSettings.isResolvedState.returns(true);
 
-		ResolvedState.setImage(stubs.videoSettings);
+		resolvedState.setImage(stubs.videoSettings);
 
 		expect(params.aspectRatio).to.equal(RESOLVED_STATE_ASPECT_RATIO);
 		expect(params.image1.element.src).to.equal(RESOLVED_IMAGE);
@@ -178,7 +178,7 @@ describe('ResolvedState', () => {
 		stubs.videoSettings.getParams.returns(params);
 		stubs.videoSettings.isResolvedState.returns(false);
 
-		ResolvedState.setImage(stubs.videoSettings);
+		resolvedState.setImage(stubs.videoSettings);
 
 		expect(params.aspectRatio).to.equal(ASPECT_RATIO);
 		expect(params.image1.element.src).to.equal(BIG_IMAGE);
@@ -197,7 +197,7 @@ describe('ResolvedState', () => {
 		stubs.videoSettings.getParams.returns(params);
 		stubs.videoSettings.isResolvedState.returns(true);
 
-		ResolvedState.setImage(stubs.videoSettings);
+		resolvedState.setImage(stubs.videoSettings);
 
 		expect(params.aspectRatio).to.equal(RESOLVED_STATE_ASPECT_RATIO);
 		expect(params.image1.element.src).to.equal(RESOLVED_IMAGE);
@@ -208,26 +208,26 @@ describe('ResolvedState', () => {
 	});
 
 	it('should support hivi template in resolved state', () => {
-		sinon.stub(ResolvedStateSwitch, 'wasDefaultStateSeen');
-		ResolvedStateSwitch.wasDefaultStateSeen.returns(true);
+		sinon.stub(resolvedStateSwitch, 'wasDefaultStateSeen');
+		resolvedStateSwitch.wasDefaultStateSeen.returns(true);
 
 		const params = {
 			theme: 'hivi'
 		};
 
-		expect(ResolvedState.isResolvedState(params)).to.equal(true);
-		ResolvedStateSwitch.wasDefaultStateSeen.restore();
+		expect(resolvedState.isResolvedState(params)).to.equal(true);
+		resolvedStateSwitch.wasDefaultStateSeen.restore();
 	});
 
 	it('should not support non existing template in resolved state', () => {
-		sinon.stub(ResolvedStateSwitch, 'wasDefaultStateSeen');
-		ResolvedStateSwitch.wasDefaultStateSeen.returns(true);
+		sinon.stub(resolvedStateSwitch, 'wasDefaultStateSeen');
+		resolvedStateSwitch.wasDefaultStateSeen.returns(true);
 
 		const params = {
 			theme: 'non-existing-template'
 		};
 
-		expect(ResolvedState.isResolvedState(params)).to.equal(false);
-		ResolvedStateSwitch.wasDefaultStateSeen.restore();
+		expect(resolvedState.isResolvedState(params)).to.equal(false);
+		resolvedStateSwitch.wasDefaultStateSeen.restore();
 	});
 });

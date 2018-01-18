@@ -1,12 +1,11 @@
-import AdEngine from 'ad-engine/src/ad-engine';
-import TemplateService from 'ad-engine/src/services/template-service';
-
-import BigFancyAdAbove from 'ad-products/modules/templates/uap/big-fancy-ad-above';
+import { AdEngine, templateService } from '@wikia/ad-engine';
+import { BigFancyAdAbove } from '@wikia/ad-products';
 
 import customContext from '../../context';
+import '../../styles.scss';
 
 customContext.targeting.artid = '390';
 
-TemplateService.register(BigFancyAdAbove);
+templateService.register(BigFancyAdAbove);
 
 new AdEngine(customContext).init();

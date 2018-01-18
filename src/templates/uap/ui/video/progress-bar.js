@@ -1,4 +1,4 @@
-import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
+import { slotTweaker } from '@wikia/ad-engine';
 
 function add(video, container) {
 	const progressBar = document.createElement('div'),
@@ -21,7 +21,7 @@ function add(video, container) {
 
 		if (remainingTime) {
 			currentTime.style.transitionDuration = `${remainingTime}s`;
-			SlotTweaker.forceRepaint(currentTime);
+			slotTweaker.forceRepaint(currentTime);
 			currentTime.style.width = '100%';
 		} else {
 			currentTime.style.width = '0';

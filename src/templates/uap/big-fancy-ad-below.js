@@ -1,12 +1,11 @@
-import Context from 'ad-engine/src/services/context-service';
-import defer from 'ad-engine/src/utils/defer';
+import { context, utils } from '@wikia/ad-engine';
 
-import UniversalAdPackage from './universal-ad-package';
-import VideoSettings from './video-settings';
+import { universalAdPackage } from './universal-ad-package';
+import { VideoSettings } from './video-settings';
 import * as classicTheme from './themes/classic';
 import * as hiviTheme from './themes/hivi';
 
-export default class BigFancyAdBelow {
+export class BigFancyAdBelow {
 	static getName() {
 		return 'bfab';
 	}
@@ -24,7 +23,7 @@ export default class BigFancyAdBelow {
 	 */
 	constructor(adSlot) {
 		this.adSlot = adSlot;
-		this.config = Context.get('templates.bfab');
+		this.config = context.get('templates.bfab');
 		this.container = document.getElementById(this.adSlot.getId());
 		this.theme = null;
 		this.videoSettings = null;
@@ -55,8 +54,8 @@ export default class BigFancyAdBelow {
 	}
 
 	onAdReady(iframe) {
-		if (UniversalAdPackage.isVideoEnabled(this.params)) {
-			defer(UniversalAdPackage.loadVideoAd, this.videoSettings)
+		if (universalAdPackage.isVideoEnabled(this.params)) {
+			utils.defer(universalAdPackage.loadVideoAd, this.videoSettings)
 				.then((video) => {
 					this.theme.onVideoReady(video);
 					return video;

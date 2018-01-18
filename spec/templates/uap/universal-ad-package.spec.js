@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 import {expect} from 'chai';
-import UniversalAdPackage from "../../../src/modules/templates/uap/universal-ad-package";
-import Context from 'ad-engine/src/services/context-service';
+import {context} from '@wikia/ad-engine';
+import {universalAdPackage} from '../../../src/templates/uap/universal-ad-package';
 
 describe('UniversalAdPackage', () => {
 	const UAP_ID = 666;
@@ -9,8 +9,8 @@ describe('UniversalAdPackage', () => {
 
 	beforeEach(function () {
 		sandbox = sinon.sandbox.create();
-		sandbox.stub(Context, 'get');
-		sandbox.spy(Context, 'set');
+		sandbox.stub(context, 'get');
+		sandbox.spy(context, 'set');
 	});
 
 	afterEach(function () {
@@ -18,21 +18,21 @@ describe('UniversalAdPackage', () => {
 	});
 
 	it('should update every slots context when uap is updated', () => {
-		Context.get.withArgs('slots').returns({TOP_LEADERBOARD: {}, TOP_RIGHT_BOXAD: {}});
-		Context.get.withArgs('slots.TOP_LEADERBOARD.nonUapSlot').returns(undefined);
-		Context.get.withArgs('slots.TOP_RIGHT_BOXAD.nonUapSlot').returns(undefined);
+		context.get.withArgs('slots').returns({TOP_LEADERBOARD: {}, TOP_RIGHT_BOXAD: {}});
+		context.get.withArgs('slots.TOP_LEADERBOARD.nonUapSlot').returns(undefined);
+		context.get.withArgs('slots.TOP_RIGHT_BOXAD.nonUapSlot').returns(undefined);
 
-		UniversalAdPackage.init({
+		universalAdPackage.init({
 			'uap': UAP_ID
 		});
 
-		expect(Context.set.calledWith('slots.TOP_LEADERBOARD.targeting.uap', UAP_ID)).to.equal(true);
-		expect(Context.set.calledWith('slots.TOP_RIGHT_BOXAD.targeting.uap', UAP_ID)).to.equal(true);
-		expect(Context.set.calledTwice);
+		expect(context.set.calledWith('slots.TOP_LEADERBOARD.targeting.uap', UAP_ID)).to.equal(true);
+		expect(context.set.calledWith('slots.TOP_RIGHT_BOXAD.targeting.uap', UAP_ID)).to.equal(true);
+		expect(context.set.calledTwice);
 	});
 
 	it('should not update slot with blocked uap parameter', () => {
-		Context.get.withArgs('slots').returns({
+		context.get.withArgs('slots').returns({
 			TOP_LEADERBOARD: {},
 			NON_UAP_SLOT: {
 				nonUapSlot: true
@@ -40,13 +40,13 @@ describe('UniversalAdPackage', () => {
 			TOP_RIGHT_BOXAD: {}
 		});
 
-		UniversalAdPackage.init({
+		universalAdPackage.init({
 			'uap': UAP_ID
 		});
 
-		expect(Context.set.calledWith('slots.TOP_LEADERBOARD.targeting.uap', UAP_ID)).to.equal(true);
-		expect(Context.set.calledWith('slots.TOP_RIGHT_BOXAD.targeting.uap', UAP_ID)).to.equal(true);
-		expect(Context.set.neverCalledWith('slots.NON_UAP_SLOT.targeting.uap', UAP_ID)).to.equal(true);
-		expect(Context.set.calledTwice).to.equal(true);
+		expect(context.set.calledWith('slots.TOP_LEADERBOARD.targeting.uap', UAP_ID)).to.equal(true);
+		expect(context.set.calledWith('slots.TOP_RIGHT_BOXAD.targeting.uap', UAP_ID)).to.equal(true);
+		expect(context.set.neverCalledWith('slots.NON_UAP_SLOT.targeting.uap', UAP_ID)).to.equal(true);
+		expect(context.set.calledTwice).to.equal(true);
 	});
 });

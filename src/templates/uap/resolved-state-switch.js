@@ -1,16 +1,16 @@
-import LocalCache from 'ad-engine/src/services/local-cache';
-import UniversalAdPackage from './universal-ad-package';
+import { localCache } from '@wikia/ad-engine';
+import { universalAdPackage } from './universal-ad-package';
 
-const cacheKey = 'adEngine_resolvedStateCounter',
-	cacheTtl = 24 * 3600,
-	now = new Date();
+const cacheKey = 'adEngine_resolvedStateCounter';
+const cacheTtl = 24 * 3600;
+const now = new Date();
 
 function createCacheKey() {
-	return `${cacheKey}_${UniversalAdPackage.getUapId()}`;
+	return `${cacheKey}_${universalAdPackage.getUapId()}`;
 }
 
 function findRecordInCache() {
-	return LocalCache.get(createCacheKey());
+	return localCache.get(createCacheKey());
 }
 
 function wasDefaultStateSeen() {
@@ -22,13 +22,13 @@ function wasDefaultStateSeen() {
 }
 
 function updateInformationAboutSeenDefaultStateAd() {
-	LocalCache.set(createCacheKey(), {
-		adId: UniversalAdPackage.getUapId(),
+	localCache.set(createCacheKey(), {
+		adId: universalAdPackage.getUapId(),
 		lastSeenDate: now.getTime()
 	}, cacheTtl);
 }
 
-export default {
+export const resolvedStateSwitch = {
 	updateInformationAboutSeenDefaultStateAd,
 	wasDefaultStateSeen
 };

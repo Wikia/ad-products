@@ -1,7 +1,7 @@
-import {expect} from 'chai';
-import * as hiviTheme from '../../../../../src/modules/templates/uap/themes/hivi';
-import ResolvedState from '../../../../../src/modules/templates/uap/resolved-state';
-import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
+import { expect } from 'chai';
+import * as hiviTheme from '../../../../../src/templates/uap/themes/hivi';
+import { resolvedState } from '../../../../../src/templates/uap/resolved-state';
+import { slotTweaker } from '@wikia/ad-engine';
 import sinon from 'sinon';
 
 
@@ -97,15 +97,15 @@ describe('UAP:HiVi template', () => {
 	beforeEach(function () {
 		sandbox = sinon.sandbox.create();
 
-		sandbox.stub(SlotTweaker, 'onReady').returns({then: () => {}});
-		sandbox.stub(SlotTweaker, 'makeResponsive');
-		sandbox.stub(ResolvedState, 'isResolvedState');
+		sandbox.stub(slotTweaker, 'onReady').returns({then: () => {}});
+		sandbox.stub(slotTweaker, 'makeResponsive');
+		sandbox.stub(resolvedState, 'isResolvedState');
 		sandbox.stub(global.window, 'scrollBy');
 		sandbox.stub(global.window, 'addEventListener');
 		global.document.body.style = new CSSStyleDeclaration();
 
-		SlotTweaker.onReady.returns({then: () => {}});
-		SlotTweaker.makeResponsive.returns({then: () => {}});
+		slotTweaker.onReady.returns({then: () => {}});
+		slotTweaker.makeResponsive.returns({then: () => {}});
 		global.window.scrollBy.returns(null);
 		global.window.addEventListener.returns(null);
 	});
@@ -117,7 +117,7 @@ describe('UAP:HiVi template', () => {
 	it('should left padding empty for default state (BFAA handles it)', () => {
 		let adSlot = getAdSlotObject();
 		let theme = new hiviTheme.BfaaTheme(adSlot, getParams());
-		ResolvedState.isResolvedState.returns(false);
+		resolvedState.isResolvedState.returns(false);
 
 		theme.onAdReady();
 		expect(document.body.style.paddingTop).to.equal('');
@@ -126,7 +126,7 @@ describe('UAP:HiVi template', () => {
 	it('should set correct padding for resolved state', () => {
 		let adSlot = getAdSlotObject();
 		let theme = new hiviTheme.BfaaTheme(adSlot, getParams());
-		ResolvedState.isResolvedState.returns(true);
+		resolvedState.isResolvedState.returns(true);
 
 		theme.onAdReady();
 

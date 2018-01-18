@@ -1,24 +1,20 @@
-import AdEngine from 'ad-engine/src/ad-engine';
-import ContextService from 'ad-engine/src/services/context-service';
-import TemplateService from 'ad-engine/src/services/template-service';
-
-import BigFancyAdAbove from 'ad-products/modules/templates/uap/big-fancy-ad-above';
-import BigFancyAdBelow from 'ad-products/modules/templates/uap/big-fancy-ad-below';
-import FloatingRail from 'ad-products/modules/templates/floating-rail';
+import { AdEngine, context, templateService } from '@wikia/ad-engine';
+import { BigFancyAdAbove, BigFancyAdBelow, FloatingRail } from '@wikia/ad-products';
 
 import customContext from '../../context';
+import '../../styles.scss';
 
 customContext.targeting.artid = '455';
 
-ContextService.extend(customContext);
+context.extend(customContext);
 
 if (document.body.offsetWidth < 728) {
-	ContextService.set('state.isMobile', true);
-	ContextService.set('targeting.skin', 'fandom_mobile');
+	context.set('state.isMobile', true);
+	context.set('targeting.skin', 'fandom_mobile');
 }
 
-TemplateService.register(BigFancyAdAbove);
-TemplateService.register(BigFancyAdBelow);
-TemplateService.register(FloatingRail);
+templateService.register(BigFancyAdAbove);
+templateService.register(BigFancyAdBelow);
+templateService.register(FloatingRail);
 
 new AdEngine().init();

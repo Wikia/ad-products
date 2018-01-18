@@ -1,21 +1,24 @@
 import { EventEmitter } from 'events';
-import SlotTweaker from 'ad-engine/src/services/slot-tweaker';
-import { SLOT_VIEWED_EVENT, VIDEO_VIEWED_EVENT } from 'ad-engine/src/models/ad-slot';
-import { logger } from 'ad-engine/src/utils/logger';
+import { autobind } from 'core-decorators';
+import { AdSlot, slotTweaker, utils } from '@wikia/ad-engine';
 
-export default class StickyBfaa extends EventEmitter {
+export class StickyBfaa extends EventEmitter {
+	// time after which we'll remove stickiness even with no user interaction
+	static STICKINESS_REMOVAL_WINDOW = 10000;
+	static LOG_GROUP = 'sticky-bfaa';
+	static STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
+
 	constructor(adSlot, stickyUntilVideoViewed = false) {
 		super();
 
 		this.adSlot = adSlot;
 		this.stickyUntilVideoViewed = stickyUntilVideoViewed;
-		this.onViewed = this.onViewed.bind(this);
 		this.sticky = false;
-		this.logger = (...args) => logger(StickyBfaa.LOG_GROUP, ...args);
+		this.logger = (...args) => utils.logger(StickyBfaa.LOG_GROUP, ...args);
 	}
 
 	run() {
-		SlotTweaker.onReady(this.adSlot).then(() => {
+		slotTweaker.onReady(this.adSlot).then(() => {
 			if (document.hidden) {
 				window.addEventListener('visibilitychange', () => this.onAdReady(), { once: true });
 			} else {
@@ -48,6 +51,7 @@ export default class StickyBfaa extends EventEmitter {
 		}
 	}
 
+	@autobind
 	onViewed() {
 		let revertTimeout = null;
 		const adContainer = this.adSlot.getElement();
@@ -58,7 +62,7 @@ export default class StickyBfaa extends EventEmitter {
 			this.revertStickiness();
 		};
 
-		this.adSlot.removeListener(SLOT_VIEWED_EVENT, this.onViewed);
+		this.adSlot.removeListener(AdSlot.SLOT_VIEWED_EVENT, this.onViewed);
 		document.addEventListener('scroll', onRevertTimeout);
 		revertTimeout = setTimeout(onRevertTimeout, (shouldRevertImmediately ? 0 : StickyBfaa.STICKINESS_REMOVAL_WINDOW));
 
@@ -67,13 +71,6 @@ export default class StickyBfaa extends EventEmitter {
 
 	onAdReady() {
 		this.applyStickiness();
-		this.adSlot.once(this.stickyUntilVideoViewed ? VIDEO_VIEWED_EVENT : SLOT_VIEWED_EVENT, this.onViewed);
+		this.adSlot.once(this.stickyUntilVideoViewed ? AdSlot.VIDEO_VIEWED_EVENT : AdSlot.SLOT_VIEWED_EVENT, this.onViewed);
 	}
 }
-
-Object.assign(StickyBfaa, {
-	// time after which we'll remove stickiness even with no user interaction
-	STICKINESS_REMOVAL_WINDOW: 10000,
-	LOG_GROUP: 'sticky-bfaa',
-	STICKINESS_CHANGE_EVENT: Symbol('stickinessChange')
-});

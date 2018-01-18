@@ -1,13 +1,12 @@
-import AdEngine from 'ad-engine/src/ad-engine';
-import TemplateService from 'ad-engine/src/services/template-service';
-
-import FloatingRail from 'ad-products/modules/templates/floating-rail';
+import { AdEngine, templateService } from '@wikia/ad-engine';
+import { FloatingRail } from '@wikia/ad-products';
 
 import customContext from '../../context';
+import '../../styles.scss';
 
 customContext.targeting.artid = '264';
 
-TemplateService.register(FloatingRail, {
+templateService.register(FloatingRail, {
 	startOffset: -15
 });
 
