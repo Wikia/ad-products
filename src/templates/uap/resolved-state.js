@@ -74,22 +74,21 @@ function isResolvedState(params) {
 }
 
 export const resolvedState = {
-	setImage(videoSettings) {
+	async setImage(videoSettings) {
 		const params = videoSettings.getParams();
 
 		if (templateSupportsResolvedState(params)) {
 			if (videoSettings.isResolvedState()) {
-				return setResolvedState(params).then(([updatedParams, ...args]) => {
-					videoSettings.updateParams(updatedParams);
-					return [updatedParams, ...args];
-				});
+				const [updatedParams, ...args] = await setResolvedState(params);
+				videoSettings.updateParams(updatedParams);
+				return [updatedParams, ...args];
 			}
 
 			resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
-			return setDefaultState(params);
+			return await setDefaultState(params);
 		}
 
-		return Promise.resolve();
+		return null;
 	},
 	isResolvedState
 };
