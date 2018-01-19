@@ -23,39 +23,38 @@ function adjustVideoAdContainer(params) {
 	}
 }
 
-function loadPorvata(videoSettings, slotContainer, imageContainer) {
+async function loadPorvata(videoSettings, slotContainer, imageContainer) {
 	const params = videoSettings.getParams();
 	const template = videoUserInterface.selectTemplate(videoSettings);
 
 	params.autoPlay = videoSettings.isAutoPlay();
 	videoSettings.updateParams(params);
 
-	return Porvata.inject(params)
-		.then((video) => {
-			video.container.style.position = 'relative';
-			videoUserInterface.setup(video, template, {
-				autoPlay: videoSettings.isAutoPlay(),
-				image: imageContainer,
-				container: slotContainer,
-				thumbnail: params.thumbnail,
-				clickThroughURL: params.clickThroughURL,
-				aspectRatio: params.aspectRatio,
-				videoAspectRatio: params.videoAspectRatio,
-				hideWhenPlaying: params.videoPlaceholderElement || params.image,
-				splitLayoutVideoPosition: params.splitLayoutVideoPosition
-			});
+	const video = await Porvata.inject(params);
 
-			video.addEventListener('wikiaAdCompleted', () => {
-				video.reload();
-			});
+	video.container.style.position = 'relative';
+	videoUserInterface.setup(video, template, {
+		autoPlay: videoSettings.isAutoPlay(),
+		image: imageContainer,
+		container: slotContainer,
+		thumbnail: params.thumbnail,
+		clickThroughURL: params.clickThroughURL,
+		aspectRatio: params.aspectRatio,
+		videoAspectRatio: params.videoAspectRatio,
+		hideWhenPlaying: params.videoPlaceholderElement || params.image,
+		splitLayoutVideoPosition: params.splitLayoutVideoPosition
+	});
 
-			adjustVideoAdContainer(params);
+	video.addEventListener('wikiaAdCompleted', () => {
+		video.reload();
+	});
 
-			return video;
-		});
+	adjustVideoAdContainer(params);
+
+	return video;
 }
 
-function loadVideoAd(videoSettings) {
+async function loadVideoAd(videoSettings) {
 	const params = videoSettings.getParams();
 	const adSlot = slotService.getBySlotName(params.slotName);
 	const slotContainer = document.getElementById(adSlot.getId());
@@ -77,20 +76,19 @@ function loadVideoAd(videoSettings) {
 		};
 	}
 
-	return loadPorvata(videoSettings, slotContainer, imageContainer)
-		.then((video) => {
-			window.addEventListener('resize', throttle(recalculateVideoSize(video), 250));
+	const video = await loadPorvata(videoSettings, slotContainer, imageContainer);
 
-			if (params.videoTriggerElement) {
-				params.videoTriggerElement.addEventListener('click', () => video.play());
-			} else if (params.videoTriggers) {
-				params.videoTriggers.forEach((trigger) => {
-					trigger.addEventListener('click', () => video.play());
-				});
-			}
+	window.addEventListener('resize', throttle(recalculateVideoSize(video), 250));
 
-			return video;
+	if (params.videoTriggerElement) {
+		params.videoTriggerElement.addEventListener('click', () => video.play());
+	} else if (params.videoTriggers) {
+		params.videoTriggers.forEach((trigger) => {
+			trigger.addEventListener('click', () => video.play());
 		});
+	}
+
+	return video;
 }
 
 function getUapId() {

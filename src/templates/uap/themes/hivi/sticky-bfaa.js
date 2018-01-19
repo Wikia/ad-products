@@ -17,14 +17,14 @@ export class StickyBfaa extends EventEmitter {
 		this.logger = (...args) => utils.logger(StickyBfaa.LOG_GROUP, ...args);
 	}
 
-	run() {
-		slotTweaker.onReady(this.adSlot).then(() => {
-			if (document.hidden) {
-				window.addEventListener('visibilitychange', () => this.onAdReady(), { once: true });
-			} else {
-				this.onAdReady();
-			}
-		});
+	async run() {
+		await slotTweaker.onReady(this.adSlot);
+
+		if (document.hidden) {
+			window.addEventListener('visibilitychange', () => this.onAdReady(), { once: true });
+		} else {
+			this.onAdReady();
+		}
 	}
 
 	isSticky() {

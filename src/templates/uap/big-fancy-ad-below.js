@@ -32,7 +32,7 @@ export class BigFancyAdBelow {
 	/**
 	 * Initializes the BFAA unit
 	 */
-	init(params) {
+	async init(params) {
 		this.params = params;
 
 		if (!this.container) {
@@ -44,22 +44,20 @@ export class BigFancyAdBelow {
 		this.container.classList.add('bfab-template');
 		this.videoSettings = new VideoSettings(params);
 		this.theme = new uapTheme.BfabTheme(this.adSlot, this.params);
-		uapTheme.adIsReady({
+		this.onAdReady(await uapTheme.adIsReady({
 			adSlot: this.adSlot,
 			videoSettings: this.videoSettings,
 			params: this.params
-		}).then(iframe => this.onAdReady(iframe));
+		}));
 
 		this.config.onInit(this.adSlot, this.params, this.config);
 	}
 
-	onAdReady(iframe) {
+	async onAdReady(iframe) {
 		if (universalAdPackage.isVideoEnabled(this.params)) {
-			utils.defer(universalAdPackage.loadVideoAd, this.videoSettings)
-				.then((video) => {
-					this.theme.onVideoReady(video);
-					return video;
-				});
+			const video = await utils.defer(universalAdPackage.loadVideoAd, this.videoSettings);
+
+			this.theme.onVideoReady(video);
 		}
 
 		this.theme.onAdReady(iframe);
