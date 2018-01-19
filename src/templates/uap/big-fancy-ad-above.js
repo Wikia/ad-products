@@ -52,7 +52,7 @@ export class BigFancyAdAbove {
 	/**
 	 * Initializes the BFAA unit
 	 */
-	init(params) {
+	async init(params) {
 		this.params = params;
 
 		if (!this.container) {
@@ -66,11 +66,11 @@ export class BigFancyAdAbove {
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
 		this.theme = new uapTheme.BfaaTheme(this.adSlot, this.params);
-		uapTheme.adIsReady({
+		this.onAdReady(await uapTheme.adIsReady({
 			adSlot: this.adSlot,
 			videoSettings: this.videoSettings,
 			params: this.params
-		}).then(iframe => this.onAdReady(iframe));
+		}));
 
 		this.config.onInit(this.adSlot, this.params, this.config);
 	}
@@ -96,7 +96,7 @@ export class BigFancyAdAbove {
 		return this.params.backgroundColor ? color : '#000';
 	}
 
-	onAdReady(iframe) {
+	async onAdReady(iframe) {
 		document.body.style.paddingTop = iframe.parentElement.style.paddingBottom;
 		document.body.classList.add('has-bfaa');
 
@@ -105,11 +105,12 @@ export class BigFancyAdAbove {
 		}
 
 		if (universalAdPackage.isVideoEnabled(this.params)) {
-			utils.defer(universalAdPackage.loadVideoAd, this.videoSettings) // defers for proper rendering
-				.then((video) => {
-					this.theme.onVideoReady(video);
-					return video;
-				});
+			const video = await utils.defer(
+				universalAdPackage.loadVideoAd,
+				this.videoSettings
+			); // defers for proper rendering
+
+			this.theme.onVideoReady(video);
 		}
 
 		this.theme.onAdReady(iframe);

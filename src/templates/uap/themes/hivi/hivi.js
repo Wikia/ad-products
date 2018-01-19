@@ -222,14 +222,13 @@ export class BfabTheme extends BigFancyAdTheme {
 		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState(video));
 	}
 
-	setResolvedState(video) {
+	async setResolvedState(video) {
 		const { config, image2 } = this.params;
 
 		this.container.classList.add('theme-resolved');
 		image2.element.classList.remove('hidden-state');
-		slotTweaker.makeResponsive(this.adSlot, config.aspectRatio.resolved).then(() => {
-			this.setThumbnailStyle(video);
-		});
+		await slotTweaker.makeResponsive(this.adSlot, config.aspectRatio.resolved);
+		this.setThumbnailStyle(video);
 	}
 
 	setThumbnailStyle(video) {
