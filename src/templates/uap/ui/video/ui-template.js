@@ -1,4 +1,4 @@
-import Client from 'ad-engine/src/utils/client';
+import { utils } from '@wikia/ad-engine';
 import CloseButton from './close-button';
 import LearnMore from './learn-more';
 import PauseControl from './pause-control';
@@ -92,7 +92,7 @@ export function selectTemplate(videoSettings) {
 	if (params.isMobile) {
 		params.container.classList.add('theme-mobile-layout');
 	}
-	if (Client.isSmartphone() || Client.isTablet()) {
+	if (utils.client.isSmartphone() || utils.client.isTablet()) {
 		params.container.classList.add('theme-mobile-device');
 	}
 

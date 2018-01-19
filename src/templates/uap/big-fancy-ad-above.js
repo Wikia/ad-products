@@ -1,12 +1,11 @@
-import Context from 'ad-engine/src/services/context-service';
-import defer from 'ad-engine/src/utils/defer';
+import { context, utils } from '@wikia/ad-engine';
 
-import UniversalAdPackage from './universal-ad-package';
-import VideoSettings from './video-settings';
+import { universalAdPackage } from './universal-ad-package';
+import { VideoSettings } from './video-settings';
 import * as classicTheme from './themes/classic';
 import * as hiviTheme from './themes/hivi';
 
-export default class BigFancyAdAbove {
+export class BigFancyAdAbove {
 	static getName() {
 		return 'bfaa';
 	}
@@ -44,7 +43,7 @@ export default class BigFancyAdAbove {
 	 */
 	constructor(adSlot) {
 		this.adSlot = adSlot;
-		this.config = Context.get('templates.bfaa');
+		this.config = context.get('templates.bfaa');
 		this.container = document.getElementById(this.adSlot.getId());
 		this.videoSettings = null;
 		this.theme = null;
@@ -62,7 +61,7 @@ export default class BigFancyAdAbove {
 
 		const uapTheme = (this.params.theme === 'hivi') ? hiviTheme : classicTheme;
 
-		UniversalAdPackage.init(this.params, this.config.slotsToEnable);
+		universalAdPackage.init(this.params, this.config.slotsToEnable);
 		this.videoSettings = new VideoSettings(this.params);
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
@@ -105,8 +104,8 @@ export default class BigFancyAdAbove {
 			this.setupNavbar();
 		}
 
-		if (UniversalAdPackage.isVideoEnabled(this.params)) {
-			defer(UniversalAdPackage.loadVideoAd, this.videoSettings) // defers for proper rendering
+		if (universalAdPackage.isVideoEnabled(this.params)) {
+			utils.defer(universalAdPackage.loadVideoAd, this.videoSettings) // defers for proper rendering
 				.then((video) => {
 					this.theme.onVideoReady(video);
 					return video;

@@ -1,12 +1,12 @@
-import ResolvedState from './resolved-state';
+import { resolvedState } from './resolved-state';
 
-export default class VideoSettings {
+export class VideoSettings {
 
 	constructor(params) {
 		this.params = params;
 
 		Object.defineProperty(this, 'resolvedState', {
-			value: ResolvedState.isResolvedState(this.params),
+			value: resolvedState.isResolvedState(this.params),
 			writable: false
 		});
 
