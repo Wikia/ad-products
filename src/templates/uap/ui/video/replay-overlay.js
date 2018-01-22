@@ -17,7 +17,17 @@ function add(video, container, params) {
 	});
 
 	if (video.params.theme && video.params.theme === 'hivi') {
-		addReplayIcon(overlay);
+		const replayIcon = addReplayIcon(overlay);
+
+		if (!params.autoPlay) {
+			const playIcon = addPlayIcon(overlay);
+			replayIcon.style.display = 'none';
+
+			video.addEventListener('start', () => {
+				replayIcon.style.display = '';
+				playIcon.style.display = 'none';
+			});
+		}
 
 		container = video.params.thumbnail;
 		container.appendChild(overlay);
@@ -49,8 +59,17 @@ function getOverlayWidth(params) {
 }
 
 function addReplayIcon(overlay) {
-	const replayIcon = createIcon(icons.REPLAY, ['replay-icon']);
+	const replayIcon = createIcon(icons.REPLAY, ['replay-icon', 'overlay-icon']);
 	overlay.appendChild(replayIcon);
+
+	return replayIcon;
+}
+
+function addPlayIcon(overlay) {
+	const playIcon = createIcon(icons.PLAY, ['play-icon', 'overlay-icon']);
+	overlay.appendChild(playIcon);
+
+	return playIcon;
 }
 
 export default {
