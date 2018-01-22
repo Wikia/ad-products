@@ -1585,7 +1585,17 @@ function add(video, container, params) {
 	});
 
 	if (video.params.theme && video.params.theme === 'hivi') {
-		addReplayIcon(overlay);
+		var replayIcon = addReplayIcon(overlay);
+
+		if (!params.autoPlay) {
+			var playIcon = addPlayIcon(overlay);
+			replayIcon.style.display = 'none';
+
+			video.addEventListener('start', function () {
+				replayIcon.style.display = '';
+				playIcon.style.display = 'none';
+			});
+		}
 
 		container = video.params.thumbnail;
 		container.appendChild(overlay);
@@ -1617,8 +1627,17 @@ function getOverlayWidth(params) {
 }
 
 function addReplayIcon(overlay) {
-	var replayIcon = (0, _icons.createIcon)(_icons.icons.REPLAY, ['replay-icon']);
+	var replayIcon = (0, _icons.createIcon)(_icons.icons.REPLAY, ['replay-icon', 'overlay-icon']);
 	overlay.appendChild(replayIcon);
+
+	return replayIcon;
+}
+
+function addPlayIcon(overlay) {
+	var playIcon = (0, _icons.createIcon)(_icons.icons.PLAY, ['play-icon', 'overlay-icon']);
+	overlay.appendChild(playIcon);
+
+	return playIcon;
 }
 
 exports.default = {
@@ -2611,6 +2630,7 @@ function _applyDecoratedDescriptor(target, property, decorators, descriptor, con
 var StickyBfaa = exports.StickyBfaa = (_class = function (_EventEmitter) {
 	_inherits(StickyBfaa, _EventEmitter);
 
+	// time after which we'll remove stickiness even with no user interaction
 	function StickyBfaa(adSlot) {
 		var stickyUntilVideoViewed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
@@ -2630,8 +2650,6 @@ var StickyBfaa = exports.StickyBfaa = (_class = function (_EventEmitter) {
 		};
 		return _this;
 	}
-	// time after which we'll remove stickiness even with no user interaction
-
 
 	_createClass(StickyBfaa, [{
 		key: 'run',
@@ -2690,8 +2708,10 @@ var StickyBfaa = exports.StickyBfaa = (_class = function (_EventEmitter) {
 			};
 
 			this.adSlot.removeListener(_adEngine.AdSlot.SLOT_VIEWED_EVENT, this.onViewed);
-			document.addEventListener('scroll', onRevertTimeout);
-			revertTimeout = setTimeout(onRevertTimeout, shouldRevertImmediately ? 0 : StickyBfaa.STICKINESS_REMOVAL_WINDOW);
+			setTimeout(function () {
+				document.addEventListener('scroll', onRevertTimeout);
+				revertTimeout = setTimeout(onRevertTimeout, shouldRevertImmediately ? 0 : StickyBfaa.STICKINESS_REMOVAL_WINDOW);
+			}, StickyBfaa.STICKINESS_ADDITIONAL_TIME);
 
 			this.logger('slotViewed triggered on ' + this.adSlot.getSlotName());
 		}
@@ -2706,6 +2726,7 @@ var StickyBfaa = exports.StickyBfaa = (_class = function (_EventEmitter) {
 	return StickyBfaa;
 }(_events.EventEmitter), (_applyDecoratedDescriptor(_class.prototype, 'onViewed', [_coreDecorators.autobind], Object.getOwnPropertyDescriptor(_class.prototype, 'onViewed'), _class.prototype)), _class);
 StickyBfaa.STICKINESS_REMOVAL_WINDOW = 10000;
+StickyBfaa.STICKINESS_ADDITIONAL_TIME = 3000;
 StickyBfaa.LOG_GROUP = 'sticky-bfaa';
 StickyBfaa.STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
 
