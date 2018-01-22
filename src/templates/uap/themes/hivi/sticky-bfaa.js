@@ -5,6 +5,7 @@ import { AdSlot, slotTweaker, utils } from '@wikia/ad-engine';
 export class StickyBfaa extends EventEmitter {
 	// time after which we'll remove stickiness even with no user interaction
 	static STICKINESS_REMOVAL_WINDOW = 10000;
+	static STICKINESS_ADDITIONAL_TIME = 3000;
 	static LOG_GROUP = 'sticky-bfaa';
 	static STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
 
@@ -63,8 +64,10 @@ export class StickyBfaa extends EventEmitter {
 		};
 
 		this.adSlot.removeListener(AdSlot.SLOT_VIEWED_EVENT, this.onViewed);
-		document.addEventListener('scroll', onRevertTimeout);
-		revertTimeout = setTimeout(onRevertTimeout, (shouldRevertImmediately ? 0 : StickyBfaa.STICKINESS_REMOVAL_WINDOW));
+		setTimeout(() => {
+			document.addEventListener('scroll', onRevertTimeout);
+			revertTimeout = setTimeout(onRevertTimeout, (shouldRevertImmediately ? 0 : StickyBfaa.STICKINESS_REMOVAL_WINDOW));
+		}, StickyBfaa.STICKINESS_ADDITIONAL_TIME);
 
 		this.logger(`slotViewed triggered on ${this.adSlot.getSlotName()}`);
 	}
