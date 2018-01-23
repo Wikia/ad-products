@@ -74,6 +74,10 @@ function isResolvedState(params) {
 }
 
 export const resolvedState = {
+	// This method is used by classic UAP only (not-HiVi)
+	// UAP:HiVi template does not support srcPropertyNames like defaultStateSrc
+	// UAP:HiVi switch images in uap/themes/hivi/hivi.js by swapping hidden-state class
+	// TODO: Remove this code once we get rid of old (classic) UAP
 	setImage(videoSettings) {
 		const params = videoSettings.getParams();
 
