@@ -1,4 +1,4 @@
-import { throttle } from 'lodash';
+import { throttle } from 'lodash-es';
 import { context, Porvata, slotService } from '@wikia/ad-engine';
 import * as videoUserInterface from './ui/video';
 

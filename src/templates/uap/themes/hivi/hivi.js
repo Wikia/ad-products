@@ -1,5 +1,5 @@
 import { context, scrollListener, slotTweaker } from '@wikia/ad-engine';
-import { debounce, mapValues } from 'lodash';
+import { debounce, mapValues } from 'lodash-es';
 
 import AdvertisementLabel from '../../ui/advertisement-label';
 import CloseButton from '../../ui/close-button';
