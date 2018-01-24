@@ -388,6 +388,12 @@ $hivi-uap-player-button-border-space: 6px;
 			display: none;
 		}
 
+		&.theme-video-fullscreen {
+			position: fixed;
+			width: 100%;
+			height: 100%;
+		}
+
 		.video-player, .replay-overlay {
 			right: 23.2%;
 			transform: translateX(50%);

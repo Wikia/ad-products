@@ -65,7 +65,10 @@ export class BfaaTheme extends BigFancyAdTheme {
 			}
 		});
 		video.addEventListener('wikiaFullscreenChange', () => {
-			if (!video.isFullscreen()) {
+			if (video.isFullscreen()) {
+				this.container.classList.add('theme-video-fullscreen');
+			} else {
+				this.container.classList.remove('theme-video-fullscreen');
 				this.updateAdSizes();
 			}
 		});
