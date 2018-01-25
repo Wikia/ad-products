@@ -20,12 +20,12 @@ const common = {
 						'sass-loader'
 					]
 				}),
-				exclude: /node_modules/
+				include: path.resolve(__dirname, 'src')
 			},
 			{
 				test: /.js$/,
 				use: 'babel-loader',
-				exclude: /node_modules/
+				include: path.resolve(__dirname, 'src')
 			}
 		]
 	}
@@ -47,7 +47,8 @@ const environments = {
 			new webpack.DefinePlugin({
 				'process.env.NODE_ENV': JSON.stringify('production')
 			}),
-			new ExtractTextPlugin({ filename: '[name].css' })
+			new ExtractTextPlugin({ filename: '[name].css' }),
+			new webpack.optimize.ModuleConcatenationPlugin()
 		]
 	},
 	development: {
@@ -94,7 +95,7 @@ const targets = {
 		}
 	},
 	commonjs: {
-		externals: Object.keys(pkg.dependencies),
+		externals: Object.keys(pkg.dependencies).map(key => new RegExp(`^${key}`)),
 		output: {
 			filename: '[name].js',
 			library: 'adEngine',
