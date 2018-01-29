@@ -1366,6 +1366,9 @@ var adIsReady = function () {
 						return ad_engine_["slotTweaker"].makeResponsive(adSlot, params.aspectRatio);
 
 					case 4:
+						return _context.abrupt('return', _context.sent);
+
+					case 5:
 					case 'end':
 						return _context.stop();
 				}
@@ -1642,6 +1645,7 @@ var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
 	// time after which we'll remove stickiness even with no user interaction
 	function StickyBfaa(adSlot) {
 		var stickyUntilVideoViewed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+		var stickyAdditionalTime = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : StickyBfaa.DEFAULT_STICKINESS_ADDITIONAL_TIME;
 
 		sticky_bfaa__classCallCheck(this, StickyBfaa);
 
@@ -1649,6 +1653,7 @@ var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
 
 		_this.adSlot = adSlot;
 		_this.stickyUntilVideoViewed = stickyUntilVideoViewed;
+		_this.stickyAdditionalTime = stickyAdditionalTime;
 		_this.sticky = false;
 		_this.logger = function () {
 			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -1742,7 +1747,7 @@ var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
 			setTimeout(function () {
 				document.addEventListener('scroll', onRevertTimeout);
 				revertTimeout = setTimeout(onRevertTimeout, shouldRevertImmediately ? 0 : StickyBfaa.STICKINESS_REMOVAL_WINDOW);
-			}, StickyBfaa.STICKINESS_ADDITIONAL_TIME);
+			}, this.stickyAdditionalTime);
 
 			this.logger('slotViewed triggered on ' + this.adSlot.getSlotName());
 		}
@@ -1757,7 +1762,7 @@ var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
 	return StickyBfaa;
 }(external__events_["EventEmitter"]), (_applyDecoratedDescriptor(_class.prototype, 'onViewed', [autobind__default.a], Object.getOwnPropertyDescriptor(_class.prototype, 'onViewed'), _class.prototype)), _class);
 sticky_bfaa_StickyBfaa.STICKINESS_REMOVAL_WINDOW = 10000;
-sticky_bfaa_StickyBfaa.STICKINESS_ADDITIONAL_TIME = 3000;
+sticky_bfaa_StickyBfaa.DEFAULT_STICKINESS_ADDITIONAL_TIME = 3000;
 sticky_bfaa_StickyBfaa.LOG_GROUP = 'sticky-bfaa';
 sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/hivi.js
@@ -1805,7 +1810,7 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 		_this.addAdvertisementLabel();
 
 		if (_this.params.isSticky) {
-			_this.stickyBfaa = new sticky_bfaa_StickyBfaa(_this.adSlot, _this.params.stickyUntilVideoViewed);
+			_this.stickyBfaa = new sticky_bfaa_StickyBfaa(_this.adSlot, _this.params.stickyUntilVideoViewed, _this.params.stickyAdditionalTime);
 			_this.addUnstickButton();
 			_this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
 				return _this.onStickinessChange(isSticky);
@@ -2067,7 +2072,7 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 			this.container.style.top = '';
 			document.body.style.paddingTop = 100 / aspectRatio + '%';
 			ad_engine_["slotTweaker"].makeResponsive(this.adSlot, aspectRatio);
-			window.scrollBy(0, -offset);
+			window.scrollBy(0, -Math.min(offset, window.scrollY));
 			this.updateAdSizes();
 		}
 	}]);
