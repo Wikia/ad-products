@@ -23,7 +23,11 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.addAdvertisementLabel();
 
 		if (this.params.isSticky) {
-			this.stickyBfaa = new StickyBfaa(this.adSlot, this.params.stickyUntilVideoViewed);
+			this.stickyBfaa = new StickyBfaa(
+				this.adSlot,
+				this.params.stickyUntilVideoViewed,
+				this.params.stickyAdditionalTime
+			);
 			this.addUnstickButton();
 			this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
 			this.stickyBfaa.run();
@@ -203,7 +207,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.container.style.top = '';
 		document.body.style.paddingTop = `${100 / aspectRatio}%`;
 		slotTweaker.makeResponsive(this.adSlot, aspectRatio);
-		window.scrollBy(0, -offset);
+		window.scrollBy(0, -Math.min(offset, window.scrollY));
 		this.updateAdSizes();
 	}
 }
