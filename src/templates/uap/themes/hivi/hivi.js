@@ -200,7 +200,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.container.style.top = '';
 		document.body.style.paddingTop = `${100 / aspectRatio}%`;
 		slotTweaker.makeResponsive(this.adSlot, aspectRatio);
-		window.scrollBy(0, -offset);
+		window.scrollBy(0, -Math.min(offset, window.scrollY));
 		this.updateAdSizes();
 	}
 }
