@@ -56,6 +56,7 @@ const environments = {
 			'floating-rail': './examples/templates/floating-rail/script.js',
 			'hivi-uap': './examples/templates/hivi-uap/script.js',
 			'hivi-uap-ctp': './examples/templates/hivi-uap-ctp/script.js',
+			'hivi-uap-static': './examples/templates/hivi-uap-static/script.js',
 			'sticky-bfaa': './examples/templates/sticky-bfaa/script.js',
 			'vuap': './examples/templates/vuap/script.js'
 		},
