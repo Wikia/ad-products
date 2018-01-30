@@ -11,7 +11,7 @@ describe('UniversalAdPackage', () => {
 		sandbox = sinon.sandbox.create();
 		sandbox.stub(context, 'get');
 		sandbox.spy(context, 'set');
-		sandbox.stub(slotService, 'getBySlotName').callsFake(function(){ return {getId: function(){}}});
+		sandbox.stub(slotService, 'getBySlotName').callsFake(function(){ return {getElement: function(){}}});
 	});
 
 	afterEach(function () {

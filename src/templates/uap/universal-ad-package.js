@@ -126,7 +126,7 @@ function enableSlots(slotsToEnable) {
 
 function initSlot(params) {
 	const adSlot = slotService.getBySlotName(params.slotName);
-	params.container = document.getElementById(adSlot.getId());
+	params.container = adSlot.getElement();
 
 	if (params.isDarkTheme) {
 		params.container.classList.add('is-dark');
