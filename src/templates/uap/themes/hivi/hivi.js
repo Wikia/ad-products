@@ -231,6 +231,13 @@ export class BfabTheme extends BigFancyAdTheme {
 
 	onVideoReady(video) {
 		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState(video));
+		video.addEventListener('wikiaFullscreenChange', () => {
+			if (video.isFullscreen()) {
+				this.container.classList.add('theme-video-fullscreen');
+			} else {
+				this.container.classList.remove('theme-video-fullscreen');
+			}
+		});
 	}
 
 	async setResolvedState(video) {
