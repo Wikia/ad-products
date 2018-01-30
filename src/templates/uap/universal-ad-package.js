@@ -1,5 +1,5 @@
 import { throttle } from 'lodash-es';
-import { context, Porvata, slotService } from '@wikia/ad-engine';
+import { context, Porvata, slotService, utils } from '@wikia/ad-engine';
 import * as videoUserInterface from './ui/video';
 
 let uapId = 'none';
@@ -57,27 +57,24 @@ function loadPorvata(videoSettings, slotContainer, imageContainer) {
 
 function loadVideoAd(videoSettings) {
 	const params = videoSettings.getParams();
-	const adSlot = slotService.getBySlotName(params.slotName);
-	const slotContainer = document.getElementById(adSlot.getId());
-	const imageContainer = slotContainer.querySelector('div:last-of-type');
-	const size = getVideoSize(slotContainer, params, videoSettings);
+	const imageContainer = params.container.querySelector('div:last-of-type');
+	const size = getVideoSize(params.container, params, videoSettings);
 
 	params.vastTargeting = {
 		passback: getType()
 	};
 	params.width = size.width;
 	params.height = size.height;
-	params.container = slotContainer;
 	videoSettings.updateParams(params);
 
 	function recalculateVideoSize(video) {
 		return () => {
-			const currentSize = getVideoSize(slotContainer, params, videoSettings);
+			const currentSize = getVideoSize(params.container, params, videoSettings);
 			video.resize(currentSize.width, currentSize.height);
 		};
 	}
 
-	return loadPorvata(videoSettings, slotContainer, imageContainer)
+	return loadPorvata(videoSettings, params.container, imageContainer)
 		.then((video) => {
 			window.addEventListener('resize', throttle(recalculateVideoSize(video), 250));
 
@@ -140,6 +137,19 @@ export const universalAdPackage = {
 		setUapId(params.uap);
 		setType(params.adProduct);
 		enableSlots(slotsToEnable);
+
+		const adSlot = slotService.getBySlotName(params.slotName);
+		params.container = document.getElementById(adSlot.getId());
+
+		if (params.isDarkTheme) {
+			params.container.classList.add('is-dark');
+		}
+		if (params.isMobile) {
+			params.container.classList.add('is-mobile-layout');
+		}
+		if (utils.client.isSmartphone() || utils.client.isTablet()) {
+			params.container.classList.add('is-mobile-device');
+		}
 	},
 	getType,
 	getUapId,

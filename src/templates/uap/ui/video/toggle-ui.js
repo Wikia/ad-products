@@ -1,9 +1,11 @@
+import { utils } from '@wikia/ad-engine';
+
 const overlayTimeout = 5000;
 
 function add(video, container, params) {
 	let timeout = null;
 
-	const isMobile = video.container.parentNode.classList.contains('theme-mobile-device'),
+	const isMobile = utils.client.isSmartphone() || utils.client.isTablet(),
 		overlay = document.createElement('div'),
 		setAutomaticToggle = () => {
 			timeout = setTimeout(() => {

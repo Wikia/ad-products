@@ -279,13 +279,17 @@ $hivi-uap-player-button-border-space: 6px;
 		display: unset;
 	}
 
-	&.theme-mobile-device .advertisement-label {
+	// TODO remove unused theme-* selector ADEN-6645
+	&.theme-mobile-device .advertisement-label,
+	&.is-mobile-device .advertisement-label {
 		font-size: 6px;
 		line-height: 6px;
 		padding: 5px;
 	}
 
-	&.theme-mobile-device .learn-more {
+	// TODO remove unused theme-* selector ADEN-6645
+	&.theme-mobile-device .learn-more,
+	&.is-mobile-device .learn-more {
 			display: unset;
 	}
 
@@ -364,25 +368,7 @@ $hivi-uap-player-button-border-space: 6px;
 			}
 		}
 
-		&.theme-dark {
-			.ui-visible .toggle-ui-overlay {
-				background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%);
-			}
 
-			.advertisement-label,
-			.button-control .icon,
-			.learn-more,
-			.porvata-icon {
-				color: $hivi-uap-dark-button-color;
-				fill: $hivi-uap-dark-button-color;
-			}
-		}
-
-		&.theme-mobile-layout .video-player {
-			right: 0;
-			top: auto;
-			transform: none;
-		}
 
 		&.theme-resolved .learn-more {
 			display: none;
@@ -416,6 +402,30 @@ $hivi-uap-player-button-border-space: 6px;
 		.replay-overlay {
 			left: 0;
 		}
+	}
+
+	// TODO remove unused theme-* selector ADEN-6645
+	&.theme-dark,
+	&.is-dark {
+		.ui-visible .toggle-ui-overlay {
+			background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%);
+		}
+
+		.advertisement-label,
+		.button-control .icon,
+		.learn-more,
+		.porvata-icon {
+			color: $hivi-uap-dark-button-color;
+			fill: $hivi-uap-dark-button-color;
+		}
+	}
+
+	// TODO remove unused theme-* selector ADEN-6645
+	&.theme-mobile-layout .video-player,
+	&.is-mobile-layout .video-player {
+		right: 0;
+		top: auto;
+		transform: none;
 	}
 }
 

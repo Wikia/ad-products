@@ -86,6 +86,8 @@ export function selectTemplate(videoSettings) {
 	}
 
 	params.container.classList.add(`theme-${template}`);
+
+	// TODO remove those ifs ADEN-6645
 	if (params.isDarkTheme) {
 		params.container.classList.add('theme-dark');
 	}
