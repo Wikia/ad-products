@@ -9,6 +9,3 @@ fi
 
 npm run test
 npm run lint
-npm run build --production
-
-git add dist/
