@@ -265,6 +265,20 @@ $hivi-uap-player-button-border-space: 6px;
 		z-index: $uap-video-fullscreen-z-index + 1;
 	}
 
+	.button-unstick .icon {
+		width: $hivi-uap-mobile-button-size;
+		height: $hivi-uap-mobile-button-size;
+
+		@media #{$breakpoint-m-up} {
+			width: $hivi-uap-button-size;
+			height: $hivi-uap-button-size;
+		}
+	}
+
+	&.theme-resolved.sticky-bfaa .button-unstick {
+		display: unset;
+	}
+
 	&.theme-mobile-device .advertisement-label {
 		font-size: 6px;
 		line-height: 6px;
@@ -304,16 +318,6 @@ $hivi-uap-player-button-border-space: 6px;
 		.porvata-icon {
 			height: $hivi-uap-button-size;
 			width: $hivi-uap-button-size;
-		}
-
-		.button-unstick .icon {
-			width: $hivi-uap-mobile-button-size;
-			height: $hivi-uap-mobile-button-size;
-
-			@media #{$breakpoint-m-up} {
-				width: $hivi-uap-button-size;
-				height: $hivi-uap-button-size;
-			}
 		}
 
 		.advertisement-label,
@@ -378,10 +382,6 @@ $hivi-uap-player-button-border-space: 6px;
 			right: 0;
 			top: auto;
 			transform: none;
-		}
-
-		&.theme-resolved.sticky-bfaa .button-unstick {
-			display: unset;
 		}
 
 		&.theme-resolved .learn-more {
