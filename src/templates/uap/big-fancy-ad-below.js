@@ -41,6 +41,8 @@ export class BigFancyAdBelow {
 
 		const uapTheme = (this.params.theme === 'hivi') ? hiviTheme : classicTheme;
 
+		universalAdPackage.initSlot(params);
+
 		this.container.classList.add('bfab-template');
 		this.videoSettings = new VideoSettings(params);
 		this.theme = new uapTheme.BfabTheme(this.adSlot, this.params);

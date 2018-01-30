@@ -124,6 +124,21 @@ function enableSlots(slotsToEnable) {
 	}
 }
 
+function initSlot(params) {
+	const adSlot = slotService.getBySlotName(params.slotName);
+	params.container = document.getElementById(adSlot.getId());
+
+	if (params.isDarkTheme) {
+		params.container.classList.add('is-dark');
+	}
+	if (params.isMobile) {
+		params.container.classList.add('is-mobile-layout');
+	}
+	if (utils.client.isSmartphone() || utils.client.isTablet()) {
+		params.container.classList.add('is-mobile-device');
+	}
+}
+
 export const universalAdPackage = {
 	init(params, slotsToEnable = []) {
 		let adProduct = 'uap';
@@ -138,19 +153,9 @@ export const universalAdPackage = {
 		setType(params.adProduct);
 		enableSlots(slotsToEnable);
 
-		const adSlot = slotService.getBySlotName(params.slotName);
-		params.container = document.getElementById(adSlot.getId());
-
-		if (params.isDarkTheme) {
-			params.container.classList.add('is-dark');
-		}
-		if (params.isMobile) {
-			params.container.classList.add('is-mobile-layout');
-		}
-		if (utils.client.isSmartphone() || utils.client.isTablet()) {
-			params.container.classList.add('is-mobile-device');
-		}
+		initSlot(params);
 	},
+	initSlot,
 	getType,
 	getUapId,
 	isVideoEnabled(params) {
