@@ -1,5 +1,5 @@
 import { context, scrollListener, slotTweaker } from '@wikia/ad-engine';
-import { debounce, mapValues } from 'lodash-es';
+import { debounce, mapValues } from 'lodash';
 
 import AdvertisementLabel from '../../ui/advertisement-label';
 import CloseButton from '../../ui/close-button';
@@ -68,9 +68,12 @@ export class BfaaTheme extends BigFancyAdTheme {
 				this.setResolvedState(true);
 			}
 		});
-		video.addEventListener('wikiaFullscreenChange', () => {
-			if (!video.isFullscreen()) {
-				this.updateAdSizes();
+		video.addEventListener('wikiaFullscreenChange', async () => {
+			if (video.isFullscreen()) {
+				this.container.classList.add('theme-video-fullscreen');
+			} else {
+				this.container.classList.remove('theme-video-fullscreen');
+				await this.updateAdSizes();
 			}
 		});
 	}
@@ -85,7 +88,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 	}
 
-	updateAdSizes() {
+	async updateAdSizes() {
 		const config = this.params.config;
 		const currentWidth = document.body.offsetWidth;
 		const isResolved = this.container.classList.contains('theme-resolved');
@@ -106,7 +109,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
-			this.setResolvedState();
+			await this.setResolvedState();
 		} else if (currentState < HIVI_RESOLVED_THRESHOLD && isResolved) {
 			this.container.style.top = '';
 			this.switchImagesInAd(false);
@@ -160,27 +163,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 		const resolvedHeight = width / aspectRatio.resolved;
 		const offset = this.getHeightDifferenceBetweenStates();
 
-		if (this.onResolvedStateScroll) {
-			window.removeEventListener('scroll', this.onResolvedStateScroll);
-			this.onResolvedStateScroll.cancel();
-		}
-
-		if (immediately) {
-			this.lock();
-		} else {
-			this.onResolvedStateScroll = debounce(() => {
-				if (window.scrollY < offset) {
-					return;
-				}
-
-				window.removeEventListener('scroll', this.onResolvedStateScroll);
-				this.onResolvedStateScroll = null;
-				this.lock();
-			}, 50);
-			window.addEventListener('scroll', this.onResolvedStateScroll);
-			this.onResolvedStateScroll();
-		}
-
 		if (isSticky) {
 			this.config.moveNavbar(resolvedHeight);
 		} else {
@@ -188,6 +170,31 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 
 		this.switchImagesInAd(true);
+
+		if (this.onResolvedStateScroll) {
+			window.removeEventListener('scroll', this.onResolvedStateScroll);
+			this.onResolvedStateScroll.cancel();
+		}
+
+		return new Promise((resolve) => {
+			if (immediately) {
+				this.lock();
+				resolve();
+			} else {
+				this.onResolvedStateScroll = debounce(() => {
+					if (window.scrollY < offset) {
+						return;
+					}
+
+					window.removeEventListener('scroll', this.onResolvedStateScroll);
+					this.onResolvedStateScroll = null;
+					this.lock();
+					resolve();
+				}, 50);
+				window.addEventListener('scroll', this.onResolvedStateScroll);
+				this.onResolvedStateScroll();
+			}
+		});
 	}
 
 	getHeightDifferenceBetweenStates() {
@@ -203,7 +210,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.container.style.top = '';
 		document.body.style.paddingTop = `${100 / aspectRatio}%`;
 		slotTweaker.makeResponsive(this.adSlot, aspectRatio);
-		window.scrollBy(0, -offset);
+		window.scrollBy(0, -Math.min(offset, window.scrollY));
 		this.updateAdSizes();
 	}
 }
@@ -229,16 +236,15 @@ export class BfabTheme extends BigFancyAdTheme {
 		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState(video));
 	}
 
-	setResolvedState(video) {
+	async setResolvedState(video) {
 		const { config, image2 } = this.params;
 
 		this.container.classList.add('theme-resolved');
 		image2.element.classList.remove('hidden-state');
-		slotTweaker.makeResponsive(this.adSlot, config.aspectRatio.resolved).then(() => {
-			if (this.params.thumbnail) {
-				this.setThumbnailStyle(video);
-			}
-		});
+		await slotTweaker.makeResponsive(this.adSlot, config.aspectRatio.resolved);
+		if (this.params.thumbnail) {
+			this.setThumbnailStyle(video);
+		}
 	}
 
 	setThumbnailStyle(video) {

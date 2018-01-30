@@ -8,9 +8,13 @@
 		}]
 	],
 	"plugins": [
+		["provide-modules", {
+			"regenerator-runtime": "regeneratorRuntime"
+		}],
 		"transform-class-properties",
 		"transform-object-rest-spread",
 		"transform-decorators-legacy",
+		"syntax-dynamic-import",
 		"lodash"
 	]
 }

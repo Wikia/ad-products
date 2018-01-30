@@ -5,6 +5,8 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const StringReplacePlugin = require('string-replace-webpack-plugin');
+const get = require('lodash/get');
 const pkg = require('./package.json');
 
 const common = {
@@ -25,7 +27,16 @@ const common = {
 			{
 				test: /.js$/,
 				use: 'babel-loader',
-				exclude: /node_modules/
+				include: path.resolve(__dirname, 'src')
+			},
+			{
+				test: path.resolve(__dirname, 'src/index.js'),
+				loader: StringReplacePlugin.replace({
+					replacements: [{
+						pattern: /<\?=[ \t]*PACKAGE\(([\w\-_.]*?)\)[ \t]*\?>/ig,
+						replacement: (match, p1) => get(pkg, p1)
+					}]
+				})
 			}
 		]
 	}
@@ -39,15 +50,14 @@ const environments = {
 		devtool: 'source-map',
 		output: {
 			path: path.resolve(__dirname, 'dist'),
-			filename: '[name].js',
-			library: 'adProducts',
-			libraryTarget: 'commonjs2'
 		},
 		plugins: [
 			new webpack.DefinePlugin({
 				'process.env.NODE_ENV': JSON.stringify('production')
 			}),
-			new ExtractTextPlugin({ filename: '[name].css' })
+			new ExtractTextPlugin({ filename: '[name].css' }),
+			new StringReplacePlugin(),
+			new webpack.optimize.ModuleConcatenationPlugin()
 		]
 	},
 	development: {
@@ -67,6 +77,7 @@ const environments = {
 		},
 		plugins: [
 			new ExtractTextPlugin({ filename: '[name]/dist/styles.css' }),
+			new StringReplacePlugin(),
 			new webpack.optimize.CommonsChunkPlugin({
 				name: 'vendor',
 				filename: '[name]/dist/vendor.js'
@@ -95,7 +106,7 @@ const targets = {
 		}
 	},
 	commonjs: {
-		externals: Object.keys(pkg.dependencies),
+		externals: Object.keys(pkg.dependencies).map(key => new RegExp(`^${key}`)),
 		output: {
 			filename: '[name].js',
 			library: 'adEngine',

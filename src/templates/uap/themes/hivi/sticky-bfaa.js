@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { autobind } from 'core-decorators';
+import autobind from 'core-decorators/es/autobind';
 import { AdSlot, slotTweaker, utils } from '@wikia/ad-engine';
 
 export class StickyBfaa extends EventEmitter {
@@ -23,14 +23,14 @@ export class StickyBfaa extends EventEmitter {
 		this.logger = (...args) => utils.logger(StickyBfaa.LOG_GROUP, ...args);
 	}
 
-	run() {
-		slotTweaker.onReady(this.adSlot).then(() => {
-			if (document.hidden) {
-				window.addEventListener('visibilitychange', () => this.onAdReady(), { once: true });
-			} else {
-				this.onAdReady();
-			}
-		});
+	async run() {
+		await slotTweaker.onReady(this.adSlot);
+
+		if (document.hidden) {
+			window.addEventListener('visibilitychange', () => this.onAdReady(), { once: true });
+		} else {
+			this.onAdReady();
+		}
 	}
 
 	isSticky() {
