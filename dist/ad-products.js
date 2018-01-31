@@ -2112,6 +2112,13 @@ var hivi_BfabTheme = function (_BigFancyAdTheme2) {
 			video.addEventListener('wikiaAdCompleted', function () {
 				return _this7.setResolvedState(video);
 			});
+			video.addEventListener('wikiaFullscreenChange', function () {
+				if (video.isFullscreen()) {
+					_this7.container.classList.add('theme-video-fullscreen');
+				} else {
+					_this7.container.classList.remove('theme-video-fullscreen');
+				}
+			});
 		}
 	}, {
 		key: 'setResolvedState',
@@ -2561,7 +2568,7 @@ if (get__default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set__default()(window, versionField, 'v3.1.0');
+set__default()(window, versionField, 'v3.2.0');
 
 
 
