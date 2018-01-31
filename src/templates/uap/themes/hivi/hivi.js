@@ -88,7 +88,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 	}
 
-	async updateAdSizes() {
+	updateAdSizes() {
 		const config = this.params.config;
 		const currentWidth = document.body.offsetWidth;
 		const isResolved = this.container.classList.contains('theme-resolved');
@@ -109,7 +109,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
-			await this.setResolvedState();
+			this.setResolvedState();
 		} else if (currentState < HIVI_RESOLVED_THRESHOLD && isResolved) {
 			this.container.style.top = '';
 			this.switchImagesInAd(false);

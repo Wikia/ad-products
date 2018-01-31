@@ -46,13 +46,14 @@ export class BigFancyAdBelow {
 		this.container.classList.add('bfab-template');
 		this.videoSettings = new VideoSettings(params);
 		this.theme = new uapTheme.BfabTheme(this.adSlot, this.params);
-		this.config.onInit(this.adSlot, this.params, this.config);
 
 		uapTheme.adIsReady({
 			adSlot: this.adSlot,
 			videoSettings: this.videoSettings,
 			params: this.params
 		}).then(iframe => this.onAdReady(iframe));
+
+		this.config.onInit(this.adSlot, this.params, this.config);
 	}
 
 	async onAdReady(iframe) {

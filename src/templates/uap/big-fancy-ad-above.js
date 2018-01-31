@@ -66,13 +66,14 @@ export class BigFancyAdAbove {
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
 		this.theme = new uapTheme.BfaaTheme(this.adSlot, this.params);
-		this.config.onInit(this.adSlot, this.params, this.config);
 
 		uapTheme.adIsReady({
 			adSlot: this.adSlot,
 			videoSettings: this.videoSettings,
 			params: this.params
 		}).then(iframe => this.onAdReady(iframe));
+
+		this.config.onInit(this.adSlot, this.params, this.config);
 	}
 
 	setupNavbar() {

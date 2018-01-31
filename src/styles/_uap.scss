@@ -380,6 +380,7 @@ $hivi-uap-player-button-border-space: 6px;
 			height: 100%;
 			top: 0;
 			left: 0;
+			z-index: $uap-video-fullscreen-z-index - 1;
 		}
 
 		.video-player, .replay-overlay {
