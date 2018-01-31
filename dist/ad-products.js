@@ -597,12 +597,14 @@ function toggle_thumbnail_add(video, container, params) {
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-ui.js
 
+
+
 var overlayTimeout = 5000;
 
 function toggle_ui_add(video, container, params) {
 	var timeout = null;
 
-	var isMobile = video.container.parentNode.classList.contains('theme-mobile-device'),
+	var isMobile = ad_engine_["utils"].client.isSmartphone() || ad_engine_["utils"].client.isTablet(),
 	    overlay = document.createElement('div'),
 	    setAutomaticToggle = function setAutomaticToggle() {
 		timeout = setTimeout(function () {
@@ -796,6 +798,8 @@ function selectTemplate(videoSettings) {
 	}
 
 	params.container.classList.add('theme-' + template);
+
+	// TODO remove those ifs ADEN-6645
 	if (params.isDarkTheme) {
 		params.container.classList.add('theme-dark');
 	}
@@ -881,23 +885,21 @@ var loadPorvata = function () {
 
 var loadVideoAd = function () {
 	var _ref2 = _asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee2(videoSettings) {
-		var params, adSlot, slotContainer, imageContainer, size, recalculateVideoSize, video;
+		var params, imageContainer, size, recalculateVideoSize, video;
 		return external__regenerator_runtime__default.a.wrap(function _callee2$(_context2) {
 			while (1) {
 				switch (_context2.prev = _context2.next) {
 					case 0:
 						recalculateVideoSize = function recalculateVideoSize(video) {
 							return function () {
-								var currentSize = getVideoSize(slotContainer, params, videoSettings);
+								var currentSize = getVideoSize(params.container, params, videoSettings);
 								video.resize(currentSize.width, currentSize.height);
 							};
 						};
 
 						params = videoSettings.getParams();
-						adSlot = ad_engine_["slotService"].getBySlotName(params.slotName);
-						slotContainer = document.getElementById(adSlot.getId());
-						imageContainer = slotContainer.querySelector('div:last-of-type');
-						size = getVideoSize(slotContainer, params, videoSettings);
+						imageContainer = params.container.querySelector('div:last-of-type');
+						size = getVideoSize(params.container, params, videoSettings);
 
 
 						params.vastTargeting = {
@@ -905,15 +907,13 @@ var loadVideoAd = function () {
 						};
 						params.width = size.width;
 						params.height = size.height;
-						params.container = slotContainer;
 						videoSettings.updateParams(params);
 
-						_context2.next = 13;
-						return loadPorvata(videoSettings, slotContainer, imageContainer);
+						_context2.next = 10;
+						return loadPorvata(videoSettings, params.container, imageContainer);
 
-					case 13:
+					case 10:
 						video = _context2.sent;
-
 
 						window.addEventListener('resize', throttle__default()(recalculateVideoSize(video), 250));
 
@@ -931,7 +931,7 @@ var loadVideoAd = function () {
 
 						return _context2.abrupt('return', video);
 
-					case 17:
+					case 14:
 					case 'end':
 						return _context2.stop();
 				}
@@ -1006,6 +1006,21 @@ function enableSlots(slotsToEnable) {
 	}
 }
 
+function initSlot(params) {
+	var adSlot = ad_engine_["slotService"].getBySlotName(params.slotName);
+	params.container = adSlot.getElement();
+
+	if (params.isDarkTheme) {
+		params.container.classList.add('is-dark');
+	}
+	if (params.isMobile) {
+		params.container.classList.add('is-mobile-layout');
+	}
+	if (ad_engine_["utils"].client.isSmartphone() || ad_engine_["utils"].client.isTablet()) {
+		params.container.classList.add('is-mobile-device');
+	}
+}
+
 var universalAdPackage = {
 	init: function init(params) {
 		var slotsToEnable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
@@ -1021,8 +1036,11 @@ var universalAdPackage = {
 		setUapId(params.uap);
 		setType(params.adProduct);
 		enableSlots(slotsToEnable);
+
+		initSlot(params);
 	},
 
+	initSlot: initSlot,
 	getType: getType,
 	getUapId: getUapId,
 	isVideoEnabled: function isVideoEnabled(params) {
@@ -1933,7 +1951,10 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 
 
 								this.adjustVideoSize(aspectScroll * value);
-								this.setThumbnailStyle(currentState);
+
+								if (this.params.thumbnail) {
+									this.setThumbnailStyle(currentState);
+								}
 
 								if (!(currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved)) {
 									_context2.next = 19;
@@ -2139,7 +2160,9 @@ var hivi_BfabTheme = function (_BigFancyAdTheme2) {
 								return ad_engine_["slotTweaker"].makeResponsive(this.adSlot, config.aspectRatio.resolved);
 
 							case 5:
-								this.setThumbnailStyle(video);
+								if (this.params.thumbnail) {
+									this.setThumbnailStyle(video);
+								}
 
 							case 6:
 							case 'end':
@@ -2426,6 +2449,8 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 			}
 
 			var uapTheme = this.params.theme === 'hivi' ? themes_hivi_namespaceObject : themes_classic_namespaceObject;
+
+			universalAdPackage.initSlot(params);
 
 			this.container.classList.add('bfab-template');
 			this.videoSettings = new video_settings_VideoSettings(params);
