@@ -4253,7 +4253,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v3.2.1');
+set_default()(window, versionField, 'v3.2.2');
 
 
 
