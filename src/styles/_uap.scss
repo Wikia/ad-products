@@ -442,6 +442,8 @@ body.ctp-vuap-loaded {
 }
 
 .sticky-bfaa {
+	// Hack: Force BFAA to repaint to fix issue with not visible slot on safari iOS
+	animation: repaint 1ms;
 	position: fixed;
 	top: 0;
 }
@@ -482,4 +484,9 @@ body.ctp-vuap-loaded {
 	.gpt-ad.bfab-template.on-animation {
 		background: #000;
 	}
+}
+
+@keyframes repaint {
+	0% { width: 99.999% }
+	100% { width: 100% }
 }
