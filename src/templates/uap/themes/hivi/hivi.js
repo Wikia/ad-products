@@ -103,7 +103,10 @@ export class BfaaTheme extends BigFancyAdTheme {
 		const value = (config.state.height.default - (diff * currentState)) / 100;
 
 		this.adjustVideoSize(aspectScroll * value);
-		this.setThumbnailStyle(currentState);
+
+		if (this.params.thumbnail) {
+			this.setThumbnailStyle(currentState);
+		}
 
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
 			await this.setResolvedState();
@@ -246,7 +249,9 @@ export class BfabTheme extends BigFancyAdTheme {
 		this.container.classList.add('theme-resolved');
 		image2.element.classList.remove('hidden-state');
 		await slotTweaker.makeResponsive(this.adSlot, config.aspectRatio.resolved);
-		this.setThumbnailStyle(video);
+		if (this.params.thumbnail) {
+			this.setThumbnailStyle(video);
+		}
 	}
 
 	setThumbnailStyle(video) {

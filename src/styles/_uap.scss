@@ -265,13 +265,31 @@ $hivi-uap-player-button-border-space: 6px;
 		z-index: $uap-video-fullscreen-z-index + 1;
 	}
 
-	&.theme-mobile-device .advertisement-label {
+	.button-unstick .icon {
+		width: $hivi-uap-mobile-button-size;
+		height: $hivi-uap-mobile-button-size;
+
+		@media #{$breakpoint-m-up} {
+			width: $hivi-uap-button-size;
+			height: $hivi-uap-button-size;
+		}
+	}
+
+	&.theme-resolved.sticky-bfaa .button-unstick {
+		display: unset;
+	}
+
+	// TODO remove unused theme-* selector ADEN-6645
+	&.theme-mobile-device .advertisement-label,
+	&.is-mobile-device .advertisement-label {
 		font-size: 6px;
 		line-height: 6px;
 		padding: 5px;
 	}
 
-	&.theme-mobile-device .learn-more {
+	// TODO remove unused theme-* selector ADEN-6645
+	&.theme-mobile-device .learn-more,
+	&.is-mobile-device .learn-more {
 			display: unset;
 	}
 
@@ -304,16 +322,6 @@ $hivi-uap-player-button-border-space: 6px;
 		.porvata-icon {
 			height: $hivi-uap-button-size;
 			width: $hivi-uap-button-size;
-		}
-
-		.button-unstick .icon {
-			width: $hivi-uap-mobile-button-size;
-			height: $hivi-uap-mobile-button-size;
-
-			@media #{$breakpoint-m-up} {
-				width: $hivi-uap-button-size;
-				height: $hivi-uap-button-size;
-			}
 		}
 
 		.advertisement-label,
@@ -360,29 +368,7 @@ $hivi-uap-player-button-border-space: 6px;
 			}
 		}
 
-		&.theme-dark {
-			.ui-visible .toggle-ui-overlay {
-				background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%);
-			}
 
-			.advertisement-label,
-			.button-control .icon,
-			.learn-more,
-			.porvata-icon {
-				color: $hivi-uap-dark-button-color;
-				fill: $hivi-uap-dark-button-color;
-			}
-		}
-
-		&.theme-mobile-layout .video-player {
-			right: 0;
-			top: auto;
-			transform: none;
-		}
-
-		&.theme-resolved.sticky-bfaa .button-unstick {
-			display: unset;
-		}
 
 		&.theme-resolved .learn-more {
 			display: none;
@@ -425,6 +411,30 @@ $hivi-uap-player-button-border-space: 6px;
 			left: 0;
 		}
 	}
+
+	// TODO remove unused theme-* selector ADEN-6645
+	&.theme-dark,
+	&.is-dark {
+		.ui-visible .toggle-ui-overlay {
+			background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%);
+		}
+
+		.advertisement-label,
+		.button-control .icon,
+		.learn-more,
+		.porvata-icon {
+			color: $hivi-uap-dark-button-color;
+			fill: $hivi-uap-dark-button-color;
+		}
+	}
+
+	// TODO remove unused theme-* selector ADEN-6645
+	&.theme-mobile-layout .video-player,
+	&.is-mobile-layout .video-player {
+		right: 0;
+		top: auto;
+		transform: none;
+	}
 }
 
 body.ctp-vuap-loaded {
@@ -432,6 +442,8 @@ body.ctp-vuap-loaded {
 }
 
 .sticky-bfaa {
+	// Hack: Force BFAA to repaint to fix issue with not visible slot on safari iOS
+	animation: repaint 1ms;
 	position: fixed;
 	top: 0;
 }
@@ -472,4 +484,9 @@ body.ctp-vuap-loaded {
 	.gpt-ad.bfab-template.on-animation {
 		background: #000;
 	}
+}
+
+@keyframes repaint {
+	0% { width: 99.999% }
+	100% { width: 100% }
 }

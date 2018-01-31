@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import {expect} from 'chai';
-import {context} from '@wikia/ad-engine';
+import {context, slotService} from '@wikia/ad-engine';
 import {universalAdPackage} from '../../../src/templates/uap/universal-ad-package';
 
 describe('UniversalAdPackage', () => {
@@ -11,6 +11,7 @@ describe('UniversalAdPackage', () => {
 		sandbox = sinon.sandbox.create();
 		sandbox.stub(context, 'get');
 		sandbox.spy(context, 'set');
+		sandbox.stub(slotService, 'getBySlotName').callsFake(function(){ return {getElement: function(){}}});
 	});
 
 	afterEach(function () {
