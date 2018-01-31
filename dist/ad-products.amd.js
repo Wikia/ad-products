@@ -4003,60 +4003,32 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 
 	big_fancy_ad_above__createClass(BigFancyAdAbove, [{
 		key: 'init',
-		value: function () {
-			var _ref = big_fancy_ad_above__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee(params) {
-				var uapTheme, iframe;
-				return runtime_module_default.a.wrap(function _callee$(_context) {
-					while (1) {
-						switch (_context.prev = _context.next) {
-							case 0:
-								this.params = params;
+		value: function init(params) {
+			var _this = this;
 
-								if (this.container) {
-									_context.next = 3;
-									break;
-								}
+			this.params = params;
 
-								return _context.abrupt('return');
-
-							case 3:
-								uapTheme = this.params.theme === 'hivi' ? themes_hivi_namespaceObject : themes_classic_namespaceObject;
-
-
-								universalAdPackage.init(this.params, this.config.slotsToEnable);
-								this.videoSettings = new video_settings_VideoSettings(this.params);
-								this.container.style.backgroundColor = this.getBackgroundColor();
-								this.container.classList.add('bfaa-template');
-								this.theme = new uapTheme.BfaaTheme(this.adSlot, this.params);
-
-								_context.next = 11;
-								return uapTheme.adIsReady({
-									adSlot: this.adSlot,
-									videoSettings: this.videoSettings,
-									params: this.params
-								});
-
-							case 11:
-								iframe = _context.sent;
-
-
-								this.onAdReady(iframe);
-								this.config.onInit(this.adSlot, this.params, this.config);
-
-							case 14:
-							case 'end':
-								return _context.stop();
-						}
-					}
-				}, _callee, this);
-			}));
-
-			function init(_x) {
-				return _ref.apply(this, arguments);
+			if (!this.container) {
+				return;
 			}
 
-			return init;
-		}()
+			var uapTheme = this.params.theme === 'hivi' ? themes_hivi_namespaceObject : themes_classic_namespaceObject;
+
+			universalAdPackage.init(this.params, this.config.slotsToEnable);
+			this.videoSettings = new video_settings_VideoSettings(this.params);
+			this.container.style.backgroundColor = this.getBackgroundColor();
+			this.container.classList.add('bfaa-template');
+			this.theme = new uapTheme.BfaaTheme(this.adSlot, this.params);
+			this.config.onInit(this.adSlot, this.params, this.config);
+
+			uapTheme.adIsReady({
+				adSlot: this.adSlot,
+				videoSettings: this.videoSettings,
+				params: this.params
+			}).then(function (iframe) {
+				return _this.onAdReady(iframe);
+			});
+		}
 	}, {
 		key: 'setupNavbar',
 		value: function setupNavbar() {
@@ -4083,11 +4055,11 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 	}, {
 		key: 'onAdReady',
 		value: function () {
-			var _ref2 = big_fancy_ad_above__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee2(iframe) {
+			var _ref = big_fancy_ad_above__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee(iframe) {
 				var video;
-				return runtime_module_default.a.wrap(function _callee2$(_context2) {
+				return runtime_module_default.a.wrap(function _callee$(_context) {
 					while (1) {
-						switch (_context2.prev = _context2.next) {
+						switch (_context.prev = _context.next) {
 							case 0:
 								document.body.style.paddingTop = iframe.parentElement.style.paddingBottom;
 								document.body.classList.add('has-bfaa');
@@ -4099,29 +4071,29 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 								this.theme.onAdReady(iframe);
 
 								if (!universalAdPackage.isVideoEnabled(this.params)) {
-									_context2.next = 9;
+									_context.next = 9;
 									break;
 								}
 
-								_context2.next = 7;
+								_context.next = 7;
 								return external___amd___ext_wikia_adEngine3__["utils"].defer(universalAdPackage.loadVideoAd, this.videoSettings);
 
 							case 7:
-								video = _context2.sent;
+								video = _context.sent;
 								// defers for proper rendering
 
 								this.theme.onVideoReady(video);
 
 							case 9:
 							case 'end':
-								return _context2.stop();
+								return _context.stop();
 						}
 					}
-				}, _callee2, this);
+				}, _callee, this);
 			}));
 
-			function onAdReady(_x2) {
-				return _ref2.apply(this, arguments);
+			function onAdReady(_x) {
+				return _ref.apply(this, arguments);
 			}
 
 			return onAdReady;
@@ -4185,45 +4157,56 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 
 	big_fancy_ad_below__createClass(BigFancyAdBelow, [{
 		key: 'init',
+		value: function init(params) {
+			var _this = this;
+
+			this.params = params;
+
+			if (!this.container) {
+				return;
+			}
+
+			var uapTheme = this.params.theme === 'hivi' ? themes_hivi_namespaceObject : themes_classic_namespaceObject;
+
+			this.container.classList.add('bfab-template');
+			this.videoSettings = new video_settings_VideoSettings(params);
+			this.theme = new uapTheme.BfabTheme(this.adSlot, this.params);
+			this.config.onInit(this.adSlot, this.params, this.config);
+
+			uapTheme.adIsReady({
+				adSlot: this.adSlot,
+				videoSettings: this.videoSettings,
+				params: this.params
+			}).then(function (iframe) {
+				return _this.onAdReady(iframe);
+			});
+		}
+	}, {
+		key: 'onAdReady',
 		value: function () {
-			var _ref = big_fancy_ad_below__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee(params) {
-				var uapTheme, iframe;
+			var _ref = big_fancy_ad_below__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee(iframe) {
+				var video;
 				return runtime_module_default.a.wrap(function _callee$(_context) {
 					while (1) {
 						switch (_context.prev = _context.next) {
 							case 0:
-								this.params = params;
+								this.theme.onAdReady(iframe);
 
-								if (this.container) {
-									_context.next = 3;
+								if (!universalAdPackage.isVideoEnabled(this.params)) {
+									_context.next = 6;
 									break;
 								}
 
-								return _context.abrupt('return');
+								_context.next = 4;
+								return external___amd___ext_wikia_adEngine3__["utils"].defer(universalAdPackage.loadVideoAd, this.videoSettings);
 
-							case 3:
-								uapTheme = this.params.theme === 'hivi' ? themes_hivi_namespaceObject : themes_classic_namespaceObject;
-
-
-								this.container.classList.add('bfab-template');
-								this.videoSettings = new video_settings_VideoSettings(params);
-								this.theme = new uapTheme.BfabTheme(this.adSlot, this.params);
-
-								_context.next = 9;
-								return uapTheme.adIsReady({
-									adSlot: this.adSlot,
-									videoSettings: this.videoSettings,
-									params: this.params
-								});
-
-							case 9:
-								iframe = _context.sent;
+							case 4:
+								video = _context.sent;
 
 
-								this.onAdReady(iframe);
-								this.config.onInit(this.adSlot, this.params, this.config);
+								this.theme.onVideoReady(video);
 
-							case 12:
+							case 6:
 							case 'end':
 								return _context.stop();
 						}
@@ -4231,47 +4214,8 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 				}, _callee, this);
 			}));
 
-			function init(_x) {
+			function onAdReady(_x) {
 				return _ref.apply(this, arguments);
-			}
-
-			return init;
-		}()
-	}, {
-		key: 'onAdReady',
-		value: function () {
-			var _ref2 = big_fancy_ad_below__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee2(iframe) {
-				var video;
-				return runtime_module_default.a.wrap(function _callee2$(_context2) {
-					while (1) {
-						switch (_context2.prev = _context2.next) {
-							case 0:
-								this.theme.onAdReady(iframe);
-
-								if (!universalAdPackage.isVideoEnabled(this.params)) {
-									_context2.next = 6;
-									break;
-								}
-
-								_context2.next = 4;
-								return external___amd___ext_wikia_adEngine3__["utils"].defer(universalAdPackage.loadVideoAd, this.videoSettings);
-
-							case 4:
-								video = _context2.sent;
-
-
-								this.theme.onVideoReady(video);
-
-							case 6:
-							case 'end':
-								return _context2.stop();
-						}
-					}
-				}, _callee2, this);
-			}));
-
-			function onAdReady(_x2) {
-				return _ref2.apply(this, arguments);
 			}
 
 			return onAdReady;
@@ -4309,7 +4253,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v3.2.0');
+set_default()(window, versionField, 'v3.2.1');
 
 
 

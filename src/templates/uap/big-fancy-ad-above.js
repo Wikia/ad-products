@@ -52,7 +52,7 @@ export class BigFancyAdAbove {
 	/**
 	 * Initializes the BFAA unit
 	 */
-	async init(params) {
+	init(params) {
 		this.params = params;
 
 		if (!this.container) {
@@ -66,15 +66,13 @@ export class BigFancyAdAbove {
 		this.container.style.backgroundColor = this.getBackgroundColor();
 		this.container.classList.add('bfaa-template');
 		this.theme = new uapTheme.BfaaTheme(this.adSlot, this.params);
+		this.config.onInit(this.adSlot, this.params, this.config);
 
-		const iframe = await uapTheme.adIsReady({
+		uapTheme.adIsReady({
 			adSlot: this.adSlot,
 			videoSettings: this.videoSettings,
 			params: this.params
-		});
-
-		this.onAdReady(iframe);
-		this.config.onInit(this.adSlot, this.params, this.config);
+		}).then(iframe => this.onAdReady(iframe));
 	}
 
 	setupNavbar() {

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -e
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
@@ -9,6 +9,3 @@ fi
 
 npm run test
 npm run lint
-npm run build --production
-
-git add dist/
