@@ -368,13 +368,11 @@ $hivi-uap-player-button-border-space: 6px;
 			}
 		}
 
-
-
 		&.theme-resolved .learn-more {
 			display: none;
 		}
 
-		&.theme-video-fullscreen {
+		&.is-mobile-device.theme-video-fullscreen {
 			position: fixed;
 			width: 100%;
 			height: 100%;
