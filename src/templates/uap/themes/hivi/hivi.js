@@ -1,5 +1,5 @@
 import { AdSlot, context, scrollListener, slotTweaker, utils } from '@wikia/ad-engine';
-import { debounce, mapValues, isUndefined } from 'lodash';
+import { debounce, mapValues, isUndefined, toPlainObject } from 'lodash';
 import { EventEmitter } from 'events';
 
 import AdvertisementLabel from '../../ui/advertisement-label';
@@ -17,9 +17,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 
 	constructor(adSlot, params) {
 		super(adSlot, params);
-
-		Object.assign(this, EventEmitter.prototype);
-		EventEmitter.call(this);
+		Object.assign(this, toPlainObject(new EventEmitter()));
 
 		this.stickyBfaa = null;
 		this.scrollListener = null;
