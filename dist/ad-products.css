@@ -308,8 +308,8 @@
   .gpt-ad.bfaa-template.theme-hivi.theme-resolved .learn-more,
   .gpt-ad.bfab-template.theme-hivi.theme-resolved .learn-more {
     display: none; }
-  .gpt-ad.bfaa-template.theme-hivi.theme-video-fullscreen,
-  .gpt-ad.bfab-template.theme-hivi.theme-video-fullscreen {
+  .gpt-ad.bfaa-template.theme-hivi.is-mobile-device.theme-video-fullscreen,
+  .gpt-ad.bfab-template.theme-hivi.is-mobile-device.theme-video-fullscreen {
     position: fixed;
     width: 100%;
     height: 100%;
