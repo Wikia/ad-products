@@ -198,7 +198,6 @@
   .gpt-ad.bfaa-template .advertisement-label,
   .gpt-ad.bfab-template .advertisement-label {
     color: #fff;
-    display: none;
     font-size: 9px;
     font-weight: bold;
     height: auto;
@@ -235,9 +234,6 @@
   .gpt-ad.bfaa-template.is-mobile-device .learn-more,
   .gpt-ad.bfab-template.theme-mobile-device .learn-more,
   .gpt-ad.bfab-template.is-mobile-device .learn-more {
-    display: unset; }
-  .gpt-ad.bfaa-template.theme-hivi .advertisement-label,
-  .gpt-ad.bfab-template.theme-hivi .advertisement-label {
     display: unset; }
   .gpt-ad.bfaa-template.theme-hivi .ui-visible .toggle-ui-overlay,
   .gpt-ad.bfab-template.theme-hivi .ui-visible .toggle-ui-overlay {
@@ -308,8 +304,8 @@
   .gpt-ad.bfaa-template.theme-hivi.theme-resolved .learn-more,
   .gpt-ad.bfab-template.theme-hivi.theme-resolved .learn-more {
     display: none; }
-  .gpt-ad.bfaa-template.theme-hivi.theme-video-fullscreen,
-  .gpt-ad.bfab-template.theme-hivi.theme-video-fullscreen {
+  .gpt-ad.bfaa-template.theme-hivi.is-mobile-device.theme-video-fullscreen,
+  .gpt-ad.bfab-template.theme-hivi.is-mobile-device.theme-video-fullscreen {
     position: fixed;
     width: 100%;
     height: 100%;
