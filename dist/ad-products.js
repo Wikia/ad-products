@@ -61,7 +61,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -78,6 +78,12 @@ module.exports = require("@wikia/ad-engine");
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+module.exports = require("events");
+
+/***/ }),
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -92,11 +98,11 @@ __webpack_require__.d(themes_hivi_namespaceObject, "BfabTheme", function() { ret
 __webpack_require__.d(themes_hivi_namespaceObject, "adIsReady", function() { return ready_adIsReady; });
 
 // EXTERNAL MODULE: external "lodash/set"
-var set_ = __webpack_require__(3);
+var set_ = __webpack_require__(4);
 var set__default = /*#__PURE__*/__webpack_require__.n(set_);
 
 // EXTERNAL MODULE: external "lodash/get"
-var get_ = __webpack_require__(4);
+var get_ = __webpack_require__(5);
 var get__default = /*#__PURE__*/__webpack_require__.n(get_);
 
 // EXTERNAL MODULE: external "regenerator-runtime"
@@ -104,7 +110,7 @@ var external__regenerator_runtime_ = __webpack_require__(0);
 var external__regenerator_runtime__default = /*#__PURE__*/__webpack_require__.n(external__regenerator_runtime_);
 
 // EXTERNAL MODULE: ./src/styles/styles.scss
-var styles = __webpack_require__(5);
+var styles = __webpack_require__(6);
 var styles_default = /*#__PURE__*/__webpack_require__.n(styles);
 
 // EXTERNAL MODULE: external "@wikia/ad-engine"
@@ -243,7 +249,7 @@ var floating_rail_FloatingRail = function () {
 	return FloatingRail;
 }();
 // EXTERNAL MODULE: external "lodash/throttle"
-var throttle_ = __webpack_require__(6);
+var throttle_ = __webpack_require__(7);
 var throttle__default = /*#__PURE__*/__webpack_require__.n(throttle_);
 
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/close-button.js
@@ -264,7 +270,7 @@ function add(video, container) {
 	add: add
 });
 // EXTERNAL MODULE: ./src/templates/uap/ui/icons.json
-var icons = __webpack_require__(7);
+var icons = __webpack_require__(8);
 var icons_default = /*#__PURE__*/__webpack_require__.n(icons);
 
 // CONCATENATED MODULE: ./src/templates/uap/ui/icons.js
@@ -1402,13 +1408,25 @@ var adIsReady = function () {
 
 
 
+// EXTERNAL MODULE: external "lodash/toPlainObject"
+var toPlainObject_ = __webpack_require__(9);
+var toPlainObject__default = /*#__PURE__*/__webpack_require__.n(toPlainObject_);
+
+// EXTERNAL MODULE: external "lodash/isUndefined"
+var isUndefined_ = __webpack_require__(10);
+var isUndefined__default = /*#__PURE__*/__webpack_require__.n(isUndefined_);
+
 // EXTERNAL MODULE: external "lodash/mapValues"
-var mapValues_ = __webpack_require__(8);
+var mapValues_ = __webpack_require__(11);
 var mapValues__default = /*#__PURE__*/__webpack_require__.n(mapValues_);
 
 // EXTERNAL MODULE: external "lodash/debounce"
-var debounce_ = __webpack_require__(9);
+var debounce_ = __webpack_require__(12);
 var debounce__default = /*#__PURE__*/__webpack_require__.n(debounce_);
+
+// EXTERNAL MODULE: external "events"
+var external__events_ = __webpack_require__(2);
+var external__events__default = /*#__PURE__*/__webpack_require__.n(external__events_);
 
 // CONCATENATED MODULE: ./src/templates/uap/ui/ui-component.js
 var ui_component__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1601,18 +1619,14 @@ var close_button_CloseButton = function (_UiComponent) {
 }(UiComponent);
 
 
-// EXTERNAL MODULE: external "events"
-var external__events_ = __webpack_require__(10);
-var external__events__default = /*#__PURE__*/__webpack_require__.n(external__events_);
-
-// EXTERNAL MODULE: external "core-decorators/es/autobind"
-var autobind_ = __webpack_require__(11);
-var autobind__default = /*#__PURE__*/__webpack_require__.n(autobind_);
+// EXTERNAL MODULE: external "lodash/isFunction"
+var isFunction_ = __webpack_require__(13);
+var isFunction__default = /*#__PURE__*/__webpack_require__.n(isFunction_);
 
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/sticky-bfaa.js
-var sticky_bfaa__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class;
+
+var sticky_bfaa__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 
 
@@ -1624,54 +1638,22 @@ function sticky_bfaa__possibleConstructorReturn(self, call) { if (!self) { throw
 
 function sticky_bfaa__inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
-	var desc = {};
-	Object['ke' + 'ys'](descriptor).forEach(function (key) {
-		desc[key] = descriptor[key];
-	});
-	desc.enumerable = !!desc.enumerable;
-	desc.configurable = !!desc.configurable;
-
-	if ('value' in desc || desc.initializer) {
-		desc.writable = true;
-	}
-
-	desc = decorators.slice().reverse().reduce(function (desc, decorator) {
-		return decorator(target, property, desc) || desc;
-	}, desc);
-
-	if (context && desc.initializer !== void 0) {
-		desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
-		desc.initializer = undefined;
-	}
-
-	if (desc.initializer === void 0) {
-		Object['define' + 'Property'](target, property, desc);
-		desc = null;
-	}
-
-	return desc;
-}
 
 
 
 
-
-var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
+var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 	sticky_bfaa__inherits(StickyBfaa, _EventEmitter);
 
-	// time after which we'll remove stickiness even with no user interaction
 	function StickyBfaa(adSlot) {
-		var stickyUntilVideoViewed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-		var stickyAdditionalTime = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : StickyBfaa.DEFAULT_STICKINESS_ADDITIONAL_TIME;
+		var customWhen = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Promise.resolve();
 
 		sticky_bfaa__classCallCheck(this, StickyBfaa);
 
 		var _this = sticky_bfaa__possibleConstructorReturn(this, (StickyBfaa.__proto__ || Object.getPrototypeOf(StickyBfaa)).call(this));
 
 		_this.adSlot = adSlot;
-		_this.stickyUntilVideoViewed = stickyUntilVideoViewed;
-		_this.stickyAdditionalTime = stickyAdditionalTime;
+		_this.customWhen = customWhen;
 		_this.sticky = false;
 		_this.logger = function () {
 			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -1687,8 +1669,6 @@ var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
 		key: 'run',
 		value: function () {
 			var _ref = sticky_bfaa__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee() {
-				var _this2 = this;
-
 				return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
 					while (1) {
 						switch (_context.prev = _context.next) {
@@ -1697,16 +1677,19 @@ var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
 								return ad_engine_["slotTweaker"].onReady(this.adSlot);
 
 							case 2:
-
-								if (document.hidden) {
-									window.addEventListener('visibilitychange', function () {
-										return _this2.onAdReady();
-									}, { once: true });
-								} else {
-									this.onAdReady();
+								if (!document.hidden) {
+									_context.next = 5;
+									break;
 								}
 
-							case 3:
+								_context.next = 5;
+								return ad_engine_["utils"].once(window, 'visibilitychange');
+
+							case 5:
+
+								this.onAdReady();
+
+							case 6:
 							case 'end':
 								return _context.stop();
 						}
@@ -1755,44 +1738,52 @@ var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
 			this.emit(StickyBfaa.CLOSE_CLICKED_EVENT);
 		}
 	}, {
-		key: 'onViewed',
-		value: function onViewed() {
-			var _this3 = this;
-
-			var revertTimeout = null;
-			var adContainer = this.adSlot.getElement();
-			var shouldRevertImmediately = Math.abs(window.scrollY - adContainer.offsetTop) < adContainer.offsetHeight / 2;
-			var onRevertTimeout = function onRevertTimeout() {
-				clearTimeout(revertTimeout);
-				document.removeEventListener('scroll', onRevertTimeout);
-				_this3.revertStickiness();
-			};
-
-			this.adSlot.removeListener(ad_engine_["AdSlot"].SLOT_VIEWED_EVENT, this.onViewed);
-			setTimeout(function () {
-				document.addEventListener('scroll', onRevertTimeout);
-				revertTimeout = setTimeout(onRevertTimeout, shouldRevertImmediately ? 0 : StickyBfaa.STICKINESS_REMOVAL_WINDOW);
-			}, this.stickyAdditionalTime);
-
-			this.logger('slotViewed triggered on ' + this.adSlot.getSlotName());
-		}
-	}, {
 		key: 'onAdReady',
-		value: function onAdReady() {
-			this.applyStickiness();
-			this.adSlot.once(this.stickyUntilVideoViewed ? ad_engine_["AdSlot"].VIDEO_VIEWED_EVENT : ad_engine_["AdSlot"].SLOT_VIEWED_EVENT, this.onViewed);
-		}
+		value: function () {
+			var _ref2 = sticky_bfaa__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee2() {
+				return external__regenerator_runtime__default.a.wrap(function _callee2$(_context2) {
+					while (1) {
+						switch (_context2.prev = _context2.next) {
+							case 0:
+								this.applyStickiness();
+								this.logger('waiting for viewability and custom condition');
+
+								_context2.next = 4;
+								return Promise.all([ad_engine_["utils"].once(this.adSlot, ad_engine_["AdSlot"].SLOT_VIEWED_EVENT), isFunction__default()(this.customWhen) ? this.customWhen() : this.customWhen]);
+
+							case 4:
+
+								this.logger('waiting for unstick timeout or user interaction');
+								_context2.next = 7;
+								return ad_engine_["utils"].once(window, 'scroll');
+
+							case 7:
+								this.revertStickiness();
+
+							case 8:
+							case 'end':
+								return _context2.stop();
+						}
+					}
+				}, _callee2, this);
+			}));
+
+			function onAdReady() {
+				return _ref2.apply(this, arguments);
+			}
+
+			return onAdReady;
+		}()
 	}]);
 
 	return StickyBfaa;
-}(external__events_["EventEmitter"]), (_applyDecoratedDescriptor(_class.prototype, 'onViewed', [autobind__default.a], Object.getOwnPropertyDescriptor(_class.prototype, 'onViewed'), _class.prototype)), _class);
-sticky_bfaa_StickyBfaa.STICKINESS_REMOVAL_WINDOW = 10000;
-sticky_bfaa_StickyBfaa.DEFAULT_STICKINESS_ADDITIONAL_TIME = 3000;
-sticky_bfaa_StickyBfaa.SAFE_REMOVE_TIMEOUT = 1000;
+}(external__events_["EventEmitter"]);
 sticky_bfaa_StickyBfaa.LOG_GROUP = 'sticky-bfaa';
 sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
 sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT = Symbol('closeClicked');
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/hivi.js
+
+
 
 
 
@@ -1818,6 +1809,7 @@ function hivi__inherits(subClass, superClass) { if (typeof superClass !== "funct
 
 
 
+
 var HIVI_RESOLVED_THRESHOLD = 0.995;
 
 var hivi_BfaaTheme = function (_BigFancyAdTheme) {
@@ -1828,6 +1820,8 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 
 		var _this = hivi__possibleConstructorReturn(this, (BfaaTheme.__proto__ || Object.getPrototypeOf(BfaaTheme)).call(this, adSlot, params));
 
+		Object.assign(_this, toPlainObject__default()(new external__events_["EventEmitter"]()));
+
 		_this.stickyBfaa = null;
 		_this.scrollListener = null;
 		_this.video = null;
@@ -1837,20 +1831,57 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 		_this.addAdvertisementLabel();
 
 		if (_this.params.isSticky) {
-			_this.stickyBfaa = new sticky_bfaa_StickyBfaa(_this.adSlot, _this.params.stickyUntilVideoViewed, _this.params.stickyAdditionalTime);
-			_this.addUnstickButton();
-			_this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
-				return _this.onStickinessChange(isSticky);
-			});
-			_this.stickyBfaa.on(sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT, function () {
-				return _this.onCloseClicked();
-			});
-			_this.stickyBfaa.run();
+			_this.addStickinessPlugin();
 		}
 		return _this;
 	}
 
 	hivi__createClass(BfaaTheme, [{
+		key: 'addStickinessPlugin',
+		value: function addStickinessPlugin() {
+			var _this2 = this;
+
+			var _params = this.params,
+			    stickyAdditionalTime = _params.stickyAdditionalTime,
+			    stickyUntilVideoViewed = _params.stickyUntilVideoViewed;
+
+			var whenResolvedAndVideoViewed = function () {
+				var _ref = hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee() {
+					return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
+						while (1) {
+							switch (_context.prev = _context.next) {
+								case 0:
+									_context.next = 2;
+									return Promise.all([ad_engine_["utils"].once(_this2, BfaaTheme.RESOLVED_STATE_EVENT), stickyUntilVideoViewed ? ad_engine_["utils"].once(_this2.adSlot, ad_engine_["AdSlot"].VIDEO_VIEWED_EVENT) : Promise.resolve()]);
+
+								case 2:
+									_context.next = 4;
+									return ad_engine_["utils"].wait(isUndefined__default()(stickyAdditionalTime) ? BfaaTheme.DEFAULT_UNSTICK_DELAY : stickyAdditionalTime);
+
+								case 4:
+								case 'end':
+									return _context.stop();
+							}
+						}
+					}, _callee, _this2);
+				}));
+
+				return function whenResolvedAndVideoViewed() {
+					return _ref.apply(this, arguments);
+				};
+			}();
+
+			this.stickyBfaa = new sticky_bfaa_StickyBfaa(this.adSlot, whenResolvedAndVideoViewed());
+			this.addUnstickButton();
+			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
+				return _this2.onStickinessChange(isSticky);
+			});
+			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT, function () {
+				return _this2.onCloseClicked();
+			});
+			this.stickyBfaa.run();
+		}
+	}, {
 		key: 'addAdvertisementLabel',
 		value: function addAdvertisementLabel() {
 			var advertisementLabel = new AdvertisementLabel();
@@ -1860,12 +1891,12 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}, {
 		key: 'addUnstickButton',
 		value: function addUnstickButton() {
-			var _this2 = this;
+			var _this3 = this;
 
 			var closeButton = new close_button_CloseButton({
 				classNames: ['button-unstick'],
 				onClick: function onClick() {
-					return _this2.stickyBfaa.close();
+					return _this3.stickyBfaa.close();
 				}
 			});
 
@@ -1874,14 +1905,14 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}, {
 		key: 'onAdReady',
 		value: function onAdReady() {
-			var _this3 = this;
+			var _this4 = this;
 
 			if (resolvedState.isResolvedState(this.params)) {
 				this.setResolvedState(true);
 			} else {
 				resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
 				this.scrollListener = ad_engine_["scrollListener"].addCallback(function () {
-					return _this3.updateAdSizes();
+					return _this4.updateAdSizes();
 				});
 				// Manually run update on scroll once
 				this.updateAdSizes();
@@ -1890,42 +1921,35 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}, {
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this4 = this;
+			var _this5 = this;
 
 			this.video = video;
 			video.addEventListener('wikiaAdStarted', function () {
-				return _this4.updateAdSizes();
+				return _this5.updateAdSizes();
 			});
 			video.addEventListener('wikiaAdCompleted', function () {
-				if (!_this4.isLocked) {
-					_this4.setResolvedState(true);
+				if (!_this5.isLocked) {
+					_this5.setResolvedState(true);
 				}
 			});
-			video.addEventListener('wikiaFullscreenChange', hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee() {
-				return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
+			video.addEventListener('wikiaFullscreenChange', hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee2() {
+				return external__regenerator_runtime__default.a.wrap(function _callee2$(_context2) {
 					while (1) {
-						switch (_context.prev = _context.next) {
+						switch (_context2.prev = _context2.next) {
 							case 0:
-								if (!video.isFullscreen()) {
-									_context.next = 4;
-									break;
+								if (video.isFullscreen()) {
+									_this5.container.classList.add('theme-video-fullscreen');
+								} else {
+									_this5.container.classList.remove('theme-video-fullscreen');
+									_this5.updateAdSizes();
 								}
 
-								_this4.container.classList.add('theme-video-fullscreen');
-								_context.next = 7;
-								break;
-
-							case 4:
-								_this4.container.classList.remove('theme-video-fullscreen');
-								_context.next = 7;
-								return _this4.updateAdSizes();
-
-							case 7:
+							case 1:
 							case 'end':
-								return _context.stop();
+								return _context2.stop();
 						}
 					}
-				}, _callee, _this4);
+				}, _callee2, _this5);
 			})));
 		}
 	}, {
@@ -1942,7 +1966,7 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}, {
 		key: 'onCloseClicked',
 		value: function onCloseClicked() {
-			var _this5 = this;
+			var _this6 = this;
 
 			this.container.classList.add('theme-closed');
 			this.container.style.marginTop = '-' + document.body.style.paddingTop;
@@ -1951,8 +1975,8 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 			document.body.style.paddingTop = '0%';
 
 			setTimeout(function () {
-				_this5.container.remove();
-			}, sticky_bfaa_StickyBfaa.SAFE_REMOVE_TIMEOUT);
+				_this6.container.remove();
+			}, BfaaTheme.SAFE_REMOVE_TIMEOUT);
 		}
 	}, {
 		key: 'updateAdSizes',
@@ -2026,11 +2050,12 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 			this.container.classList.add('theme-locked');
 			ad_engine_["scrollListener"].removeCallback(this.scrollListener);
 			this.adjustSizesToResolved(offset);
+			this.emit(BfaaTheme.RESOLVED_STATE_EVENT);
 		}
 	}, {
 		key: 'setResolvedState',
 		value: function setResolvedState(immediately) {
-			var _this6 = this;
+			var _this7 = this;
 
 			var isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 			var width = this.container.offsetWidth;
@@ -2053,21 +2078,21 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 
 			return new Promise(function (resolve) {
 				if (immediately) {
-					_this6.lock();
+					_this7.lock();
 					resolve();
 				} else {
-					_this6.onResolvedStateScroll = debounce__default()(function () {
+					_this7.onResolvedStateScroll = debounce__default()(function () {
 						if (window.scrollY < offset) {
 							return;
 						}
 
-						window.removeEventListener('scroll', _this6.onResolvedStateScroll);
-						_this6.onResolvedStateScroll = null;
-						_this6.lock();
+						window.removeEventListener('scroll', _this7.onResolvedStateScroll);
+						_this7.onResolvedStateScroll = null;
+						_this7.lock();
 						resolve();
 					}, 50);
-					window.addEventListener('scroll', _this6.onResolvedStateScroll);
-					_this6.onResolvedStateScroll();
+					window.addEventListener('scroll', _this7.onResolvedStateScroll);
+					_this7.onResolvedStateScroll();
 				}
 			});
 		}
@@ -2095,16 +2120,19 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	return BfaaTheme;
 }(BigFancyAdTheme);
 
+hivi_BfaaTheme.RESOLVED_STATE_EVENT = Symbol('RESOLVED_STATE_EVENT');
+hivi_BfaaTheme.DEFAULT_UNSTICK_DELAY = 3000;
+hivi_BfaaTheme.SAFE_REMOVE_TIMEOUT = 1000;
 var hivi_BfabTheme = function (_BigFancyAdTheme2) {
 	hivi__inherits(BfabTheme, _BigFancyAdTheme2);
 
 	function BfabTheme(adSlot, params) {
 		hivi__classCallCheck(this, BfabTheme);
 
-		var _this7 = hivi__possibleConstructorReturn(this, (BfabTheme.__proto__ || Object.getPrototypeOf(BfabTheme)).call(this, adSlot, params));
+		var _this8 = hivi__possibleConstructorReturn(this, (BfabTheme.__proto__ || Object.getPrototypeOf(BfabTheme)).call(this, adSlot, params));
 
-		_this7.addAdvertisementLabel();
-		return _this7;
+		_this8.addAdvertisementLabel();
+		return _this8;
 	}
 
 	hivi__createClass(BfabTheme, [{
@@ -2122,35 +2150,35 @@ var hivi_BfabTheme = function (_BigFancyAdTheme2) {
 	}, {
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this8 = this;
+			var _this9 = this;
 
 			video.addEventListener('wikiaAdCompleted', function () {
-				return _this8.setResolvedState(video);
+				return _this9.setResolvedState(video);
 			});
 			video.addEventListener('wikiaFullscreenChange', function () {
 				if (video.isFullscreen()) {
-					_this8.container.classList.add('theme-video-fullscreen');
+					_this9.container.classList.add('theme-video-fullscreen');
 				} else {
-					_this8.container.classList.remove('theme-video-fullscreen');
+					_this9.container.classList.remove('theme-video-fullscreen');
 				}
 			});
 		}
 	}, {
 		key: 'setResolvedState',
 		value: function () {
-			var _ref2 = hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee2(video) {
-				var _params, config, image2;
+			var _ref3 = hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee3(video) {
+				var _params2, config, image2;
 
-				return external__regenerator_runtime__default.a.wrap(function _callee2$(_context2) {
+				return external__regenerator_runtime__default.a.wrap(function _callee3$(_context3) {
 					while (1) {
-						switch (_context2.prev = _context2.next) {
+						switch (_context3.prev = _context3.next) {
 							case 0:
-								_params = this.params, config = _params.config, image2 = _params.image2;
+								_params2 = this.params, config = _params2.config, image2 = _params2.image2;
 
 
 								this.container.classList.add('theme-resolved');
 								image2.element.classList.remove('hidden-state');
-								_context2.next = 5;
+								_context3.next = 5;
 								return ad_engine_["slotTweaker"].makeResponsive(this.adSlot, config.aspectRatio.resolved);
 
 							case 5:
@@ -2160,14 +2188,14 @@ var hivi_BfabTheme = function (_BigFancyAdTheme2) {
 
 							case 6:
 							case 'end':
-								return _context2.stop();
+								return _context3.stop();
 						}
 					}
-				}, _callee2, this);
+				}, _callee3, this);
 			}));
 
 			function setResolvedState(_x) {
-				return _ref2.apply(this, arguments);
+				return _ref3.apply(this, arguments);
 			}
 
 			return setResolvedState;
@@ -2345,23 +2373,33 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 									this.setupNavbar();
 								}
 
-								this.theme.onAdReady(iframe);
-
-								if (!universalAdPackage.isVideoEnabled(this.params)) {
-									_context.next = 9;
+								if (!document.hidden) {
+									_context.next = 6;
 									break;
 								}
 
-								_context.next = 7;
+								_context.next = 6;
+								return ad_engine_["utils"].once(window, 'visibilitychange');
+
+							case 6:
+
+								this.theme.onAdReady(iframe);
+
+								if (!universalAdPackage.isVideoEnabled(this.params)) {
+									_context.next = 12;
+									break;
+								}
+
+								_context.next = 10;
 								return ad_engine_["utils"].defer(universalAdPackage.loadVideoAd, this.videoSettings);
 
-							case 7:
+							case 10:
 								video = _context.sent;
 								// defers for proper rendering
 
 								this.theme.onVideoReady(video);
 
-							case 9:
+							case 12:
 							case 'end':
 								return _context.stop();
 						}
@@ -2470,23 +2508,33 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 					while (1) {
 						switch (_context.prev = _context.next) {
 							case 0:
-								this.theme.onAdReady(iframe);
-
-								if (!universalAdPackage.isVideoEnabled(this.params)) {
-									_context.next = 6;
+								if (!document.hidden) {
+									_context.next = 3;
 									break;
 								}
 
-								_context.next = 4;
+								_context.next = 3;
+								return ad_engine_["utils"].once(window, 'visibilitychange');
+
+							case 3:
+
+								this.theme.onAdReady(iframe);
+
+								if (!universalAdPackage.isVideoEnabled(this.params)) {
+									_context.next = 9;
+									break;
+								}
+
+								_context.next = 7;
 								return ad_engine_["utils"].defer(universalAdPackage.loadVideoAd, this.videoSettings);
 
-							case 4:
+							case 7:
 								video = _context.sent;
 
 
 								this.theme.onVideoReady(video);
 
-							case 6:
+							case 9:
 							case 'end':
 								return _context.stop();
 						}
@@ -2539,58 +2587,64 @@ set__default()(window, versionField, 'v3.3.3');
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/set");
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/get");
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/throttle");
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 module.exports = {"CROSS":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19.707 4.293a.999.999 0 0 0-1.414 0L12 10.586 5.707 4.293a.999.999 0 1 0-1.414 1.414L10.586 12l-6.293 6.293a.999.999 0 1 0 1.414 1.414L12 13.414l6.293 6.293a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L13.414 12l6.293-6.293a.999.999 0 0 0 0-1.414\" fill-rule=\"evenodd\"/></svg>","LEARN_MORE":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g stroke=\"none\" stroke-width=\"1\" fill-rule=\"evenodd\"><g transform=\"translate(-753.000000, -1764.000000)\" fill-rule=\"nonzero\"><g transform=\"translate(153.000000, 1746.000000)\"><g transform=\"translate(5.000000, 0.000000)\"><g transform=\"translate(459.000000, 0.000000)\"><g transform=\"translate(136.000000, 18.000000)\"><polygon points=\"24 0 15 0 18.4395 3.4395 9.033 12.846 11.154 14.967 20.5605 5.5605 24 9\"></polygon><path d=\"M19.5,24 L1.5,24 C0.672,24 0,23.328 0,22.5 L0,4.5 C0,3.672 0.672,3 1.5,3 L10.5,3 L10.5,6 L3,6 L3,21 L18,21 L18,13.5 L21,13.5 L21,22.5 C21,23.328 20.328,24 19.5,24 Z\"></path></g></g></g></g></g></g></svg>","PAUSE":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill-rule=\"evenodd\"><rect width=\"7\" height=\"22\" rx=\"1\" x=\"3\" y=\"1\"></rect><rect x=\"14\" width=\"7\" height=\"22\" rx=\"1\" y=\"1\"></rect></g></svg>","PLAY":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19.69 12.6L5.143 22.867a.722.722 0 0 1-.753.05.733.733 0 0 1-.391-.65V1.733c0-.274.15-.524.391-.65a.724.724 0 0 1 .753.05l14.545 10.266a.734.734 0 0 1 0 1.201z\" fill-rule=\"evenodd\"></path></svg>","REPLAY":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12 23c6.065 0 11-4.863 11-10.84a.992.992 0 0 0-1-.985c-.553 0-1 .44-1 .986 0 4.89-4.037 8.868-9 8.868s-9-3.978-9-8.868c0-4.89 4.037-8.869 9-8.869a8.991 8.991 0 0 1 6.975 3.292l-3.794-.501a.996.996 0 0 0-1.124.845.987.987 0 0 0 .858 1.108l5.946.785a.996.996 0 0 0 1.124-.845l.797-5.86a.987.987 0 0 0-.858-1.107.994.994 0 0 0-1.124.846l-.446 3.28A10.997 10.997 0 0 0 12 1.322c-6.065 0-11 4.862-11 10.839C1 18.137 5.935 23 12 23\" fill-rule=\"evenodd\"/></svg>","FULLSCREEN_OFF":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M5.5 9H8V2H5v4H1v3h4.5zm13 0H16V2h3v4h4v3h-4.5zm-13 6H8v7H5v-4H1v-3h4.5zm13 0H16v7h3v-4h4v-3h-4.5z\" fill-rule=\"evenodd\"/></svg>","FULLSCREEN_ON":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M21.5 22H23v-7h-3v4h-4v3h5.5zM23 3.5V9h-3V5h-4V2h7v1.5zm-22 17V15h3v4h4v3H1v-1.5zM2.5 2H1v7h3V5h4V2H2.5z\" fill-rule=\"evenodd\"/></svg>","VOLUME_OFF":"<svg viewBox=\"0 0 28 28\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style>.cls-1{fill:#fff;opacity:0.4;}.cls-2{fill:#231f20;}</style></defs><title>sound_off_button</title><circle class=\"cls-1\" cx=\"14.06\" cy=\"13.96\" r=\"13.74\"/><path class=\"cls-2\" d=\"M16,2.93A13.07,13.07,0,1,1,2.93,16,13.08,13.08,0,0,1,16,2.93M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Z\" transform=\"translate(-2 -2)\"/><g id=\"Page-1\"><g id=\"Video-Player-Skin\"><g id=\"Video-Copy\"><g id=\"volume-off\"><path id=\"Shape\" class=\"cls-2\" d=\"M14.25,9.17l-3.79,4.11H6.84c-.78,0-1,.46-1,.89V17.7a1,1,0,0,0,1,1h3.65l3.79,4.18a1.09,1.09,0,0,0,.53.14,1,1,0,0,0,.5-.14,1,1,0,0,0,.5-.9V10a1,1,0,0,0-.5-.9,1.06,1.06,0,0,0-1,.05Z\" transform=\"translate(-2 -2)\"/><path id=\"Fill-1\" class=\"cls-2\" d=\"M22.91,16.21l3-3a.92.92,0,1,0-1.3-1.3l-3,3-3-3a.92.92,0,1,0-1.3,1.3l3,3-3,3a.92.92,0,1,0,1.3,1.3l3-3,3,3a.92.92,0,1,0,1.3-1.3Z\" transform=\"translate(-2 -2)\"/></g></g></g></g></svg>","VOLUME_ON":"<svg viewBox=\"0 0 28 28\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style>.cls-1{fill:#fff;opacity:0.4;}.cls-2{fill:#231f20;}</style></defs><title>sound_on_button</title><circle class=\"cls-1\" cx=\"13.96\" cy=\"14.06\" r=\"13.74\"/><path class=\"cls-2\" d=\"M16,2.93A13.07,13.07,0,1,1,2.93,16,13.08,13.08,0,0,1,16,2.93M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Z\" transform=\"translate(-2 -2)\"/><g id=\"Page-1\"><g id=\"Video-Player-Skin\"><g id=\"Video-Copy\"><g id=\"volume\"><path id=\"Shape\" class=\"cls-2\" d=\"M14.24,9.17l-3.79,4.11H6.82c-.78,0-1,.46-1,.89V17.7a1,1,0,0,0,1,1h3.65l3.79,4.18a1.09,1.09,0,0,0,.53.14,1,1,0,0,0,.5-.14,1,1,0,0,0,.5-.9V10a1,1,0,0,0-.5-.9,1.06,1.06,0,0,0-1,.05Z\" transform=\"translate(-2 -2)\"/><path id=\"Shape-2\" data-name=\"Shape\" class=\"cls-2\" d=\"M19.18,19.33a4.39,4.39,0,0,0,0-6.19.71.71,0,0,0-1,1,3,3,0,0,1,0,4.19.71.71,0,0,0,1,1Z\" transform=\"translate(-2 -2)\"/><path id=\"Shape-3\" data-name=\"Shape\" class=\"cls-2\" d=\"M23.3,16.23a6.19,6.19,0,0,0-1.81-4.39.71.71,0,1,0-1,1,4.81,4.81,0,0,1,0,6.79.71.71,0,1,0,1,1,6.19,6.19,0,0,0,1.81-4.39Z\" transform=\"translate(-2 -2)\"/></g></g></g></g></svg>","HIVI_VOLUME_OFF":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6 8.007H1.347C.333 8.007 0 8.769 0 9.391v5.032C0 15.045.333 16 1.347 16H6l5.007 5.796c.215.132.454.205.693.205.24 0 .436-.063.65-.196.429-.265.65-.75.65-1.28V3.447c0-.53-.221-1.02-.65-1.284-.429-.265-.935-.187-1.365.078L6 8.007zM20.305 12l2.425-2.425a.922.922 0 1 0-1.306-1.305l-2.425 2.424-2.423-2.424a.923.923 0 0 0-1.306 1.305L17.695 12l-2.425 2.425a.922.922 0 1 0 1.306 1.304L19 13.306l2.425 2.423a.92.92 0 0 0 1.306 0 .922.922 0 0 0 0-1.304L20.305 12z\" fill-rule=\"evenodd\"></path></svg>","HIVI_VOLUME_ON":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill-rule=\"evenodd\"><path d=\"M6 8.007H1.347C.333 8.007 0 8.769 0 9.391v5.032C0 15.045.333 16 1.347 16H6l5.007 5.796c.215.132.454.205.693.205.24 0 .436-.063.65-.196.429-.265.65-.75.65-1.28V3.447c0-.53-.221-1.02-.65-1.284-.429-.265-.935-.187-1.365.078L6 8.007zm11.612 8.524a5.858 5.858 0 0 0 0-8.253.944.944 0 0 0-1.337 1.332 3.97 3.97 0 0 1 0 5.59.943.943 0 1 0 1.337 1.331z\"></path><path d=\"M23.03 12.135c0-2.21-.859-4.292-2.418-5.857a.943.943 0 1 0-1.337 1.332 6.37 6.37 0 0 1 1.868 4.525 6.37 6.37 0 0 1-1.868 4.525.943.943 0 1 0 1.338 1.332 8.249 8.249 0 0 0 2.418-5.857z\"></path></g></svg>"}
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = require("lodash/mapValues");
-
-/***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = require("lodash/debounce");
+module.exports = require("lodash/toPlainObject");
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("events");
+module.exports = require("lodash/isUndefined");
 
 /***/ }),
 /* 11 */
 /***/ (function(module, exports) {
 
-module.exports = require("core-decorators/es/autobind");
+module.exports = require("lodash/mapValues");
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = require("lodash/debounce");
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+module.exports = require("lodash/isFunction");
 
 /***/ })
 /******/ ]);

@@ -3,7 +3,6 @@ import { isFunction } from 'lodash';
 import { AdSlot, slotTweaker, utils } from '@wikia/ad-engine';
 
 export class StickyBfaa extends EventEmitter {
-	static SAFE_REMOVE_TIMEOUT = 1000;
 	static LOG_GROUP = 'sticky-bfaa';
 	static STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
 	static CLOSE_CLICKED_EVENT = Symbol('closeClicked');

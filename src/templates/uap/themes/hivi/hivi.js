@@ -14,6 +14,7 @@ const HIVI_RESOLVED_THRESHOLD = 0.995;
 export class BfaaTheme extends BigFancyAdTheme {
 	static RESOLVED_STATE_EVENT = Symbol('RESOLVED_STATE_EVENT');
 	static DEFAULT_UNSTICK_DELAY = 3000;
+	static SAFE_REMOVE_TIMEOUT = 1000;
 
 	constructor(adSlot, params) {
 		super(adSlot, params);
@@ -118,7 +119,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 
 		setTimeout(() => {
 			this.container.remove();
-		}, StickyBfaa.SAFE_REMOVE_TIMEOUT);
+		}, BfaaTheme.SAFE_REMOVE_TIMEOUT);
 	}
 
 	updateAdSizes() {
