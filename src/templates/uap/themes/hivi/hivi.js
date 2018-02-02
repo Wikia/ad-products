@@ -30,6 +30,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 			);
 			this.addUnstickButton();
 			this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
+			this.stickyBfaa.on(StickyBfaa.CLOSE_CLICKED_EVENT, () => this.onCloseClicked());
 			this.stickyBfaa.run();
 		}
 	}
@@ -43,7 +44,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 	addUnstickButton() {
 		const closeButton = new CloseButton({
 			classNames: ['button-unstick'],
-			onClick: () => this.stickyBfaa.revertStickiness()
+			onClick: () => this.stickyBfaa.close()
 		});
 
 		this.container.appendChild(closeButton.render());
@@ -86,6 +87,18 @@ export class BfaaTheme extends BigFancyAdTheme {
 		if (!isSticky) {
 			this.config.moveNavbar(0);
 		}
+	}
+
+	onCloseClicked() {
+		this.container.classList.add('theme-closed');
+		this.container.style.marginTop = `-${document.body.style.paddingTop}`;
+
+		document.body.classList.add('bfaa-closed');
+		document.body.style.paddingTop = '0%';
+
+		setTimeout(() => {
+			this.container.remove();
+		}, StickyBfaa.SAFE_REMOVE_TIMEOUT);
 	}
 
 	updateAdSizes() {

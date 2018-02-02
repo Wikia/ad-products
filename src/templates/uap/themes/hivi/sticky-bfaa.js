@@ -6,8 +6,10 @@ export class StickyBfaa extends EventEmitter {
 	// time after which we'll remove stickiness even with no user interaction
 	static STICKINESS_REMOVAL_WINDOW = 10000;
 	static DEFAULT_STICKINESS_ADDITIONAL_TIME = 3000;
+	static SAFE_REMOVE_TIMEOUT = 1000;
 	static LOG_GROUP = 'sticky-bfaa';
 	static STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
+	static CLOSE_CLICKED_EVENT = Symbol('closeClicked');
 
 	constructor(
 		adSlot,
@@ -55,6 +57,12 @@ export class StickyBfaa extends EventEmitter {
 		} else {
 			this.logger('bfaa stickiness is already reverted');
 		}
+	}
+
+	close() {
+		this.revertStickiness();
+		this.logger('Closing and removing bfaa');
+		this.emit(StickyBfaa.CLOSE_CLICKED_EVENT);
 	}
 
 	@autobind

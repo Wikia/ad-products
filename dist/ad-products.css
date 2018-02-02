@@ -72,7 +72,6 @@
     z-index: -1; }
   .gpt-ad.bfaa-template .button-unstick,
   .gpt-ad.bfab-template .button-unstick {
-    display: none;
     position: absolute;
     top: 0;
     right: 0;
@@ -198,7 +197,6 @@
   .gpt-ad.bfaa-template .advertisement-label,
   .gpt-ad.bfab-template .advertisement-label {
     color: #fff;
-    display: none;
     font-size: 9px;
     font-weight: bold;
     height: auto;
@@ -221,9 +219,6 @@
       .gpt-ad.bfab-template .button-unstick .icon {
         width: 16px;
         height: 16px; } }
-  .gpt-ad.bfaa-template.theme-resolved.sticky-bfaa .button-unstick,
-  .gpt-ad.bfab-template.theme-resolved.sticky-bfaa .button-unstick {
-    display: unset; }
   .gpt-ad.bfaa-template.theme-mobile-device .advertisement-label,
   .gpt-ad.bfaa-template.is-mobile-device .advertisement-label,
   .gpt-ad.bfab-template.theme-mobile-device .advertisement-label,
@@ -235,9 +230,6 @@
   .gpt-ad.bfaa-template.is-mobile-device .learn-more,
   .gpt-ad.bfab-template.theme-mobile-device .learn-more,
   .gpt-ad.bfab-template.is-mobile-device .learn-more {
-    display: unset; }
-  .gpt-ad.bfaa-template.theme-hivi .advertisement-label,
-  .gpt-ad.bfab-template.theme-hivi .advertisement-label {
     display: unset; }
   .gpt-ad.bfaa-template.theme-hivi .ui-visible .toggle-ui-overlay,
   .gpt-ad.bfab-template.theme-hivi .ui-visible .toggle-ui-overlay {
@@ -363,8 +355,14 @@
     right: 0;
     top: auto;
     transform: none; }
+  .gpt-ad.bfaa-template.theme-closed,
+  .gpt-ad.bfab-template.theme-closed {
+    transition: margin 0.4s ease; }
 
-body.ctp-vuap-loaded {
+body.bfaa-closed {
+  transition: padding 0.4s ease; }
+
+body .ctp-vuap-loaded {
   transition: padding 0.4s ease; }
 
 .sticky-bfaa {

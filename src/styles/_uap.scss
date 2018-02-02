@@ -102,7 +102,6 @@ $hivi-uap-player-button-border-space: 6px;
 	}
 
 	.button-unstick {
-		display: none;
 		position: absolute;
 		top: 0;
 		right: 0;
@@ -274,10 +273,6 @@ $hivi-uap-player-button-border-space: 6px;
 		}
 	}
 
-	&.theme-resolved.sticky-bfaa .button-unstick {
-		display: unset;
-	}
-
 	// TODO remove unused theme-* selector ADEN-6645
 	&.theme-mobile-device .advertisement-label,
 	&.is-mobile-device .advertisement-label {
@@ -429,10 +424,20 @@ $hivi-uap-player-button-border-space: 6px;
 		top: auto;
 		transform: none;
 	}
+
+	&.theme-closed {
+		transition: margin $uap-video-animation-duration ease;
+	}
 }
 
-body.ctp-vuap-loaded {
-	transition: padding $uap-video-animation-duration ease;
+body {
+	&.bfaa-closed {
+		transition: padding $uap-video-animation-duration ease;
+	}
+
+	.ctp-vuap-loaded {
+		transition: padding $uap-video-animation-duration ease;
+	}
 }
 
 .sticky-bfaa {

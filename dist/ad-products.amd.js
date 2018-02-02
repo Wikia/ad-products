@@ -3489,6 +3489,13 @@ var sticky_bfaa_StickyBfaa = (sticky_bfaa__class = function (_EventEmitter) {
 			}
 		}
 	}, {
+		key: 'close',
+		value: function close() {
+			this.revertStickiness();
+			this.logger('Closing and removing bfaa');
+			this.emit(StickyBfaa.CLOSE_CLICKED_EVENT);
+		}
+	}, {
 		key: 'onViewed',
 		value: function onViewed() {
 			var _this3 = this;
@@ -3522,8 +3529,10 @@ var sticky_bfaa_StickyBfaa = (sticky_bfaa__class = function (_EventEmitter) {
 }(events["EventEmitter"]), (sticky_bfaa__applyDecoratedDescriptor(sticky_bfaa__class.prototype, 'onViewed', [autobind], Object.getOwnPropertyDescriptor(sticky_bfaa__class.prototype, 'onViewed'), sticky_bfaa__class.prototype)), sticky_bfaa__class);
 sticky_bfaa_StickyBfaa.STICKINESS_REMOVAL_WINDOW = 10000;
 sticky_bfaa_StickyBfaa.DEFAULT_STICKINESS_ADDITIONAL_TIME = 3000;
+sticky_bfaa_StickyBfaa.SAFE_REMOVE_TIMEOUT = 1000;
 sticky_bfaa_StickyBfaa.LOG_GROUP = 'sticky-bfaa';
 sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
+sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT = Symbol('closeClicked');
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/hivi.js
 
 
@@ -3574,6 +3583,9 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 			_this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
 				return _this.onStickinessChange(isSticky);
 			});
+			_this.stickyBfaa.on(sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT, function () {
+				return _this.onCloseClicked();
+			});
 			_this.stickyBfaa.run();
 		}
 		return _this;
@@ -3594,7 +3606,7 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 			var closeButton = new close_button_CloseButton({
 				classNames: ['button-unstick'],
 				onClick: function onClick() {
-					return _this2.stickyBfaa.revertStickiness();
+					return _this2.stickyBfaa.close();
 				}
 			});
 
@@ -3667,6 +3679,21 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 			if (!isSticky) {
 				this.config.moveNavbar(0);
 			}
+		}
+	}, {
+		key: 'onCloseClicked',
+		value: function onCloseClicked() {
+			var _this5 = this;
+
+			this.container.classList.add('theme-closed');
+			this.container.style.marginTop = '-' + document.body.style.paddingTop;
+
+			document.body.classList.add('bfaa-closed');
+			document.body.style.paddingTop = '0%';
+
+			setTimeout(function () {
+				_this5.container.remove();
+			}, sticky_bfaa_StickyBfaa.SAFE_REMOVE_TIMEOUT);
 		}
 	}, {
 		key: 'updateAdSizes',
@@ -3744,7 +3771,7 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}, {
 		key: 'setResolvedState',
 		value: function setResolvedState(immediately) {
-			var _this5 = this;
+			var _this6 = this;
 
 			var isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 			var width = this.container.offsetWidth;
@@ -3767,21 +3794,21 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 
 			return new Promise(function (resolve) {
 				if (immediately) {
-					_this5.lock();
+					_this6.lock();
 					resolve();
 				} else {
-					_this5.onResolvedStateScroll = debounce_default()(function () {
+					_this6.onResolvedStateScroll = debounce_default()(function () {
 						if (window.scrollY < offset) {
 							return;
 						}
 
-						window.removeEventListener('scroll', _this5.onResolvedStateScroll);
-						_this5.onResolvedStateScroll = null;
-						_this5.lock();
+						window.removeEventListener('scroll', _this6.onResolvedStateScroll);
+						_this6.onResolvedStateScroll = null;
+						_this6.lock();
 						resolve();
 					}, 50);
-					window.addEventListener('scroll', _this5.onResolvedStateScroll);
-					_this5.onResolvedStateScroll();
+					window.addEventListener('scroll', _this6.onResolvedStateScroll);
+					_this6.onResolvedStateScroll();
 				}
 			});
 		}
@@ -3815,10 +3842,10 @@ var hivi_BfabTheme = function (_BigFancyAdTheme2) {
 	function BfabTheme(adSlot, params) {
 		hivi__classCallCheck(this, BfabTheme);
 
-		var _this6 = hivi__possibleConstructorReturn(this, (BfabTheme.__proto__ || Object.getPrototypeOf(BfabTheme)).call(this, adSlot, params));
+		var _this7 = hivi__possibleConstructorReturn(this, (BfabTheme.__proto__ || Object.getPrototypeOf(BfabTheme)).call(this, adSlot, params));
 
-		_this6.addAdvertisementLabel();
-		return _this6;
+		_this7.addAdvertisementLabel();
+		return _this7;
 	}
 
 	hivi__createClass(BfabTheme, [{
@@ -3836,16 +3863,16 @@ var hivi_BfabTheme = function (_BigFancyAdTheme2) {
 	}, {
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this7 = this;
+			var _this8 = this;
 
 			video.addEventListener('wikiaAdCompleted', function () {
-				return _this7.setResolvedState(video);
+				return _this8.setResolvedState(video);
 			});
 			video.addEventListener('wikiaFullscreenChange', function () {
 				if (video.isFullscreen()) {
-					_this7.container.classList.add('theme-video-fullscreen');
+					_this8.container.classList.add('theme-video-fullscreen');
 				} else {
-					_this7.container.classList.remove('theme-video-fullscreen');
+					_this8.container.classList.remove('theme-video-fullscreen');
 				}
 			});
 		}
