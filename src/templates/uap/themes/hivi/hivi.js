@@ -43,7 +43,10 @@ export class BfaaTheme extends BigFancyAdTheme {
 	addUnstickButton() {
 		const closeButton = new CloseButton({
 			classNames: ['button-unstick'],
-			onClick: () => this.stickyBfaa.revertStickiness()
+			onClick: () => {
+				this.stickyBfaa.revertStickiness();
+				this.video.pause();
+			}
 		});
 
 		this.container.appendChild(closeButton.render());
