@@ -3595,7 +3595,7 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 				classNames: ['button-unstick'],
 				onClick: function onClick() {
 					_this2.stickyBfaa.revertStickiness();
-					_this2.video.pause();
+					if (_this2.video) _this2.video.pause();
 				}
 			});
 
