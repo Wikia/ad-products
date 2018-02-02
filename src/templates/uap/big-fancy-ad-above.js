@@ -105,6 +105,10 @@ export class BigFancyAdAbove {
 			this.setupNavbar();
 		}
 
+		if (document.hidden) {
+			await utils.once(window, 'visibilitychange');
+		}
+
 		this.theme.onAdReady(iframe);
 
 		if (universalAdPackage.isVideoEnabled(this.params)) {
