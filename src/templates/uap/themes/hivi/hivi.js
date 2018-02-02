@@ -45,7 +45,9 @@ export class BfaaTheme extends BigFancyAdTheme {
 			classNames: ['button-unstick'],
 			onClick: () => {
 				this.stickyBfaa.revertStickiness();
-				if (this.video) this.video.pause();
+				if (this.video) {
+					this.video.pause();
+				}
 			}
 		});
 
