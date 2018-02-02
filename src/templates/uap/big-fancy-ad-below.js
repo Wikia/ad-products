@@ -57,6 +57,10 @@ export class BigFancyAdBelow {
 	}
 
 	async onAdReady(iframe) {
+		if (document.hidden) {
+			await utils.once(window, 'visibilitychange');
+		}
+
 		this.theme.onAdReady(iframe);
 
 		if (universalAdPackage.isVideoEnabled(this.params)) {

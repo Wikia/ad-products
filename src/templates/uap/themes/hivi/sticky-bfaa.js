@@ -1,11 +1,8 @@
 import { EventEmitter } from 'events';
-import autobind from 'core-decorators/es/autobind';
+import { isFunction } from 'lodash';
 import { AdSlot, slotTweaker, utils } from '@wikia/ad-engine';
 
 export class StickyBfaa extends EventEmitter {
-	// time after which we'll remove stickiness even with no user interaction
-	static STICKINESS_REMOVAL_WINDOW = 10000;
-	static DEFAULT_STICKINESS_ADDITIONAL_TIME = 3000;
 	static SAFE_REMOVE_TIMEOUT = 1000;
 	static LOG_GROUP = 'sticky-bfaa';
 	static STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
@@ -13,14 +10,12 @@ export class StickyBfaa extends EventEmitter {
 
 	constructor(
 		adSlot,
-		stickyUntilVideoViewed = false,
-		stickyAdditionalTime = StickyBfaa.DEFAULT_STICKINESS_ADDITIONAL_TIME
+		customWhen = Promise.resolve()
 	) {
 		super();
 
 		this.adSlot = adSlot;
-		this.stickyUntilVideoViewed = stickyUntilVideoViewed;
-		this.stickyAdditionalTime = stickyAdditionalTime;
+		this.customWhen = customWhen;
 		this.sticky = false;
 		this.logger = (...args) => utils.logger(StickyBfaa.LOG_GROUP, ...args);
 	}
@@ -29,10 +24,10 @@ export class StickyBfaa extends EventEmitter {
 		await slotTweaker.onReady(this.adSlot);
 
 		if (document.hidden) {
-			window.addEventListener('visibilitychange', () => this.onAdReady(), { once: true });
-		} else {
-			this.onAdReady();
+			await utils.once(window, 'visibilitychange');
 		}
+
+		this.onAdReady();
 	}
 
 	isSticky() {
@@ -65,28 +60,17 @@ export class StickyBfaa extends EventEmitter {
 		this.emit(StickyBfaa.CLOSE_CLICKED_EVENT);
 	}
 
-	@autobind
-	onViewed() {
-		let revertTimeout = null;
-		const adContainer = this.adSlot.getElement();
-		const shouldRevertImmediately = Math.abs(window.scrollY - adContainer.offsetTop) < (adContainer.offsetHeight / 2);
-		const onRevertTimeout = () => {
-			clearTimeout(revertTimeout);
-			document.removeEventListener('scroll', onRevertTimeout);
-			this.revertStickiness();
-		};
-
-		this.adSlot.removeListener(AdSlot.SLOT_VIEWED_EVENT, this.onViewed);
-		setTimeout(() => {
-			document.addEventListener('scroll', onRevertTimeout);
-			revertTimeout = setTimeout(onRevertTimeout, (shouldRevertImmediately ? 0 : StickyBfaa.STICKINESS_REMOVAL_WINDOW));
-		}, this.stickyAdditionalTime);
-
-		this.logger(`slotViewed triggered on ${this.adSlot.getSlotName()}`);
-	}
-
-	onAdReady() {
+	async onAdReady() {
 		this.applyStickiness();
-		this.adSlot.once(this.stickyUntilVideoViewed ? AdSlot.VIDEO_VIEWED_EVENT : AdSlot.SLOT_VIEWED_EVENT, this.onViewed);
+		this.logger('waiting for viewability and custom condition');
+
+		await Promise.all([
+			utils.once(this.adSlot, AdSlot.SLOT_VIEWED_EVENT),
+			isFunction(this.customWhen) ? this.customWhen() : this.customWhen
+		]);
+
+		this.logger('waiting for unstick timeout or user interaction');
+		await utils.once(window, 'scroll');
+		this.revertStickiness();
 	}
 }
