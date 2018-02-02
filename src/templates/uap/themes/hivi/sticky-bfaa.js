@@ -3,8 +3,6 @@ import { isFunction } from 'lodash';
 import { AdSlot, slotTweaker, utils } from '@wikia/ad-engine';
 
 export class StickyBfaa extends EventEmitter {
-	// time after which we'll remove stickiness even with no user interaction
-	static STICKINESS_REMOVAL_TIMEOUT = 10000;
 	static LOG_GROUP = 'sticky-bfaa';
 	static STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
 
@@ -64,12 +62,7 @@ export class StickyBfaa extends EventEmitter {
 		]);
 
 		this.logger('waiting for unstick timeout or user interaction');
-
-		await Promise.race([
-			utils.wait(StickyBfaa.STICKINESS_REMOVAL_TIMEOUT),
-			utils.once(window, 'scroll')
-		]);
-
+		await utils.once(window, 'scroll');
 		this.revertStickiness();
 	}
 }
