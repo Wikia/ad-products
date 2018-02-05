@@ -95,6 +95,8 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 	}
 
 	onVideoReady(video) {
+		super.onVideoReady();
+
 		this.video = video;
 		video.addEventListener('wikiaAdStarted', () => this.updateAdSizes());
 		video.addEventListener('wikiaAdCompleted', () => {
@@ -252,10 +254,14 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 
 export class BfabTheme extends BigFancyAdHiviTheme {
 	onAdReady() {
+		super.onAdReady();
+
 		slotTweaker.makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
 	}
 
 	onVideoReady(video) {
+		super.onVideoReady();
+
 		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState(video));
 		video.addEventListener('wikiaFullscreenChange', () => {
 			if (video.isFullscreen()) {
