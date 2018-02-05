@@ -3594,7 +3594,8 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 			var closeButton = new close_button_CloseButton({
 				classNames: ['button-unstick'],
 				onClick: function onClick() {
-					return _this2.stickyBfaa.revertStickiness();
+					_this2.stickyBfaa.revertStickiness();
+					if (_this2.video) _this2.video.pause();
 				}
 			});
 

@@ -1,5 +1,6 @@
-import { context, scrollListener, slotTweaker } from '@wikia/ad-engine';
-import { debounce, mapValues } from 'lodash';
+import { AdSlot, context, scrollListener, slotTweaker, utils } from '@wikia/ad-engine';
+import { debounce, mapValues, isUndefined, toPlainObject } from 'lodash';
+import { EventEmitter } from 'events';
 
 import AdvertisementLabel from '../../ui/advertisement-label';
 import CloseButton from '../../ui/close-button';
@@ -25,8 +26,12 @@ class BigFancyAdHiviTheme extends BigFancyAdTheme {
 }
 
 export class BfaaTheme extends BigFancyAdHiviTheme {
+	static RESOLVED_STATE_EVENT = Symbol('RESOLVED_STATE_EVENT');
+	static DEFAULT_UNSTICK_DELAY = 3000;
+
 	constructor(adSlot, params) {
 		super(adSlot, params);
+		Object.assign(this, toPlainObject(new EventEmitter()));
 
 		this.stickyBfaa = null;
 		this.scrollListener = null;
@@ -36,21 +41,41 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		this.onResolvedStateScroll = null;
 
 		if (this.params.isSticky) {
-			this.stickyBfaa = new StickyBfaa(
-				this.adSlot,
-				this.params.stickyUntilVideoViewed,
-				this.params.stickyAdditionalTime
-			);
-			this.addUnstickButton();
-			this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
-			this.stickyBfaa.run();
+			this.addStickinessPlugin();
 		}
+	}
+
+	addStickinessPlugin() {
+		const { stickyAdditionalTime, stickyUntilVideoViewed } = this.params;
+		const whenResolvedAndVideoViewed = async () => {
+			await Promise.all([
+				utils.once(this, BfaaTheme.RESOLVED_STATE_EVENT),
+				stickyUntilVideoViewed ?
+					utils.once(this.adSlot, AdSlot.VIDEO_VIEWED_EVENT) :
+					Promise.resolve()
+			]);
+			await utils.wait(
+				isUndefined(stickyAdditionalTime) ?
+					BfaaTheme.DEFAULT_UNSTICK_DELAY :
+					stickyAdditionalTime
+			);
+		};
+
+		this.stickyBfaa = new StickyBfaa(this.adSlot, whenResolvedAndVideoViewed());
+		this.addUnstickButton();
+		this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
+		this.stickyBfaa.run();
 	}
 
 	addUnstickButton() {
 		const closeButton = new CloseButton({
 			classNames: ['button-unstick'],
-			onClick: () => this.stickyBfaa.revertStickiness()
+			onClick: () => {
+				this.stickyBfaa.revertStickiness();
+				if (this.video) {
+					this.video.pause();
+				}
+			}
 		});
 
 		this.container.appendChild(closeButton.render());
@@ -82,7 +107,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 				this.container.classList.add('theme-video-fullscreen');
 			} else {
 				this.container.classList.remove('theme-video-fullscreen');
-				await this.updateAdSizes();
+				this.updateAdSizes();
 			}
 		});
 	}
@@ -163,6 +188,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		this.container.classList.add('theme-locked');
 		scrollListener.removeCallback(this.scrollListener);
 		this.adjustSizesToResolved(offset);
+		this.emit(BfaaTheme.RESOLVED_STATE_EVENT);
 	}
 
 	setResolvedState(immediately) {
