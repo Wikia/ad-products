@@ -79,13 +79,9 @@ export function selectTemplate(videoSettings) {
 		template = 'hivi';
 	} else if (videoSettings.isSplitLayout()) {
 		template = params.splitLayoutVideoPosition === 'right' ? 'split-right' : 'split-left';
-		params.container.classList.add(`theme-${template}`);
 	} else if (videoSettings.isAutoPlay()) {
 		template = 'auto-play';
-	} else {
-		document.body.classList.add('ctp-vuap-loaded');
 	}
-
 
 	// TODO remove those ifs ADEN-6645
 	if (params.isDarkTheme) {
