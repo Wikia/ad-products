@@ -10,7 +10,21 @@ import { resolvedStateSwitch } from '../../resolved-state-switch';
 
 const HIVI_RESOLVED_THRESHOLD = 0.995;
 
-export class BfaaTheme extends BigFancyAdTheme {
+class BigFancyAdHiviTheme extends BigFancyAdTheme {
+	onAdReady() {
+		super.onAdReady();
+		this.container.classList.add('theme-hivi');
+		this.addAdvertisementLabel();
+	}
+
+	addAdvertisementLabel() {
+		const advertisementLabel = new AdvertisementLabel();
+
+		this.container.appendChild(advertisementLabel.render());
+	}
+}
+
+export class BfaaTheme extends BigFancyAdHiviTheme {
 	constructor(adSlot, params) {
 		super(adSlot, params);
 
@@ -20,7 +34,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.config = context.get('templates.bfaa');
 		this.isLocked = false;
 		this.onResolvedStateScroll = null;
-		this.addAdvertisementLabel();
 
 		if (this.params.isSticky) {
 			this.stickyBfaa = new StickyBfaa(
@@ -34,12 +47,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 		}
 	}
 
-	addAdvertisementLabel() {
-		const advertisementLabel = new AdvertisementLabel();
-
-		this.container.appendChild(advertisementLabel.render());
-	}
-
 	addUnstickButton() {
 		const closeButton = new CloseButton({
 			classNames: ['button-unstick'],
@@ -50,6 +57,8 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	onAdReady() {
+		super.onAdReady();
+
 		if (resolvedState.isResolvedState(this.params)) {
 			this.setResolvedState(true);
 		} else {
@@ -215,19 +224,7 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 }
 
-export class BfabTheme extends BigFancyAdTheme {
-	constructor(adSlot, params) {
-		super(adSlot, params);
-
-		this.addAdvertisementLabel();
-	}
-
-	addAdvertisementLabel() {
-		const advertisementLabel = new AdvertisementLabel();
-
-		this.container.appendChild(advertisementLabel.render());
-	}
-
+export class BfabTheme extends BigFancyAdHiviTheme {
 	onAdReady() {
 		slotTweaker.makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
 	}
