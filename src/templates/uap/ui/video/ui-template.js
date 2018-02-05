@@ -83,16 +83,5 @@ export function selectTemplate(videoSettings) {
 		template = 'auto-play';
 	}
 
-	// TODO remove those ifs ADEN-6645
-	if (params.isDarkTheme) {
-		params.container.classList.add('theme-dark');
-	}
-	if (params.isMobile) {
-		params.container.classList.add('theme-mobile-layout');
-	}
-	if (utils.client.isSmartphone() || utils.client.isTablet()) {
-		params.container.classList.add('theme-mobile-device');
-	}
-
 	return templates[template];
 }
