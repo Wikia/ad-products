@@ -1,4 +1,3 @@
-import { utils } from '@wikia/ad-engine';
 import CloseButton from './close-button';
 import LearnMore from './learn-more';
 import PauseControl from './pause-control';
