@@ -1,7 +1,7 @@
 import ToggleAnimation from '../../ui/video/toggle-animation';
 import { BigFancyAdTheme } from '../theme';
-import {universalAdPackage} from "../../universal-ad-package";
-import {VideoSettings} from "../../video-settings";
+import { universalAdPackage } from '../../universal-ad-package';
+import { VideoSettings } from '../../video-settings';
 
 class BigFancyAdClassicTheme extends BigFancyAdTheme {
 	onAdReady(iframe) {
