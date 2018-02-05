@@ -1,7 +1,13 @@
 import { context, utils } from '@wikia/ad-engine';
 
+import {
+	CSS_CLASSNAME_FADE_IN_ANIMATION,
+	CSS_CLASSNAME_SLIDE_OUT_ANIMATION,
+	CSS_CLASSNAME_STICKY_BFAA,
+} from './constants';
 import { universalAdPackage } from './universal-ad-package';
 import { VideoSettings } from './video-settings';
+import { animate } from './ui/animate';
 import * as classicTheme from './themes/classic';
 import * as hiviTheme from './themes/hivi';
 
@@ -12,11 +18,13 @@ export class BigFancyAdAbove {
 
 	static getDefaultConfig() {
 		function onStickBfaaCallback(adSlot) {
-			adSlot.getElement().classList.add('sticky-bfaa');
+			adSlot.getElement().classList.add(CSS_CLASSNAME_STICKY_BFAA);
 		}
 
-		function onUnstickBfaaCallback(adSlot) {
-			adSlot.getElement().classList.remove('sticky-bfaa');
+		async function onUnstickBfaaCallback(adSlot) {
+			await animate(adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, 600);
+			adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
+			await animate(adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, 400);
 		}
 
 		return {
@@ -28,7 +36,6 @@ export class BigFancyAdAbove {
 				'BOTTOM_LEADERBOARD',
 				'INCONTENT_BOXAD'
 			],
-			stickyAnimationDuration: 500,
 			onInit: () => {},
 			onStickBfaaCallback,
 			onUnstickBfaaCallback,
