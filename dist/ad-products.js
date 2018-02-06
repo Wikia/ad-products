@@ -92,7 +92,7 @@ var constants_namespaceObject = {};
 __webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_FADE_IN_ANIMATION", function() { return CSS_CLASSNAME_FADE_IN_ANIMATION; });
 __webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_SLIDE_OUT_ANIMATION", function() { return CSS_CLASSNAME_SLIDE_OUT_ANIMATION; });
 __webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_STICKY_BFAA", function() { return CSS_CLASSNAME_STICKY_BFAA; });
-__webpack_require__.d(constants_namespaceObject, "CSS_VARIABLE_EASE_IN_CUBIC", function() { return CSS_VARIABLE_EASE_IN_CUBIC; });
+__webpack_require__.d(constants_namespaceObject, "CSS_TIMING_EASE_IN_CUBIC", function() { return CSS_TIMING_EASE_IN_CUBIC; });
 var themes_classic_namespaceObject = {};
 __webpack_require__.d(themes_classic_namespaceObject, "BfaaTheme", function() { return classic_BfaaTheme; });
 __webpack_require__.d(themes_classic_namespaceObject, "BfabTheme", function() { return classic_BfabTheme; });
@@ -262,25 +262,24 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 var animate = function () {
 	var _ref = _asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee(adSlot, className, duration) {
-		var container, durationPropertyName;
+		var container;
 		return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
 			while (1) {
 				switch (_context.prev = _context.next) {
 					case 0:
 						container = adSlot.getElement();
-						durationPropertyName = '--' + className + '-duration';
 
 
-						container.style.setProperty(durationPropertyName, duration + 'ms');
+						container.style.animationDuration = duration + 'ms';
 						container.classList.add(className);
-						_context.next = 6;
+						_context.next = 5;
 						return ad_engine_["utils"].wait(duration);
 
-					case 6:
+					case 5:
 						container.classList.remove(className);
-						container.style.removeProperty(durationPropertyName);
+						container.style.animationDuration = '';
 
-					case 8:
+					case 7:
 					case 'end':
 						return _context.stop();
 				}
@@ -297,7 +296,7 @@ var animate = function () {
 var CSS_CLASSNAME_FADE_IN_ANIMATION = 'fade-in';
 var CSS_CLASSNAME_SLIDE_OUT_ANIMATION = 'slide-out';
 var CSS_CLASSNAME_STICKY_BFAA = 'sticky-bfaa';
-var CSS_VARIABLE_EASE_IN_CUBIC = '--uap-ease-in-cubic';
+var CSS_TIMING_EASE_IN_CUBIC = 'cubic-bezier(0.55, 0.055, 0.675, 0.19)';
 // EXTERNAL MODULE: external "lodash/throttle"
 var throttle_ = __webpack_require__(7);
 var throttle__default = /*#__PURE__*/__webpack_require__.n(throttle_);

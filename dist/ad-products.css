@@ -7,9 +7,6 @@
   top: 0;
   backface-visibility: hidden; }
 
-:root {
-  --uap-ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19); }
-
 .gpt-ad.bfaa-template,
 .gpt-ad.bfab-template {
   display: block;
@@ -28,10 +25,10 @@
     opacity: 1; } }
   .gpt-ad.bfaa-template.slide-out,
   .gpt-ad.bfab-template.slide-out {
-    animation: slideOut var(--slide-out-duration) cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards; }
+    animation: slideOut 0.6s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards; }
   .gpt-ad.bfaa-template.fade-in,
   .gpt-ad.bfab-template.fade-in {
-    animation: fadeIn var(--fade-in-duration) ease-in; }
+    animation: fadeIn 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19); }
   .gpt-ad.bfaa-template > div,
   .gpt-ad.bfab-template > div {
     padding: 0;
