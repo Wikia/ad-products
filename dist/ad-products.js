@@ -2323,14 +2323,21 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 
 			return {
 				desktopNavbarWrapperSelector: '.wds-global-navigation-wrapper',
-				handleNavbar: false,
 				mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
+				handleNavbar: false,
 				slotSibling: '.topic-header',
 				slotsToEnable: ['BOTTOM_LEADERBOARD', 'INCONTENT_BOXAD'],
 				onInit: function onInit() {},
 				onStickBfaaCallback: onStickBfaaCallback,
 				onUnstickBfaaCallback: onUnstickBfaaCallback,
-				moveNavbar: function moveNavbar() {}
+				moveNavbar: function moveNavbar(offset) {
+					var navbarElement = document.querySelector('body > nav.navigation');
+
+					if (navbarElement) {
+						navbarElement.style.transition = offset ? '' : 'top 600ms ' + universalAdPackage.CSS_TIMING_EASE_IN_CUBIC;
+						navbarElement.style.top = offset ? offset + 'px' : '';
+					}
+				}
 			};
 		}
 
