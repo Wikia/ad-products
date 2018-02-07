@@ -1,4 +1,3 @@
-import { utils } from '@wikia/ad-engine';
 import CloseButton from './close-button';
 import LearnMore from './learn-more';
 import PauseControl from './pause-control';
@@ -81,21 +80,6 @@ export function selectTemplate(videoSettings) {
 		template = params.splitLayoutVideoPosition === 'right' ? 'split-right' : 'split-left';
 	} else if (videoSettings.isAutoPlay()) {
 		template = 'auto-play';
-	} else {
-		document.body.classList.add('ctp-vuap-loaded');
-	}
-
-	params.container.classList.add(`theme-${template}`);
-
-	// TODO remove those ifs ADEN-6645
-	if (params.isDarkTheme) {
-		params.container.classList.add('theme-dark');
-	}
-	if (params.isMobile) {
-		params.container.classList.add('theme-mobile-layout');
-	}
-	if (utils.client.isSmartphone() || utils.client.isTablet()) {
-		params.container.classList.add('theme-mobile-device');
 	}
 
 	return templates[template];
