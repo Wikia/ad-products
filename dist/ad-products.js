@@ -61,23 +61,101 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports) {
 
-module.exports = require("regenerator-runtime");
+module.exports = require("@wikia/ad-engine");
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports) {
 
-module.exports = require("@wikia/ad-engine");
+module.exports = require("babel-runtime/helpers/classCallCheck");
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/helpers/createClass");
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/regenerator");
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/helpers/asyncToGenerator");
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/core-js/object/get-prototype-of");
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/helpers/possibleConstructorReturn");
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/helpers/inherits");
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/helpers/get");
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/core-js/object/keys");
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/helpers/toConsumableArray");
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/core-js/promise");
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/core-js/object/assign");
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/core-js/symbol");
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+module.exports = require("events");
+
+/***/ }),
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -92,23 +170,23 @@ __webpack_require__.d(themes_hivi_namespaceObject, "BfabTheme", function() { ret
 __webpack_require__.d(themes_hivi_namespaceObject, "adIsReady", function() { return ready_adIsReady; });
 
 // EXTERNAL MODULE: external "lodash/set"
-var set_ = __webpack_require__(3);
+var set_ = __webpack_require__(16);
 var set__default = /*#__PURE__*/__webpack_require__.n(set_);
 
 // EXTERNAL MODULE: external "lodash/get"
-var get_ = __webpack_require__(4);
+var get_ = __webpack_require__(17);
 var get__default = /*#__PURE__*/__webpack_require__.n(get_);
 
-// EXTERNAL MODULE: external "regenerator-runtime"
-var external__regenerator_runtime_ = __webpack_require__(0);
-var external__regenerator_runtime__default = /*#__PURE__*/__webpack_require__.n(external__regenerator_runtime_);
-
 // EXTERNAL MODULE: ./src/styles/styles.scss
-var styles = __webpack_require__(5);
+var styles = __webpack_require__(18);
 var styles_default = /*#__PURE__*/__webpack_require__.n(styles);
 
+// EXTERNAL MODULE: external "babel-runtime/core-js/object/keys"
+var keys_ = __webpack_require__(9);
+var keys__default = /*#__PURE__*/__webpack_require__.n(keys_);
+
 // EXTERNAL MODULE: external "@wikia/ad-engine"
-var ad_engine_ = __webpack_require__(1);
+var ad_engine_ = __webpack_require__(0);
 var ad_engine__default = /*#__PURE__*/__webpack_require__.n(ad_engine_);
 
 // CONCATENATED MODULE: ./src/common/product-info.js
@@ -117,7 +195,7 @@ var ad_engine__default = /*#__PURE__*/__webpack_require__.n(ad_engine_);
 
 function findSlotGroup(product) {
 	var slotGroups = ad_engine_["context"].get('slotGroups'),
-	    result = Object.keys(slotGroups).filter(function (name) {
+	    result = keys__default()(slotGroups).filter(function (name) {
 		return slotGroups[name].indexOf(product) !== -1;
 	});
 
@@ -144,13 +222,16 @@ function getAdProductInfo(slotName, loadedTemplate, loadedProduct) {
 }
 // CONCATENATED MODULE: ./src/common/index.js
 
+// EXTERNAL MODULE: external "babel-runtime/helpers/classCallCheck"
+var classCallCheck_ = __webpack_require__(1);
+var classCallCheck__default = /*#__PURE__*/__webpack_require__.n(classCallCheck_);
+
+// EXTERNAL MODULE: external "babel-runtime/helpers/createClass"
+var createClass_ = __webpack_require__(2);
+var createClass__default = /*#__PURE__*/__webpack_require__.n(createClass_);
 
 // CONCATENATED MODULE: ./src/templates/floating-rail.js
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
@@ -160,7 +241,7 @@ var biggestAdSize = 600;
 var availableSpace = null;
 
 var floating_rail_FloatingRail = function () {
-	_createClass(FloatingRail, null, [{
+	createClass__default()(FloatingRail, null, [{
 		key: 'getName',
 		value: function getName() {
 			return 'floatingRail';
@@ -178,14 +259,14 @@ var floating_rail_FloatingRail = function () {
 	}]);
 
 	function FloatingRail() {
-		_classCallCheck(this, FloatingRail);
+		classCallCheck__default()(this, FloatingRail);
 
 		this.config = ad_engine_["context"].get('templates.floatingRail');
 		this.rail = document.querySelector(this.config.railSelector);
 		this.railWrapper = document.querySelector(this.config.wrapperSelector);
 	}
 
-	_createClass(FloatingRail, [{
+	createClass__default()(FloatingRail, [{
 		key: 'init',
 		value: function init(params) {
 			var _this = this;
@@ -242,12 +323,19 @@ var floating_rail_FloatingRail = function () {
 
 	return FloatingRail;
 }();
+// EXTERNAL MODULE: external "babel-runtime/regenerator"
+var regenerator_ = __webpack_require__(3);
+var regenerator__default = /*#__PURE__*/__webpack_require__.n(regenerator_);
+
+// EXTERNAL MODULE: external "babel-runtime/helpers/asyncToGenerator"
+var asyncToGenerator_ = __webpack_require__(4);
+var asyncToGenerator__default = /*#__PURE__*/__webpack_require__.n(asyncToGenerator_);
+
 // EXTERNAL MODULE: external "lodash/throttle"
-var throttle_ = __webpack_require__(6);
+var throttle_ = __webpack_require__(19);
 var throttle__default = /*#__PURE__*/__webpack_require__.n(throttle_);
 
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/close-button.js
-
 function add(video, container) {
 	var closeButton = document.createElement('div');
 
@@ -264,7 +352,7 @@ function add(video, container) {
 	add: add
 });
 // EXTERNAL MODULE: ./src/templates/uap/ui/icons.json
-var icons = __webpack_require__(7);
+var icons = __webpack_require__(20);
 var icons_default = /*#__PURE__*/__webpack_require__.n(icons);
 
 // CONCATENATED MODULE: ./src/templates/uap/ui/icons.js
@@ -289,12 +377,11 @@ function createIcon(iconName) {
 	return null;
 }
 
-var icons_icons = Object.keys(icons_default.a).reduce(function (map, name) {
+var icons_icons = keys__default()(icons_default.a).reduce(function (map, name) {
 	map[name] = name;
 	return map;
 }, {});
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/learn-more.js
-
 
 
 var learn_more_text = 'Learn More';
@@ -320,7 +407,6 @@ function learn_more_add(video, container, params) {
 	add: learn_more_add
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/pause-control.js
-
 
 
 function pause_control_add(video, container) {
@@ -356,7 +442,6 @@ function pause_control_add(video, container) {
 	add: pause_control_add
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/pause-overlay.js
-
 function pause_overlay_add(video, container) {
 	var overlay = document.createElement('div');
 
@@ -376,7 +461,6 @@ function pause_overlay_add(video, container) {
 	add: pause_overlay_add
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/progress-bar.js
-
 
 
 function progress_bar_add(video, container) {
@@ -418,7 +502,6 @@ function progress_bar_add(video, container) {
 	add: progress_bar_add
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/replay-overlay.js
-
 
 
 var replayOverlayClass = 'replay-overlay';
@@ -499,7 +582,6 @@ function addPlayIcon(overlay) {
 	add: replay_overlay_add
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-animation.js
-
 var duration = 400,
     onAnimationClassName = 'on-animation';
 
@@ -548,7 +630,6 @@ function toggle_animation_add(video, container, params) {
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-fullscreen.js
 
 
-
 function toggle_fullscreen_add(video, container) {
 	var toggleFullscreenButton = document.createElement('div'),
 	    offIcon = createIcon(icons_icons.FULLSCREEN_OFF, ['fullscreen-off-icon', 'porvata-icon', 'porvata-off-icon']),
@@ -581,7 +662,6 @@ function toggle_fullscreen_add(video, container) {
 	add: toggle_fullscreen_add
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-thumbnail.js
-
 function toggle_thumbnail_add(video, container, params) {
 	video.addEventListener('wikiaAdStarted', function () {
 		params.thumbnail.classList.add('hidden-state');
@@ -596,7 +676,6 @@ function toggle_thumbnail_add(video, container, params) {
 	add: toggle_thumbnail_add
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-ui.js
-
 
 
 var overlayTimeout = 5000;
@@ -642,7 +721,6 @@ function toggle_ui_add(video, container, params) {
 	add: toggle_ui_add
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-video.js
-
 function toggle_video_add(video, container) {
 	video.addEventListener('wikiaAdStarted', function () {
 		container.classList.remove('hide');
@@ -657,7 +735,6 @@ function toggle_video_add(video, container) {
 	add: toggle_video_add
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/volume-control.js
-
 
 
 function createVolumeControl(params) {
@@ -705,22 +782,19 @@ function volume_control_add(video, container) {
 	add: volume_control_add
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/panel.js
-var panel__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 
 
-function panel__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Panel = function () {
+var panel_Panel = function () {
 	function Panel(className, uiElements) {
-		panel__classCallCheck(this, Panel);
+		classCallCheck__default()(this, Panel);
 
 		this.uiElements = uiElements;
 		this.className = className;
 		this.panelContainer = null;
 	}
 
-	panel__createClass(Panel, [{
+	createClass__default()(Panel, [{
 		key: 'add',
 		value: function add(video, container, params) {
 			var _this = this;
@@ -755,8 +829,6 @@ var Panel = function () {
 
 
 
-
-
 var ui_template_createBottomPanel = function createBottomPanel(_ref) {
 	var _ref$theme = _ref.theme,
 	    theme = _ref$theme === undefined ? null : _ref$theme;
@@ -768,7 +840,7 @@ var ui_template_createBottomPanel = function createBottomPanel(_ref) {
 		panelClassName += ' dynamic-panel';
 	}
 
-	return new Panel(panelClassName, [isHiVi ? pause_control : null, volume_control, isHiVi ? toggle_fullscreen : null]);
+	return new panel_Panel(panelClassName, [isHiVi ? pause_control : null, volume_control, isHiVi ? toggle_fullscreen : null]);
 };
 
 var ui_template_getTemplates = function getTemplates(params, videoSettings) {
@@ -793,27 +865,11 @@ function selectTemplate(videoSettings) {
 		template = params.splitLayoutVideoPosition === 'right' ? 'split-right' : 'split-left';
 	} else if (videoSettings.isAutoPlay()) {
 		template = 'auto-play';
-	} else {
-		document.body.classList.add('ctp-vuap-loaded');
-	}
-
-	params.container.classList.add('theme-' + template);
-
-	// TODO remove those ifs ADEN-6645
-	if (params.isDarkTheme) {
-		params.container.classList.add('theme-dark');
-	}
-	if (params.isMobile) {
-		params.container.classList.add('theme-mobile-layout');
-	}
-	if (ad_engine_["utils"].client.isSmartphone() || ad_engine_["utils"].client.isTablet()) {
-		params.container.classList.add('theme-mobile-device');
 	}
 
 	return templates[template];
 }
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/video-interface.js
-
 function setup(video, uiElements, params) {
 	uiElements.forEach(function (element) {
 		if (element) {
@@ -824,14 +880,16 @@ function setup(video, uiElements, params) {
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/index.js
 
 
-
 // CONCATENATED MODULE: ./src/templates/uap/universal-ad-package.js
 
 
+
+
+
 var loadPorvata = function () {
-	var _ref = _asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee(videoSettings, slotContainer, imageContainer) {
+	var _ref = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee(videoSettings, slotContainer, imageContainer) {
 		var params, template, video;
-		return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
+		return regenerator__default.a.wrap(function _callee$(_context) {
 			while (1) {
 				switch (_context.prev = _context.next) {
 					case 0:
@@ -884,9 +942,9 @@ var loadPorvata = function () {
 }();
 
 var loadVideoAd = function () {
-	var _ref2 = _asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee2(videoSettings) {
+	var _ref2 = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee2(videoSettings) {
 		var params, imageContainer, size, recalculateVideoSize, video;
-		return external__regenerator_runtime__default.a.wrap(function _callee2$(_context2) {
+		return regenerator__default.a.wrap(function _callee2$(_context2) {
 			while (1) {
 				switch (_context2.prev = _context2.next) {
 					case 0:
@@ -946,10 +1004,6 @@ var loadVideoAd = function () {
 
 
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-
-
 
 var uapId = 'none';
 var uapType = 'uap';
@@ -991,7 +1045,7 @@ function setType(type) {
 
 function updateSlotsTargeting(id) {
 	var slots = ad_engine_["context"].get('slots');
-	Object.keys(slots).forEach(function (slotId) {
+	keys__default()(slots).forEach(function (slotId) {
 		if (!slots[slotId].nonUapSlot) {
 			ad_engine_["context"].set('slots.' + slotId + '.targeting.uap', id);
 		}
@@ -1053,8 +1107,23 @@ var universalAdPackage = {
 	setType: setType,
 	setUapId: setUapId
 };
-// CONCATENATED MODULE: ./src/templates/uap/resolved-state-switch.js
+// EXTERNAL MODULE: external "babel-runtime/core-js/object/assign"
+var assign_ = __webpack_require__(12);
+var assign__default = /*#__PURE__*/__webpack_require__.n(assign_);
 
+// EXTERNAL MODULE: external "babel-runtime/helpers/toConsumableArray"
+var toConsumableArray_ = __webpack_require__(10);
+var toConsumableArray__default = /*#__PURE__*/__webpack_require__.n(toConsumableArray_);
+
+// EXTERNAL MODULE: external "babel-runtime/helpers/toArray"
+var toArray_ = __webpack_require__(21);
+var toArray__default = /*#__PURE__*/__webpack_require__.n(toArray_);
+
+// EXTERNAL MODULE: external "babel-runtime/core-js/promise"
+var promise_ = __webpack_require__(11);
+var promise__default = /*#__PURE__*/__webpack_require__.n(promise_);
+
+// CONCATENATED MODULE: ./src/templates/uap/resolved-state-switch.js
 
 
 
@@ -1092,9 +1161,6 @@ var resolvedStateSwitch = {
 // CONCATENATED MODULE: ./src/templates/uap/resolved-state.js
 
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 
 
@@ -1126,16 +1192,16 @@ function setState(state, params) {
 		srcPropertyName = 'resolvedStateSrc';
 	}
 
-	promises.push(Promise.resolve(params));
+	promises.push(promise__default.a.resolve(params));
 	image1.element.src = image1[srcPropertyName];
-	promises.push(Promise.race([ad_engine_["utils"].once(image1.element, 'load'), ad_engine_["utils"].once(image1.element, 'error')]));
+	promises.push(promise__default.a.race([ad_engine_["utils"].once(image1.element, 'load'), ad_engine_["utils"].once(image1.element, 'error')]));
 
 	if (image2 && image2[srcPropertyName]) {
 		image2.element.src = image2[srcPropertyName];
-		promises.push(Promise.race([ad_engine_["utils"].once(image2.element, 'load'), ad_engine_["utils"].once(image2.element, 'error')]));
+		promises.push(promise__default.a.race([ad_engine_["utils"].once(image2.element, 'load'), ad_engine_["utils"].once(image2.element, 'error')]));
 	}
 
-	return Promise.all(promises);
+	return promise__default.a.all(promises);
 }
 
 function setDefaultState(params) {
@@ -1178,12 +1244,12 @@ var resolvedState = {
 		if (templateSupportsResolvedState(params)) {
 			if (videoSettings.isResolvedState()) {
 				return resolved_state_setResolvedState(params).then(function (_ref) {
-					var _ref2 = _toArray(_ref),
+					var _ref2 = toArray__default()(_ref),
 					    updatedParams = _ref2[0],
 					    args = _ref2.slice(1);
 
 					videoSettings.updateParams(updatedParams);
-					return [updatedParams].concat(_toConsumableArray(args));
+					return [updatedParams].concat(toConsumableArray__default()(args));
 				});
 			}
 
@@ -1191,23 +1257,20 @@ var resolvedState = {
 			return setDefaultState(params);
 		}
 
-		return Promise.resolve();
+		return promise__default.a.resolve();
 	},
 
 	isResolvedState: isResolvedState
 };
 // CONCATENATED MODULE: ./src/templates/uap/video-settings.js
-var video_settings__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 
-
-function video_settings__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
 var video_settings_VideoSettings = function () {
 	function VideoSettings(params) {
-		video_settings__classCallCheck(this, VideoSettings);
+		classCallCheck__default()(this, VideoSettings);
 
 		this.params = params;
 
@@ -1227,7 +1290,7 @@ var video_settings_VideoSettings = function () {
 		});
 	}
 
-	video_settings__createClass(VideoSettings, [{
+	createClass__default()(VideoSettings, [{
 		key: 'detectAutoPlay',
 		value: function detectAutoPlay() {
 			var defaultStateAutoPlay = this.params.autoPlay && !this.resolvedState,
@@ -1237,12 +1300,12 @@ var video_settings_VideoSettings = function () {
 	}, {
 		key: 'getParams',
 		value: function getParams() {
-			return Object.assign({}, this.params);
+			return assign__default()({}, this.params);
 		}
 	}, {
 		key: 'updateParams',
 		value: function updateParams(params) {
-			Object.assign(this.params, params);
+			assign__default()(this.params, params);
 		}
 	}, {
 		key: 'isAutoPlay',
@@ -1263,23 +1326,35 @@ var video_settings_VideoSettings = function () {
 
 	return VideoSettings;
 }();
+// EXTERNAL MODULE: external "babel-runtime/core-js/object/get-prototype-of"
+var get_prototype_of_ = __webpack_require__(5);
+var get_prototype_of__default = /*#__PURE__*/__webpack_require__.n(get_prototype_of_);
+
+// EXTERNAL MODULE: external "babel-runtime/helpers/possibleConstructorReturn"
+var possibleConstructorReturn_ = __webpack_require__(6);
+var possibleConstructorReturn__default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn_);
+
+// EXTERNAL MODULE: external "babel-runtime/helpers/get"
+var helpers_get_ = __webpack_require__(8);
+var helpers_get__default = /*#__PURE__*/__webpack_require__.n(helpers_get_);
+
+// EXTERNAL MODULE: external "babel-runtime/helpers/inherits"
+var inherits_ = __webpack_require__(7);
+var inherits__default = /*#__PURE__*/__webpack_require__.n(inherits_);
+
 // CONCATENATED MODULE: ./src/templates/uap/themes/theme.js
-var theme__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 
-
-function theme__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var BigFancyAdTheme = function () {
+var theme_BigFancyAdTheme = function () {
 	function BigFancyAdTheme(adSlot, params) {
-		theme__classCallCheck(this, BigFancyAdTheme);
+		classCallCheck__default()(this, BigFancyAdTheme);
 
 		this.adSlot = adSlot;
 		this.container = this.adSlot.getElement();
 		this.params = params;
 	}
 
-	theme__createClass(BigFancyAdTheme, [{
+	createClass__default()(BigFancyAdTheme, [{
 		key: "onAdReady",
 		value: function onAdReady() {}
 	}, {
@@ -1290,47 +1365,76 @@ var BigFancyAdTheme = function () {
 	return BigFancyAdTheme;
 }();
 // CONCATENATED MODULE: ./src/templates/uap/themes/classic/classic.js
-var classic__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-
-
-function classic__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 
 
 
-var classic_BfaaTheme = function (_BigFancyAdTheme) {
-	_inherits(BfaaTheme, _BigFancyAdTheme);
 
-	function BfaaTheme() {
-		classic__classCallCheck(this, BfaaTheme);
 
-		return _possibleConstructorReturn(this, (BfaaTheme.__proto__ || Object.getPrototypeOf(BfaaTheme)).apply(this, arguments));
+
+
+
+
+
+var classic_BigFancyAdClassicTheme = function (_BigFancyAdTheme) {
+	inherits__default()(BigFancyAdClassicTheme, _BigFancyAdTheme);
+
+	function BigFancyAdClassicTheme() {
+		classCallCheck__default()(this, BigFancyAdClassicTheme);
+
+		return possibleConstructorReturn__default()(this, (BigFancyAdClassicTheme.__proto__ || get_prototype_of__default()(BigFancyAdClassicTheme)).apply(this, arguments));
 	}
 
-	classic__createClass(BfaaTheme, [{
+	createClass__default()(BigFancyAdClassicTheme, [{
+		key: 'onAdReady',
+		value: function onAdReady(iframe) {
+			helpers_get__default()(BigFancyAdClassicTheme.prototype.__proto__ || get_prototype_of__default()(BigFancyAdClassicTheme.prototype), 'onAdReady', this).call(this, iframe);
+
+			if (universalAdPackage.isVideoEnabled(this.params)) {
+				var videoSettings = new video_settings_VideoSettings(this.params);
+
+				if (videoSettings.isSplitLayout()) {
+					var theme = videoSettings.getParams().splitLayoutVideoPosition === 'right' ? 'theme-split-right' : 'theme-split-left';
+
+					this.params.container.classList.add(theme);
+				} else if (!videoSettings.isAutoPlay()) {
+					document.body.classList.add('ctp-vuap-loaded');
+				}
+			}
+		}
+	}]);
+
+	return BigFancyAdClassicTheme;
+}(theme_BigFancyAdTheme);
+
+var classic_BfaaTheme = function (_BigFancyAdClassicThe) {
+	inherits__default()(BfaaTheme, _BigFancyAdClassicThe);
+
+	function BfaaTheme() {
+		classCallCheck__default()(this, BfaaTheme);
+
+		return possibleConstructorReturn__default()(this, (BfaaTheme.__proto__ || get_prototype_of__default()(BfaaTheme)).apply(this, arguments));
+	}
+
+	createClass__default()(BfaaTheme, [{
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this2 = this;
+			var _this3 = this;
 
 			if (!this.params.splitLayoutVideoPosition) {
 				video.addEventListener('wikiaAdStarted', function () {
-					_this2.recalculatePaddingTop(_this2.params.videoAspectRatio);
+					_this3.recalculatePaddingTop(_this3.params.videoAspectRatio);
 				});
 
 				video.addEventListener('wikiaAdCompleted', function () {
-					_this2.recalculatePaddingTop(_this2.params.aspectRatio);
+					_this3.recalculatePaddingTop(_this3.params.aspectRatio);
 				});
 			}
 		}
 	}, {
 		key: 'recalculatePaddingTop',
 		value: function recalculatePaddingTop(finalAspectRatio) {
-			var _this3 = this;
+			var _this4 = this;
 
 			document.body.style.paddingTop = 100 / finalAspectRatio + '%';
 
@@ -1340,39 +1444,37 @@ var classic_BfaaTheme = function (_BigFancyAdTheme) {
 
 			setTimeout(function () {
 				// clear height so ad is responsive again
-				_this3.container.style.height = '';
+				_this4.container.style.height = '';
 			}, toggle_animation.duration);
 		}
 	}]);
 
 	return BfaaTheme;
-}(BigFancyAdTheme);
+}(classic_BigFancyAdClassicTheme);
 
-var classic_BfabTheme = function (_BigFancyAdTheme2) {
-	_inherits(BfabTheme, _BigFancyAdTheme2);
+var classic_BfabTheme = function (_BigFancyAdClassicThe2) {
+	inherits__default()(BfabTheme, _BigFancyAdClassicThe2);
 
 	function BfabTheme() {
-		classic__classCallCheck(this, BfabTheme);
+		classCallCheck__default()(this, BfabTheme);
 
-		return _possibleConstructorReturn(this, (BfabTheme.__proto__ || Object.getPrototypeOf(BfabTheme)).apply(this, arguments));
+		return possibleConstructorReturn__default()(this, (BfabTheme.__proto__ || get_prototype_of__default()(BfabTheme)).apply(this, arguments));
 	}
 
 	return BfabTheme;
-}(BigFancyAdTheme);
+}(classic_BigFancyAdClassicTheme);
 // CONCATENATED MODULE: ./src/templates/uap/themes/classic/ready.js
 
-
-function ready__asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 
 
 
 var adIsReady = function () {
-	var _ref2 = ready__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee(_ref) {
+	var _ref2 = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee(_ref) {
 		var adSlot = _ref.adSlot,
 		    params = _ref.params,
 		    videoSettings = _ref.videoSettings;
-		return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
+		return regenerator__default.a.wrap(function _callee$(_context) {
 			while (1) {
 				switch (_context.prev = _context.next) {
 					case 0:
@@ -1401,24 +1503,36 @@ var adIsReady = function () {
 // CONCATENATED MODULE: ./src/templates/uap/themes/classic/index.js
 
 
+// EXTERNAL MODULE: external "babel-runtime/core-js/symbol"
+var symbol_ = __webpack_require__(13);
+var symbol__default = /*#__PURE__*/__webpack_require__.n(symbol_);
+
+// EXTERNAL MODULE: external "lodash/toPlainObject"
+var toPlainObject_ = __webpack_require__(22);
+var toPlainObject__default = /*#__PURE__*/__webpack_require__.n(toPlainObject_);
+
+// EXTERNAL MODULE: external "lodash/isUndefined"
+var isUndefined_ = __webpack_require__(23);
+var isUndefined__default = /*#__PURE__*/__webpack_require__.n(isUndefined_);
 
 // EXTERNAL MODULE: external "lodash/mapValues"
-var mapValues_ = __webpack_require__(8);
+var mapValues_ = __webpack_require__(24);
 var mapValues__default = /*#__PURE__*/__webpack_require__.n(mapValues_);
 
 // EXTERNAL MODULE: external "lodash/debounce"
-var debounce_ = __webpack_require__(9);
+var debounce_ = __webpack_require__(25);
 var debounce__default = /*#__PURE__*/__webpack_require__.n(debounce_);
 
+// EXTERNAL MODULE: external "events"
+var external__events_ = __webpack_require__(14);
+var external__events__default = /*#__PURE__*/__webpack_require__.n(external__events_);
+
 // CONCATENATED MODULE: ./src/templates/uap/ui/ui-component.js
-var ui_component__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 
 
-function ui_component__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var UiComponent = function () {
-	ui_component__createClass(UiComponent, [{
+var ui_component_UiComponent = function () {
+	createClass__default()(UiComponent, [{
 		key: "classNames",
 		get: function get() {
 			return this.props.classNames || [];
@@ -1428,12 +1542,12 @@ var UiComponent = function () {
 	function UiComponent() {
 		var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-		ui_component__classCallCheck(this, UiComponent);
+		classCallCheck__default()(this, UiComponent);
 
 		this.props = props;
 	}
 
-	ui_component__createClass(UiComponent, [{
+	createClass__default()(UiComponent, [{
 		key: "render",
 		value: function render() {
 			return document.createDocumentFragment();
@@ -1445,30 +1559,25 @@ var UiComponent = function () {
 
 
 // CONCATENATED MODULE: ./src/templates/uap/ui/advertisement-label.js
-var advertisement_label__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 
 
-function advertisement_label__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function advertisement_label__possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function advertisement_label__inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 
 
 var labelText = 'Advertisement';
 
-var AdvertisementLabel = function (_UiComponent) {
-	advertisement_label__inherits(AdvertisementLabel, _UiComponent);
+var advertisement_label_AdvertisementLabel = function (_UiComponent) {
+	inherits__default()(AdvertisementLabel, _UiComponent);
 
 	function AdvertisementLabel() {
-		advertisement_label__classCallCheck(this, AdvertisementLabel);
+		classCallCheck__default()(this, AdvertisementLabel);
 
-		return advertisement_label__possibleConstructorReturn(this, (AdvertisementLabel.__proto__ || Object.getPrototypeOf(AdvertisementLabel)).apply(this, arguments));
+		return possibleConstructorReturn__default()(this, (AdvertisementLabel.__proto__ || get_prototype_of__default()(AdvertisementLabel)).apply(this, arguments));
 	}
 
-	advertisement_label__createClass(AdvertisementLabel, [{
+	createClass__default()(AdvertisementLabel, [{
 		key: 'render',
 		value: function render() {
 			var label = document.createElement('div');
@@ -1481,36 +1590,29 @@ var AdvertisementLabel = function (_UiComponent) {
 	}]);
 
 	return AdvertisementLabel;
-}(UiComponent);
+}(ui_component_UiComponent);
 
 
 // CONCATENATED MODULE: ./src/templates/uap/ui/button.js
-var button__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 
 
-function button__toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function button__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function button__possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function button__inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 
 
-var Button = function (_UiComponent) {
-	button__inherits(Button, _UiComponent);
+
+
+
+var button_Button = function (_UiComponent) {
+	inherits__default()(Button, _UiComponent);
 
 	function Button() {
-		button__classCallCheck(this, Button);
+		classCallCheck__default()(this, Button);
 
-		return button__possibleConstructorReturn(this, (Button.__proto__ || Object.getPrototypeOf(Button)).apply(this, arguments));
+		return possibleConstructorReturn__default()(this, (Button.__proto__ || get_prototype_of__default()(Button)).apply(this, arguments));
 	}
 
-	button__createClass(Button, [{
+	createClass__default()(Button, [{
 		key: 'render',
 		value: function render() {
 			var _this2 = this;
@@ -1541,49 +1643,42 @@ var Button = function (_UiComponent) {
 	}, {
 		key: 'classNames',
 		get: function get() {
-			return ['button-control'].concat(button__toConsumableArray(_get(Button.prototype.__proto__ || Object.getPrototypeOf(Button.prototype), 'classNames', this)));
+			return ['button-control'].concat(toConsumableArray__default()(helpers_get__default()(Button.prototype.__proto__ || get_prototype_of__default()(Button.prototype), 'classNames', this)));
 		}
 	}]);
 
 	return Button;
-}(UiComponent);
+}(ui_component_UiComponent);
 
 
 // CONCATENATED MODULE: ./src/templates/uap/ui/close-button.js
-var close_button__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var close_button__get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 
 
-function close_button__toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-function close_button__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function close_button__possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function close_button__inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 
 
 
 
 var close_button_CloseButton = function (_UiComponent) {
-	close_button__inherits(CloseButton, _UiComponent);
+	inherits__default()(CloseButton, _UiComponent);
 
 	function CloseButton() {
-		close_button__classCallCheck(this, CloseButton);
+		classCallCheck__default()(this, CloseButton);
 
-		return close_button__possibleConstructorReturn(this, (CloseButton.__proto__ || Object.getPrototypeOf(CloseButton)).apply(this, arguments));
+		return possibleConstructorReturn__default()(this, (CloseButton.__proto__ || get_prototype_of__default()(CloseButton)).apply(this, arguments));
 	}
 
-	close_button__createClass(CloseButton, [{
+	createClass__default()(CloseButton, [{
 		key: 'render',
 		value: function render() {
 			var onClick = this.props.onClick;
 
 			var classNames = this.classNames;
-			var button = new Button({ onClick: onClick, classNames: classNames }).render();
+			var button = new button_Button({ onClick: onClick, classNames: classNames }).render();
 			var closeIcon = createIcon(icons_icons.CROSS, ['icon']);
 
 			button.appendChild(closeIcon);
@@ -1593,85 +1688,45 @@ var close_button_CloseButton = function (_UiComponent) {
 	}, {
 		key: 'classNames',
 		get: function get() {
-			return ['button-close'].concat(close_button__toConsumableArray(close_button__get(CloseButton.prototype.__proto__ || Object.getPrototypeOf(CloseButton.prototype), 'classNames', this)));
+			return ['button-close'].concat(toConsumableArray__default()(helpers_get__default()(CloseButton.prototype.__proto__ || get_prototype_of__default()(CloseButton.prototype), 'classNames', this)));
 		}
 	}]);
 
 	return CloseButton;
-}(UiComponent);
+}(ui_component_UiComponent);
 
 
-// EXTERNAL MODULE: external "events"
-var external__events_ = __webpack_require__(10);
-var external__events__default = /*#__PURE__*/__webpack_require__.n(external__events_);
-
-// EXTERNAL MODULE: external "core-decorators/es/autobind"
-var autobind_ = __webpack_require__(11);
-var autobind__default = /*#__PURE__*/__webpack_require__.n(autobind_);
+// EXTERNAL MODULE: external "lodash/isFunction"
+var isFunction_ = __webpack_require__(26);
+var isFunction__default = /*#__PURE__*/__webpack_require__.n(isFunction_);
 
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/sticky-bfaa.js
-var sticky_bfaa__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _desc, _value, _class;
-
-
-
-function sticky_bfaa__asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-function sticky_bfaa__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function sticky_bfaa__possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function sticky_bfaa__inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
-	var desc = {};
-	Object['ke' + 'ys'](descriptor).forEach(function (key) {
-		desc[key] = descriptor[key];
-	});
-	desc.enumerable = !!desc.enumerable;
-	desc.configurable = !!desc.configurable;
-
-	if ('value' in desc || desc.initializer) {
-		desc.writable = true;
-	}
-
-	desc = decorators.slice().reverse().reduce(function (desc, decorator) {
-		return decorator(target, property, desc) || desc;
-	}, desc);
-
-	if (context && desc.initializer !== void 0) {
-		desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
-		desc.initializer = undefined;
-	}
-
-	if (desc.initializer === void 0) {
-		Object['define' + 'Property'](target, property, desc);
-		desc = null;
-	}
-
-	return desc;
-}
 
 
 
 
 
-var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
-	sticky_bfaa__inherits(StickyBfaa, _EventEmitter);
 
-	// time after which we'll remove stickiness even with no user interaction
+
+
+
+
+
+
+
+
+var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
+	inherits__default()(StickyBfaa, _EventEmitter);
+
 	function StickyBfaa(adSlot) {
-		var stickyUntilVideoViewed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-		var stickyAdditionalTime = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : StickyBfaa.DEFAULT_STICKINESS_ADDITIONAL_TIME;
+		var customWhen = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : promise__default.a.resolve();
 
-		sticky_bfaa__classCallCheck(this, StickyBfaa);
+		classCallCheck__default()(this, StickyBfaa);
 
-		var _this = sticky_bfaa__possibleConstructorReturn(this, (StickyBfaa.__proto__ || Object.getPrototypeOf(StickyBfaa)).call(this));
+		var _this = possibleConstructorReturn__default()(this, (StickyBfaa.__proto__ || get_prototype_of__default()(StickyBfaa)).call(this));
 
 		_this.adSlot = adSlot;
-		_this.stickyUntilVideoViewed = stickyUntilVideoViewed;
-		_this.stickyAdditionalTime = stickyAdditionalTime;
+		_this.customWhen = customWhen;
 		_this.sticky = false;
 		_this.logger = function () {
 			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -1683,13 +1738,11 @@ var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
 		return _this;
 	}
 
-	sticky_bfaa__createClass(StickyBfaa, [{
+	createClass__default()(StickyBfaa, [{
 		key: 'run',
 		value: function () {
-			var _ref = sticky_bfaa__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee() {
-				var _this2 = this;
-
-				return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
+			var _ref = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee() {
+				return regenerator__default.a.wrap(function _callee$(_context) {
 					while (1) {
 						switch (_context.prev = _context.next) {
 							case 0:
@@ -1697,16 +1750,19 @@ var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
 								return ad_engine_["slotTweaker"].onReady(this.adSlot);
 
 							case 2:
-
-								if (document.hidden) {
-									window.addEventListener('visibilitychange', function () {
-										return _this2.onAdReady();
-									}, { once: true });
-								} else {
-									this.onAdReady();
+								if (!document.hidden) {
+									_context.next = 5;
+									break;
 								}
 
-							case 3:
+								_context.next = 5;
+								return ad_engine_["utils"].once(window, 'visibilitychange');
+
+							case 5:
+
+								this.onAdReady();
+
+							case 6:
 							case 'end':
 								return _context.stop();
 						}
@@ -1748,56 +1804,64 @@ var sticky_bfaa_StickyBfaa = (_class = function (_EventEmitter) {
 			}
 		}
 	}, {
-		key: 'onViewed',
-		value: function onViewed() {
-			var _this3 = this;
-
-			var revertTimeout = null;
-			var adContainer = this.adSlot.getElement();
-			var shouldRevertImmediately = Math.abs(window.scrollY - adContainer.offsetTop) < adContainer.offsetHeight / 2;
-			var onRevertTimeout = function onRevertTimeout() {
-				clearTimeout(revertTimeout);
-				document.removeEventListener('scroll', onRevertTimeout);
-				_this3.revertStickiness();
-			};
-
-			this.adSlot.removeListener(ad_engine_["AdSlot"].SLOT_VIEWED_EVENT, this.onViewed);
-			setTimeout(function () {
-				document.addEventListener('scroll', onRevertTimeout);
-				revertTimeout = setTimeout(onRevertTimeout, shouldRevertImmediately ? 0 : StickyBfaa.STICKINESS_REMOVAL_WINDOW);
-			}, this.stickyAdditionalTime);
-
-			this.logger('slotViewed triggered on ' + this.adSlot.getSlotName());
-		}
-	}, {
 		key: 'onAdReady',
-		value: function onAdReady() {
-			this.applyStickiness();
-			this.adSlot.once(this.stickyUntilVideoViewed ? ad_engine_["AdSlot"].VIDEO_VIEWED_EVENT : ad_engine_["AdSlot"].SLOT_VIEWED_EVENT, this.onViewed);
-		}
+		value: function () {
+			var _ref2 = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee2() {
+				return regenerator__default.a.wrap(function _callee2$(_context2) {
+					while (1) {
+						switch (_context2.prev = _context2.next) {
+							case 0:
+								this.applyStickiness();
+								this.logger('waiting for viewability and custom condition');
+
+								_context2.next = 4;
+								return promise__default.a.all([ad_engine_["utils"].once(this.adSlot, ad_engine_["AdSlot"].SLOT_VIEWED_EVENT), isFunction__default()(this.customWhen) ? this.customWhen() : this.customWhen]);
+
+							case 4:
+
+								this.logger('waiting for unstick timeout or user interaction');
+								_context2.next = 7;
+								return ad_engine_["utils"].once(window, 'scroll');
+
+							case 7:
+								this.revertStickiness();
+
+							case 8:
+							case 'end':
+								return _context2.stop();
+						}
+					}
+				}, _callee2, this);
+			}));
+
+			function onAdReady() {
+				return _ref2.apply(this, arguments);
+			}
+
+			return onAdReady;
+		}()
 	}]);
 
 	return StickyBfaa;
-}(external__events_["EventEmitter"]), (_applyDecoratedDescriptor(_class.prototype, 'onViewed', [autobind__default.a], Object.getOwnPropertyDescriptor(_class.prototype, 'onViewed'), _class.prototype)), _class);
-sticky_bfaa_StickyBfaa.STICKINESS_REMOVAL_WINDOW = 10000;
-sticky_bfaa_StickyBfaa.DEFAULT_STICKINESS_ADDITIONAL_TIME = 3000;
+}(external__events_["EventEmitter"]);
 sticky_bfaa_StickyBfaa.LOG_GROUP = 'sticky-bfaa';
-sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
+sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = symbol__default()('stickinessChange');
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/hivi.js
 
 
 
-var hivi__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 
 
-function hivi__asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-function hivi__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function hivi__possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function hivi__inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+
 
 
 
@@ -1811,50 +1875,111 @@ function hivi__inherits(subClass, superClass) { if (typeof superClass !== "funct
 
 var HIVI_RESOLVED_THRESHOLD = 0.995;
 
-var hivi_BfaaTheme = function (_BigFancyAdTheme) {
-	hivi__inherits(BfaaTheme, _BigFancyAdTheme);
+var hivi_BigFancyAdHiviTheme = function (_BigFancyAdTheme) {
+	inherits__default()(BigFancyAdHiviTheme, _BigFancyAdTheme);
 
-	function BfaaTheme(adSlot, params) {
-		hivi__classCallCheck(this, BfaaTheme);
+	function BigFancyAdHiviTheme() {
+		classCallCheck__default()(this, BigFancyAdHiviTheme);
 
-		var _this = hivi__possibleConstructorReturn(this, (BfaaTheme.__proto__ || Object.getPrototypeOf(BfaaTheme)).call(this, adSlot, params));
-
-		_this.stickyBfaa = null;
-		_this.scrollListener = null;
-		_this.video = null;
-		_this.config = ad_engine_["context"].get('templates.bfaa');
-		_this.isLocked = false;
-		_this.onResolvedStateScroll = null;
-		_this.addAdvertisementLabel();
-
-		if (_this.params.isSticky) {
-			_this.stickyBfaa = new sticky_bfaa_StickyBfaa(_this.adSlot, _this.params.stickyUntilVideoViewed, _this.params.stickyAdditionalTime);
-			_this.addUnstickButton();
-			_this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
-				return _this.onStickinessChange(isSticky);
-			});
-			_this.stickyBfaa.run();
-		}
-		return _this;
+		return possibleConstructorReturn__default()(this, (BigFancyAdHiviTheme.__proto__ || get_prototype_of__default()(BigFancyAdHiviTheme)).apply(this, arguments));
 	}
 
-	hivi__createClass(BfaaTheme, [{
+	createClass__default()(BigFancyAdHiviTheme, [{
+		key: 'onAdReady',
+		value: function onAdReady() {
+			helpers_get__default()(BigFancyAdHiviTheme.prototype.__proto__ || get_prototype_of__default()(BigFancyAdHiviTheme.prototype), 'onAdReady', this).call(this);
+			this.container.classList.add('theme-hivi');
+			this.addAdvertisementLabel();
+		}
+	}, {
 		key: 'addAdvertisementLabel',
 		value: function addAdvertisementLabel() {
-			var advertisementLabel = new AdvertisementLabel();
+			var advertisementLabel = new advertisement_label_AdvertisementLabel();
 
 			this.container.appendChild(advertisementLabel.render());
+		}
+	}]);
+
+	return BigFancyAdHiviTheme;
+}(theme_BigFancyAdTheme);
+
+var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
+	inherits__default()(BfaaTheme, _BigFancyAdHiviTheme);
+
+	function BfaaTheme(adSlot, params) {
+		classCallCheck__default()(this, BfaaTheme);
+
+		var _this2 = possibleConstructorReturn__default()(this, (BfaaTheme.__proto__ || get_prototype_of__default()(BfaaTheme)).call(this, adSlot, params));
+
+		assign__default()(_this2, toPlainObject__default()(new external__events_["EventEmitter"]()));
+
+		_this2.stickyBfaa = null;
+		_this2.scrollListener = null;
+		_this2.video = null;
+		_this2.config = ad_engine_["context"].get('templates.bfaa');
+		_this2.isLocked = false;
+		_this2.onResolvedStateScroll = null;
+
+		if (_this2.params.isSticky) {
+			_this2.addStickinessPlugin();
+		}
+		return _this2;
+	}
+
+	createClass__default()(BfaaTheme, [{
+		key: 'addStickinessPlugin',
+		value: function addStickinessPlugin() {
+			var _this3 = this;
+
+			var _params = this.params,
+			    stickyAdditionalTime = _params.stickyAdditionalTime,
+			    stickyUntilVideoViewed = _params.stickyUntilVideoViewed;
+
+			var whenResolvedAndVideoViewed = function () {
+				var _ref = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee() {
+					return regenerator__default.a.wrap(function _callee$(_context) {
+						while (1) {
+							switch (_context.prev = _context.next) {
+								case 0:
+									_context.next = 2;
+									return promise__default.a.all([ad_engine_["utils"].once(_this3, BfaaTheme.RESOLVED_STATE_EVENT), stickyUntilVideoViewed ? ad_engine_["utils"].once(_this3.adSlot, ad_engine_["AdSlot"].VIDEO_VIEWED_EVENT) : promise__default.a.resolve()]);
+
+								case 2:
+									_context.next = 4;
+									return ad_engine_["utils"].wait(isUndefined__default()(stickyAdditionalTime) ? BfaaTheme.DEFAULT_UNSTICK_DELAY : stickyAdditionalTime);
+
+								case 4:
+								case 'end':
+									return _context.stop();
+							}
+						}
+					}, _callee, _this3);
+				}));
+
+				return function whenResolvedAndVideoViewed() {
+					return _ref.apply(this, arguments);
+				};
+			}();
+
+			this.stickyBfaa = new sticky_bfaa_StickyBfaa(this.adSlot, whenResolvedAndVideoViewed());
+			this.addUnstickButton();
+			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
+				return _this3.onStickinessChange(isSticky);
+			});
+			this.stickyBfaa.run();
 		}
 	}, {
 		key: 'addUnstickButton',
 		value: function addUnstickButton() {
-			var _this2 = this;
+			var _this4 = this;
 
 			var closeButton = new close_button_CloseButton({
 				classNames: ['button-unstick'],
 				onClick: function onClick() {
-					_this2.stickyBfaa.revertStickiness();
-					if (_this2.video) _this2.video.pause();
+					_this4.stickyBfaa.revertStickiness();
+					if (_this4.video) {
+						_this4.video.pause();
+					}
 				}
 			});
 
@@ -1863,14 +1988,16 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}, {
 		key: 'onAdReady',
 		value: function onAdReady() {
-			var _this3 = this;
+			var _this5 = this;
+
+			helpers_get__default()(BfaaTheme.prototype.__proto__ || get_prototype_of__default()(BfaaTheme.prototype), 'onAdReady', this).call(this);
 
 			if (resolvedState.isResolvedState(this.params)) {
 				this.setResolvedState(true);
 			} else {
 				resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
 				this.scrollListener = ad_engine_["scrollListener"].addCallback(function () {
-					return _this3.updateAdSizes();
+					return _this5.updateAdSizes();
 				});
 				// Manually run update on scroll once
 				this.updateAdSizes();
@@ -1879,42 +2006,37 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}, {
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this4 = this;
+			var _this6 = this;
+
+			helpers_get__default()(BfaaTheme.prototype.__proto__ || get_prototype_of__default()(BfaaTheme.prototype), 'onVideoReady', this).call(this);
 
 			this.video = video;
 			video.addEventListener('wikiaAdStarted', function () {
-				return _this4.updateAdSizes();
+				return _this6.updateAdSizes();
 			});
 			video.addEventListener('wikiaAdCompleted', function () {
-				if (!_this4.isLocked) {
-					_this4.setResolvedState(true);
+				if (!_this6.isLocked) {
+					_this6.setResolvedState(true);
 				}
 			});
-			video.addEventListener('wikiaFullscreenChange', hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee() {
-				return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
+			video.addEventListener('wikiaFullscreenChange', asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee2() {
+				return regenerator__default.a.wrap(function _callee2$(_context2) {
 					while (1) {
-						switch (_context.prev = _context.next) {
+						switch (_context2.prev = _context2.next) {
 							case 0:
-								if (!video.isFullscreen()) {
-									_context.next = 4;
-									break;
+								if (video.isFullscreen()) {
+									_this6.container.classList.add('theme-video-fullscreen');
+								} else {
+									_this6.container.classList.remove('theme-video-fullscreen');
+									_this6.updateAdSizes();
 								}
 
-								_this4.container.classList.add('theme-video-fullscreen');
-								_context.next = 7;
-								break;
-
-							case 4:
-								_this4.container.classList.remove('theme-video-fullscreen');
-								_context.next = 7;
-								return _this4.updateAdSizes();
-
-							case 7:
+							case 1:
 							case 'end':
-								return _context.stop();
+								return _context2.stop();
 						}
 					}
-				}, _callee, _this4);
+				}, _callee2, _this6);
 			})));
 		}
 	}, {
@@ -1974,10 +2096,10 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 				return styleProperty.default - diff * state + '%';
 			});
 
-			Object.assign(this.params.thumbnail.style, style);
+			assign__default()(this.params.thumbnail.style, style);
 
 			if (this.video) {
-				Object.assign(this.video.container.style, style);
+				assign__default()(this.video.container.style, style);
 			}
 		}
 	}, {
@@ -2000,11 +2122,12 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 			this.container.classList.add('theme-locked');
 			ad_engine_["scrollListener"].removeCallback(this.scrollListener);
 			this.adjustSizesToResolved(offset);
+			this.emit(BfaaTheme.RESOLVED_STATE_EVENT);
 		}
 	}, {
 		key: 'setResolvedState',
 		value: function setResolvedState(immediately) {
-			var _this5 = this;
+			var _this7 = this;
 
 			var isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 			var width = this.container.offsetWidth;
@@ -2025,23 +2148,23 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 				this.onResolvedStateScroll.cancel();
 			}
 
-			return new Promise(function (resolve) {
+			return new promise__default.a(function (resolve) {
 				if (immediately) {
-					_this5.lock();
+					_this7.lock();
 					resolve();
 				} else {
-					_this5.onResolvedStateScroll = debounce__default()(function () {
+					_this7.onResolvedStateScroll = debounce__default()(function () {
 						if (window.scrollY < offset) {
 							return;
 						}
 
-						window.removeEventListener('scroll', _this5.onResolvedStateScroll);
-						_this5.onResolvedStateScroll = null;
-						_this5.lock();
+						window.removeEventListener('scroll', _this7.onResolvedStateScroll);
+						_this7.onResolvedStateScroll = null;
+						_this7.lock();
 						resolve();
 					}, 50);
-					window.addEventListener('scroll', _this5.onResolvedStateScroll);
-					_this5.onResolvedStateScroll();
+					window.addEventListener('scroll', _this7.onResolvedStateScroll);
+					_this7.onResolvedStateScroll();
 				}
 			});
 		}
@@ -2067,64 +2190,60 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}]);
 
 	return BfaaTheme;
-}(BigFancyAdTheme);
+}(hivi_BigFancyAdHiviTheme);
 
-var hivi_BfabTheme = function (_BigFancyAdTheme2) {
-	hivi__inherits(BfabTheme, _BigFancyAdTheme2);
+hivi_BfaaTheme.RESOLVED_STATE_EVENT = symbol__default()('RESOLVED_STATE_EVENT');
+hivi_BfaaTheme.DEFAULT_UNSTICK_DELAY = 3000;
+var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
+	inherits__default()(BfabTheme, _BigFancyAdHiviTheme2);
 
-	function BfabTheme(adSlot, params) {
-		hivi__classCallCheck(this, BfabTheme);
+	function BfabTheme() {
+		classCallCheck__default()(this, BfabTheme);
 
-		var _this6 = hivi__possibleConstructorReturn(this, (BfabTheme.__proto__ || Object.getPrototypeOf(BfabTheme)).call(this, adSlot, params));
-
-		_this6.addAdvertisementLabel();
-		return _this6;
+		return possibleConstructorReturn__default()(this, (BfabTheme.__proto__ || get_prototype_of__default()(BfabTheme)).apply(this, arguments));
 	}
 
-	hivi__createClass(BfabTheme, [{
-		key: 'addAdvertisementLabel',
-		value: function addAdvertisementLabel() {
-			var advertisementLabel = new AdvertisementLabel();
-
-			this.container.appendChild(advertisementLabel.render());
-		}
-	}, {
+	createClass__default()(BfabTheme, [{
 		key: 'onAdReady',
 		value: function onAdReady() {
+			helpers_get__default()(BfabTheme.prototype.__proto__ || get_prototype_of__default()(BfabTheme.prototype), 'onAdReady', this).call(this);
+
 			ad_engine_["slotTweaker"].makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
 		}
 	}, {
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this7 = this;
+			var _this9 = this;
+
+			helpers_get__default()(BfabTheme.prototype.__proto__ || get_prototype_of__default()(BfabTheme.prototype), 'onVideoReady', this).call(this);
 
 			video.addEventListener('wikiaAdCompleted', function () {
-				return _this7.setResolvedState(video);
+				return _this9.setResolvedState(video);
 			});
 			video.addEventListener('wikiaFullscreenChange', function () {
 				if (video.isFullscreen()) {
-					_this7.container.classList.add('theme-video-fullscreen');
+					_this9.container.classList.add('theme-video-fullscreen');
 				} else {
-					_this7.container.classList.remove('theme-video-fullscreen');
+					_this9.container.classList.remove('theme-video-fullscreen');
 				}
 			});
 		}
 	}, {
 		key: 'setResolvedState',
 		value: function () {
-			var _ref2 = hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee2(video) {
-				var _params, config, image2;
+			var _ref3 = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee3(video) {
+				var _params2, config, image2;
 
-				return external__regenerator_runtime__default.a.wrap(function _callee2$(_context2) {
+				return regenerator__default.a.wrap(function _callee3$(_context3) {
 					while (1) {
-						switch (_context2.prev = _context2.next) {
+						switch (_context3.prev = _context3.next) {
 							case 0:
-								_params = this.params, config = _params.config, image2 = _params.image2;
+								_params2 = this.params, config = _params2.config, image2 = _params2.image2;
 
 
 								this.container.classList.add('theme-resolved');
 								image2.element.classList.remove('hidden-state');
-								_context2.next = 5;
+								_context3.next = 5;
 								return ad_engine_["slotTweaker"].makeResponsive(this.adSlot, config.aspectRatio.resolved);
 
 							case 5:
@@ -2134,14 +2253,14 @@ var hivi_BfabTheme = function (_BigFancyAdTheme2) {
 
 							case 6:
 							case 'end':
-								return _context2.stop();
+								return _context3.stop();
 						}
 					}
-				}, _callee2, this);
+				}, _callee3, this);
 			}));
 
 			function setResolvedState(_x) {
-				return _ref2.apply(this, arguments);
+				return _ref3.apply(this, arguments);
 			}
 
 			return setResolvedState;
@@ -2154,10 +2273,10 @@ var hivi_BfabTheme = function (_BigFancyAdTheme2) {
 				return styleProperty.resolved + '%';
 			});
 
-			Object.assign(thumbnail.style, style);
+			assign__default()(thumbnail.style, style);
 
 			if (video) {
-				Object.assign(video.container.style, style);
+				assign__default()(video.container.style, style);
 				window.requestAnimationFrame(function () {
 					video.resize(thumbnail.offsetWidth, thumbnail.offsetHeight);
 				});
@@ -2166,9 +2285,8 @@ var hivi_BfabTheme = function (_BigFancyAdTheme2) {
 	}]);
 
 	return BfabTheme;
-}(BigFancyAdTheme);
+}(hivi_BigFancyAdHiviTheme);
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/ready.js
-
 
 
 function ready_adIsReady(_ref) {
@@ -2180,15 +2298,10 @@ function ready_adIsReady(_ref) {
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/index.js
 
 
-
 // CONCATENATED MODULE: ./src/templates/uap/big-fancy-ad-above.js
-var big_fancy_ad_above__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 
 
-function big_fancy_ad_above__asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-function big_fancy_ad_above__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
@@ -2198,7 +2311,7 @@ function big_fancy_ad_above__classCallCheck(instance, Constructor) { if (!(insta
 
 
 var big_fancy_ad_above_BigFancyAdAbove = function () {
-	big_fancy_ad_above__createClass(BigFancyAdAbove, null, [{
+	createClass__default()(BigFancyAdAbove, null, [{
 		key: 'getName',
 		value: function getName() {
 			return 'bfaa';
@@ -2237,7 +2350,7 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 	}]);
 
 	function BigFancyAdAbove(adSlot) {
-		big_fancy_ad_above__classCallCheck(this, BigFancyAdAbove);
+		classCallCheck__default()(this, BigFancyAdAbove);
 
 		this.adSlot = adSlot;
 		this.config = ad_engine_["context"].get('templates.bfaa');
@@ -2251,7 +2364,7 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
   */
 
 
-	big_fancy_ad_above__createClass(BigFancyAdAbove, [{
+	createClass__default()(BigFancyAdAbove, [{
 		key: 'init',
 		value: function init(params) {
 			var _this = this;
@@ -2306,9 +2419,9 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 	}, {
 		key: 'onAdReady',
 		value: function () {
-			var _ref = big_fancy_ad_above__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee(iframe) {
+			var _ref = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee(iframe) {
 				var video;
-				return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
+				return regenerator__default.a.wrap(function _callee$(_context) {
 					while (1) {
 						switch (_context.prev = _context.next) {
 							case 0:
@@ -2319,23 +2432,33 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 									this.setupNavbar();
 								}
 
-								this.theme.onAdReady(iframe);
-
-								if (!universalAdPackage.isVideoEnabled(this.params)) {
-									_context.next = 9;
+								if (!document.hidden) {
+									_context.next = 6;
 									break;
 								}
 
-								_context.next = 7;
+								_context.next = 6;
+								return ad_engine_["utils"].once(window, 'visibilitychange');
+
+							case 6:
+
+								this.theme.onAdReady(iframe);
+
+								if (!universalAdPackage.isVideoEnabled(this.params)) {
+									_context.next = 12;
+									break;
+								}
+
+								_context.next = 10;
 								return ad_engine_["utils"].defer(universalAdPackage.loadVideoAd, this.videoSettings);
 
-							case 7:
+							case 10:
 								video = _context.sent;
 								// defers for proper rendering
 
 								this.theme.onVideoReady(video);
 
-							case 9:
+							case 12:
 							case 'end':
 								return _context.stop();
 						}
@@ -2354,13 +2477,9 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 	return BigFancyAdAbove;
 }();
 // CONCATENATED MODULE: ./src/templates/uap/big-fancy-ad-below.js
-var big_fancy_ad_below__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 
 
-function big_fancy_ad_below__asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-function big_fancy_ad_below__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
@@ -2370,7 +2489,7 @@ function big_fancy_ad_below__classCallCheck(instance, Constructor) { if (!(insta
 
 
 var big_fancy_ad_below_BigFancyAdBelow = function () {
-	big_fancy_ad_below__createClass(BigFancyAdBelow, null, [{
+	createClass__default()(BigFancyAdBelow, null, [{
 		key: 'getName',
 		value: function getName() {
 			return 'bfab';
@@ -2392,7 +2511,7 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 	}]);
 
 	function BigFancyAdBelow(adSlot) {
-		big_fancy_ad_below__classCallCheck(this, BigFancyAdBelow);
+		classCallCheck__default()(this, BigFancyAdBelow);
 
 		this.adSlot = adSlot;
 		this.config = ad_engine_["context"].get('templates.bfab');
@@ -2406,7 +2525,7 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
   */
 
 
-	big_fancy_ad_below__createClass(BigFancyAdBelow, [{
+	createClass__default()(BigFancyAdBelow, [{
 		key: 'init',
 		value: function init(params) {
 			var _this = this;
@@ -2438,29 +2557,39 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 	}, {
 		key: 'onAdReady',
 		value: function () {
-			var _ref = big_fancy_ad_below__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee(iframe) {
+			var _ref = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee(iframe) {
 				var video;
-				return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
+				return regenerator__default.a.wrap(function _callee$(_context) {
 					while (1) {
 						switch (_context.prev = _context.next) {
 							case 0:
-								this.theme.onAdReady(iframe);
-
-								if (!universalAdPackage.isVideoEnabled(this.params)) {
-									_context.next = 6;
+								if (!document.hidden) {
+									_context.next = 3;
 									break;
 								}
 
-								_context.next = 4;
+								_context.next = 3;
+								return ad_engine_["utils"].once(window, 'visibilitychange');
+
+							case 3:
+
+								this.theme.onAdReady(iframe);
+
+								if (!universalAdPackage.isVideoEnabled(this.params)) {
+									_context.next = 9;
+									break;
+								}
+
+								_context.next = 7;
 								return ad_engine_["utils"].defer(universalAdPackage.loadVideoAd, this.videoSettings);
 
-							case 4:
+							case 7:
 								video = _context.sent;
 
 
 								this.theme.onVideoReady(video);
 
-							case 6:
+							case 9:
 							case 'end':
 								return _context.stop();
 						}
@@ -2483,9 +2612,7 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 
 
 
-
 // CONCATENATED MODULE: ./src/templates/index.js
-
 
 
 // CONCATENATED MODULE: ./src/index.js
@@ -2495,7 +2622,6 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdAbove", function() { return big_fancy_ad_above_BigFancyAdAbove; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdBelow", function() { return big_fancy_ad_below_BigFancyAdBelow; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "universalAdPackage", function() { return universalAdPackage; });
-
 
 
 
@@ -2513,58 +2639,70 @@ set__default()(window, versionField, 'v3.3.3');
 
 
 /***/ }),
-/* 3 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/set");
 
 /***/ }),
-/* 4 */
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/get");
 
 /***/ }),
-/* 5 */
+/* 18 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 6 */
+/* 19 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/throttle");
 
 /***/ }),
-/* 7 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = {"CROSS":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19.707 4.293a.999.999 0 0 0-1.414 0L12 10.586 5.707 4.293a.999.999 0 1 0-1.414 1.414L10.586 12l-6.293 6.293a.999.999 0 1 0 1.414 1.414L12 13.414l6.293 6.293a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L13.414 12l6.293-6.293a.999.999 0 0 0 0-1.414\" fill-rule=\"evenodd\"/></svg>","LEARN_MORE":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g stroke=\"none\" stroke-width=\"1\" fill-rule=\"evenodd\"><g transform=\"translate(-753.000000, -1764.000000)\" fill-rule=\"nonzero\"><g transform=\"translate(153.000000, 1746.000000)\"><g transform=\"translate(5.000000, 0.000000)\"><g transform=\"translate(459.000000, 0.000000)\"><g transform=\"translate(136.000000, 18.000000)\"><polygon points=\"24 0 15 0 18.4395 3.4395 9.033 12.846 11.154 14.967 20.5605 5.5605 24 9\"></polygon><path d=\"M19.5,24 L1.5,24 C0.672,24 0,23.328 0,22.5 L0,4.5 C0,3.672 0.672,3 1.5,3 L10.5,3 L10.5,6 L3,6 L3,21 L18,21 L18,13.5 L21,13.5 L21,22.5 C21,23.328 20.328,24 19.5,24 Z\"></path></g></g></g></g></g></g></svg>","PAUSE":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill-rule=\"evenodd\"><rect width=\"7\" height=\"22\" rx=\"1\" x=\"3\" y=\"1\"></rect><rect x=\"14\" width=\"7\" height=\"22\" rx=\"1\" y=\"1\"></rect></g></svg>","PLAY":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19.69 12.6L5.143 22.867a.722.722 0 0 1-.753.05.733.733 0 0 1-.391-.65V1.733c0-.274.15-.524.391-.65a.724.724 0 0 1 .753.05l14.545 10.266a.734.734 0 0 1 0 1.201z\" fill-rule=\"evenodd\"></path></svg>","REPLAY":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12 23c6.065 0 11-4.863 11-10.84a.992.992 0 0 0-1-.985c-.553 0-1 .44-1 .986 0 4.89-4.037 8.868-9 8.868s-9-3.978-9-8.868c0-4.89 4.037-8.869 9-8.869a8.991 8.991 0 0 1 6.975 3.292l-3.794-.501a.996.996 0 0 0-1.124.845.987.987 0 0 0 .858 1.108l5.946.785a.996.996 0 0 0 1.124-.845l.797-5.86a.987.987 0 0 0-.858-1.107.994.994 0 0 0-1.124.846l-.446 3.28A10.997 10.997 0 0 0 12 1.322c-6.065 0-11 4.862-11 10.839C1 18.137 5.935 23 12 23\" fill-rule=\"evenodd\"/></svg>","FULLSCREEN_OFF":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M5.5 9H8V2H5v4H1v3h4.5zm13 0H16V2h3v4h4v3h-4.5zm-13 6H8v7H5v-4H1v-3h4.5zm13 0H16v7h3v-4h4v-3h-4.5z\" fill-rule=\"evenodd\"/></svg>","FULLSCREEN_ON":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M21.5 22H23v-7h-3v4h-4v3h5.5zM23 3.5V9h-3V5h-4V2h7v1.5zm-22 17V15h3v4h4v3H1v-1.5zM2.5 2H1v7h3V5h4V2H2.5z\" fill-rule=\"evenodd\"/></svg>","VOLUME_OFF":"<svg viewBox=\"0 0 28 28\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style>.cls-1{fill:#fff;opacity:0.4;}.cls-2{fill:#231f20;}</style></defs><title>sound_off_button</title><circle class=\"cls-1\" cx=\"14.06\" cy=\"13.96\" r=\"13.74\"/><path class=\"cls-2\" d=\"M16,2.93A13.07,13.07,0,1,1,2.93,16,13.08,13.08,0,0,1,16,2.93M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Z\" transform=\"translate(-2 -2)\"/><g id=\"Page-1\"><g id=\"Video-Player-Skin\"><g id=\"Video-Copy\"><g id=\"volume-off\"><path id=\"Shape\" class=\"cls-2\" d=\"M14.25,9.17l-3.79,4.11H6.84c-.78,0-1,.46-1,.89V17.7a1,1,0,0,0,1,1h3.65l3.79,4.18a1.09,1.09,0,0,0,.53.14,1,1,0,0,0,.5-.14,1,1,0,0,0,.5-.9V10a1,1,0,0,0-.5-.9,1.06,1.06,0,0,0-1,.05Z\" transform=\"translate(-2 -2)\"/><path id=\"Fill-1\" class=\"cls-2\" d=\"M22.91,16.21l3-3a.92.92,0,1,0-1.3-1.3l-3,3-3-3a.92.92,0,1,0-1.3,1.3l3,3-3,3a.92.92,0,1,0,1.3,1.3l3-3,3,3a.92.92,0,1,0,1.3-1.3Z\" transform=\"translate(-2 -2)\"/></g></g></g></g></svg>","VOLUME_ON":"<svg viewBox=\"0 0 28 28\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style>.cls-1{fill:#fff;opacity:0.4;}.cls-2{fill:#231f20;}</style></defs><title>sound_on_button</title><circle class=\"cls-1\" cx=\"13.96\" cy=\"14.06\" r=\"13.74\"/><path class=\"cls-2\" d=\"M16,2.93A13.07,13.07,0,1,1,2.93,16,13.08,13.08,0,0,1,16,2.93M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Z\" transform=\"translate(-2 -2)\"/><g id=\"Page-1\"><g id=\"Video-Player-Skin\"><g id=\"Video-Copy\"><g id=\"volume\"><path id=\"Shape\" class=\"cls-2\" d=\"M14.24,9.17l-3.79,4.11H6.82c-.78,0-1,.46-1,.89V17.7a1,1,0,0,0,1,1h3.65l3.79,4.18a1.09,1.09,0,0,0,.53.14,1,1,0,0,0,.5-.14,1,1,0,0,0,.5-.9V10a1,1,0,0,0-.5-.9,1.06,1.06,0,0,0-1,.05Z\" transform=\"translate(-2 -2)\"/><path id=\"Shape-2\" data-name=\"Shape\" class=\"cls-2\" d=\"M19.18,19.33a4.39,4.39,0,0,0,0-6.19.71.71,0,0,0-1,1,3,3,0,0,1,0,4.19.71.71,0,0,0,1,1Z\" transform=\"translate(-2 -2)\"/><path id=\"Shape-3\" data-name=\"Shape\" class=\"cls-2\" d=\"M23.3,16.23a6.19,6.19,0,0,0-1.81-4.39.71.71,0,1,0-1,1,4.81,4.81,0,0,1,0,6.79.71.71,0,1,0,1,1,6.19,6.19,0,0,0,1.81-4.39Z\" transform=\"translate(-2 -2)\"/></g></g></g></g></svg>","HIVI_VOLUME_OFF":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6 8.007H1.347C.333 8.007 0 8.769 0 9.391v5.032C0 15.045.333 16 1.347 16H6l5.007 5.796c.215.132.454.205.693.205.24 0 .436-.063.65-.196.429-.265.65-.75.65-1.28V3.447c0-.53-.221-1.02-.65-1.284-.429-.265-.935-.187-1.365.078L6 8.007zM20.305 12l2.425-2.425a.922.922 0 1 0-1.306-1.305l-2.425 2.424-2.423-2.424a.923.923 0 0 0-1.306 1.305L17.695 12l-2.425 2.425a.922.922 0 1 0 1.306 1.304L19 13.306l2.425 2.423a.92.92 0 0 0 1.306 0 .922.922 0 0 0 0-1.304L20.305 12z\" fill-rule=\"evenodd\"></path></svg>","HIVI_VOLUME_ON":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill-rule=\"evenodd\"><path d=\"M6 8.007H1.347C.333 8.007 0 8.769 0 9.391v5.032C0 15.045.333 16 1.347 16H6l5.007 5.796c.215.132.454.205.693.205.24 0 .436-.063.65-.196.429-.265.65-.75.65-1.28V3.447c0-.53-.221-1.02-.65-1.284-.429-.265-.935-.187-1.365.078L6 8.007zm11.612 8.524a5.858 5.858 0 0 0 0-8.253.944.944 0 0 0-1.337 1.332 3.97 3.97 0 0 1 0 5.59.943.943 0 1 0 1.337 1.331z\"></path><path d=\"M23.03 12.135c0-2.21-.859-4.292-2.418-5.857a.943.943 0 1 0-1.337 1.332 6.37 6.37 0 0 1 1.868 4.525 6.37 6.37 0 0 1-1.868 4.525.943.943 0 1 0 1.338 1.332 8.249 8.249 0 0 0 2.418-5.857z\"></path></g></svg>"}
 
 /***/ }),
-/* 8 */
+/* 21 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/helpers/toArray");
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+module.exports = require("lodash/toPlainObject");
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+module.exports = require("lodash/isUndefined");
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/mapValues");
 
 /***/ }),
-/* 9 */
+/* 25 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/debounce");
 
 /***/ }),
-/* 10 */
+/* 26 */
 /***/ (function(module, exports) {
 
-module.exports = require("events");
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-module.exports = require("core-decorators/es/autobind");
+module.exports = require("lodash/isFunction");
 
 /***/ })
 /******/ ]);
