@@ -1,13 +1,6 @@
 import { context, utils } from '@wikia/ad-engine';
-
-import {
-	CSS_CLASSNAME_FADE_IN_ANIMATION,
-	CSS_CLASSNAME_SLIDE_OUT_ANIMATION,
-	CSS_CLASSNAME_STICKY_BFAA,
-} from './constants';
 import { universalAdPackage } from './universal-ad-package';
 import { VideoSettings } from './video-settings';
-import { animate } from './ui/animate';
 import * as classicTheme from './themes/classic';
 import * as hiviTheme from './themes/hivi';
 
@@ -17,17 +10,6 @@ export class BigFancyAdAbove {
 	}
 
 	static getDefaultConfig() {
-		function onStickBfaaCallback(adSlot) {
-			adSlot.getElement().classList.add(CSS_CLASSNAME_STICKY_BFAA);
-		}
-
-		async function onUnstickBfaaCallback(adSlot) {
-			// Animation time is defined also in CSS, remember to change it in both places
-			await animate(adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, 600);
-			adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
-			await animate(adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, 400);
-		}
-
 		return {
 			desktopNavbarWrapperSelector: '.wds-global-navigation-wrapper',
 			mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
@@ -38,8 +20,10 @@ export class BigFancyAdAbove {
 				'INCONTENT_BOXAD'
 			],
 			onInit: () => {},
-			onStickBfaaCallback,
-			onUnstickBfaaCallback,
+			onBeforeStickBfaaCallback: () => {},
+			onAfterStickBfaaCallback: () => {},
+			onBeforeUnstickBfaaCallback: () => {},
+			onAfterUnstickBfaaCallback: () => {},
 			moveNavbar(offset) {
 				const navbarElement = document.querySelector('body > nav.navigation');
 

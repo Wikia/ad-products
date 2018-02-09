@@ -8,6 +8,11 @@ import { BigFancyAdTheme } from '../theme';
 import { StickyBfaa } from './sticky-bfaa';
 import { resolvedState } from '../../resolved-state';
 import { resolvedStateSwitch } from '../../resolved-state-switch';
+import {
+	CSS_CLASSNAME_FADE_IN_ANIMATION, CSS_CLASSNAME_SLIDE_OUT_ANIMATION,
+	CSS_CLASSNAME_STICKY_BFAA, SLIDE_OUT_TIME, FADE_IN_TIME
+} from '../../constants';
+import { animate } from '../../ui/animate';
 
 const HIVI_RESOLVED_THRESHOLD = 0.995;
 
@@ -116,14 +121,26 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		});
 	}
 
-	onStickinessChange(isSticky) {
-		const stickinessCallback = isSticky ? this.config.onStickBfaaCallback : this.config.onUnstickBfaaCallback;
+	async onStickinessChange(isSticky) {
+		const stickinessBeforeCallback = isSticky ?
+			this.config.onBeforeStickBfaaCallback :
+			this.config.onBeforeUnstickBfaaCallback;
+		const stickinessAfterCallback = isSticky ?
+			this.config.onAfterStickBfaaCallback :
+			this.config.onAfterUnstickBfaaCallback;
 
-		stickinessCallback.call(this.config, this.adSlot, this.params);
+		stickinessBeforeCallback.call(this.config, this.adSlot, this.params);
 
 		if (!isSticky) {
 			this.config.moveNavbar(0);
+			await animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
+			this.adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
+			await animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
+		} else {
+			this.adSlot.getElement().classList.add(CSS_CLASSNAME_STICKY_BFAA);
 		}
+
+		stickinessAfterCallback.call(this.config, this.adSlot, this.params);
 	}
 
 	updateAdSizes() {
