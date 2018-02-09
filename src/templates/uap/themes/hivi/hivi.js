@@ -104,10 +104,12 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 				this.setResolvedState(true);
 			}
 		});
-		video.addEventListener('wikiaFullscreenChange', async () => {
+		video.addEventListener('wikiaFullscreenChange', () => {
 			if (video.isFullscreen()) {
+				this.stickyBfaa.blockRevertStickiness();
 				this.container.classList.add('theme-video-fullscreen');
 			} else {
+				this.stickyBfaa.unblockRevertStickiness();
 				this.container.classList.remove('theme-video-fullscreen');
 				this.updateAdSizes();
 			}
