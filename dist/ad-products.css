@@ -223,16 +223,12 @@
   .gpt-ad.bfaa-template.theme-resolved.sticky-bfaa .button-unstick,
   .gpt-ad.bfab-template.theme-resolved.sticky-bfaa .button-unstick {
     display: unset; }
-  .gpt-ad.bfaa-template.theme-mobile-device .advertisement-label,
   .gpt-ad.bfaa-template.is-mobile-device .advertisement-label,
-  .gpt-ad.bfab-template.theme-mobile-device .advertisement-label,
   .gpt-ad.bfab-template.is-mobile-device .advertisement-label {
     font-size: 6px;
     line-height: 6px;
     padding: 5px; }
-  .gpt-ad.bfaa-template.theme-mobile-device .learn-more,
   .gpt-ad.bfaa-template.is-mobile-device .learn-more,
-  .gpt-ad.bfab-template.theme-mobile-device .learn-more,
   .gpt-ad.bfab-template.is-mobile-device .learn-more {
     display: unset; }
   .gpt-ad.bfaa-template.theme-hivi .ui-visible .toggle-ui-overlay,
@@ -331,30 +327,20 @@
   .gpt-ad.bfaa-template.theme-split-left .replay-overlay,
   .gpt-ad.bfab-template.theme-split-left .replay-overlay {
     left: 0; }
-  .gpt-ad.bfaa-template.theme-dark .ui-visible .toggle-ui-overlay, .gpt-ad.bfaa-template.is-dark .ui-visible .toggle-ui-overlay,
-  .gpt-ad.bfab-template.theme-dark .ui-visible .toggle-ui-overlay,
+  .gpt-ad.bfaa-template.is-dark .ui-visible .toggle-ui-overlay,
   .gpt-ad.bfab-template.is-dark .ui-visible .toggle-ui-overlay {
     background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%); }
-  .gpt-ad.bfaa-template.theme-dark .advertisement-label,
-  .gpt-ad.bfaa-template.theme-dark .button-control .icon,
-  .gpt-ad.bfaa-template.theme-dark .learn-more,
-  .gpt-ad.bfaa-template.theme-dark .porvata-icon, .gpt-ad.bfaa-template.is-dark .advertisement-label,
+  .gpt-ad.bfaa-template.is-dark .advertisement-label,
   .gpt-ad.bfaa-template.is-dark .button-control .icon,
   .gpt-ad.bfaa-template.is-dark .learn-more,
   .gpt-ad.bfaa-template.is-dark .porvata-icon,
-  .gpt-ad.bfab-template.theme-dark .advertisement-label,
-  .gpt-ad.bfab-template.theme-dark .button-control .icon,
-  .gpt-ad.bfab-template.theme-dark .learn-more,
-  .gpt-ad.bfab-template.theme-dark .porvata-icon,
   .gpt-ad.bfab-template.is-dark .advertisement-label,
   .gpt-ad.bfab-template.is-dark .button-control .icon,
   .gpt-ad.bfab-template.is-dark .learn-more,
   .gpt-ad.bfab-template.is-dark .porvata-icon {
     color: #000;
     fill: #000; }
-  .gpt-ad.bfaa-template.theme-mobile-layout .video-player,
   .gpt-ad.bfaa-template.is-mobile-layout .video-player,
-  .gpt-ad.bfab-template.theme-mobile-layout .video-player,
   .gpt-ad.bfab-template.is-mobile-layout .video-player {
     right: 0;
     top: auto;
