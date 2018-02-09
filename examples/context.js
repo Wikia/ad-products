@@ -13,6 +13,25 @@ export default {
 			threshold: 100
 		}
 	},
+	options: {
+		customAdLoader: {
+			globalMethodName: 'loadCustomAd'
+		},
+		porvata: {
+			audio: {
+				exposeToSlot: true,
+				segment: '-audio',
+				key: 'audio'
+			}
+		},
+		video: {
+			moatTracking: {
+				enabled: true,
+				partnerCode: 'wikiaimajsint377461931603',
+				sampling: 1
+			}
+		}
+	},
 	slots: {
 		'top-leaderboard': {
 			slotName: 'TOP_LEADERBOARD',
