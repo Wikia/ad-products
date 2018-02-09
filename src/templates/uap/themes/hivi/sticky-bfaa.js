@@ -56,6 +56,7 @@ export class StickyBfaa extends EventEmitter {
 	async registerRevertStickiness() {
 		this.logger('waiting for user interaction');
 		await utils.once(window, 'scroll');
+		// wait for callback that are triggered after scroll event (eg. 'wikiaFullscreenChange')
 		await utils.wait();
 		if (!this.isRevertStickinessBlocked) {
 			this.revertStickiness();
