@@ -56,13 +56,12 @@ export class StickyBfaa extends EventEmitter {
 	async registerRevertStickiness() {
 		this.logger('waiting for user interaction');
 		await utils.once(window, 'scroll');
-		await utils.defer(() => {
-			if (!this.isRevertStickinessBlocked) {
-				this.revertStickiness();
-			} else {
-				this.registerRevertStickiness();
-			}
-		});
+		await utils.wait();
+		if (!this.isRevertStickinessBlocked) {
+			this.revertStickiness();
+		} else {
+			this.registerRevertStickiness();
+		}
 	}
 
 	blockRevertStickiness() {
