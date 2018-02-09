@@ -22,6 +22,7 @@ export class BigFancyAdAbove {
 		}
 
 		async function onUnstickBfaaCallback(adSlot) {
+			// Animation time is defined also in CSS, remember to change it in both places
 			await animate(adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, 600);
 			adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
 			await animate(adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, 400);
