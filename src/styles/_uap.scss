@@ -27,10 +27,32 @@ $hivi-uap-mobile-button-size: 24px;
 $hivi-uap-button-border-space: 6px;
 $hivi-uap-player-button-border-space: 6px;
 
+$ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+
 .gpt-ad.bfaa-template,
 .gpt-ad.bfab-template {
 	display: block;
 	transform: translateZ(0);
+
+	@keyframes slideOut {
+		from { transform: translateY(0); }
+		to { transform: translateY(-100%); }
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+
+	&.slide-out {
+		// Animation time is defined also in JS, remember to change it in both places
+		animation: slideOut .6s $ease-in-cubic forwards;
+	}
+
+	&.fade-in {
+		// Animation time is defined also in JS, remember to change it in both places
+		animation: fadeIn .4s $ease-in-cubic;
+	}
 
 	& > div {
 		padding: 0;
