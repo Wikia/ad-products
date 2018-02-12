@@ -88,11 +88,6 @@ module.exports = require("events");
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-var constants_namespaceObject = {};
-__webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_FADE_IN_ANIMATION", function() { return CSS_CLASSNAME_FADE_IN_ANIMATION; });
-__webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_SLIDE_OUT_ANIMATION", function() { return CSS_CLASSNAME_SLIDE_OUT_ANIMATION; });
-__webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_STICKY_BFAA", function() { return CSS_CLASSNAME_STICKY_BFAA; });
-__webpack_require__.d(constants_namespaceObject, "CSS_TIMING_EASE_IN_CUBIC", function() { return CSS_TIMING_EASE_IN_CUBIC; });
 var themes_classic_namespaceObject = {};
 __webpack_require__.d(themes_classic_namespaceObject, "BfaaTheme", function() { return classic_BfaaTheme; });
 __webpack_require__.d(themes_classic_namespaceObject, "BfabTheme", function() { return classic_BfabTheme; });
@@ -253,50 +248,6 @@ var floating_rail_FloatingRail = function () {
 
 	return FloatingRail;
 }();
-// CONCATENATED MODULE: ./src/templates/uap/ui/animate.js
-
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-
-
-var animate = function () {
-	var _ref = _asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee(adSlot, className, duration) {
-		var container;
-		return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
-			while (1) {
-				switch (_context.prev = _context.next) {
-					case 0:
-						container = adSlot.getElement();
-
-
-						container.style.animationDuration = duration + 'ms';
-						container.classList.add(className);
-						_context.next = 5;
-						return ad_engine_["utils"].wait(duration);
-
-					case 5:
-						container.classList.remove(className);
-						container.style.animationDuration = '';
-
-					case 7:
-					case 'end':
-						return _context.stop();
-				}
-			}
-		}, _callee, this);
-	}));
-
-	return function animate(_x, _x2, _x3) {
-		return _ref.apply(this, arguments);
-	};
-}();
-// CONCATENATED MODULE: ./src/templates/uap/constants.js
-
-var CSS_CLASSNAME_FADE_IN_ANIMATION = 'fade-in';
-var CSS_CLASSNAME_SLIDE_OUT_ANIMATION = 'slide-out';
-var CSS_CLASSNAME_STICKY_BFAA = 'sticky-bfaa';
-var CSS_TIMING_EASE_IN_CUBIC = 'cubic-bezier(0.55, 0.055, 0.675, 0.19)';
 // EXTERNAL MODULE: external "lodash/throttle"
 var throttle_ = __webpack_require__(7);
 var throttle__default = /*#__PURE__*/__webpack_require__.n(throttle_);
@@ -555,7 +506,7 @@ function addPlayIcon(overlay) {
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-animation.js
 
-var toggle_animation_duration = 400,
+var duration = 400,
     onAnimationClassName = 'on-animation';
 
 function resizeContainer(container, finalAspectRatio) {
@@ -564,7 +515,7 @@ function resizeContainer(container, finalAspectRatio) {
 
 	setTimeout(function () {
 		container.style.height = '';
-	}, toggle_animation_duration);
+	}, duration);
 }
 
 function toggle(elementToShow, elementToHide) {
@@ -577,7 +528,7 @@ function hideVideo(video, params) {
 	setTimeout(function () {
 		toggle(params.image, video.container);
 		params.container.classList.remove(onAnimationClassName);
-	}, toggle_animation_duration);
+	}, duration);
 }
 
 function showVideo(video, params) {
@@ -598,7 +549,7 @@ function toggle_animation_add(video, container, params) {
 
 /* harmony default export */ var toggle_animation = ({
 	add: toggle_animation_add,
-	duration: toggle_animation_duration
+	duration: duration
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-fullscreen.js
 
@@ -811,7 +762,6 @@ var Panel = function () {
 
 
 
-
 var ui_template_createBottomPanel = function createBottomPanel(_ref) {
 	var _ref$theme = _ref.theme,
 	    theme = _ref$theme === undefined ? null : _ref$theme;
@@ -848,21 +798,6 @@ function selectTemplate(videoSettings) {
 		template = params.splitLayoutVideoPosition === 'right' ? 'split-right' : 'split-left';
 	} else if (videoSettings.isAutoPlay()) {
 		template = 'auto-play';
-	} else {
-		document.body.classList.add('ctp-vuap-loaded');
-	}
-
-	params.container.classList.add('theme-' + template);
-
-	// TODO remove those ifs ADEN-6645
-	if (params.isDarkTheme) {
-		params.container.classList.add('theme-dark');
-	}
-	if (params.isMobile) {
-		params.container.classList.add('theme-mobile-layout');
-	}
-	if (ad_engine_["utils"].client.isSmartphone() || ad_engine_["utils"].client.isTablet()) {
-		params.container.classList.add('theme-mobile-device');
 	}
 
 	return templates[template];
@@ -883,10 +818,8 @@ function setup(video, uiElements, params) {
 // CONCATENATED MODULE: ./src/templates/uap/universal-ad-package.js
 
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var loadPorvata = function () {
-	var _ref = universal_ad_package__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee(videoSettings, slotContainer, imageContainer) {
+	var _ref = _asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee(videoSettings, slotContainer, imageContainer) {
 		var params, template, video;
 		return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
 			while (1) {
@@ -941,7 +874,7 @@ var loadPorvata = function () {
 }();
 
 var loadVideoAd = function () {
-	var _ref2 = universal_ad_package__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee2(videoSettings) {
+	var _ref2 = _asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee2(videoSettings) {
 		var params, imageContainer, size, recalculateVideoSize, video;
 		return external__regenerator_runtime__default.a.wrap(function _callee2$(_context2) {
 			while (1) {
@@ -1003,8 +936,7 @@ var loadVideoAd = function () {
 
 
 
-function universal_ad_package__asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 
 
@@ -1079,7 +1011,7 @@ function initSlot(params) {
 	}
 }
 
-var universalAdPackage = _extends({}, constants_namespaceObject, {
+var universalAdPackage = {
 	init: function init(params) {
 		var slotsToEnable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
@@ -1110,7 +1042,7 @@ var universalAdPackage = _extends({}, constants_namespaceObject, {
 	loadVideoAd: loadVideoAd,
 	setType: setType,
 	setUapId: setUapId
-});
+};
 // CONCATENATED MODULE: ./src/templates/uap/resolved-state-switch.js
 
 
@@ -1350,6 +1282,8 @@ var BigFancyAdTheme = function () {
 // CONCATENATED MODULE: ./src/templates/uap/themes/classic/classic.js
 var classic__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 
 
 function classic__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1361,8 +1295,41 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var classic_BfaaTheme = function (_BigFancyAdTheme) {
-	_inherits(BfaaTheme, _BigFancyAdTheme);
+
+
+var classic_BigFancyAdClassicTheme = function (_BigFancyAdTheme) {
+	_inherits(BigFancyAdClassicTheme, _BigFancyAdTheme);
+
+	function BigFancyAdClassicTheme() {
+		classic__classCallCheck(this, BigFancyAdClassicTheme);
+
+		return _possibleConstructorReturn(this, (BigFancyAdClassicTheme.__proto__ || Object.getPrototypeOf(BigFancyAdClassicTheme)).apply(this, arguments));
+	}
+
+	classic__createClass(BigFancyAdClassicTheme, [{
+		key: 'onAdReady',
+		value: function onAdReady(iframe) {
+			_get(BigFancyAdClassicTheme.prototype.__proto__ || Object.getPrototypeOf(BigFancyAdClassicTheme.prototype), 'onAdReady', this).call(this, iframe);
+
+			if (universalAdPackage.isVideoEnabled(this.params)) {
+				var videoSettings = new video_settings_VideoSettings(this.params);
+
+				if (videoSettings.isSplitLayout()) {
+					var theme = videoSettings.getParams().splitLayoutVideoPosition === 'right' ? 'theme-split-right' : 'theme-split-left';
+
+					this.params.container.classList.add(theme);
+				} else if (!videoSettings.isAutoPlay()) {
+					document.body.classList.add('ctp-vuap-loaded');
+				}
+			}
+		}
+	}]);
+
+	return BigFancyAdClassicTheme;
+}(BigFancyAdTheme);
+
+var classic_BfaaTheme = function (_BigFancyAdClassicThe) {
+	_inherits(BfaaTheme, _BigFancyAdClassicThe);
 
 	function BfaaTheme() {
 		classic__classCallCheck(this, BfaaTheme);
@@ -1373,22 +1340,22 @@ var classic_BfaaTheme = function (_BigFancyAdTheme) {
 	classic__createClass(BfaaTheme, [{
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this2 = this;
+			var _this3 = this;
 
 			if (!this.params.splitLayoutVideoPosition) {
 				video.addEventListener('wikiaAdStarted', function () {
-					_this2.recalculatePaddingTop(_this2.params.videoAspectRatio);
+					_this3.recalculatePaddingTop(_this3.params.videoAspectRatio);
 				});
 
 				video.addEventListener('wikiaAdCompleted', function () {
-					_this2.recalculatePaddingTop(_this2.params.aspectRatio);
+					_this3.recalculatePaddingTop(_this3.params.aspectRatio);
 				});
 			}
 		}
 	}, {
 		key: 'recalculatePaddingTop',
 		value: function recalculatePaddingTop(finalAspectRatio) {
-			var _this3 = this;
+			var _this4 = this;
 
 			document.body.style.paddingTop = 100 / finalAspectRatio + '%';
 
@@ -1398,16 +1365,16 @@ var classic_BfaaTheme = function (_BigFancyAdTheme) {
 
 			setTimeout(function () {
 				// clear height so ad is responsive again
-				_this3.container.style.height = '';
+				_this4.container.style.height = '';
 			}, toggle_animation.duration);
 		}
 	}]);
 
 	return BfaaTheme;
-}(BigFancyAdTheme);
+}(classic_BigFancyAdClassicTheme);
 
-var classic_BfabTheme = function (_BigFancyAdTheme2) {
-	_inherits(BfabTheme, _BigFancyAdTheme2);
+var classic_BfabTheme = function (_BigFancyAdClassicThe2) {
+	_inherits(BfabTheme, _BigFancyAdClassicThe2);
 
 	function BfabTheme() {
 		classic__classCallCheck(this, BfabTheme);
@@ -1416,7 +1383,7 @@ var classic_BfabTheme = function (_BigFancyAdTheme2) {
 	}
 
 	return BfabTheme;
-}(BigFancyAdTheme);
+}(classic_BigFancyAdClassicTheme);
 // CONCATENATED MODULE: ./src/templates/uap/themes/classic/ready.js
 
 
@@ -1557,7 +1524,7 @@ var AdvertisementLabel = function (_UiComponent) {
 // CONCATENATED MODULE: ./src/templates/uap/ui/button.js
 var button__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+var button__get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 
 
@@ -1611,7 +1578,7 @@ var Button = function (_UiComponent) {
 	}, {
 		key: 'classNames',
 		get: function get() {
-			return ['button-control'].concat(button__toConsumableArray(_get(Button.prototype.__proto__ || Object.getPrototypeOf(Button.prototype), 'classNames', this)));
+			return ['button-control'].concat(button__toConsumableArray(button__get(Button.prototype.__proto__ || Object.getPrototypeOf(Button.prototype), 'classNames', this)));
 		}
 	}]);
 
@@ -1833,6 +1800,8 @@ sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
 
 var hivi__createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var hivi__get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 
 
 function hivi__asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -1856,34 +1825,61 @@ function hivi__inherits(subClass, superClass) { if (typeof superClass !== "funct
 
 var HIVI_RESOLVED_THRESHOLD = 0.995;
 
-var hivi_BfaaTheme = function (_BigFancyAdTheme) {
-	hivi__inherits(BfaaTheme, _BigFancyAdTheme);
+var hivi_BigFancyAdHiviTheme = function (_BigFancyAdTheme) {
+	hivi__inherits(BigFancyAdHiviTheme, _BigFancyAdTheme);
+
+	function BigFancyAdHiviTheme() {
+		hivi__classCallCheck(this, BigFancyAdHiviTheme);
+
+		return hivi__possibleConstructorReturn(this, (BigFancyAdHiviTheme.__proto__ || Object.getPrototypeOf(BigFancyAdHiviTheme)).apply(this, arguments));
+	}
+
+	hivi__createClass(BigFancyAdHiviTheme, [{
+		key: 'onAdReady',
+		value: function onAdReady() {
+			hivi__get(BigFancyAdHiviTheme.prototype.__proto__ || Object.getPrototypeOf(BigFancyAdHiviTheme.prototype), 'onAdReady', this).call(this);
+			this.container.classList.add('theme-hivi');
+			this.addAdvertisementLabel();
+		}
+	}, {
+		key: 'addAdvertisementLabel',
+		value: function addAdvertisementLabel() {
+			var advertisementLabel = new AdvertisementLabel();
+
+			this.container.appendChild(advertisementLabel.render());
+		}
+	}]);
+
+	return BigFancyAdHiviTheme;
+}(BigFancyAdTheme);
+
+var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
+	hivi__inherits(BfaaTheme, _BigFancyAdHiviTheme);
 
 	function BfaaTheme(adSlot, params) {
 		hivi__classCallCheck(this, BfaaTheme);
 
-		var _this = hivi__possibleConstructorReturn(this, (BfaaTheme.__proto__ || Object.getPrototypeOf(BfaaTheme)).call(this, adSlot, params));
+		var _this2 = hivi__possibleConstructorReturn(this, (BfaaTheme.__proto__ || Object.getPrototypeOf(BfaaTheme)).call(this, adSlot, params));
 
-		Object.assign(_this, toPlainObject__default()(new external__events_["EventEmitter"]()));
+		Object.assign(_this2, toPlainObject__default()(new external__events_["EventEmitter"]()));
 
-		_this.stickyBfaa = null;
-		_this.scrollListener = null;
-		_this.video = null;
-		_this.config = ad_engine_["context"].get('templates.bfaa');
-		_this.isLocked = false;
-		_this.onResolvedStateScroll = null;
-		_this.addAdvertisementLabel();
+		_this2.stickyBfaa = null;
+		_this2.scrollListener = null;
+		_this2.video = null;
+		_this2.config = ad_engine_["context"].get('templates.bfaa');
+		_this2.isLocked = false;
+		_this2.onResolvedStateScroll = null;
 
-		if (_this.params.isSticky) {
-			_this.addStickinessPlugin();
+		if (_this2.params.isSticky) {
+			_this2.addStickinessPlugin();
 		}
-		return _this;
+		return _this2;
 	}
 
 	hivi__createClass(BfaaTheme, [{
 		key: 'addStickinessPlugin',
 		value: function addStickinessPlugin() {
-			var _this2 = this;
+			var _this3 = this;
 
 			var _params = this.params,
 			    stickyAdditionalTime = _params.stickyAdditionalTime,
@@ -1896,7 +1892,7 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 							switch (_context.prev = _context.next) {
 								case 0:
 									_context.next = 2;
-									return Promise.all([ad_engine_["utils"].once(_this2, BfaaTheme.RESOLVED_STATE_EVENT), stickyUntilVideoViewed ? ad_engine_["utils"].once(_this2.adSlot, ad_engine_["AdSlot"].VIDEO_VIEWED_EVENT) : Promise.resolve()]);
+									return Promise.all([ad_engine_["utils"].once(_this3, BfaaTheme.RESOLVED_STATE_EVENT), stickyUntilVideoViewed ? ad_engine_["utils"].once(_this3.adSlot, ad_engine_["AdSlot"].VIDEO_VIEWED_EVENT) : Promise.resolve()]);
 
 								case 2:
 									_context.next = 4;
@@ -1907,7 +1903,7 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 									return _context.stop();
 							}
 						}
-					}, _callee, _this2);
+					}, _callee, _this3);
 				}));
 
 				return function whenResolvedAndVideoViewed() {
@@ -1918,28 +1914,21 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 			this.stickyBfaa = new sticky_bfaa_StickyBfaa(this.adSlot, whenResolvedAndVideoViewed());
 			this.addUnstickButton();
 			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
-				return _this2.onStickinessChange(isSticky);
+				return _this3.onStickinessChange(isSticky);
 			});
 			this.stickyBfaa.run();
 		}
 	}, {
-		key: 'addAdvertisementLabel',
-		value: function addAdvertisementLabel() {
-			var advertisementLabel = new AdvertisementLabel();
-
-			this.container.appendChild(advertisementLabel.render());
-		}
-	}, {
 		key: 'addUnstickButton',
 		value: function addUnstickButton() {
-			var _this3 = this;
+			var _this4 = this;
 
 			var closeButton = new close_button_CloseButton({
 				classNames: ['button-unstick'],
 				onClick: function onClick() {
-					_this3.stickyBfaa.revertStickiness();
-					if (_this3.video) {
-						_this3.video.pause();
+					_this4.stickyBfaa.revertStickiness();
+					if (_this4.video) {
+						_this4.video.pause();
 					}
 				}
 			});
@@ -1949,14 +1938,16 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}, {
 		key: 'onAdReady',
 		value: function onAdReady() {
-			var _this4 = this;
+			var _this5 = this;
+
+			hivi__get(BfaaTheme.prototype.__proto__ || Object.getPrototypeOf(BfaaTheme.prototype), 'onAdReady', this).call(this);
 
 			if (resolvedState.isResolvedState(this.params)) {
 				this.setResolvedState(true);
 			} else {
 				resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
 				this.scrollListener = ad_engine_["scrollListener"].addCallback(function () {
-					return _this4.updateAdSizes();
+					return _this5.updateAdSizes();
 				});
 				// Manually run update on scroll once
 				this.updateAdSizes();
@@ -1965,15 +1956,17 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}, {
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this5 = this;
+			var _this6 = this;
+
+			hivi__get(BfaaTheme.prototype.__proto__ || Object.getPrototypeOf(BfaaTheme.prototype), 'onVideoReady', this).call(this);
 
 			this.video = video;
 			video.addEventListener('wikiaAdStarted', function () {
-				return _this5.updateAdSizes();
+				return _this6.updateAdSizes();
 			});
 			video.addEventListener('wikiaAdCompleted', function () {
-				if (!_this5.isLocked) {
-					_this5.setResolvedState(true);
+				if (!_this6.isLocked) {
+					_this6.setResolvedState(true);
 				}
 			});
 			video.addEventListener('wikiaFullscreenChange', hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee2() {
@@ -1982,10 +1975,10 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 						switch (_context2.prev = _context2.next) {
 							case 0:
 								if (video.isFullscreen()) {
-									_this5.container.classList.add('theme-video-fullscreen');
+									_this6.container.classList.add('theme-video-fullscreen');
 								} else {
-									_this5.container.classList.remove('theme-video-fullscreen');
-									_this5.updateAdSizes();
+									_this6.container.classList.remove('theme-video-fullscreen');
+									_this6.updateAdSizes();
 								}
 
 							case 1:
@@ -1993,7 +1986,7 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 								return _context2.stop();
 						}
 					}
-				}, _callee2, _this5);
+				}, _callee2, _this6);
 			})));
 		}
 	}, {
@@ -2084,7 +2077,7 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}, {
 		key: 'setResolvedState',
 		value: function setResolvedState(immediately) {
-			var _this6 = this;
+			var _this7 = this;
 
 			var isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 			var width = this.container.offsetWidth;
@@ -2107,21 +2100,21 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 
 			return new Promise(function (resolve) {
 				if (immediately) {
-					_this6.lock();
+					_this7.lock();
 					resolve();
 				} else {
-					_this6.onResolvedStateScroll = debounce__default()(function () {
+					_this7.onResolvedStateScroll = debounce__default()(function () {
 						if (window.scrollY < offset) {
 							return;
 						}
 
-						window.removeEventListener('scroll', _this6.onResolvedStateScroll);
-						_this6.onResolvedStateScroll = null;
-						_this6.lock();
+						window.removeEventListener('scroll', _this7.onResolvedStateScroll);
+						_this7.onResolvedStateScroll = null;
+						_this7.lock();
 						resolve();
 					}, 50);
-					window.addEventListener('scroll', _this6.onResolvedStateScroll);
-					_this6.onResolvedStateScroll();
+					window.addEventListener('scroll', _this7.onResolvedStateScroll);
+					_this7.onResolvedStateScroll();
 				}
 			});
 		}
@@ -2147,47 +2140,41 @@ var hivi_BfaaTheme = function (_BigFancyAdTheme) {
 	}]);
 
 	return BfaaTheme;
-}(BigFancyAdTheme);
+}(hivi_BigFancyAdHiviTheme);
 
 hivi_BfaaTheme.RESOLVED_STATE_EVENT = Symbol('RESOLVED_STATE_EVENT');
 hivi_BfaaTheme.DEFAULT_UNSTICK_DELAY = 3000;
-var hivi_BfabTheme = function (_BigFancyAdTheme2) {
-	hivi__inherits(BfabTheme, _BigFancyAdTheme2);
+var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
+	hivi__inherits(BfabTheme, _BigFancyAdHiviTheme2);
 
-	function BfabTheme(adSlot, params) {
+	function BfabTheme() {
 		hivi__classCallCheck(this, BfabTheme);
 
-		var _this7 = hivi__possibleConstructorReturn(this, (BfabTheme.__proto__ || Object.getPrototypeOf(BfabTheme)).call(this, adSlot, params));
-
-		_this7.addAdvertisementLabel();
-		return _this7;
+		return hivi__possibleConstructorReturn(this, (BfabTheme.__proto__ || Object.getPrototypeOf(BfabTheme)).apply(this, arguments));
 	}
 
 	hivi__createClass(BfabTheme, [{
-		key: 'addAdvertisementLabel',
-		value: function addAdvertisementLabel() {
-			var advertisementLabel = new AdvertisementLabel();
-
-			this.container.appendChild(advertisementLabel.render());
-		}
-	}, {
 		key: 'onAdReady',
 		value: function onAdReady() {
+			hivi__get(BfabTheme.prototype.__proto__ || Object.getPrototypeOf(BfabTheme.prototype), 'onAdReady', this).call(this);
+
 			ad_engine_["slotTweaker"].makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
 		}
 	}, {
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this8 = this;
+			var _this9 = this;
+
+			hivi__get(BfabTheme.prototype.__proto__ || Object.getPrototypeOf(BfabTheme.prototype), 'onVideoReady', this).call(this);
 
 			video.addEventListener('wikiaAdCompleted', function () {
-				return _this8.setResolvedState(video);
+				return _this9.setResolvedState(video);
 			});
 			video.addEventListener('wikiaFullscreenChange', function () {
 				if (video.isFullscreen()) {
-					_this8.container.classList.add('theme-video-fullscreen');
+					_this9.container.classList.add('theme-video-fullscreen');
 				} else {
-					_this8.container.classList.remove('theme-video-fullscreen');
+					_this9.container.classList.remove('theme-video-fullscreen');
 				}
 			});
 		}
@@ -2248,7 +2235,7 @@ var hivi_BfabTheme = function (_BigFancyAdTheme2) {
 	}]);
 
 	return BfabTheme;
-}(BigFancyAdTheme);
+}(hivi_BigFancyAdHiviTheme);
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/ready.js
 
 
@@ -2279,8 +2266,6 @@ function big_fancy_ad_above__classCallCheck(instance, Constructor) { if (!(insta
 
 
 
-
-
 var big_fancy_ad_above_BigFancyAdAbove = function () {
 	big_fancy_ad_above__createClass(BigFancyAdAbove, null, [{
 		key: 'getName',
@@ -2290,54 +2275,25 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 	}, {
 		key: 'getDefaultConfig',
 		value: function getDefaultConfig() {
-			var onUnstickBfaaCallback = function () {
-				var _ref = big_fancy_ad_above__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee(adSlot) {
-					return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
-						while (1) {
-							switch (_context.prev = _context.next) {
-								case 0:
-									_context.next = 2;
-									return animate(adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, 600);
-
-								case 2:
-									adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
-									_context.next = 5;
-									return animate(adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, 400);
-
-								case 5:
-								case 'end':
-									return _context.stop();
-							}
-						}
-					}, _callee, this);
-				}));
-
-				return function onUnstickBfaaCallback(_x) {
-					return _ref.apply(this, arguments);
-				};
-			}();
-
 			function onStickBfaaCallback(adSlot) {
-				adSlot.getElement().classList.add(CSS_CLASSNAME_STICKY_BFAA);
+				adSlot.getElement().classList.add('sticky-bfaa');
+			}
+
+			function onUnstickBfaaCallback(adSlot) {
+				adSlot.getElement().classList.remove('sticky-bfaa');
 			}
 
 			return {
 				desktopNavbarWrapperSelector: '.wds-global-navigation-wrapper',
-				mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
 				handleNavbar: false,
+				mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
 				slotSibling: '.topic-header',
 				slotsToEnable: ['BOTTOM_LEADERBOARD', 'INCONTENT_BOXAD'],
+				stickyAnimationDuration: 500,
 				onInit: function onInit() {},
 				onStickBfaaCallback: onStickBfaaCallback,
 				onUnstickBfaaCallback: onUnstickBfaaCallback,
-				moveNavbar: function moveNavbar(offset) {
-					var navbarElement = document.querySelector('body > nav.navigation');
-
-					if (navbarElement) {
-						navbarElement.style.transition = offset ? '' : 'top 600ms ' + universalAdPackage.CSS_TIMING_EASE_IN_CUBIC;
-						navbarElement.style.top = offset ? offset + 'px' : '';
-					}
-				}
+				moveNavbar: function moveNavbar() {}
 			};
 		}
 
@@ -2419,11 +2375,11 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 	}, {
 		key: 'onAdReady',
 		value: function () {
-			var _ref2 = big_fancy_ad_above__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee2(iframe) {
+			var _ref = big_fancy_ad_above__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee(iframe) {
 				var video;
-				return external__regenerator_runtime__default.a.wrap(function _callee2$(_context2) {
+				return external__regenerator_runtime__default.a.wrap(function _callee$(_context) {
 					while (1) {
-						switch (_context2.prev = _context2.next) {
+						switch (_context.prev = _context.next) {
 							case 0:
 								document.body.style.paddingTop = iframe.parentElement.style.paddingBottom;
 								document.body.classList.add('has-bfaa');
@@ -2433,11 +2389,11 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 								}
 
 								if (!document.hidden) {
-									_context2.next = 6;
+									_context.next = 6;
 									break;
 								}
 
-								_context2.next = 6;
+								_context.next = 6;
 								return ad_engine_["utils"].once(window, 'visibilitychange');
 
 							case 6:
@@ -2445,29 +2401,29 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 								this.theme.onAdReady(iframe);
 
 								if (!universalAdPackage.isVideoEnabled(this.params)) {
-									_context2.next = 12;
+									_context.next = 12;
 									break;
 								}
 
-								_context2.next = 10;
+								_context.next = 10;
 								return ad_engine_["utils"].defer(universalAdPackage.loadVideoAd, this.videoSettings);
 
 							case 10:
-								video = _context2.sent;
+								video = _context.sent;
 								// defers for proper rendering
 
 								this.theme.onVideoReady(video);
 
 							case 12:
 							case 'end':
-								return _context2.stop();
+								return _context.stop();
 						}
 					}
-				}, _callee2, this);
+				}, _callee, this);
 			}));
 
-			function onAdReady(_x2) {
-				return _ref2.apply(this, arguments);
+			function onAdReady(_x) {
+				return _ref.apply(this, arguments);
 			}
 
 			return onAdReady;
@@ -2617,10 +2573,6 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 
 
 
-
-
-
-
 // CONCATENATED MODULE: ./src/templates/index.js
 
 
@@ -2629,7 +2581,6 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getAdProductInfo", function() { return getAdProductInfo; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "FloatingRail", function() { return floating_rail_FloatingRail; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "resolvedState", function() { return resolvedState; });
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "animateUAPSlot", function() { return animate; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdAbove", function() { return big_fancy_ad_above_BigFancyAdAbove; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdBelow", function() { return big_fancy_ad_below_BigFancyAdBelow; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "universalAdPackage", function() { return universalAdPackage; });
@@ -2645,7 +2596,7 @@ if (get__default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set__default()(window, versionField, 'v3.3.3');
+set__default()(window, versionField, 'v3.3.4');
 
 
 
