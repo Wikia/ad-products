@@ -1926,6 +1926,13 @@ function isUndefined(arg) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var constants_namespaceObject = {};
+__webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_FADE_IN_ANIMATION", function() { return CSS_CLASSNAME_FADE_IN_ANIMATION; });
+__webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_SLIDE_OUT_ANIMATION", function() { return CSS_CLASSNAME_SLIDE_OUT_ANIMATION; });
+__webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_STICKY_BFAA", function() { return CSS_CLASSNAME_STICKY_BFAA; });
+__webpack_require__.d(constants_namespaceObject, "CSS_TIMING_EASE_IN_CUBIC", function() { return CSS_TIMING_EASE_IN_CUBIC; });
+__webpack_require__.d(constants_namespaceObject, "SLIDE_OUT_TIME", function() { return SLIDE_OUT_TIME; });
+__webpack_require__.d(constants_namespaceObject, "FADE_IN_TIME", function() { return FADE_IN_TIME; });
 var themes_classic_namespaceObject = {};
 __webpack_require__.d(themes_classic_namespaceObject, "BfaaTheme", function() { return classic_BfaaTheme; });
 __webpack_require__.d(themes_classic_namespaceObject, "BfabTheme", function() { return classic_BfabTheme; });
@@ -2344,7 +2351,7 @@ function addPlayIcon(overlay) {
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-animation.js
 
-var duration = 400,
+var toggle_animation_duration = 400,
     onAnimationClassName = 'on-animation';
 
 function resizeContainer(container, finalAspectRatio) {
@@ -2353,7 +2360,7 @@ function resizeContainer(container, finalAspectRatio) {
 
 	setTimeout(function () {
 		container.style.height = '';
-	}, duration);
+	}, toggle_animation_duration);
 }
 
 function toggle(elementToShow, elementToHide) {
@@ -2366,7 +2373,7 @@ function hideVideo(video, params) {
 	setTimeout(function () {
 		toggle(params.image, video.container);
 		params.container.classList.remove(onAnimationClassName);
-	}, duration);
+	}, toggle_animation_duration);
 }
 
 function showVideo(video, params) {
@@ -2387,7 +2394,7 @@ function toggle_animation_add(video, container, params) {
 
 /* harmony default export */ var toggle_animation = ({
 	add: toggle_animation_add,
-	duration: duration
+	duration: toggle_animation_duration
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-fullscreen.js
 
@@ -2653,8 +2660,19 @@ function setup(video, uiElements, params) {
 
 
 
+// CONCATENATED MODULE: ./src/templates/uap/constants.js
+
+var CSS_CLASSNAME_FADE_IN_ANIMATION = 'fade-in';
+var CSS_CLASSNAME_SLIDE_OUT_ANIMATION = 'slide-out';
+var CSS_CLASSNAME_STICKY_BFAA = 'sticky-bfaa';
+var CSS_TIMING_EASE_IN_CUBIC = 'cubic-bezier(0.55, 0.055, 0.675, 0.19)';
+// Animation time is defined also in CSS, remember to change it in both places
+var SLIDE_OUT_TIME = 600;
+var FADE_IN_TIME = 400;
 // CONCATENATED MODULE: ./src/templates/uap/universal-ad-package.js
 
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var loadPorvata = function () {
 	var _ref = _asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee(videoSettings, slotContainer, imageContainer) {
@@ -2779,6 +2797,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 
 
+
 var uapId = 'none';
 var uapType = 'uap';
 
@@ -2849,7 +2868,7 @@ function initSlot(params) {
 	}
 }
 
-var universalAdPackage = {
+var universalAdPackage = _extends({}, constants_namespaceObject, {
 	init: function init(params) {
 		var slotsToEnable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
@@ -2880,7 +2899,7 @@ var universalAdPackage = {
 	loadVideoAd: loadVideoAd,
 	setType: setType,
 	setUapId: setUapId
-};
+});
 // CONCATENATED MODULE: ./src/templates/uap/resolved-state-switch.js
 
 
@@ -3512,6 +3531,7 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 		_this.adSlot = adSlot;
 		_this.customWhen = customWhen;
 		_this.sticky = false;
+		_this.isRevertStickinessBlocked = false;
 		_this.logger = function () {
 			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 				args[_key] = arguments[_key];
@@ -3588,29 +3608,29 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 			}
 		}
 	}, {
-		key: 'onAdReady',
+		key: 'registerRevertStickiness',
 		value: function () {
 			var _ref2 = sticky_bfaa__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee2() {
 				return runtime_module_default.a.wrap(function _callee2$(_context2) {
 					while (1) {
 						switch (_context2.prev = _context2.next) {
 							case 0:
-								this.applyStickiness();
-								this.logger('waiting for viewability and custom condition');
-
-								_context2.next = 4;
-								return Promise.all([external___amd___ext_wikia_adEngine3__["utils"].once(this.adSlot, external___amd___ext_wikia_adEngine3__["AdSlot"].SLOT_VIEWED_EVENT), isFunction_default()(this.customWhen) ? this.customWhen() : this.customWhen]);
-
-							case 4:
-
-								this.logger('waiting for unstick timeout or user interaction');
-								_context2.next = 7;
+								this.logger('waiting for user interaction');
+								_context2.next = 3;
 								return external___amd___ext_wikia_adEngine3__["utils"].once(window, 'scroll');
 
-							case 7:
-								this.revertStickiness();
+							case 3:
+								_context2.next = 5;
+								return external___amd___ext_wikia_adEngine3__["utils"].wait();
 
-							case 8:
+							case 5:
+								if (!this.isRevertStickinessBlocked) {
+									this.revertStickiness();
+								} else {
+									this.registerRevertStickiness();
+								}
+
+							case 6:
 							case 'end':
 								return _context2.stop();
 						}
@@ -3618,8 +3638,50 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 				}, _callee2, this);
 			}));
 
-			function onAdReady() {
+			function registerRevertStickiness() {
 				return _ref2.apply(this, arguments);
+			}
+
+			return registerRevertStickiness;
+		}()
+	}, {
+		key: 'blockRevertStickiness',
+		value: function blockRevertStickiness() {
+			this.isRevertStickinessBlocked = true;
+		}
+	}, {
+		key: 'unblockRevertStickiness',
+		value: function unblockRevertStickiness() {
+			this.isRevertStickinessBlocked = false;
+		}
+	}, {
+		key: 'onAdReady',
+		value: function () {
+			var _ref3 = sticky_bfaa__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee3() {
+				return runtime_module_default.a.wrap(function _callee3$(_context3) {
+					while (1) {
+						switch (_context3.prev = _context3.next) {
+							case 0:
+								this.applyStickiness();
+								this.logger('waiting for viewability and custom condition');
+
+								_context3.next = 4;
+								return Promise.all([external___amd___ext_wikia_adEngine3__["utils"].once(this.adSlot, external___amd___ext_wikia_adEngine3__["AdSlot"].SLOT_VIEWED_EVENT), isFunction_default()(this.customWhen) ? this.customWhen() : this.customWhen]);
+
+							case 4:
+
+								this.registerRevertStickiness();
+
+							case 5:
+							case 'end':
+								return _context3.stop();
+						}
+					}
+				}, _callee3, this);
+			}));
+
+			function onAdReady() {
+				return _ref3.apply(this, arguments);
 			}
 
 			return onAdReady;
@@ -3630,6 +3692,44 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 }(events["EventEmitter"]);
 sticky_bfaa_StickyBfaa.LOG_GROUP = 'sticky-bfaa';
 sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
+// CONCATENATED MODULE: ./src/templates/uap/ui/animate.js
+
+
+function animate__asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+
+
+var animate = function () {
+	var _ref = animate__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee(adSlot, className, duration) {
+		var container;
+		return runtime_module_default.a.wrap(function _callee$(_context) {
+			while (1) {
+				switch (_context.prev = _context.next) {
+					case 0:
+						container = adSlot.getElement();
+
+
+						container.style.animationDuration = duration + 'ms';
+						container.classList.add(className);
+						_context.next = 5;
+						return external___amd___ext_wikia_adEngine3__["utils"].wait(duration);
+
+					case 5:
+						container.classList.remove(className);
+						container.style.animationDuration = '';
+
+					case 7:
+					case 'end':
+						return _context.stop();
+				}
+			}
+		}, _callee, this);
+	}));
+
+	return function animate(_x, _x2, _x3) {
+		return _ref.apply(this, arguments);
+	};
+}();
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/hivi.js
 
 
@@ -3649,6 +3749,8 @@ function hivi__classCallCheck(instance, Constructor) { if (!(instance instanceof
 function hivi__possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function hivi__inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
 
 
 
@@ -3807,37 +3909,68 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 					_this6.setResolvedState(true);
 				}
 			});
-			video.addEventListener('wikiaFullscreenChange', hivi__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee2() {
+			video.addEventListener('wikiaFullscreenChange', function () {
+				if (video.isFullscreen()) {
+					_this6.stickyBfaa.blockRevertStickiness();
+					_this6.container.classList.add('theme-video-fullscreen');
+				} else {
+					_this6.stickyBfaa.unblockRevertStickiness();
+					_this6.container.classList.remove('theme-video-fullscreen');
+					_this6.updateAdSizes();
+				}
+			});
+		}
+	}, {
+		key: 'onStickinessChange',
+		value: function () {
+			var _ref2 = hivi__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee2(isSticky) {
+				var stickinessBeforeCallback, stickinessAfterCallback;
 				return runtime_module_default.a.wrap(function _callee2$(_context2) {
 					while (1) {
 						switch (_context2.prev = _context2.next) {
 							case 0:
-								if (video.isFullscreen()) {
-									_this6.container.classList.add('theme-video-fullscreen');
-								} else {
-									_this6.container.classList.remove('theme-video-fullscreen');
-									_this6.updateAdSizes();
+								stickinessBeforeCallback = isSticky ? this.config.onBeforeStickBfaaCallback : this.config.onBeforeUnstickBfaaCallback;
+								stickinessAfterCallback = isSticky ? this.config.onAfterStickBfaaCallback : this.config.onAfterUnstickBfaaCallback;
+
+
+								stickinessBeforeCallback.call(this.config, this.adSlot, this.params);
+
+								if (isSticky) {
+									_context2.next = 11;
+									break;
 								}
 
-							case 1:
+								this.config.moveNavbar(0);
+								_context2.next = 7;
+								return animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
+
+							case 7:
+								this.adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
+								animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
+								_context2.next = 12;
+								break;
+
+							case 11:
+								this.adSlot.getElement().classList.add(CSS_CLASSNAME_STICKY_BFAA);
+
+							case 12:
+
+								stickinessAfterCallback.call(this.config, this.adSlot, this.params);
+
+							case 13:
 							case 'end':
 								return _context2.stop();
 						}
 					}
-				}, _callee2, _this6);
-			})));
-		}
-	}, {
-		key: 'onStickinessChange',
-		value: function onStickinessChange(isSticky) {
-			var stickinessCallback = isSticky ? this.config.onStickBfaaCallback : this.config.onUnstickBfaaCallback;
+				}, _callee2, this);
+			}));
 
-			stickinessCallback.call(this.config, this.adSlot, this.params);
-
-			if (!isSticky) {
-				this.config.moveNavbar(0);
+			function onStickinessChange(_x) {
+				return _ref2.apply(this, arguments);
 			}
-		}
+
+			return onStickinessChange;
+		}()
 	}, {
 		key: 'updateAdSizes',
 		value: function updateAdSizes() {
@@ -4047,7 +4180,7 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 				}, _callee3, this);
 			}));
 
-			function setResolvedState(_x) {
+			function setResolvedState(_x2) {
 				return _ref3.apply(this, arguments);
 			}
 
@@ -4103,7 +4236,6 @@ function big_fancy_ad_above__classCallCheck(instance, Constructor) { if (!(insta
 
 
 
-
 var big_fancy_ad_above_BigFancyAdAbove = function () {
 	big_fancy_ad_above__createClass(BigFancyAdAbove, null, [{
 		key: 'getName',
@@ -4113,25 +4245,25 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 	}, {
 		key: 'getDefaultConfig',
 		value: function getDefaultConfig() {
-			function onStickBfaaCallback(adSlot) {
-				adSlot.getElement().classList.add('sticky-bfaa');
-			}
-
-			function onUnstickBfaaCallback(adSlot) {
-				adSlot.getElement().classList.remove('sticky-bfaa');
-			}
-
 			return {
 				desktopNavbarWrapperSelector: '.wds-global-navigation-wrapper',
-				handleNavbar: false,
 				mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
+				handleNavbar: false,
 				slotSibling: '.topic-header',
 				slotsToEnable: ['BOTTOM_LEADERBOARD', 'INCONTENT_BOXAD'],
-				stickyAnimationDuration: 500,
 				onInit: function onInit() {},
-				onStickBfaaCallback: onStickBfaaCallback,
-				onUnstickBfaaCallback: onUnstickBfaaCallback,
-				moveNavbar: function moveNavbar() {}
+				onBeforeStickBfaaCallback: function onBeforeStickBfaaCallback() {},
+				onAfterStickBfaaCallback: function onAfterStickBfaaCallback() {},
+				onBeforeUnstickBfaaCallback: function onBeforeUnstickBfaaCallback() {},
+				onAfterUnstickBfaaCallback: function onAfterUnstickBfaaCallback() {},
+				moveNavbar: function moveNavbar(offset) {
+					var navbarElement = document.querySelector('body > nav.navigation');
+
+					if (navbarElement) {
+						navbarElement.style.transition = offset ? '' : 'top 600ms ' + universalAdPackage.CSS_TIMING_EASE_IN_CUBIC;
+						navbarElement.style.top = offset ? offset + 'px' : '';
+					}
+				}
 			};
 		}
 
@@ -4411,6 +4543,7 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 
 
 
+
 // CONCATENATED MODULE: ./src/templates/index.js
 
 
@@ -4434,7 +4567,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v3.3.4');
+set_default()(window, versionField, 'v4.0.0');
 
 
 
