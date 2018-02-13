@@ -27,10 +27,32 @@ $hivi-uap-mobile-button-size: 24px;
 $hivi-uap-button-border-space: 6px;
 $hivi-uap-player-button-border-space: 6px;
 
+$ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+
 .gpt-ad.bfaa-template,
 .gpt-ad.bfab-template {
 	display: block;
 	transform: translateZ(0);
+
+	@keyframes slideOut {
+		from { transform: translateY(0); }
+		to { transform: translateY(-100%); }
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+
+	&.slide-out {
+		// Animation time is defined also in JS, remember to change it in both places
+		animation: slideOut .6s $ease-in-cubic forwards;
+	}
+
+	&.fade-in {
+		// Animation time is defined also in JS, remember to change it in both places
+		animation: fadeIn .4s $ease-in-cubic;
+	}
 
 	& > div {
 		padding: 0;
@@ -273,16 +295,16 @@ $hivi-uap-player-button-border-space: 6px;
 		}
 	}
 
-	// TODO remove unused theme-* selector ADEN-6645
-	&.theme-mobile-device .advertisement-label,
+	&.theme-resolved.sticky-bfaa .button-unstick {
+		display: unset;
+	}
+
 	&.is-mobile-device .advertisement-label {
 		font-size: 6px;
 		line-height: 6px;
 		padding: 5px;
 	}
 
-	// TODO remove unused theme-* selector ADEN-6645
-	&.theme-mobile-device .learn-more,
 	&.is-mobile-device .learn-more {
 			display: unset;
 	}
@@ -401,8 +423,6 @@ $hivi-uap-player-button-border-space: 6px;
 		}
 	}
 
-	// TODO remove unused theme-* selector ADEN-6645
-	&.theme-dark,
 	&.is-dark {
 		.ui-visible .toggle-ui-overlay {
 			background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%);
@@ -417,8 +437,6 @@ $hivi-uap-player-button-border-space: 6px;
 		}
 	}
 
-	// TODO remove unused theme-* selector ADEN-6645
-	&.theme-mobile-layout .video-player,
 	&.is-mobile-layout .video-player {
 		right: 0;
 		top: auto;

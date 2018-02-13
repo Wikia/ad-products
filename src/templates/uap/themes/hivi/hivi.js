@@ -8,10 +8,29 @@ import { BigFancyAdTheme } from '../theme';
 import { StickyBfaa } from './sticky-bfaa';
 import { resolvedState } from '../../resolved-state';
 import { resolvedStateSwitch } from '../../resolved-state-switch';
+import {
+	CSS_CLASSNAME_FADE_IN_ANIMATION, CSS_CLASSNAME_SLIDE_OUT_ANIMATION,
+	CSS_CLASSNAME_STICKY_BFAA, SLIDE_OUT_TIME, FADE_IN_TIME
+} from '../../constants';
+import { animate } from '../../ui/animate';
 
 const HIVI_RESOLVED_THRESHOLD = 0.995;
 
-export class BfaaTheme extends BigFancyAdTheme {
+class BigFancyAdHiviTheme extends BigFancyAdTheme {
+	onAdReady() {
+		super.onAdReady();
+		this.container.classList.add('theme-hivi');
+		this.addAdvertisementLabel();
+	}
+
+	addAdvertisementLabel() {
+		const advertisementLabel = new AdvertisementLabel();
+
+		this.container.appendChild(advertisementLabel.render());
+	}
+}
+
+export class BfaaTheme extends BigFancyAdHiviTheme {
 	static RESOLVED_STATE_EVENT = Symbol('RESOLVED_STATE_EVENT');
 	static DEFAULT_UNSTICK_DELAY = 3000;
 	static SAFE_REMOVE_TIMEOUT = 1000;
@@ -26,7 +45,6 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.config = context.get('templates.bfaa');
 		this.isLocked = false;
 		this.onResolvedStateScroll = null;
-		this.addAdvertisementLabel();
 
 		if (this.params.isSticky) {
 			this.addStickinessPlugin();
@@ -56,22 +74,23 @@ export class BfaaTheme extends BigFancyAdTheme {
 		this.stickyBfaa.run();
 	}
 
-	addAdvertisementLabel() {
-		const advertisementLabel = new AdvertisementLabel();
-
-		this.container.appendChild(advertisementLabel.render());
-	}
-
 	addUnstickButton() {
 		const closeButton = new CloseButton({
 			classNames: ['button-unstick'],
-			onClick: () => this.stickyBfaa.close()
+			onClick: () => {
+				this.stickyBfaa.close();
+				if (this.video) {
+					this.video.stop();
+				}
+			}
 		});
 
 		this.container.appendChild(closeButton.render());
 	}
 
 	onAdReady() {
+		super.onAdReady();
+
 		if (resolvedState.isResolvedState(this.params)) {
 			this.setResolvedState(true);
 		} else {
@@ -83,6 +102,8 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 
 	onVideoReady(video) {
+		super.onVideoReady();
+
 		this.video = video;
 		video.addEventListener('wikiaAdStarted', () => this.updateAdSizes());
 		video.addEventListener('wikiaAdCompleted', () => {
@@ -90,24 +111,38 @@ export class BfaaTheme extends BigFancyAdTheme {
 				this.setResolvedState(true);
 			}
 		});
-		video.addEventListener('wikiaFullscreenChange', async () => {
+		video.addEventListener('wikiaFullscreenChange', () => {
 			if (video.isFullscreen()) {
+				this.stickyBfaa.blockRevertStickiness();
 				this.container.classList.add('theme-video-fullscreen');
 			} else {
+				this.stickyBfaa.unblockRevertStickiness();
 				this.container.classList.remove('theme-video-fullscreen');
 				this.updateAdSizes();
 			}
 		});
 	}
 
-	onStickinessChange(isSticky) {
-		const stickinessCallback = isSticky ? this.config.onStickBfaaCallback : this.config.onUnstickBfaaCallback;
+	async onStickinessChange(isSticky) {
+		const stickinessBeforeCallback = isSticky ?
+			this.config.onBeforeStickBfaaCallback :
+			this.config.onBeforeUnstickBfaaCallback;
+		const stickinessAfterCallback = isSticky ?
+			this.config.onAfterStickBfaaCallback :
+			this.config.onAfterUnstickBfaaCallback;
 
-		stickinessCallback.call(this.config, this.adSlot, this.params);
+		stickinessBeforeCallback.call(this.config, this.adSlot, this.params);
 
 		if (!isSticky) {
 			this.config.moveNavbar(0);
+			await animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
+			this.adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
+			animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
+		} else {
+			this.adSlot.getElement().classList.add(CSS_CLASSNAME_STICKY_BFAA);
 		}
+
+		stickinessAfterCallback.call(this.config, this.adSlot, this.params);
 	}
 
 	onCloseClicked() {
@@ -250,24 +285,16 @@ export class BfaaTheme extends BigFancyAdTheme {
 	}
 }
 
-export class BfabTheme extends BigFancyAdTheme {
-	constructor(adSlot, params) {
-		super(adSlot, params);
-
-		this.addAdvertisementLabel();
-	}
-
-	addAdvertisementLabel() {
-		const advertisementLabel = new AdvertisementLabel();
-
-		this.container.appendChild(advertisementLabel.render());
-	}
-
+export class BfabTheme extends BigFancyAdHiviTheme {
 	onAdReady() {
+		super.onAdReady();
+
 		slotTweaker.makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
 	}
 
 	onVideoReady(video) {
+		super.onVideoReady();
+
 		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState(video));
 		video.addEventListener('wikiaFullscreenChange', () => {
 			if (video.isFullscreen()) {

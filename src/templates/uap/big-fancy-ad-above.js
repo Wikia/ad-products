@@ -1,5 +1,4 @@
 import { context, utils } from '@wikia/ad-engine';
-
 import { universalAdPackage } from './universal-ad-package';
 import { VideoSettings } from './video-settings';
 import * as classicTheme from './themes/classic';
@@ -11,28 +10,30 @@ export class BigFancyAdAbove {
 	}
 
 	static getDefaultConfig() {
-		function onStickBfaaCallback(adSlot) {
-			adSlot.getElement().classList.add('sticky-bfaa');
-		}
-
-		function onUnstickBfaaCallback(adSlot) {
-			adSlot.getElement().classList.remove('sticky-bfaa');
-		}
-
 		return {
 			desktopNavbarWrapperSelector: '.wds-global-navigation-wrapper',
-			handleNavbar: false,
 			mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
+			handleNavbar: false,
 			slotSibling: '.topic-header',
 			slotsToEnable: [
 				'BOTTOM_LEADERBOARD',
 				'INCONTENT_BOXAD'
 			],
-			stickyAnimationDuration: 500,
 			onInit: () => {},
-			onStickBfaaCallback,
-			onUnstickBfaaCallback,
-			moveNavbar: () => {}
+			onBeforeStickBfaaCallback: () => {},
+			onAfterStickBfaaCallback: () => {},
+			onBeforeUnstickBfaaCallback: () => {},
+			onAfterUnstickBfaaCallback: () => {},
+			moveNavbar(offset) {
+				const navbarElement = document.querySelector('body > nav.navigation');
+
+				if (navbarElement) {
+					navbarElement.style.transition = (
+						offset ? '' : `top 600ms ${universalAdPackage.CSS_TIMING_EASE_IN_CUBIC}`
+					);
+					navbarElement.style.top = (offset ? `${offset}px` : '');
+				}
+			}
 		};
 	}
 
