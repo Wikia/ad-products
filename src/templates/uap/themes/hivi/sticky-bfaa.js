@@ -55,9 +55,9 @@ export class StickyBfaa extends EventEmitter {
 	}
 
 	close() {
-		this.revertStickiness();
 		this.logger('Closing and removing bfaa');
-		this.emit(StickyBfaa.CLOSE_CLICKED_EVENT);
+		this.emit(StickyBfaa.CLOSE_CLICKED_EVENT, this.sticky);
+		this.sticky = false;
 	}
 
 	async registerRevertStickiness() {

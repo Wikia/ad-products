@@ -1772,9 +1772,9 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 	}, {
 		key: 'close',
 		value: function close() {
-			this.revertStickiness();
 			this.logger('Closing and removing bfaa');
-			this.emit(StickyBfaa.CLOSE_CLICKED_EVENT);
+			this.emit(StickyBfaa.CLOSE_CLICKED_EVENT, this.sticky);
+			this.sticky = false;
 		}
 	}, {
 		key: 'registerRevertStickiness',
@@ -2026,8 +2026,8 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
 				return _this3.onStickinessChange(isSticky);
 			});
-			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT, function () {
-				return _this3.onCloseClicked();
+			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT, function (isSticky) {
+				return _this3.onCloseClicked(isSticky);
 			});
 			this.stickyBfaa.run();
 		}
@@ -2040,8 +2040,8 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 				classNames: ['button-unstick'],
 				onClick: function onClick() {
 					_this4.stickyBfaa.close();
-					if (_this4.video) {
-						_this4.video.stop();
+					if (_this4.video && _this4.video.ima.getAdsManager()) {
+						_this4.video.pause();
 					}
 				}
 			});
@@ -2146,16 +2146,43 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 		}()
 	}, {
 		key: 'onCloseClicked',
-		value: function onCloseClicked() {
-			var _this7 = this;
+		value: function () {
+			var _ref3 = hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee3(isSticky) {
+				return external__regenerator_runtime__default.a.wrap(function _callee3$(_context3) {
+					while (1) {
+						switch (_context3.prev = _context3.next) {
+							case 0:
+								if (isSticky) {
+									this.config.moveNavbar(0);
+								}
 
-			document.body.classList.add('bfaa-closed');
-			document.body.style.paddingTop = '0%';
+								document.body.classList.add('bfaa-closed');
+								document.body.style.paddingTop = '0%';
+								_context3.next = 5;
+								return animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
 
-			setTimeout(function () {
-				_this7.container.remove();
-			}, SLIDE_OUT_TIME);
-		}
+							case 5:
+
+								if (this.video && this.video.ima.getAdsManager()) {
+									this.video.stop();
+								}
+
+								this.container.remove();
+
+							case 7:
+							case 'end':
+								return _context3.stop();
+						}
+					}
+				}, _callee3, this);
+			}));
+
+			function onCloseClicked(_x2) {
+				return _ref3.apply(this, arguments);
+			}
+
+			return onCloseClicked;
+		}()
 	}, {
 		key: 'updateAdSizes',
 		value: function updateAdSizes() {
@@ -2233,7 +2260,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 	}, {
 		key: 'setResolvedState',
 		value: function setResolvedState(immediately) {
-			var _this8 = this;
+			var _this7 = this;
 
 			var isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 			var width = this.container.offsetWidth;
@@ -2256,21 +2283,21 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 
 			return new Promise(function (resolve) {
 				if (immediately) {
-					_this8.lock();
+					_this7.lock();
 					resolve();
 				} else {
-					_this8.onResolvedStateScroll = debounce__default()(function () {
+					_this7.onResolvedStateScroll = debounce__default()(function () {
 						if (window.scrollY < offset) {
 							return;
 						}
 
-						window.removeEventListener('scroll', _this8.onResolvedStateScroll);
-						_this8.onResolvedStateScroll = null;
-						_this8.lock();
+						window.removeEventListener('scroll', _this7.onResolvedStateScroll);
+						_this7.onResolvedStateScroll = null;
+						_this7.lock();
 						resolve();
 					}, 50);
-					window.addEventListener('scroll', _this8.onResolvedStateScroll);
-					_this8.onResolvedStateScroll();
+					window.addEventListener('scroll', _this7.onResolvedStateScroll);
+					_this7.onResolvedStateScroll();
 				}
 			});
 		}
@@ -2319,37 +2346,37 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 	}, {
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this10 = this;
+			var _this9 = this;
 
 			hivi__get(BfabTheme.prototype.__proto__ || Object.getPrototypeOf(BfabTheme.prototype), 'onVideoReady', this).call(this);
 
 			video.addEventListener('wikiaAdCompleted', function () {
-				return _this10.setResolvedState(video);
+				return _this9.setResolvedState(video);
 			});
 			video.addEventListener('wikiaFullscreenChange', function () {
 				if (video.isFullscreen()) {
-					_this10.container.classList.add('theme-video-fullscreen');
+					_this9.container.classList.add('theme-video-fullscreen');
 				} else {
-					_this10.container.classList.remove('theme-video-fullscreen');
+					_this9.container.classList.remove('theme-video-fullscreen');
 				}
 			});
 		}
 	}, {
 		key: 'setResolvedState',
 		value: function () {
-			var _ref3 = hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee3(video) {
+			var _ref4 = hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee4(video) {
 				var _params2, config, image2;
 
-				return external__regenerator_runtime__default.a.wrap(function _callee3$(_context3) {
+				return external__regenerator_runtime__default.a.wrap(function _callee4$(_context4) {
 					while (1) {
-						switch (_context3.prev = _context3.next) {
+						switch (_context4.prev = _context4.next) {
 							case 0:
 								_params2 = this.params, config = _params2.config, image2 = _params2.image2;
 
 
 								this.container.classList.add('theme-resolved');
 								image2.element.classList.remove('hidden-state');
-								_context3.next = 5;
+								_context4.next = 5;
 								return ad_engine_["slotTweaker"].makeResponsive(this.adSlot, config.aspectRatio.resolved);
 
 							case 5:
@@ -2359,14 +2386,14 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 
 							case 6:
 							case 'end':
-								return _context3.stop();
+								return _context4.stop();
 						}
 					}
-				}, _callee3, this);
+				}, _callee4, this);
 			}));
 
-			function setResolvedState(_x2) {
-				return _ref3.apply(this, arguments);
+			function setResolvedState(_x3) {
+				return _ref4.apply(this, arguments);
 			}
 
 			return setResolvedState;

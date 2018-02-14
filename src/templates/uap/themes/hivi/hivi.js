@@ -69,7 +69,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		this.stickyBfaa = new StickyBfaa(this.adSlot, whenResolvedAndVideoViewed());
 		this.addUnstickButton();
 		this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
-		this.stickyBfaa.on(StickyBfaa.CLOSE_CLICKED_EVENT, () => this.onCloseClicked());
+		this.stickyBfaa.on(StickyBfaa.CLOSE_CLICKED_EVENT, isSticky => this.onCloseClicked(isSticky));
 		this.stickyBfaa.run();
 	}
 
@@ -78,8 +78,8 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 			classNames: ['button-unstick'],
 			onClick: () => {
 				this.stickyBfaa.close();
-				if (this.video) {
-					this.video.stop();
+				if (this.video && this.video.ima.getAdsManager()) {
+					this.video.pause();
 				}
 			}
 		});
@@ -144,13 +144,20 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		stickinessAfterCallback.call(this.config, this.adSlot, this.params);
 	}
 
-	onCloseClicked() {
+	async onCloseClicked(isSticky) {
+		if (isSticky) {
+			this.config.moveNavbar(0);
+		}
+
 		document.body.classList.add('bfaa-closed');
 		document.body.style.paddingTop = '0%';
+		await animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
 
-		setTimeout(() => {
-			this.container.remove();
-		}, SLIDE_OUT_TIME);
+		if (this.video && this.video.ima.getAdsManager()) {
+			this.video.stop();
+		}
+
+		this.container.remove();
 	}
 
 	updateAdSizes() {
