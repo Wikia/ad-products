@@ -7,7 +7,7 @@
     "url": "https://github.com/Wikia/ad-products"
   },
   "dependencies": {
-    "@wikia/ad-engine": "^9.4.2",
+    "@wikia/ad-engine": "9.5.0",
     "core-decorators": "^0.20.0",
     "events": "^1.1.1",
     "lodash": "^4.17.4",
