@@ -2113,7 +2113,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 									break;
 								}
 
-								this.config.moveNavbar(0);
+								this.config.moveNavbar(0, SLIDE_OUT_TIME);
 								_context2.next = 7;
 								return animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
 
@@ -2146,43 +2146,23 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 		}()
 	}, {
 		key: 'onCloseClicked',
-		value: function () {
-			var _ref3 = hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee3(isSticky) {
-				return external__regenerator_runtime__default.a.wrap(function _callee3$(_context3) {
-					while (1) {
-						switch (_context3.prev = _context3.next) {
-							case 0:
-								if (isSticky) {
-									this.config.moveNavbar(0);
-								}
+		value: function onCloseClicked(isSticky) {
+			ad_engine_["scrollListener"].removeCallback(this.scrollListener);
 
-								document.body.classList.add('bfaa-closed');
-								document.body.style.paddingTop = '0%';
-								_context3.next = 5;
-								return animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
-
-							case 5:
-
-								if (this.video && this.video.ima.getAdsManager()) {
-									this.video.stop();
-								}
-
-								this.container.remove();
-
-							case 7:
-							case 'end':
-								return _context3.stop();
-						}
-					}
-				}, _callee3, this);
-			}));
-
-			function onCloseClicked(_x2) {
-				return _ref3.apply(this, arguments);
+			if (this.video && this.video.ima.getAdsManager()) {
+				this.video.stop();
 			}
 
-			return onCloseClicked;
-		}()
+			if (isSticky) {
+				this.config.moveNavbar(0, 0);
+			}
+
+			animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, 0);
+
+			document.body.style.paddingTop = '0';
+
+			this.container.remove();
+		}
 	}, {
 		key: 'updateAdSizes',
 		value: function updateAdSizes() {
@@ -2269,7 +2249,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			var offset = this.getHeightDifferenceBetweenStates();
 
 			if (isSticky) {
-				this.config.moveNavbar(resolvedHeight);
+				this.config.moveNavbar(resolvedHeight, SLIDE_OUT_TIME);
 			} else {
 				this.container.style.top = Math.min(window.scrollY, offset) + 'px';
 			}
@@ -2364,19 +2344,19 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 	}, {
 		key: 'setResolvedState',
 		value: function () {
-			var _ref4 = hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee4(video) {
+			var _ref3 = hivi__asyncToGenerator( /*#__PURE__*/external__regenerator_runtime__default.a.mark(function _callee3(video) {
 				var _params2, config, image2;
 
-				return external__regenerator_runtime__default.a.wrap(function _callee4$(_context4) {
+				return external__regenerator_runtime__default.a.wrap(function _callee3$(_context3) {
 					while (1) {
-						switch (_context4.prev = _context4.next) {
+						switch (_context3.prev = _context3.next) {
 							case 0:
 								_params2 = this.params, config = _params2.config, image2 = _params2.image2;
 
 
 								this.container.classList.add('theme-resolved');
 								image2.element.classList.remove('hidden-state');
-								_context4.next = 5;
+								_context3.next = 5;
 								return ad_engine_["slotTweaker"].makeResponsive(this.adSlot, config.aspectRatio.resolved);
 
 							case 5:
@@ -2386,14 +2366,14 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 
 							case 6:
 							case 'end':
-								return _context4.stop();
+								return _context3.stop();
 						}
 					}
-				}, _callee4, this);
+				}, _callee3, this);
 			}));
 
-			function setResolvedState(_x3) {
-				return _ref4.apply(this, arguments);
+			function setResolvedState(_x2) {
+				return _ref3.apply(this, arguments);
 			}
 
 			return setResolvedState;
@@ -2469,10 +2449,12 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 				onBeforeUnstickBfaaCallback: function onBeforeUnstickBfaaCallback() {},
 				onAfterUnstickBfaaCallback: function onAfterUnstickBfaaCallback() {},
 				moveNavbar: function moveNavbar(offset) {
+					var time = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 600;
+
 					var navbarElement = document.querySelector('body > nav.navigation');
 
 					if (navbarElement) {
-						navbarElement.style.transition = offset ? '' : 'top 600ms ' + universalAdPackage.CSS_TIMING_EASE_IN_CUBIC;
+						navbarElement.style.transition = offset ? '' : 'top ' + time + 'ms ' + universalAdPackage.CSS_TIMING_EASE_IN_CUBIC;
 						navbarElement.style.top = offset ? offset + 'px' : '';
 					}
 				}
@@ -2604,7 +2586,7 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 				}, _callee, this);
 			}));
 
-			function onAdReady(_x) {
+			function onAdReady(_x2) {
 				return _ref.apply(this, arguments);
 			}
 

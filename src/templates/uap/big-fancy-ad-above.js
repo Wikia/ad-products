@@ -24,12 +24,12 @@ export class BigFancyAdAbove {
 			onAfterStickBfaaCallback: () => {},
 			onBeforeUnstickBfaaCallback: () => {},
 			onAfterUnstickBfaaCallback: () => {},
-			moveNavbar(offset) {
+			moveNavbar(offset, time = 600) {
 				const navbarElement = document.querySelector('body > nav.navigation');
 
 				if (navbarElement) {
 					navbarElement.style.transition = (
-						offset ? '' : `top 600ms ${universalAdPackage.CSS_TIMING_EASE_IN_CUBIC}`
+						offset ? '' : `top ${time}ms ${universalAdPackage.CSS_TIMING_EASE_IN_CUBIC}`
 					);
 					navbarElement.style.top = (offset ? `${offset}px` : '');
 				}

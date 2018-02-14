@@ -133,7 +133,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		stickinessBeforeCallback.call(this.config, this.adSlot, this.params);
 
 		if (!isSticky) {
-			this.config.moveNavbar(0);
+			this.config.moveNavbar(0, SLIDE_OUT_TIME);
 			await animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
 			this.adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
 			animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
@@ -144,18 +144,20 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		stickinessAfterCallback.call(this.config, this.adSlot, this.params);
 	}
 
-	async onCloseClicked(isSticky) {
-		if (isSticky) {
-			this.config.moveNavbar(0);
-		}
-
-		document.body.classList.add('bfaa-closed');
-		document.body.style.paddingTop = '0%';
-		await animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
+	onCloseClicked(isSticky) {
+		scrollListener.removeCallback(this.scrollListener);
 
 		if (this.video && this.video.ima.getAdsManager()) {
 			this.video.stop();
 		}
+
+		if (isSticky) {
+			this.config.moveNavbar(0, 0);
+		}
+
+		animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, 0);
+
+		document.body.style.paddingTop = '0';
 
 		this.container.remove();
 	}
@@ -237,7 +239,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		const offset = this.getHeightDifferenceBetweenStates();
 
 		if (isSticky) {
-			this.config.moveNavbar(resolvedHeight);
+			this.config.moveNavbar(resolvedHeight, SLIDE_OUT_TIME);
 		} else {
 			this.container.style.top = `${Math.min(window.scrollY, offset)}px`;
 		}
