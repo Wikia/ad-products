@@ -1,6 +1,7 @@
 import { context, utils } from '@wikia/ad-engine';
 import { universalAdPackage } from './universal-ad-package';
 import { VideoSettings } from './video-settings';
+import { SLIDE_OUT_TIME } from './constants';
 import * as classicTheme from './themes/classic';
 import * as hiviTheme from './themes/hivi';
 
@@ -24,7 +25,7 @@ export class BigFancyAdAbove {
 			onAfterStickBfaaCallback: () => {},
 			onBeforeUnstickBfaaCallback: () => {},
 			onAfterUnstickBfaaCallback: () => {},
-			moveNavbar(offset, time = 600) {
+			moveNavbar(offset, time = SLIDE_OUT_TIME) {
 				const navbarElement = document.querySelector('body > nav.navigation');
 
 				if (navbarElement) {

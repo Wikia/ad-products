@@ -363,10 +363,7 @@
     top: auto;
     transform: none; }
 
-body.bfaa-closed {
-  transition: padding 0.6s cubic-bezier(0.55, 0.055, 0.675, 0.19); }
-
-body .ctp-vuap-loaded {
+body.ctp-vuap-loaded {
   transition: padding 0.4s ease; }
 
 .sticky-bfaa {

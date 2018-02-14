@@ -78,9 +78,6 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 			classNames: ['button-unstick'],
 			onClick: () => {
 				this.stickyBfaa.close();
-				if (this.video && this.video.ima.getAdsManager()) {
-					this.video.pause();
-				}
 			}
 		});
 

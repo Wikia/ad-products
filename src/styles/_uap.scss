@@ -445,14 +445,8 @@ $ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
 	}
 }
 
-body {
-	&.bfaa-closed {
-		transition: padding $uap-video-animation-long-duration $ease-in-cubic;
-	}
-
-	.ctp-vuap-loaded {
-		transition: padding $uap-video-animation-duration ease;
-	}
+body.ctp-vuap-loaded {
+	transition: padding $uap-video-animation-duration ease;
 }
 
 .sticky-bfaa {

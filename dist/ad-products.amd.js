@@ -3878,9 +3878,6 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 				classNames: ['button-unstick'],
 				onClick: function onClick() {
 					_this4.stickyBfaa.close();
-					if (_this4.video && _this4.video.ima.getAdsManager()) {
-						_this4.video.pause();
-					}
 				}
 			});
 
@@ -4266,6 +4263,7 @@ function big_fancy_ad_above__classCallCheck(instance, Constructor) { if (!(insta
 
 
 
+
 var big_fancy_ad_above_BigFancyAdAbove = function () {
 	big_fancy_ad_above__createClass(BigFancyAdAbove, null, [{
 		key: 'getName',
@@ -4287,7 +4285,7 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 				onBeforeUnstickBfaaCallback: function onBeforeUnstickBfaaCallback() {},
 				onAfterUnstickBfaaCallback: function onAfterUnstickBfaaCallback() {},
 				moveNavbar: function moveNavbar(offset) {
-					var time = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 600;
+					var time = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : SLIDE_OUT_TIME;
 
 					var navbarElement = document.querySelector('body > nav.navigation');
 
