@@ -2848,7 +2848,7 @@ function updateSlotsTargeting(id) {
 function enableSlots(slotsToEnable) {
 	if (getType() !== 'abcd') {
 		slotsToEnable.forEach(function (slotName) {
-			external___amd___ext_wikia_adEngine3__["slotService"].enable(slotName);
+			external___amd___ext_wikia_adEngine3__["btfBlockerService"].unblock(slotName);
 		});
 	}
 }
@@ -4617,7 +4617,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v4.0.0');
+set_default()(window, versionField, 'v4.0.2');
 
 
 

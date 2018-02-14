@@ -1010,7 +1010,7 @@ function updateSlotsTargeting(id) {
 function enableSlots(slotsToEnable) {
 	if (getType() !== 'abcd') {
 		slotsToEnable.forEach(function (slotName) {
-			ad_engine_["slotService"].enable(slotName);
+			ad_engine_["btfBlockerService"].unblock(slotName);
 		});
 	}
 }
@@ -2779,7 +2779,7 @@ if (get__default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set__default()(window, versionField, 'v4.0.0');
+set__default()(window, versionField, 'v4.0.2');
 
 
 
