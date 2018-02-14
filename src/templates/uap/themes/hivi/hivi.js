@@ -33,7 +33,6 @@ class BigFancyAdHiviTheme extends BigFancyAdTheme {
 export class BfaaTheme extends BigFancyAdHiviTheme {
 	static RESOLVED_STATE_EVENT = Symbol('RESOLVED_STATE_EVENT');
 	static DEFAULT_UNSTICK_DELAY = 3000;
-	static SAFE_REMOVE_TIMEOUT = 1000;
 
 	constructor(adSlot, params) {
 		super(adSlot, params);
@@ -146,15 +145,12 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 	}
 
 	onCloseClicked() {
-		this.container.classList.add('theme-closed');
-		this.container.style.marginTop = `-${document.body.style.paddingTop}`;
-
 		document.body.classList.add('bfaa-closed');
 		document.body.style.paddingTop = '0%';
 
 		setTimeout(() => {
 			this.container.remove();
-		}, BfaaTheme.SAFE_REMOVE_TIMEOUT);
+		}, SLIDE_OUT_TIME);
 	}
 
 	updateAdSizes() {

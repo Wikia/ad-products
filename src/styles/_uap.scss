@@ -14,6 +14,7 @@ $uap-progress-bar-current-time-color: #666;
 $uap-progress-bar-height: 8px;
 $uap-replay-overlay-color: rgba(0,0,0,0.3);
 $uap-video-animation-duration: 0.4s;
+$uap-video-animation-long-duration: 0.6s;
 $uap-video-z-index: 100;
 $uap-video-fullscreen-z-index: 2147483647;
 
@@ -46,12 +47,12 @@ $ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
 
 	&.slide-out {
 		// Animation time is defined also in JS, remember to change it in both places
-		animation: slideOut .6s $ease-in-cubic forwards;
+		animation: slideOut $uap-video-animation-long-duration $ease-in-cubic forwards;
 	}
 
 	&.fade-in {
 		// Animation time is defined also in JS, remember to change it in both places
-		animation: fadeIn .4s $ease-in-cubic;
+		animation: fadeIn $uap-video-animation-duration $ease-in-cubic;
 	}
 
 	& > div {
@@ -442,15 +443,11 @@ $ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
 		top: auto;
 		transform: none;
 	}
-
-	&.theme-closed {
-		transition: margin $uap-video-animation-duration ease;
-	}
 }
 
 body {
 	&.bfaa-closed {
-		transition: padding $uap-video-animation-duration ease;
+		transition: padding $uap-video-animation-long-duration $ease-in-cubic;
 	}
 
 	.ctp-vuap-loaded {

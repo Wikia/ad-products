@@ -90,7 +90,6 @@
     z-index: -1; }
   .gpt-ad.bfaa-template .button-unstick,
   .gpt-ad.bfab-template .button-unstick {
-    display: none;
     position: absolute;
     top: 0;
     right: 0;
@@ -364,7 +363,10 @@
     top: auto;
     transform: none; }
 
-body.ctp-vuap-loaded {
+body.bfaa-closed {
+  transition: padding 0.6s cubic-bezier(0.55, 0.055, 0.675, 0.19); }
+
+body .ctp-vuap-loaded {
   transition: padding 0.4s ease; }
 
 .sticky-bfaa {

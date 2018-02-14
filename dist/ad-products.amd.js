@@ -3608,6 +3608,13 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 			}
 		}
 	}, {
+		key: 'close',
+		value: function close() {
+			this.revertStickiness();
+			this.logger('Closing and removing bfaa');
+			this.emit(StickyBfaa.CLOSE_CLICKED_EVENT);
+		}
+	}, {
 		key: 'registerRevertStickiness',
 		value: function () {
 			var _ref2 = sticky_bfaa__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee2() {
@@ -3692,6 +3699,7 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 }(events["EventEmitter"]);
 sticky_bfaa_StickyBfaa.LOG_GROUP = 'sticky-bfaa';
 sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
+sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT = Symbol('closeClicked');
 // CONCATENATED MODULE: ./src/templates/uap/ui/animate.js
 
 
@@ -3856,6 +3864,9 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
 				return _this3.onStickinessChange(isSticky);
 			});
+			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT, function () {
+				return _this3.onCloseClicked();
+			});
 			this.stickyBfaa.run();
 		}
 	}, {
@@ -3866,9 +3877,9 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			var closeButton = new close_button_CloseButton({
 				classNames: ['button-unstick'],
 				onClick: function onClick() {
-					_this4.stickyBfaa.revertStickiness();
+					_this4.stickyBfaa.close();
 					if (_this4.video) {
-						_this4.video.pause();
+						_this4.video.stop();
 					}
 				}
 			});
@@ -3972,6 +3983,18 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			return onStickinessChange;
 		}()
 	}, {
+		key: 'onCloseClicked',
+		value: function onCloseClicked() {
+			var _this7 = this;
+
+			document.body.classList.add('bfaa-closed');
+			document.body.style.paddingTop = '0%';
+
+			setTimeout(function () {
+				_this7.container.remove();
+			}, SLIDE_OUT_TIME);
+		}
+	}, {
 		key: 'updateAdSizes',
 		value: function updateAdSizes() {
 			var config = this.params.config;
@@ -4048,7 +4071,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 	}, {
 		key: 'setResolvedState',
 		value: function setResolvedState(immediately) {
-			var _this7 = this;
+			var _this8 = this;
 
 			var isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 			var width = this.container.offsetWidth;
@@ -4071,21 +4094,21 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 
 			return new Promise(function (resolve) {
 				if (immediately) {
-					_this7.lock();
+					_this8.lock();
 					resolve();
 				} else {
-					_this7.onResolvedStateScroll = debounce_default()(function () {
+					_this8.onResolvedStateScroll = debounce_default()(function () {
 						if (window.scrollY < offset) {
 							return;
 						}
 
-						window.removeEventListener('scroll', _this7.onResolvedStateScroll);
-						_this7.onResolvedStateScroll = null;
-						_this7.lock();
+						window.removeEventListener('scroll', _this8.onResolvedStateScroll);
+						_this8.onResolvedStateScroll = null;
+						_this8.lock();
 						resolve();
 					}, 50);
-					window.addEventListener('scroll', _this7.onResolvedStateScroll);
-					_this7.onResolvedStateScroll();
+					window.addEventListener('scroll', _this8.onResolvedStateScroll);
+					_this8.onResolvedStateScroll();
 				}
 			});
 		}
@@ -4134,18 +4157,18 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 	}, {
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this9 = this;
+			var _this10 = this;
 
 			hivi__get(BfabTheme.prototype.__proto__ || Object.getPrototypeOf(BfabTheme.prototype), 'onVideoReady', this).call(this);
 
 			video.addEventListener('wikiaAdCompleted', function () {
-				return _this9.setResolvedState(video);
+				return _this10.setResolvedState(video);
 			});
 			video.addEventListener('wikiaFullscreenChange', function () {
 				if (video.isFullscreen()) {
-					_this9.container.classList.add('theme-video-fullscreen');
+					_this10.container.classList.add('theme-video-fullscreen');
 				} else {
-					_this9.container.classList.remove('theme-video-fullscreen');
+					_this10.container.classList.remove('theme-video-fullscreen');
 				}
 			});
 		}
