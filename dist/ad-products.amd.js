@@ -2246,11 +2246,20 @@ function progress_bar_add(video, container) {
 		currentTime.style.transitionDuration = '';
 		currentTime.style.width = '0';
 	};
+	progressBar.rewind = function () {
+		var remainingTime = currentTime.style.transitionDuration;
+
+		progressBar.reset();
+		external___amd___ext_wikia_adEngine3__["slotTweaker"].forceRepaint(currentTime);
+		currentTime.style.transitionDuration = remainingTime;
+	};
 	progressBar.start = function () {
 		var remainingTime = video.getRemainingTime();
 
 		if (remainingTime) {
-			currentTime.style.transitionDuration = remainingTime + 's';
+			if (remainingTime > 0) {
+				currentTime.style.transitionDuration = remainingTime + 's';
+			}
 			external___amd___ext_wikia_adEngine3__["slotTweaker"].forceRepaint(currentTime);
 			currentTime.style.width = '100%';
 		} else {
@@ -2260,6 +2269,7 @@ function progress_bar_add(video, container) {
 
 	video.addEventListener('wikiaAdPlay', progressBar.start);
 	video.addEventListener('wikiaAdCompleted', progressBar.reset);
+	video.addEventListener('wikiaAdRestart', progressBar.rewind);
 	video.addEventListener('wikiaAdPause', progressBar.pause);
 
 	container.appendChild(progressBar);
