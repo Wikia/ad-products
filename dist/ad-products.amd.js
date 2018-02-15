@@ -3994,8 +3994,8 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 
 			document.body.style.paddingTop = '0';
 
-			this.container.remove();
-			this.adSlot = null;
+			this.adSlot.disable();
+			this.adSlot.collapse();
 		}
 	}, {
 		key: 'updateAdSizes',
@@ -4026,9 +4026,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 				this.switchImagesInAd(false);
 			}
 
-			if (this.adSlot) {
-				external___amd___ext_wikia_adEngine3__["slotTweaker"].makeResponsive(this.adSlot, currentAspectRatio);
-			}
+			external___amd___ext_wikia_adEngine3__["slotTweaker"].makeResponsive(this.adSlot, currentAspectRatio);
 		}
 	}, {
 		key: 'adjustVideoSize',
@@ -4128,13 +4126,15 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 	}, {
 		key: 'adjustSizesToResolved',
 		value: function adjustSizesToResolved(offset) {
-			var aspectRatio = this.params.config.aspectRatio.resolved;
+			if (this.adSlot.isEnabled()) {
+				var aspectRatio = this.params.config.aspectRatio.resolved;
 
-			this.container.style.top = '';
-			document.body.style.paddingTop = 100 / aspectRatio + '%';
-			external___amd___ext_wikia_adEngine3__["slotTweaker"].makeResponsive(this.adSlot, aspectRatio);
-			window.scrollBy(0, -Math.min(offset, window.scrollY));
-			this.updateAdSizes();
+				this.container.style.top = '';
+				document.body.style.paddingTop = 100 / aspectRatio + '%';
+				external___amd___ext_wikia_adEngine3__["slotTweaker"].makeResponsive(this.adSlot, aspectRatio);
+				window.scrollBy(0, -Math.min(offset, window.scrollY));
+				this.updateAdSizes();
+			}
 		}
 	}]);
 

@@ -154,8 +154,8 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 
 		document.body.style.paddingTop = '0';
 
-		this.container.remove();
-		this.adSlot = null;
+		this.adSlot.disable();
+		this.adSlot.collapse();
 	}
 
 	updateAdSizes() {
@@ -185,9 +185,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 			this.switchImagesInAd(false);
 		}
 
-		if (this.adSlot) {
-			slotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
-		}
+		slotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
 	}
 
 	adjustVideoSize(value) {
@@ -278,13 +276,15 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 	}
 
 	adjustSizesToResolved(offset) {
-		const aspectRatio = this.params.config.aspectRatio.resolved;
+		if (this.adSlot.isEnabled()) {
+			const aspectRatio = this.params.config.aspectRatio.resolved;
 
-		this.container.style.top = '';
-		document.body.style.paddingTop = `${100 / aspectRatio}%`;
-		slotTweaker.makeResponsive(this.adSlot, aspectRatio);
-		window.scrollBy(0, -Math.min(offset, window.scrollY));
-		this.updateAdSizes();
+			this.container.style.top = '';
+			document.body.style.paddingTop = `${100 / aspectRatio}%`;
+			slotTweaker.makeResponsive(this.adSlot, aspectRatio);
+			window.scrollBy(0, -Math.min(offset, window.scrollY));
+			this.updateAdSizes();
+		}
 	}
 }
 
