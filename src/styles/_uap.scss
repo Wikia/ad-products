@@ -296,10 +296,6 @@ $ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
 		}
 	}
 
-	&.theme-resolved.sticky-bfaa .button-unstick {
-		display: unset;
-	}
-
 	&.is-mobile-device .advertisement-label {
 		font-size: 6px;
 		line-height: 6px;

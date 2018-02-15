@@ -237,9 +237,6 @@
       .gpt-ad.bfab-template .button-unstick .icon {
         width: 16px;
         height: 16px; } }
-  .gpt-ad.bfaa-template.theme-resolved.sticky-bfaa .button-unstick,
-  .gpt-ad.bfab-template.theme-resolved.sticky-bfaa .button-unstick {
-    display: unset; }
   .gpt-ad.bfaa-template.is-mobile-device .advertisement-label,
   .gpt-ad.bfab-template.is-mobile-device .advertisement-label {
     font-size: 6px;
