@@ -3995,6 +3995,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			document.body.style.paddingTop = '0';
 
 			this.container.remove();
+			this.adSlot = null;
 		}
 	}, {
 		key: 'updateAdSizes',
@@ -4025,7 +4026,9 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 				this.switchImagesInAd(false);
 			}
 
-			external___amd___ext_wikia_adEngine3__["slotTweaker"].makeResponsive(this.adSlot, currentAspectRatio);
+			if (this.adSlot) {
+				external___amd___ext_wikia_adEngine3__["slotTweaker"].makeResponsive(this.adSlot, currentAspectRatio);
+			}
 		}
 	}, {
 		key: 'adjustVideoSize',

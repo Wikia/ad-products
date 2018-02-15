@@ -155,6 +155,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		document.body.style.paddingTop = '0';
 
 		this.container.remove();
+		this.adSlot = null;
 	}
 
 	updateAdSizes() {
@@ -184,7 +185,9 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 			this.switchImagesInAd(false);
 		}
 
-		slotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
+		if (this.adSlot) {
+			slotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
+		}
 	}
 
 	adjustVideoSize(value) {

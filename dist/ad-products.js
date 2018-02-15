@@ -2157,6 +2157,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			document.body.style.paddingTop = '0';
 
 			this.container.remove();
+			this.adSlot = null;
 		}
 	}, {
 		key: 'updateAdSizes',
@@ -2187,7 +2188,9 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 				this.switchImagesInAd(false);
 			}
 
-			ad_engine_["slotTweaker"].makeResponsive(this.adSlot, currentAspectRatio);
+			if (this.adSlot) {
+				ad_engine_["slotTweaker"].makeResponsive(this.adSlot, currentAspectRatio);
+			}
 		}
 	}, {
 		key: 'adjustVideoSize',
