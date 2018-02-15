@@ -3992,8 +3992,6 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 				this.config.moveNavbar(0, 0);
 			}
 
-			animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, 0);
-
 			document.body.style.paddingTop = '0';
 
 			this.container.remove();
