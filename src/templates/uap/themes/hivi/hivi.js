@@ -69,6 +69,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		this.stickyBfaa = new StickyBfaa(this.adSlot, whenResolvedAndVideoViewed());
 		this.addUnstickButton();
 		this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
+		this.stickyBfaa.on(StickyBfaa.CLOSE_CLICKED_EVENT, isSticky => this.onCloseClicked(isSticky));
 		this.stickyBfaa.run();
 	}
 
@@ -76,10 +77,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		const closeButton = new CloseButton({
 			classNames: ['button-unstick'],
 			onClick: () => {
-				this.stickyBfaa.revertStickiness();
-				if (this.video) {
-					this.video.pause();
-				}
+				this.stickyBfaa.close();
 			}
 		});
 
@@ -132,7 +130,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		stickinessBeforeCallback.call(this.config, this.adSlot, this.params);
 
 		if (!isSticky) {
-			this.config.moveNavbar(0);
+			this.config.moveNavbar(0, SLIDE_OUT_TIME);
 			await animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
 			this.adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
 			animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
@@ -141,6 +139,23 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		}
 
 		stickinessAfterCallback.call(this.config, this.adSlot, this.params);
+	}
+
+	onCloseClicked(isSticky) {
+		scrollListener.removeCallback(this.scrollListener);
+
+		if (this.video && this.video.ima.getAdsManager()) {
+			this.video.stop();
+		}
+
+		if (isSticky) {
+			this.config.moveNavbar(0, 0);
+		}
+
+		document.body.style.paddingTop = '0';
+
+		this.adSlot.disable();
+		this.adSlot.collapse();
 	}
 
 	updateAdSizes() {
@@ -220,7 +235,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		const offset = this.getHeightDifferenceBetweenStates();
 
 		if (isSticky) {
-			this.config.moveNavbar(resolvedHeight);
+			this.config.moveNavbar(resolvedHeight, SLIDE_OUT_TIME);
 		} else {
 			this.container.style.top = `${Math.min(window.scrollY, offset)}px`;
 		}
@@ -261,13 +276,15 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 	}
 
 	adjustSizesToResolved(offset) {
-		const aspectRatio = this.params.config.aspectRatio.resolved;
+		if (this.adSlot.isEnabled()) {
+			const aspectRatio = this.params.config.aspectRatio.resolved;
 
-		this.container.style.top = '';
-		document.body.style.paddingTop = `${100 / aspectRatio}%`;
-		slotTweaker.makeResponsive(this.adSlot, aspectRatio);
-		window.scrollBy(0, -Math.min(offset, window.scrollY));
-		this.updateAdSizes();
+			this.container.style.top = '';
+			document.body.style.paddingTop = `${100 / aspectRatio}%`;
+			slotTweaker.makeResponsive(this.adSlot, aspectRatio);
+			window.scrollBy(0, -Math.min(offset, window.scrollY));
+			this.updateAdSizes();
+		}
 	}
 }
 
