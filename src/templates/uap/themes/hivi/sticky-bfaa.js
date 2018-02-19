@@ -5,6 +5,7 @@ import { AdSlot, slotTweaker, utils } from '@wikia/ad-engine';
 export class StickyBfaa extends EventEmitter {
 	static LOG_GROUP = 'sticky-bfaa';
 	static STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
+	static CLOSE_CLICKED_EVENT = Symbol('closeClicked');
 
 	constructor(
 		adSlot,
@@ -51,6 +52,12 @@ export class StickyBfaa extends EventEmitter {
 		} else {
 			this.logger('bfaa stickiness is already reverted');
 		}
+	}
+
+	close() {
+		this.logger('Closing and removing bfaa');
+		this.emit(StickyBfaa.CLOSE_CLICKED_EVENT, this.sticky);
+		this.sticky = false;
 	}
 
 	async registerRevertStickiness() {

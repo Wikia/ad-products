@@ -22,7 +22,8 @@ function getSlotElement() {
 function getAdSlotObject() {
 	return {
 		getElement: () => getSlotElement(),
-		getId: () => 'TOP_LEADERBOARD'
+		getId: () => 'TOP_LEADERBOARD',
+		isEnabled: () => true
 	};
 }
 
