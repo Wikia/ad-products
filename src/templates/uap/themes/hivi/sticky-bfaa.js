@@ -5,6 +5,7 @@ import { AdSlot, slotTweaker, utils } from '@wikia/ad-engine';
 export class StickyBfaa extends EventEmitter {
 	static LOG_GROUP = 'sticky-bfaa';
 	static STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
+	static CLOSE_CLICKED_EVENT = Symbol('closeClicked');
 
 	constructor(
 		adSlot,
@@ -15,6 +16,7 @@ export class StickyBfaa extends EventEmitter {
 		this.adSlot = adSlot;
 		this.customWhen = customWhen;
 		this.sticky = false;
+		this.isRevertStickinessBlocked = false;
 		this.logger = (...args) => utils.logger(StickyBfaa.LOG_GROUP, ...args);
 	}
 
@@ -52,6 +54,32 @@ export class StickyBfaa extends EventEmitter {
 		}
 	}
 
+	close() {
+		this.logger('Closing and removing bfaa');
+		this.emit(StickyBfaa.CLOSE_CLICKED_EVENT, this.sticky);
+		this.sticky = false;
+	}
+
+	async registerRevertStickiness() {
+		this.logger('waiting for user interaction');
+		await utils.once(window, 'scroll');
+		// wait for callback that are triggered after scroll event (eg. 'wikiaFullscreenChange')
+		await utils.wait();
+		if (!this.isRevertStickinessBlocked) {
+			this.revertStickiness();
+		} else {
+			this.registerRevertStickiness();
+		}
+	}
+
+	blockRevertStickiness() {
+		this.isRevertStickinessBlocked = true;
+	}
+
+	unblockRevertStickiness() {
+		this.isRevertStickinessBlocked = false;
+	}
+
 	async onAdReady() {
 		this.applyStickiness();
 		this.logger('waiting for viewability and custom condition');
@@ -61,8 +89,6 @@ export class StickyBfaa extends EventEmitter {
 			isFunction(this.customWhen) ? this.customWhen() : this.customWhen
 		]);
 
-		this.logger('waiting for unstick timeout or user interaction');
-		await utils.once(window, 'scroll');
-		this.revertStickiness();
+		this.registerRevertStickiness();
 	}
 }

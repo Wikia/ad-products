@@ -14,6 +14,7 @@ $uap-progress-bar-current-time-color: #666;
 $uap-progress-bar-height: 8px;
 $uap-replay-overlay-color: rgba(0,0,0,0.3);
 $uap-video-animation-duration: 0.4s;
+$uap-video-animation-long-duration: 0.6s;
 $uap-video-z-index: 100;
 $uap-video-fullscreen-z-index: 2147483647;
 
@@ -27,10 +28,32 @@ $hivi-uap-mobile-button-size: 24px;
 $hivi-uap-button-border-space: 6px;
 $hivi-uap-player-button-border-space: 6px;
 
+$ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+
 .gpt-ad.bfaa-template,
 .gpt-ad.bfab-template {
 	display: block;
 	transform: translateZ(0);
+
+	@keyframes slideOut {
+		from { transform: translateY(0); }
+		to { transform: translateY(-100%); }
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+
+	&.slide-out {
+		// Animation time is defined also in JS, remember to change it in both places
+		animation: slideOut $uap-video-animation-long-duration $ease-in-cubic forwards;
+	}
+
+	&.fade-in {
+		// Animation time is defined also in JS, remember to change it in both places
+		animation: fadeIn $uap-video-animation-duration $ease-in-cubic;
+	}
 
 	& > div {
 		padding: 0;
@@ -102,7 +125,6 @@ $hivi-uap-player-button-border-space: 6px;
 	}
 
 	.button-unstick {
-		display: none;
 		position: absolute;
 		top: 0;
 		right: 0;
@@ -272,10 +294,6 @@ $hivi-uap-player-button-border-space: 6px;
 			width: $hivi-uap-button-size;
 			height: $hivi-uap-button-size;
 		}
-	}
-
-	&.theme-resolved.sticky-bfaa .button-unstick {
-		display: unset;
 	}
 
 	&.is-mobile-device .advertisement-label {

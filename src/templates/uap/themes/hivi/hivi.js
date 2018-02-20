@@ -8,6 +8,11 @@ import { BigFancyAdTheme } from '../theme';
 import { StickyBfaa } from './sticky-bfaa';
 import { resolvedState } from '../../resolved-state';
 import { resolvedStateSwitch } from '../../resolved-state-switch';
+import {
+	CSS_CLASSNAME_FADE_IN_ANIMATION, CSS_CLASSNAME_SLIDE_OUT_ANIMATION,
+	CSS_CLASSNAME_STICKY_BFAA, SLIDE_OUT_TIME, FADE_IN_TIME
+} from '../../constants';
+import { animate } from '../../ui/animate';
 
 const HIVI_RESOLVED_THRESHOLD = 0.995;
 
@@ -64,6 +69,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		this.stickyBfaa = new StickyBfaa(this.adSlot, whenResolvedAndVideoViewed());
 		this.addUnstickButton();
 		this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
+		this.stickyBfaa.on(StickyBfaa.CLOSE_CLICKED_EVENT, isSticky => this.onCloseClicked(isSticky));
 		this.stickyBfaa.run();
 	}
 
@@ -71,10 +77,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		const closeButton = new CloseButton({
 			classNames: ['button-unstick'],
 			onClick: () => {
-				this.stickyBfaa.revertStickiness();
-				if (this.video) {
-					this.video.pause();
-				}
+				this.stickyBfaa.close();
 			}
 		});
 
@@ -104,24 +107,55 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 				this.setResolvedState(true);
 			}
 		});
-		video.addEventListener('wikiaFullscreenChange', async () => {
+		video.addEventListener('wikiaFullscreenChange', () => {
 			if (video.isFullscreen()) {
+				this.stickyBfaa.blockRevertStickiness();
 				this.container.classList.add('theme-video-fullscreen');
 			} else {
+				this.stickyBfaa.unblockRevertStickiness();
 				this.container.classList.remove('theme-video-fullscreen');
 				this.updateAdSizes();
 			}
 		});
 	}
 
-	onStickinessChange(isSticky) {
-		const stickinessCallback = isSticky ? this.config.onStickBfaaCallback : this.config.onUnstickBfaaCallback;
+	async onStickinessChange(isSticky) {
+		const stickinessBeforeCallback = isSticky ?
+			this.config.onBeforeStickBfaaCallback :
+			this.config.onBeforeUnstickBfaaCallback;
+		const stickinessAfterCallback = isSticky ?
+			this.config.onAfterStickBfaaCallback :
+			this.config.onAfterUnstickBfaaCallback;
 
-		stickinessCallback.call(this.config, this.adSlot, this.params);
+		stickinessBeforeCallback.call(this.config, this.adSlot, this.params);
 
 		if (!isSticky) {
-			this.config.moveNavbar(0);
+			this.config.moveNavbar(0, SLIDE_OUT_TIME);
+			await animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
+			this.adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
+			animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
+		} else {
+			this.adSlot.getElement().classList.add(CSS_CLASSNAME_STICKY_BFAA);
 		}
+
+		stickinessAfterCallback.call(this.config, this.adSlot, this.params);
+	}
+
+	onCloseClicked(isSticky) {
+		scrollListener.removeCallback(this.scrollListener);
+
+		if (this.video && this.video.ima.getAdsManager()) {
+			this.video.stop();
+		}
+
+		if (isSticky) {
+			this.config.moveNavbar(0, 0);
+		}
+
+		document.body.style.paddingTop = '0';
+
+		this.adSlot.disable();
+		this.adSlot.collapse();
 	}
 
 	updateAdSizes() {
@@ -201,7 +235,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		const offset = this.getHeightDifferenceBetweenStates();
 
 		if (isSticky) {
-			this.config.moveNavbar(resolvedHeight);
+			this.config.moveNavbar(resolvedHeight, SLIDE_OUT_TIME);
 		} else {
 			this.container.style.top = `${Math.min(window.scrollY, offset)}px`;
 		}
@@ -242,13 +276,15 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 	}
 
 	adjustSizesToResolved(offset) {
-		const aspectRatio = this.params.config.aspectRatio.resolved;
+		if (this.adSlot.isEnabled()) {
+			const aspectRatio = this.params.config.aspectRatio.resolved;
 
-		this.container.style.top = '';
-		document.body.style.paddingTop = `${100 / aspectRatio}%`;
-		slotTweaker.makeResponsive(this.adSlot, aspectRatio);
-		window.scrollBy(0, -Math.min(offset, window.scrollY));
-		this.updateAdSizes();
+			this.container.style.top = '';
+			document.body.style.paddingTop = `${100 / aspectRatio}%`;
+			slotTweaker.makeResponsive(this.adSlot, aspectRatio);
+			window.scrollBy(0, -Math.min(offset, window.scrollY));
+			this.updateAdSizes();
+		}
 	}
 }
 

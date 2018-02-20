@@ -1,6 +1,7 @@
 import { throttle } from 'lodash';
-import { context, Porvata, slotService, utils } from '@wikia/ad-engine';
+import { btfBlockerService, context, Porvata, slotService, utils } from '@wikia/ad-engine';
 import * as videoUserInterface from './ui/video';
+import * as constants from './constants';
 
 let uapId = 'none';
 let uapType = 'uap';
@@ -116,7 +117,7 @@ function updateSlotsTargeting(id) {
 function enableSlots(slotsToEnable) {
 	if (getType() !== 'abcd') {
 		slotsToEnable.forEach((slotName) => {
-			slotService.enable(slotName);
+			btfBlockerService.unblock(slotName);
 		});
 	}
 }
@@ -137,6 +138,7 @@ function initSlot(params) {
 }
 
 export const universalAdPackage = {
+	...constants,
 	init(params, slotsToEnable = []) {
 		let adProduct = 'uap';
 

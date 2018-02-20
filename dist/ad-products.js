@@ -160,6 +160,13 @@ module.exports = require("events");
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var constants_namespaceObject = {};
+__webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_FADE_IN_ANIMATION", function() { return CSS_CLASSNAME_FADE_IN_ANIMATION; });
+__webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_SLIDE_OUT_ANIMATION", function() { return CSS_CLASSNAME_SLIDE_OUT_ANIMATION; });
+__webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_STICKY_BFAA", function() { return CSS_CLASSNAME_STICKY_BFAA; });
+__webpack_require__.d(constants_namespaceObject, "CSS_TIMING_EASE_IN_CUBIC", function() { return CSS_TIMING_EASE_IN_CUBIC; });
+__webpack_require__.d(constants_namespaceObject, "SLIDE_OUT_TIME", function() { return SLIDE_OUT_TIME; });
+__webpack_require__.d(constants_namespaceObject, "FADE_IN_TIME", function() { return FADE_IN_TIME; });
 var themes_classic_namespaceObject = {};
 __webpack_require__.d(themes_classic_namespaceObject, "BfaaTheme", function() { return classic_BfaaTheme; });
 __webpack_require__.d(themes_classic_namespaceObject, "BfabTheme", function() { return classic_BfabTheme; });
@@ -331,8 +338,12 @@ var regenerator__default = /*#__PURE__*/__webpack_require__.n(regenerator_);
 var asyncToGenerator_ = __webpack_require__(4);
 var asyncToGenerator__default = /*#__PURE__*/__webpack_require__.n(asyncToGenerator_);
 
+// EXTERNAL MODULE: external "babel-runtime/helpers/extends"
+var extends_ = __webpack_require__(19);
+var extends__default = /*#__PURE__*/__webpack_require__.n(extends_);
+
 // EXTERNAL MODULE: external "lodash/throttle"
-var throttle_ = __webpack_require__(19);
+var throttle_ = __webpack_require__(20);
 var throttle__default = /*#__PURE__*/__webpack_require__.n(throttle_);
 
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/close-button.js
@@ -352,7 +363,7 @@ function add(video, container) {
 	add: add
 });
 // EXTERNAL MODULE: ./src/templates/uap/ui/icons.json
-var icons = __webpack_require__(20);
+var icons = __webpack_require__(21);
 var icons_default = /*#__PURE__*/__webpack_require__.n(icons);
 
 // CONCATENATED MODULE: ./src/templates/uap/ui/icons.js
@@ -582,7 +593,7 @@ function addPlayIcon(overlay) {
 	add: replay_overlay_add
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-animation.js
-var duration = 400,
+var toggle_animation_duration = 400,
     onAnimationClassName = 'on-animation';
 
 function resizeContainer(container, finalAspectRatio) {
@@ -591,7 +602,7 @@ function resizeContainer(container, finalAspectRatio) {
 
 	setTimeout(function () {
 		container.style.height = '';
-	}, duration);
+	}, toggle_animation_duration);
 }
 
 function toggle(elementToShow, elementToHide) {
@@ -604,7 +615,7 @@ function hideVideo(video, params) {
 	setTimeout(function () {
 		toggle(params.image, video.container);
 		params.container.classList.remove(onAnimationClassName);
-	}, duration);
+	}, toggle_animation_duration);
 }
 
 function showVideo(video, params) {
@@ -625,7 +636,7 @@ function toggle_animation_add(video, container, params) {
 
 /* harmony default export */ var toggle_animation = ({
 	add: toggle_animation_add,
-	duration: duration
+	duration: toggle_animation_duration
 });
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-fullscreen.js
 
@@ -880,7 +891,16 @@ function setup(video, uiElements, params) {
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/index.js
 
 
+// CONCATENATED MODULE: ./src/templates/uap/constants.js
+var CSS_CLASSNAME_FADE_IN_ANIMATION = 'fade-in';
+var CSS_CLASSNAME_SLIDE_OUT_ANIMATION = 'slide-out';
+var CSS_CLASSNAME_STICKY_BFAA = 'sticky-bfaa';
+var CSS_TIMING_EASE_IN_CUBIC = 'cubic-bezier(0.55, 0.055, 0.675, 0.19)';
+// Animation time is defined also in CSS, remember to change it in both places
+var SLIDE_OUT_TIME = 600;
+var FADE_IN_TIME = 400;
 // CONCATENATED MODULE: ./src/templates/uap/universal-ad-package.js
+
 
 
 
@@ -1005,6 +1025,7 @@ var loadVideoAd = function () {
 
 
 
+
 var uapId = 'none';
 var uapType = 'uap';
 
@@ -1055,7 +1076,7 @@ function updateSlotsTargeting(id) {
 function enableSlots(slotsToEnable) {
 	if (getType() !== 'abcd') {
 		slotsToEnable.forEach(function (slotName) {
-			ad_engine_["slotService"].enable(slotName);
+			ad_engine_["btfBlockerService"].unblock(slotName);
 		});
 	}
 }
@@ -1075,7 +1096,7 @@ function initSlot(params) {
 	}
 }
 
-var universalAdPackage = {
+var universalAdPackage = extends__default()({}, constants_namespaceObject, {
 	init: function init(params) {
 		var slotsToEnable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
@@ -1106,7 +1127,7 @@ var universalAdPackage = {
 	loadVideoAd: loadVideoAd,
 	setType: setType,
 	setUapId: setUapId
-};
+});
 // EXTERNAL MODULE: external "babel-runtime/core-js/object/assign"
 var assign_ = __webpack_require__(12);
 var assign__default = /*#__PURE__*/__webpack_require__.n(assign_);
@@ -1116,7 +1137,7 @@ var toConsumableArray_ = __webpack_require__(10);
 var toConsumableArray__default = /*#__PURE__*/__webpack_require__.n(toConsumableArray_);
 
 // EXTERNAL MODULE: external "babel-runtime/helpers/toArray"
-var toArray_ = __webpack_require__(21);
+var toArray_ = __webpack_require__(22);
 var toArray__default = /*#__PURE__*/__webpack_require__.n(toArray_);
 
 // EXTERNAL MODULE: external "babel-runtime/core-js/promise"
@@ -1508,19 +1529,19 @@ var symbol_ = __webpack_require__(13);
 var symbol__default = /*#__PURE__*/__webpack_require__.n(symbol_);
 
 // EXTERNAL MODULE: external "lodash/toPlainObject"
-var toPlainObject_ = __webpack_require__(22);
+var toPlainObject_ = __webpack_require__(23);
 var toPlainObject__default = /*#__PURE__*/__webpack_require__.n(toPlainObject_);
 
 // EXTERNAL MODULE: external "lodash/isUndefined"
-var isUndefined_ = __webpack_require__(23);
+var isUndefined_ = __webpack_require__(24);
 var isUndefined__default = /*#__PURE__*/__webpack_require__.n(isUndefined_);
 
 // EXTERNAL MODULE: external "lodash/mapValues"
-var mapValues_ = __webpack_require__(24);
+var mapValues_ = __webpack_require__(25);
 var mapValues__default = /*#__PURE__*/__webpack_require__.n(mapValues_);
 
 // EXTERNAL MODULE: external "lodash/debounce"
-var debounce_ = __webpack_require__(25);
+var debounce_ = __webpack_require__(26);
 var debounce__default = /*#__PURE__*/__webpack_require__.n(debounce_);
 
 // EXTERNAL MODULE: external "events"
@@ -1697,7 +1718,7 @@ var close_button_CloseButton = function (_UiComponent) {
 
 
 // EXTERNAL MODULE: external "lodash/isFunction"
-var isFunction_ = __webpack_require__(26);
+var isFunction_ = __webpack_require__(27);
 var isFunction__default = /*#__PURE__*/__webpack_require__.n(isFunction_);
 
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/sticky-bfaa.js
@@ -1728,6 +1749,7 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 		_this.adSlot = adSlot;
 		_this.customWhen = customWhen;
 		_this.sticky = false;
+		_this.isRevertStickinessBlocked = false;
 		_this.logger = function () {
 			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 				args[_key] = arguments[_key];
@@ -1804,29 +1826,36 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 			}
 		}
 	}, {
-		key: 'onAdReady',
+		key: 'close',
+		value: function close() {
+			this.logger('Closing and removing bfaa');
+			this.emit(StickyBfaa.CLOSE_CLICKED_EVENT, this.sticky);
+			this.sticky = false;
+		}
+	}, {
+		key: 'registerRevertStickiness',
 		value: function () {
 			var _ref2 = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee2() {
 				return regenerator__default.a.wrap(function _callee2$(_context2) {
 					while (1) {
 						switch (_context2.prev = _context2.next) {
 							case 0:
-								this.applyStickiness();
-								this.logger('waiting for viewability and custom condition');
-
-								_context2.next = 4;
-								return promise__default.a.all([ad_engine_["utils"].once(this.adSlot, ad_engine_["AdSlot"].SLOT_VIEWED_EVENT), isFunction__default()(this.customWhen) ? this.customWhen() : this.customWhen]);
-
-							case 4:
-
-								this.logger('waiting for unstick timeout or user interaction');
-								_context2.next = 7;
+								this.logger('waiting for user interaction');
+								_context2.next = 3;
 								return ad_engine_["utils"].once(window, 'scroll');
 
-							case 7:
-								this.revertStickiness();
+							case 3:
+								_context2.next = 5;
+								return ad_engine_["utils"].wait();
 
-							case 8:
+							case 5:
+								if (!this.isRevertStickinessBlocked) {
+									this.revertStickiness();
+								} else {
+									this.registerRevertStickiness();
+								}
+
+							case 6:
 							case 'end':
 								return _context2.stop();
 						}
@@ -1834,8 +1863,50 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 				}, _callee2, this);
 			}));
 
-			function onAdReady() {
+			function registerRevertStickiness() {
 				return _ref2.apply(this, arguments);
+			}
+
+			return registerRevertStickiness;
+		}()
+	}, {
+		key: 'blockRevertStickiness',
+		value: function blockRevertStickiness() {
+			this.isRevertStickinessBlocked = true;
+		}
+	}, {
+		key: 'unblockRevertStickiness',
+		value: function unblockRevertStickiness() {
+			this.isRevertStickinessBlocked = false;
+		}
+	}, {
+		key: 'onAdReady',
+		value: function () {
+			var _ref3 = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee3() {
+				return regenerator__default.a.wrap(function _callee3$(_context3) {
+					while (1) {
+						switch (_context3.prev = _context3.next) {
+							case 0:
+								this.applyStickiness();
+								this.logger('waiting for viewability and custom condition');
+
+								_context3.next = 4;
+								return promise__default.a.all([ad_engine_["utils"].once(this.adSlot, ad_engine_["AdSlot"].SLOT_VIEWED_EVENT), isFunction__default()(this.customWhen) ? this.customWhen() : this.customWhen]);
+
+							case 4:
+
+								this.registerRevertStickiness();
+
+							case 5:
+							case 'end':
+								return _context3.stop();
+						}
+					}
+				}, _callee3, this);
+			}));
+
+			function onAdReady() {
+				return _ref3.apply(this, arguments);
 			}
 
 			return onAdReady;
@@ -1846,7 +1917,46 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 }(external__events_["EventEmitter"]);
 sticky_bfaa_StickyBfaa.LOG_GROUP = 'sticky-bfaa';
 sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = symbol__default()('stickinessChange');
+sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT = symbol__default()('closeClicked');
+// CONCATENATED MODULE: ./src/templates/uap/ui/animate.js
+
+
+
+
+var animate = function () {
+	var _ref = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee(adSlot, className, duration) {
+		var container;
+		return regenerator__default.a.wrap(function _callee$(_context) {
+			while (1) {
+				switch (_context.prev = _context.next) {
+					case 0:
+						container = adSlot.getElement();
+
+
+						container.style.animationDuration = duration + 'ms';
+						container.classList.add(className);
+						_context.next = 5;
+						return ad_engine_["utils"].wait(duration);
+
+					case 5:
+						container.classList.remove(className);
+						container.style.animationDuration = '';
+
+					case 7:
+					case 'end':
+						return _context.stop();
+				}
+			}
+		}, _callee, this);
+	}));
+
+	return function animate(_x, _x2, _x3) {
+		return _ref.apply(this, arguments);
+	};
+}();
 // CONCATENATED MODULE: ./src/templates/uap/themes/hivi/hivi.js
+
+
 
 
 
@@ -1966,6 +2076,9 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
 				return _this3.onStickinessChange(isSticky);
 			});
+			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT, function (isSticky) {
+				return _this3.onCloseClicked(isSticky);
+			});
 			this.stickyBfaa.run();
 		}
 	}, {
@@ -1976,10 +2089,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			var closeButton = new close_button_CloseButton({
 				classNames: ['button-unstick'],
 				onClick: function onClick() {
-					_this4.stickyBfaa.revertStickiness();
-					if (_this4.video) {
-						_this4.video.pause();
-					}
+					_this4.stickyBfaa.close();
 				}
 			});
 
@@ -2019,36 +2129,85 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 					_this6.setResolvedState(true);
 				}
 			});
-			video.addEventListener('wikiaFullscreenChange', asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee2() {
+			video.addEventListener('wikiaFullscreenChange', function () {
+				if (video.isFullscreen()) {
+					_this6.stickyBfaa.blockRevertStickiness();
+					_this6.container.classList.add('theme-video-fullscreen');
+				} else {
+					_this6.stickyBfaa.unblockRevertStickiness();
+					_this6.container.classList.remove('theme-video-fullscreen');
+					_this6.updateAdSizes();
+				}
+			});
+		}
+	}, {
+		key: 'onStickinessChange',
+		value: function () {
+			var _ref2 = asyncToGenerator__default()( /*#__PURE__*/regenerator__default.a.mark(function _callee2(isSticky) {
+				var stickinessBeforeCallback, stickinessAfterCallback;
 				return regenerator__default.a.wrap(function _callee2$(_context2) {
 					while (1) {
 						switch (_context2.prev = _context2.next) {
 							case 0:
-								if (video.isFullscreen()) {
-									_this6.container.classList.add('theme-video-fullscreen');
-								} else {
-									_this6.container.classList.remove('theme-video-fullscreen');
-									_this6.updateAdSizes();
+								stickinessBeforeCallback = isSticky ? this.config.onBeforeStickBfaaCallback : this.config.onBeforeUnstickBfaaCallback;
+								stickinessAfterCallback = isSticky ? this.config.onAfterStickBfaaCallback : this.config.onAfterUnstickBfaaCallback;
+
+
+								stickinessBeforeCallback.call(this.config, this.adSlot, this.params);
+
+								if (isSticky) {
+									_context2.next = 11;
+									break;
 								}
 
-							case 1:
+								this.config.moveNavbar(0, SLIDE_OUT_TIME);
+								_context2.next = 7;
+								return animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
+
+							case 7:
+								this.adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
+								animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
+								_context2.next = 12;
+								break;
+
+							case 11:
+								this.adSlot.getElement().classList.add(CSS_CLASSNAME_STICKY_BFAA);
+
+							case 12:
+
+								stickinessAfterCallback.call(this.config, this.adSlot, this.params);
+
+							case 13:
 							case 'end':
 								return _context2.stop();
 						}
 					}
-				}, _callee2, _this6);
-			})));
-		}
-	}, {
-		key: 'onStickinessChange',
-		value: function onStickinessChange(isSticky) {
-			var stickinessCallback = isSticky ? this.config.onStickBfaaCallback : this.config.onUnstickBfaaCallback;
+				}, _callee2, this);
+			}));
 
-			stickinessCallback.call(this.config, this.adSlot, this.params);
-
-			if (!isSticky) {
-				this.config.moveNavbar(0);
+			function onStickinessChange(_x) {
+				return _ref2.apply(this, arguments);
 			}
+
+			return onStickinessChange;
+		}()
+	}, {
+		key: 'onCloseClicked',
+		value: function onCloseClicked(isSticky) {
+			ad_engine_["scrollListener"].removeCallback(this.scrollListener);
+
+			if (this.video && this.video.ima.getAdsManager()) {
+				this.video.stop();
+			}
+
+			if (isSticky) {
+				this.config.moveNavbar(0, 0);
+			}
+
+			document.body.style.paddingTop = '0';
+
+			this.adSlot.disable();
+			this.adSlot.collapse();
 		}
 	}, {
 		key: 'updateAdSizes',
@@ -2136,7 +2295,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			var offset = this.getHeightDifferenceBetweenStates();
 
 			if (isSticky) {
-				this.config.moveNavbar(resolvedHeight);
+				this.config.moveNavbar(resolvedHeight, SLIDE_OUT_TIME);
 			} else {
 				this.container.style.top = Math.min(window.scrollY, offset) + 'px';
 			}
@@ -2179,13 +2338,15 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 	}, {
 		key: 'adjustSizesToResolved',
 		value: function adjustSizesToResolved(offset) {
-			var aspectRatio = this.params.config.aspectRatio.resolved;
+			if (this.adSlot.isEnabled()) {
+				var aspectRatio = this.params.config.aspectRatio.resolved;
 
-			this.container.style.top = '';
-			document.body.style.paddingTop = 100 / aspectRatio + '%';
-			ad_engine_["slotTweaker"].makeResponsive(this.adSlot, aspectRatio);
-			window.scrollBy(0, -Math.min(offset, window.scrollY));
-			this.updateAdSizes();
+				this.container.style.top = '';
+				document.body.style.paddingTop = 100 / aspectRatio + '%';
+				ad_engine_["slotTweaker"].makeResponsive(this.adSlot, aspectRatio);
+				window.scrollBy(0, -Math.min(offset, window.scrollY));
+				this.updateAdSizes();
+			}
 		}
 	}]);
 
@@ -2259,7 +2420,7 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 				}, _callee3, this);
 			}));
 
-			function setResolvedState(_x) {
+			function setResolvedState(_x2) {
 				return _ref3.apply(this, arguments);
 			}
 
@@ -2319,25 +2480,27 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 	}, {
 		key: 'getDefaultConfig',
 		value: function getDefaultConfig() {
-			function onStickBfaaCallback(adSlot) {
-				adSlot.getElement().classList.add('sticky-bfaa');
-			}
-
-			function onUnstickBfaaCallback(adSlot) {
-				adSlot.getElement().classList.remove('sticky-bfaa');
-			}
-
 			return {
 				desktopNavbarWrapperSelector: '.wds-global-navigation-wrapper',
-				handleNavbar: false,
 				mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
+				handleNavbar: false,
 				slotSibling: '.topic-header',
 				slotsToEnable: ['BOTTOM_LEADERBOARD', 'INCONTENT_BOXAD'],
-				stickyAnimationDuration: 500,
 				onInit: function onInit() {},
-				onStickBfaaCallback: onStickBfaaCallback,
-				onUnstickBfaaCallback: onUnstickBfaaCallback,
-				moveNavbar: function moveNavbar() {}
+				onBeforeStickBfaaCallback: function onBeforeStickBfaaCallback() {},
+				onAfterStickBfaaCallback: function onAfterStickBfaaCallback() {},
+				onBeforeUnstickBfaaCallback: function onBeforeUnstickBfaaCallback() {},
+				onAfterUnstickBfaaCallback: function onAfterUnstickBfaaCallback() {},
+				moveNavbar: function moveNavbar(offset) {
+					var time = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : SLIDE_OUT_TIME;
+
+					var navbarElement = document.querySelector('body > nav.navigation');
+
+					if (navbarElement) {
+						navbarElement.style.transition = offset ? '' : 'top ' + time + 'ms ' + universalAdPackage.CSS_TIMING_EASE_IN_CUBIC;
+						navbarElement.style.top = offset ? offset + 'px' : '';
+					}
+				}
 			};
 		}
 
@@ -2466,7 +2629,7 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 				}, _callee, this);
 			}));
 
-			function onAdReady(_x) {
+			function onAdReady(_x2) {
 				return _ref.apply(this, arguments);
 			}
 
@@ -2612,6 +2775,7 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 
 
 
+
 // CONCATENATED MODULE: ./src/templates/index.js
 
 
@@ -2633,7 +2797,7 @@ if (get__default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set__default()(window, versionField, 'v3.3.3');
+set__default()(window, versionField, 'v4.1.0');
 
 
 
@@ -2660,46 +2824,52 @@ module.exports = require("lodash/get");
 /* 19 */
 /***/ (function(module, exports) {
 
-module.exports = require("lodash/throttle");
+module.exports = require("babel-runtime/helpers/extends");
 
 /***/ }),
 /* 20 */
 /***/ (function(module, exports) {
 
-module.exports = {"CROSS":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19.707 4.293a.999.999 0 0 0-1.414 0L12 10.586 5.707 4.293a.999.999 0 1 0-1.414 1.414L10.586 12l-6.293 6.293a.999.999 0 1 0 1.414 1.414L12 13.414l6.293 6.293a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L13.414 12l6.293-6.293a.999.999 0 0 0 0-1.414\" fill-rule=\"evenodd\"/></svg>","LEARN_MORE":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g stroke=\"none\" stroke-width=\"1\" fill-rule=\"evenodd\"><g transform=\"translate(-753.000000, -1764.000000)\" fill-rule=\"nonzero\"><g transform=\"translate(153.000000, 1746.000000)\"><g transform=\"translate(5.000000, 0.000000)\"><g transform=\"translate(459.000000, 0.000000)\"><g transform=\"translate(136.000000, 18.000000)\"><polygon points=\"24 0 15 0 18.4395 3.4395 9.033 12.846 11.154 14.967 20.5605 5.5605 24 9\"></polygon><path d=\"M19.5,24 L1.5,24 C0.672,24 0,23.328 0,22.5 L0,4.5 C0,3.672 0.672,3 1.5,3 L10.5,3 L10.5,6 L3,6 L3,21 L18,21 L18,13.5 L21,13.5 L21,22.5 C21,23.328 20.328,24 19.5,24 Z\"></path></g></g></g></g></g></g></svg>","PAUSE":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill-rule=\"evenodd\"><rect width=\"7\" height=\"22\" rx=\"1\" x=\"3\" y=\"1\"></rect><rect x=\"14\" width=\"7\" height=\"22\" rx=\"1\" y=\"1\"></rect></g></svg>","PLAY":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19.69 12.6L5.143 22.867a.722.722 0 0 1-.753.05.733.733 0 0 1-.391-.65V1.733c0-.274.15-.524.391-.65a.724.724 0 0 1 .753.05l14.545 10.266a.734.734 0 0 1 0 1.201z\" fill-rule=\"evenodd\"></path></svg>","REPLAY":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12 23c6.065 0 11-4.863 11-10.84a.992.992 0 0 0-1-.985c-.553 0-1 .44-1 .986 0 4.89-4.037 8.868-9 8.868s-9-3.978-9-8.868c0-4.89 4.037-8.869 9-8.869a8.991 8.991 0 0 1 6.975 3.292l-3.794-.501a.996.996 0 0 0-1.124.845.987.987 0 0 0 .858 1.108l5.946.785a.996.996 0 0 0 1.124-.845l.797-5.86a.987.987 0 0 0-.858-1.107.994.994 0 0 0-1.124.846l-.446 3.28A10.997 10.997 0 0 0 12 1.322c-6.065 0-11 4.862-11 10.839C1 18.137 5.935 23 12 23\" fill-rule=\"evenodd\"/></svg>","FULLSCREEN_OFF":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M5.5 9H8V2H5v4H1v3h4.5zm13 0H16V2h3v4h4v3h-4.5zm-13 6H8v7H5v-4H1v-3h4.5zm13 0H16v7h3v-4h4v-3h-4.5z\" fill-rule=\"evenodd\"/></svg>","FULLSCREEN_ON":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M21.5 22H23v-7h-3v4h-4v3h5.5zM23 3.5V9h-3V5h-4V2h7v1.5zm-22 17V15h3v4h4v3H1v-1.5zM2.5 2H1v7h3V5h4V2H2.5z\" fill-rule=\"evenodd\"/></svg>","VOLUME_OFF":"<svg viewBox=\"0 0 28 28\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style>.cls-1{fill:#fff;opacity:0.4;}.cls-2{fill:#231f20;}</style></defs><title>sound_off_button</title><circle class=\"cls-1\" cx=\"14.06\" cy=\"13.96\" r=\"13.74\"/><path class=\"cls-2\" d=\"M16,2.93A13.07,13.07,0,1,1,2.93,16,13.08,13.08,0,0,1,16,2.93M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Z\" transform=\"translate(-2 -2)\"/><g id=\"Page-1\"><g id=\"Video-Player-Skin\"><g id=\"Video-Copy\"><g id=\"volume-off\"><path id=\"Shape\" class=\"cls-2\" d=\"M14.25,9.17l-3.79,4.11H6.84c-.78,0-1,.46-1,.89V17.7a1,1,0,0,0,1,1h3.65l3.79,4.18a1.09,1.09,0,0,0,.53.14,1,1,0,0,0,.5-.14,1,1,0,0,0,.5-.9V10a1,1,0,0,0-.5-.9,1.06,1.06,0,0,0-1,.05Z\" transform=\"translate(-2 -2)\"/><path id=\"Fill-1\" class=\"cls-2\" d=\"M22.91,16.21l3-3a.92.92,0,1,0-1.3-1.3l-3,3-3-3a.92.92,0,1,0-1.3,1.3l3,3-3,3a.92.92,0,1,0,1.3,1.3l3-3,3,3a.92.92,0,1,0,1.3-1.3Z\" transform=\"translate(-2 -2)\"/></g></g></g></g></svg>","VOLUME_ON":"<svg viewBox=\"0 0 28 28\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style>.cls-1{fill:#fff;opacity:0.4;}.cls-2{fill:#231f20;}</style></defs><title>sound_on_button</title><circle class=\"cls-1\" cx=\"13.96\" cy=\"14.06\" r=\"13.74\"/><path class=\"cls-2\" d=\"M16,2.93A13.07,13.07,0,1,1,2.93,16,13.08,13.08,0,0,1,16,2.93M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Z\" transform=\"translate(-2 -2)\"/><g id=\"Page-1\"><g id=\"Video-Player-Skin\"><g id=\"Video-Copy\"><g id=\"volume\"><path id=\"Shape\" class=\"cls-2\" d=\"M14.24,9.17l-3.79,4.11H6.82c-.78,0-1,.46-1,.89V17.7a1,1,0,0,0,1,1h3.65l3.79,4.18a1.09,1.09,0,0,0,.53.14,1,1,0,0,0,.5-.14,1,1,0,0,0,.5-.9V10a1,1,0,0,0-.5-.9,1.06,1.06,0,0,0-1,.05Z\" transform=\"translate(-2 -2)\"/><path id=\"Shape-2\" data-name=\"Shape\" class=\"cls-2\" d=\"M19.18,19.33a4.39,4.39,0,0,0,0-6.19.71.71,0,0,0-1,1,3,3,0,0,1,0,4.19.71.71,0,0,0,1,1Z\" transform=\"translate(-2 -2)\"/><path id=\"Shape-3\" data-name=\"Shape\" class=\"cls-2\" d=\"M23.3,16.23a6.19,6.19,0,0,0-1.81-4.39.71.71,0,1,0-1,1,4.81,4.81,0,0,1,0,6.79.71.71,0,1,0,1,1,6.19,6.19,0,0,0,1.81-4.39Z\" transform=\"translate(-2 -2)\"/></g></g></g></g></svg>","HIVI_VOLUME_OFF":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6 8.007H1.347C.333 8.007 0 8.769 0 9.391v5.032C0 15.045.333 16 1.347 16H6l5.007 5.796c.215.132.454.205.693.205.24 0 .436-.063.65-.196.429-.265.65-.75.65-1.28V3.447c0-.53-.221-1.02-.65-1.284-.429-.265-.935-.187-1.365.078L6 8.007zM20.305 12l2.425-2.425a.922.922 0 1 0-1.306-1.305l-2.425 2.424-2.423-2.424a.923.923 0 0 0-1.306 1.305L17.695 12l-2.425 2.425a.922.922 0 1 0 1.306 1.304L19 13.306l2.425 2.423a.92.92 0 0 0 1.306 0 .922.922 0 0 0 0-1.304L20.305 12z\" fill-rule=\"evenodd\"></path></svg>","HIVI_VOLUME_ON":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill-rule=\"evenodd\"><path d=\"M6 8.007H1.347C.333 8.007 0 8.769 0 9.391v5.032C0 15.045.333 16 1.347 16H6l5.007 5.796c.215.132.454.205.693.205.24 0 .436-.063.65-.196.429-.265.65-.75.65-1.28V3.447c0-.53-.221-1.02-.65-1.284-.429-.265-.935-.187-1.365.078L6 8.007zm11.612 8.524a5.858 5.858 0 0 0 0-8.253.944.944 0 0 0-1.337 1.332 3.97 3.97 0 0 1 0 5.59.943.943 0 1 0 1.337 1.331z\"></path><path d=\"M23.03 12.135c0-2.21-.859-4.292-2.418-5.857a.943.943 0 1 0-1.337 1.332 6.37 6.37 0 0 1 1.868 4.525 6.37 6.37 0 0 1-1.868 4.525.943.943 0 1 0 1.338 1.332 8.249 8.249 0 0 0 2.418-5.857z\"></path></g></svg>"}
+module.exports = require("lodash/throttle");
 
 /***/ }),
 /* 21 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/helpers/toArray");
+module.exports = {"CROSS":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19.707 4.293a.999.999 0 0 0-1.414 0L12 10.586 5.707 4.293a.999.999 0 1 0-1.414 1.414L10.586 12l-6.293 6.293a.999.999 0 1 0 1.414 1.414L12 13.414l6.293 6.293a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L13.414 12l6.293-6.293a.999.999 0 0 0 0-1.414\" fill-rule=\"evenodd\"/></svg>","LEARN_MORE":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g stroke=\"none\" stroke-width=\"1\" fill-rule=\"evenodd\"><g transform=\"translate(-753.000000, -1764.000000)\" fill-rule=\"nonzero\"><g transform=\"translate(153.000000, 1746.000000)\"><g transform=\"translate(5.000000, 0.000000)\"><g transform=\"translate(459.000000, 0.000000)\"><g transform=\"translate(136.000000, 18.000000)\"><polygon points=\"24 0 15 0 18.4395 3.4395 9.033 12.846 11.154 14.967 20.5605 5.5605 24 9\"></polygon><path d=\"M19.5,24 L1.5,24 C0.672,24 0,23.328 0,22.5 L0,4.5 C0,3.672 0.672,3 1.5,3 L10.5,3 L10.5,6 L3,6 L3,21 L18,21 L18,13.5 L21,13.5 L21,22.5 C21,23.328 20.328,24 19.5,24 Z\"></path></g></g></g></g></g></g></svg>","PAUSE":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill-rule=\"evenodd\"><rect width=\"7\" height=\"22\" rx=\"1\" x=\"3\" y=\"1\"></rect><rect x=\"14\" width=\"7\" height=\"22\" rx=\"1\" y=\"1\"></rect></g></svg>","PLAY":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19.69 12.6L5.143 22.867a.722.722 0 0 1-.753.05.733.733 0 0 1-.391-.65V1.733c0-.274.15-.524.391-.65a.724.724 0 0 1 .753.05l14.545 10.266a.734.734 0 0 1 0 1.201z\" fill-rule=\"evenodd\"></path></svg>","REPLAY":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12 23c6.065 0 11-4.863 11-10.84a.992.992 0 0 0-1-.985c-.553 0-1 .44-1 .986 0 4.89-4.037 8.868-9 8.868s-9-3.978-9-8.868c0-4.89 4.037-8.869 9-8.869a8.991 8.991 0 0 1 6.975 3.292l-3.794-.501a.996.996 0 0 0-1.124.845.987.987 0 0 0 .858 1.108l5.946.785a.996.996 0 0 0 1.124-.845l.797-5.86a.987.987 0 0 0-.858-1.107.994.994 0 0 0-1.124.846l-.446 3.28A10.997 10.997 0 0 0 12 1.322c-6.065 0-11 4.862-11 10.839C1 18.137 5.935 23 12 23\" fill-rule=\"evenodd\"/></svg>","FULLSCREEN_OFF":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M5.5 9H8V2H5v4H1v3h4.5zm13 0H16V2h3v4h4v3h-4.5zm-13 6H8v7H5v-4H1v-3h4.5zm13 0H16v7h3v-4h4v-3h-4.5z\" fill-rule=\"evenodd\"/></svg>","FULLSCREEN_ON":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M21.5 22H23v-7h-3v4h-4v3h5.5zM23 3.5V9h-3V5h-4V2h7v1.5zm-22 17V15h3v4h4v3H1v-1.5zM2.5 2H1v7h3V5h4V2H2.5z\" fill-rule=\"evenodd\"/></svg>","VOLUME_OFF":"<svg viewBox=\"0 0 28 28\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style>.cls-1{fill:#fff;opacity:0.4;}.cls-2{fill:#231f20;}</style></defs><title>sound_off_button</title><circle class=\"cls-1\" cx=\"14.06\" cy=\"13.96\" r=\"13.74\"/><path class=\"cls-2\" d=\"M16,2.93A13.07,13.07,0,1,1,2.93,16,13.08,13.08,0,0,1,16,2.93M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Z\" transform=\"translate(-2 -2)\"/><g id=\"Page-1\"><g id=\"Video-Player-Skin\"><g id=\"Video-Copy\"><g id=\"volume-off\"><path id=\"Shape\" class=\"cls-2\" d=\"M14.25,9.17l-3.79,4.11H6.84c-.78,0-1,.46-1,.89V17.7a1,1,0,0,0,1,1h3.65l3.79,4.18a1.09,1.09,0,0,0,.53.14,1,1,0,0,0,.5-.14,1,1,0,0,0,.5-.9V10a1,1,0,0,0-.5-.9,1.06,1.06,0,0,0-1,.05Z\" transform=\"translate(-2 -2)\"/><path id=\"Fill-1\" class=\"cls-2\" d=\"M22.91,16.21l3-3a.92.92,0,1,0-1.3-1.3l-3,3-3-3a.92.92,0,1,0-1.3,1.3l3,3-3,3a.92.92,0,1,0,1.3,1.3l3-3,3,3a.92.92,0,1,0,1.3-1.3Z\" transform=\"translate(-2 -2)\"/></g></g></g></g></svg>","VOLUME_ON":"<svg viewBox=\"0 0 28 28\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style>.cls-1{fill:#fff;opacity:0.4;}.cls-2{fill:#231f20;}</style></defs><title>sound_on_button</title><circle class=\"cls-1\" cx=\"13.96\" cy=\"14.06\" r=\"13.74\"/><path class=\"cls-2\" d=\"M16,2.93A13.07,13.07,0,1,1,2.93,16,13.08,13.08,0,0,1,16,2.93M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Z\" transform=\"translate(-2 -2)\"/><g id=\"Page-1\"><g id=\"Video-Player-Skin\"><g id=\"Video-Copy\"><g id=\"volume\"><path id=\"Shape\" class=\"cls-2\" d=\"M14.24,9.17l-3.79,4.11H6.82c-.78,0-1,.46-1,.89V17.7a1,1,0,0,0,1,1h3.65l3.79,4.18a1.09,1.09,0,0,0,.53.14,1,1,0,0,0,.5-.14,1,1,0,0,0,.5-.9V10a1,1,0,0,0-.5-.9,1.06,1.06,0,0,0-1,.05Z\" transform=\"translate(-2 -2)\"/><path id=\"Shape-2\" data-name=\"Shape\" class=\"cls-2\" d=\"M19.18,19.33a4.39,4.39,0,0,0,0-6.19.71.71,0,0,0-1,1,3,3,0,0,1,0,4.19.71.71,0,0,0,1,1Z\" transform=\"translate(-2 -2)\"/><path id=\"Shape-3\" data-name=\"Shape\" class=\"cls-2\" d=\"M23.3,16.23a6.19,6.19,0,0,0-1.81-4.39.71.71,0,1,0-1,1,4.81,4.81,0,0,1,0,6.79.71.71,0,1,0,1,1,6.19,6.19,0,0,0,1.81-4.39Z\" transform=\"translate(-2 -2)\"/></g></g></g></g></svg>","HIVI_VOLUME_OFF":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6 8.007H1.347C.333 8.007 0 8.769 0 9.391v5.032C0 15.045.333 16 1.347 16H6l5.007 5.796c.215.132.454.205.693.205.24 0 .436-.063.65-.196.429-.265.65-.75.65-1.28V3.447c0-.53-.221-1.02-.65-1.284-.429-.265-.935-.187-1.365.078L6 8.007zM20.305 12l2.425-2.425a.922.922 0 1 0-1.306-1.305l-2.425 2.424-2.423-2.424a.923.923 0 0 0-1.306 1.305L17.695 12l-2.425 2.425a.922.922 0 1 0 1.306 1.304L19 13.306l2.425 2.423a.92.92 0 0 0 1.306 0 .922.922 0 0 0 0-1.304L20.305 12z\" fill-rule=\"evenodd\"></path></svg>","HIVI_VOLUME_ON":"<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g fill-rule=\"evenodd\"><path d=\"M6 8.007H1.347C.333 8.007 0 8.769 0 9.391v5.032C0 15.045.333 16 1.347 16H6l5.007 5.796c.215.132.454.205.693.205.24 0 .436-.063.65-.196.429-.265.65-.75.65-1.28V3.447c0-.53-.221-1.02-.65-1.284-.429-.265-.935-.187-1.365.078L6 8.007zm11.612 8.524a5.858 5.858 0 0 0 0-8.253.944.944 0 0 0-1.337 1.332 3.97 3.97 0 0 1 0 5.59.943.943 0 1 0 1.337 1.331z\"></path><path d=\"M23.03 12.135c0-2.21-.859-4.292-2.418-5.857a.943.943 0 1 0-1.337 1.332 6.37 6.37 0 0 1 1.868 4.525 6.37 6.37 0 0 1-1.868 4.525.943.943 0 1 0 1.338 1.332 8.249 8.249 0 0 0 2.418-5.857z\"></path></g></svg>"}
 
 /***/ }),
 /* 22 */
 /***/ (function(module, exports) {
 
-module.exports = require("lodash/toPlainObject");
+module.exports = require("babel-runtime/helpers/toArray");
 
 /***/ }),
 /* 23 */
 /***/ (function(module, exports) {
 
-module.exports = require("lodash/isUndefined");
+module.exports = require("lodash/toPlainObject");
 
 /***/ }),
 /* 24 */
 /***/ (function(module, exports) {
 
-module.exports = require("lodash/mapValues");
+module.exports = require("lodash/isUndefined");
 
 /***/ }),
 /* 25 */
 /***/ (function(module, exports) {
 
-module.exports = require("lodash/debounce");
+module.exports = require("lodash/mapValues");
 
 /***/ }),
 /* 26 */
+/***/ (function(module, exports) {
+
+module.exports = require("lodash/debounce");
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/isFunction");
