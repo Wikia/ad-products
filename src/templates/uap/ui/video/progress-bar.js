@@ -16,11 +16,20 @@ function add(video, container) {
 		currentTime.style.transitionDuration = '';
 		currentTime.style.width = '0';
 	};
+	progressBar.rewind = () => {
+		const remainingTime = currentTime.style.transitionDuration;
+
+		progressBar.reset();
+		slotTweaker.forceRepaint(currentTime);
+		currentTime.style.transitionDuration = remainingTime;
+	};
 	progressBar.start = () => {
 		const remainingTime = video.getRemainingTime();
 
 		if (remainingTime) {
-			currentTime.style.transitionDuration = `${remainingTime}s`;
+			if (remainingTime > 0) {
+				currentTime.style.transitionDuration = `${remainingTime}s`;
+			}
 			slotTweaker.forceRepaint(currentTime);
 			currentTime.style.width = '100%';
 		} else {
@@ -30,6 +39,7 @@ function add(video, container) {
 
 	video.addEventListener('wikiaAdPlay', progressBar.start);
 	video.addEventListener('wikiaAdCompleted', progressBar.reset);
+	video.addEventListener('wikiaAdRestart', progressBar.rewind);
 	video.addEventListener('wikiaAdPause', progressBar.pause);
 
 	container.appendChild(progressBar);

@@ -490,11 +490,20 @@ function progress_bar_add(video, container) {
 		currentTime.style.transitionDuration = '';
 		currentTime.style.width = '0';
 	};
+	progressBar.rewind = function () {
+		var remainingTime = currentTime.style.transitionDuration;
+
+		progressBar.reset();
+		ad_engine_["slotTweaker"].forceRepaint(currentTime);
+		currentTime.style.transitionDuration = remainingTime;
+	};
 	progressBar.start = function () {
 		var remainingTime = video.getRemainingTime();
 
 		if (remainingTime) {
-			currentTime.style.transitionDuration = remainingTime + 's';
+			if (remainingTime > 0) {
+				currentTime.style.transitionDuration = remainingTime + 's';
+			}
 			ad_engine_["slotTweaker"].forceRepaint(currentTime);
 			currentTime.style.width = '100%';
 		} else {
@@ -504,6 +513,7 @@ function progress_bar_add(video, container) {
 
 	video.addEventListener('wikiaAdPlay', progressBar.start);
 	video.addEventListener('wikiaAdCompleted', progressBar.reset);
+	video.addEventListener('wikiaAdRestart', progressBar.rewind);
 	video.addEventListener('wikiaAdPause', progressBar.pause);
 
 	container.appendChild(progressBar);
@@ -2797,7 +2807,7 @@ if (get__default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set__default()(window, versionField, 'v4.1.0');
+set__default()(window, versionField, 'v4.2.0');
 
 
 
