@@ -69,7 +69,8 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		this.stickyBfaa = new StickyBfaa(this.adSlot, whenResolvedAndVideoViewed());
 		this.addUnstickButton();
 		this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
-		this.stickyBfaa.on(StickyBfaa.CLOSE_CLICKED_EVENT, isSticky => this.onCloseClicked(isSticky));
+		this.stickyBfaa.on(StickyBfaa.CLOSE_CLICKED_EVENT, this.onCloseClicked.bind(this));
+		this.stickyBfaa.on(StickyBfaa.UNSTICK_IMMEDIATELY_EVENT, this.unstickImmediately.bind(this));
 		this.stickyBfaa.run();
 	}
 
@@ -141,21 +142,24 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		stickinessAfterCallback.call(this.config, this.adSlot, this.params);
 	}
 
-	onCloseClicked(isSticky) {
-		scrollListener.removeCallback(this.scrollListener);
-
-		if (this.video && this.video.ima.getAdsManager()) {
-			this.video.stop();
-		}
-
-		if (isSticky) {
-			this.config.moveNavbar(0, 0);
-		}
+	onCloseClicked() {
+		this.unstickImmediately();
 
 		document.body.style.paddingTop = '0';
 
 		this.adSlot.disable();
 		this.adSlot.collapse();
+	}
+
+	unstickImmediately() {
+		scrollListener.removeCallback(this.scrollListener);
+		this.adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
+
+		if (this.video && this.video.ima.getAdsManager()) {
+			this.video.stop();
+		}
+
+		this.config.moveNavbar(0, 0);
 	}
 
 	updateAdSizes() {
