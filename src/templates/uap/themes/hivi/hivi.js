@@ -292,12 +292,22 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 	onAdReady() {
 		super.onAdReady();
 
-		slotTweaker.makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
+		if (resolvedState.isResolvedState(this.params)) {
+			this.setResolvedState();
+		} else {
+			resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
+			slotTweaker.makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
+		}
 	}
 
 	onVideoReady(video) {
 		super.onVideoReady();
 
+		video.addEventListener('wikiaAdStarted', () => {
+			if (resolvedState.isResolvedState(this.params)) {
+				this.setResolvedState(video);
+			}
+		});
 		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState(video));
 		video.addEventListener('wikiaFullscreenChange', () => {
 			if (video.isFullscreen()) {
