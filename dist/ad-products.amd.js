@@ -3556,6 +3556,8 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 		key: 'run',
 		value: function () {
 			var _ref = sticky_bfaa__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee() {
+				var _this2 = this;
+
 				return runtime_module_default.a.wrap(function _callee$(_context) {
 					while (1) {
 						switch (_context.prev = _context.next) {
@@ -3574,9 +3576,15 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 
 							case 5:
 
+								this.adSlot.once('unstickImmediately', function () {
+									_this2.logger('Unsticking bfaa');
+									_this2.emit(StickyBfaa.UNSTICK_IMMEDIATELY_EVENT);
+									_this2.sticky = false;
+								});
+
 								this.onAdReady();
 
-							case 6:
+							case 7:
 							case 'end':
 								return _context.stop();
 						}
@@ -3710,6 +3718,7 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 sticky_bfaa_StickyBfaa.LOG_GROUP = 'sticky-bfaa';
 sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
 sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT = Symbol('closeClicked');
+sticky_bfaa_StickyBfaa.UNSTICK_IMMEDIATELY_EVENT = Symbol('unstickImmediately');
 // CONCATENATED MODULE: ./src/templates/uap/ui/animate.js
 
 
@@ -3874,9 +3883,8 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
 				return _this3.onStickinessChange(isSticky);
 			});
-			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT, function (isSticky) {
-				return _this3.onCloseClicked(isSticky);
-			});
+			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT, this.onCloseClicked.bind(this));
+			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.UNSTICK_IMMEDIATELY_EVENT, this.unstickImmediately.bind(this));
 			this.stickyBfaa.run();
 		}
 	}, {
@@ -3991,21 +3999,25 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 		}()
 	}, {
 		key: 'onCloseClicked',
-		value: function onCloseClicked(isSticky) {
-			external___amd___ext_wikia_adEngine3__["scrollListener"].removeCallback(this.scrollListener);
-
-			if (this.video && this.video.ima.getAdsManager()) {
-				this.video.stop();
-			}
-
-			if (isSticky) {
-				this.config.moveNavbar(0, 0);
-			}
+		value: function onCloseClicked() {
+			this.unstickImmediately();
 
 			document.body.style.paddingTop = '0';
 
 			this.adSlot.disable();
 			this.adSlot.collapse();
+		}
+	}, {
+		key: 'unstickImmediately',
+		value: function unstickImmediately() {
+			external___amd___ext_wikia_adEngine3__["scrollListener"].removeCallback(this.scrollListener);
+			this.adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
+
+			if (this.video && this.video.ima.getAdsManager()) {
+				this.video.stop();
+			}
+
+			this.config.moveNavbar(0, 0);
 		}
 	}, {
 		key: 'updateAdSizes',
@@ -4608,7 +4620,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v4.2.1');
+set_default()(window, versionField, 'v4.2.2');
 
 
 
