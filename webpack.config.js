@@ -27,7 +27,10 @@ const common = {
 			{
 				test: /.js$/,
 				use: 'babel-loader',
-				include: path.resolve(__dirname, 'src')
+				include: [
+					path.join(__dirname, 'src'),
+					path.join(__dirname, 'examples')
+				]
 			},
 			{
 				test: path.resolve(__dirname, 'src/index.js'),
