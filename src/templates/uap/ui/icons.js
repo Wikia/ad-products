@@ -6,7 +6,8 @@ export function createIcon(iconName, classNames = []) {
 	if (svgs[iconName]) {
 		const element = parser.parseFromString(svgs[iconName], 'image/svg+xml').documentElement;
 
-		classNames.forEach(className => element.classList.add(className));
+		// IE 11 doesn't support classList nor className on SVG elements
+		element.setAttribute('class', classNames.join(' '));
 
 		return element;
 	}
