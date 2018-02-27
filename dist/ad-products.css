@@ -90,10 +90,10 @@
     z-index: -1; }
   .gpt-ad.bfaa-template .button-unstick,
   .gpt-ad.bfab-template .button-unstick {
+    padding: 6px;
     position: absolute;
     top: 0;
-    right: 0;
-    margin: 6px; }
+    right: 0; }
     @media only screen and (min-width: 768px) {
       .gpt-ad.bfaa-template .button-unstick,
       .gpt-ad.bfab-template .button-unstick {

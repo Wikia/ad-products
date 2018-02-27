@@ -125,10 +125,10 @@ $ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
 	}
 
 	.button-unstick {
+		padding: $hivi-uap-button-border-space;
 		position: absolute;
 		top: 0;
 		right: 0;
-		margin: $hivi-uap-button-border-space;
 
 		@media #{$breakpoint-m-up} {
 			right: 17px;

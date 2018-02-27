@@ -6,6 +6,7 @@ export class StickyBfaa extends EventEmitter {
 	static LOG_GROUP = 'sticky-bfaa';
 	static STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
 	static CLOSE_CLICKED_EVENT = Symbol('closeClicked');
+	static UNSTICK_IMMEDIATELY_EVENT = Symbol('unstickImmediately');
 
 	constructor(
 		adSlot,
@@ -26,6 +27,12 @@ export class StickyBfaa extends EventEmitter {
 		if (document.hidden) {
 			await utils.once(window, 'visibilitychange');
 		}
+
+		this.adSlot.once('unstickImmediately', () => {
+			this.logger('Unsticking bfaa');
+			this.emit(StickyBfaa.UNSTICK_IMMEDIATELY_EVENT);
+			this.sticky = false;
+		});
 
 		this.onAdReady();
 	}
