@@ -3433,9 +3433,8 @@ function createIcon(iconName) {
 	if (icons_default.a[iconName]) {
 		var element = parser.parseFromString(icons_default.a[iconName], 'image/svg+xml').documentElement;
 
-		classNames.forEach(function (className) {
-			return element.classList.add(className);
-		});
+		// IE 11 doesn't support classList nor className on SVG elements
+		element.setAttribute('class', classNames.join(' '));
 
 		return element;
 	}
@@ -4828,15 +4827,10 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 	createClass_default()(StickyBfaa, [{
 		key: 'run',
 		value: function () {
-<<<<<<< HEAD
 			var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee() {
-				return regenerator_default.a.wrap(function _callee$(_context) {
-=======
-			var _ref = sticky_bfaa__asyncToGenerator( /*#__PURE__*/runtime_module_default.a.mark(function _callee() {
 				var _this2 = this;
 
-				return runtime_module_default.a.wrap(function _callee$(_context) {
->>>>>>> origin/dev
+				return regenerator_default.a.wrap(function _callee$(_context) {
 					while (1) {
 						switch (_context.prev = _context.next) {
 							case 0:
@@ -4994,14 +4988,9 @@ var sticky_bfaa_StickyBfaa = function (_EventEmitter) {
 	return StickyBfaa;
 }(events["EventEmitter"]);
 sticky_bfaa_StickyBfaa.LOG_GROUP = 'sticky-bfaa';
-<<<<<<< HEAD
 sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = symbol_default()('stickinessChange');
 sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT = symbol_default()('closeClicked');
-=======
-sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
-sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT = Symbol('closeClicked');
-sticky_bfaa_StickyBfaa.UNSTICK_IMMEDIATELY_EVENT = Symbol('unstickImmediately');
->>>>>>> origin/dev
+sticky_bfaa_StickyBfaa.UNSTICK_IMMEDIATELY_EVENT = symbol_default()('unstickImmediately');
 // CONCATENATED MODULE: ./src/templates/uap/ui/animate.js
 
 
@@ -5456,7 +5445,12 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 		value: function onAdReady() {
 			helpers_get_default()(BfabTheme.prototype.__proto__ || get_prototype_of_default()(BfabTheme.prototype), 'onAdReady', this).call(this);
 
-			external___amd___ext_wikia_adEngine3__["slotTweaker"].makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
+			if (resolvedState.isResolvedState(this.params)) {
+				this.setResolvedState();
+			} else {
+				resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
+				external___amd___ext_wikia_adEngine3__["slotTweaker"].makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
+			}
 		}
 	}, {
 		key: 'onVideoReady',
@@ -5465,6 +5459,11 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 
 			helpers_get_default()(BfabTheme.prototype.__proto__ || get_prototype_of_default()(BfabTheme.prototype), 'onVideoReady', this).call(this);
 
+			video.addEventListener('wikiaAdStarted', function () {
+				if (resolvedState.isResolvedState(_this9.params)) {
+					_this9.setResolvedState(video);
+				}
+			});
 			video.addEventListener('wikiaAdCompleted', function () {
 				return _this9.setResolvedState(video);
 			});
@@ -5884,7 +5883,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v4.2.2');
+set_default()(window, versionField, 'v4.2.3');
 
 
 
