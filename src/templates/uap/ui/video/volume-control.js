@@ -19,6 +19,10 @@ function updateCurrentState(video, volumeControl) {
 	} else {
 		volumeControl.classList.remove('is-on');
 	}
+
+	if (!video.isMobilePlayerMuted() && video.mobileVideoAd.muted) {
+		video.updateVideoDOMElement(video.volumeValue);
+	}
 }
 
 function add(video, container) {
