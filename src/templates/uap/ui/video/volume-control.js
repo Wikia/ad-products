@@ -21,7 +21,7 @@ function updateCurrentState(video, volumeControl) {
 	}
 
 	if (!video.isMobilePlayerMuted() && video.mobileVideoAd.muted) {
-		video.updateVideoDOMElement(video.volumeValue);
+		video.updateVideoDOMElement(video.defaultVolume);
 	}
 }
 
