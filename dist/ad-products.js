@@ -2028,6 +2028,10 @@ function updateCurrentState(video, volumeControl) {
 	} else {
 		volumeControl.classList.remove('is-on');
 	}
+
+	if (!video.isMobilePlayerMuted() && video.mobileVideoAd && video.mobileVideoAd.muted) {
+		video.updateVideoDOMElement(video.defaultVolume);
+	}
 }
 
 function volume_control_add(video, container) {
