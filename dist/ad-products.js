@@ -2029,7 +2029,7 @@ function updateCurrentState(video, volumeControl) {
 		volumeControl.classList.remove('is-on');
 	}
 
-	if (!video.isMobilePlayerMuted() && video.mobileVideoAd.muted) {
+	if (!video.isMobilePlayerMuted() && video.mobileVideoAd && video.mobileVideoAd.muted) {
 		video.updateVideoDOMElement(video.defaultVolume);
 	}
 }
