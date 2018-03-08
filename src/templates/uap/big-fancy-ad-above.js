@@ -14,7 +14,9 @@ export class BigFancyAdAbove {
 		return {
 			desktopNavbarWrapperSelector: '.wds-global-navigation-wrapper',
 			mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
+			mainContainer: document.body,
 			handleNavbar: false,
+			stickinessAllowed: true,
 			slotSibling: '.topic-header',
 			slotsToEnable: [
 				'BOTTOM_LEADERBOARD',
@@ -100,8 +102,8 @@ export class BigFancyAdAbove {
 	}
 
 	async onAdReady(iframe) {
-		document.body.style.paddingTop = iframe.parentElement.style.paddingBottom;
-		document.body.classList.add('has-bfaa');
+		this.config.mainContainer.style.paddingTop = iframe.parentElement.style.paddingBottom;
+		this.config.mainContainer.classList.add('has-bfaa');
 
 		if (this.config.handleNavbar) {
 			this.setupNavbar();

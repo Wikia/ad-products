@@ -1,4 +1,4 @@
-import { AdSlot, context, scrollListener, slotTweaker, utils } from '@wikia/ad-engine';
+import { AdSlot, scrollListener, slotTweaker, utils } from '@wikia/ad-engine';
 import { debounce, mapValues, isUndefined, toPlainObject } from 'lodash';
 import { EventEmitter } from 'events';
 
@@ -41,11 +41,10 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		this.stickyBfaa = null;
 		this.scrollListener = null;
 		this.video = null;
-		this.config = context.get('templates.bfaa');
 		this.isLocked = false;
 		this.onResolvedStateScroll = null;
 
-		if (this.params.isSticky) {
+		if (this.params.isSticky && this.config.stickinessAllowed) {
 			this.addStickinessPlugin();
 		}
 	}
@@ -145,7 +144,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 	onCloseClicked() {
 		this.unstickImmediately();
 
-		document.body.style.paddingTop = '0';
+		this.config.mainContainer.style.paddingTop = '0';
 
 		this.adSlot.disable();
 		this.adSlot.collapse();
@@ -164,7 +163,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 
 	updateAdSizes() {
 		const config = this.params.config;
-		const currentWidth = document.body.offsetWidth;
+		const currentWidth = this.config.mainContainer.offsetWidth;
 		const isResolved = this.container.classList.contains('theme-resolved');
 		const maxHeight = currentWidth / config.aspectRatio.default;
 		const minHeight = currentWidth / config.aspectRatio.resolved;
@@ -284,7 +283,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 			const aspectRatio = this.params.config.aspectRatio.resolved;
 
 			this.container.style.top = '';
-			document.body.style.paddingTop = `${100 / aspectRatio}%`;
+			this.config.mainContainer.style.paddingTop = `${100 / aspectRatio}%`;
 			slotTweaker.makeResponsive(this.adSlot, aspectRatio);
 			window.scrollBy(0, -Math.min(offset, window.scrollY));
 			this.updateAdSizes();
