@@ -47,6 +47,10 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		if (this.params.isSticky && this.config.stickinessAllowed) {
 			this.addStickinessPlugin();
 		}
+
+		if (!this.config.stickinessAllowed) {
+			this.params.resolvedStateForced = true;
+		}
 	}
 
 	addStickinessPlugin() {

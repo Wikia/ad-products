@@ -59,6 +59,10 @@ function templateSupportsResolvedState(params) {
 function isResolvedState(params) {
 	let result = false;
 
+	if (params.resolvedStateForced) {
+		return true;
+	}
+
 	if (templateSupportsResolvedState(params)) {
 		const showResolvedState = !isBlockedByURLParam();
 		let defaultStateSeen = true;
