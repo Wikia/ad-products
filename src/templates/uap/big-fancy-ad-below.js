@@ -12,6 +12,9 @@ export class BigFancyAdBelow {
 
 	static getDefaultConfig() {
 		return {
+			autoPlayAllowed: false,
+			defaultStateAllowed: true,
+			fullscreenAllowed: true,
 			onInit: () => {}
 		};
 	}
@@ -38,6 +41,14 @@ export class BigFancyAdBelow {
 		if (!this.container) {
 			return;
 		}
+
+		// TODO Remove this hack when all mobile apps support autoplay and fullscreen
+		if (!this.config.autoPlayAllowed) {
+			this.params.autoPlay = false;
+			this.params.resolvedStateAutoPlay = false;
+		}
+		this.params.fullscreenAllowed = this.config.fullscreenAllowed;
+		// TODO: End of hack
 
 		const uapTheme = (this.params.theme === 'hivi') ? hiviTheme : classicTheme;
 

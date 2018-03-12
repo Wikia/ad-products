@@ -14,7 +14,12 @@ export class BigFancyAdAbove {
 		return {
 			desktopNavbarWrapperSelector: '.wds-global-navigation-wrapper',
 			mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
+			mainContainer: document.body,
 			handleNavbar: false,
+			autoPlayAllowed: true,
+			defaultStateAllowed: true,
+			fullscreenAllowed: true,
+			stickinessAllowed: true,
 			slotSibling: '.topic-header',
 			slotsToEnable: [
 				'BOTTOM_LEADERBOARD',
@@ -61,6 +66,14 @@ export class BigFancyAdAbove {
 			return;
 		}
 
+		// TODO Remove this hack when all mobile apps support autoplay and fullscreen
+		if (!this.config.autoPlayAllowed) {
+			this.params.autoPlay = false;
+			this.params.resolvedStateAutoPlay = false;
+		}
+		this.params.fullscreenAllowed = this.config.fullscreenAllowed;
+		// TODO: End of hack
+
 		const uapTheme = (this.params.theme === 'hivi') ? hiviTheme : classicTheme;
 
 		universalAdPackage.init(this.params, this.config.slotsToEnable);
@@ -100,8 +113,8 @@ export class BigFancyAdAbove {
 	}
 
 	async onAdReady(iframe) {
-		document.body.style.paddingTop = iframe.parentElement.style.paddingBottom;
-		document.body.classList.add('has-bfaa');
+		this.config.mainContainer.style.paddingTop = iframe.parentElement.style.paddingBottom;
+		this.config.mainContainer.classList.add('has-bfaa');
 
 		if (this.config.handleNavbar) {
 			this.setupNavbar();

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as hiviTheme from '../../../../../src/templates/uap/themes/hivi';
 import { resolvedState } from '../../../../../src/templates/uap/resolved-state';
-import { slotTweaker } from '@wikia/ad-engine';
+import { context, slotTweaker } from '@wikia/ad-engine';
 import sinon from 'sinon';
 
 
@@ -98,6 +98,9 @@ describe('UAP:HiVi template', () => {
 	beforeEach(function () {
 		sandbox = sinon.sandbox.create();
 
+		sandbox.stub(context, 'get').withArgs('templates.bfaa').returns({
+			mainContainer: document.body
+		});
 		sandbox.stub(slotTweaker, 'onReady').returns({then: () => {}});
 		sandbox.stub(slotTweaker, 'makeResponsive');
 		sandbox.stub(resolvedState, 'isResolvedState');
