@@ -5339,6 +5339,10 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 
 			if (this.video) {
 				assign_default()(this.video.container.style, style);
+
+				if (this.video.isFullscreen()) {
+					this.video.container.style.height = '100%';
+				}
 			}
 		}
 	}, {

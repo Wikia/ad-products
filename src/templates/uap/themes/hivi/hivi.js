@@ -208,6 +208,10 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 
 		if (this.video) {
 			Object.assign(this.video.container.style, style);
+
+			if (this.video.isFullscreen()) {
+				this.video.container.style.height = '100%';
+			}
 		}
 	}
 
