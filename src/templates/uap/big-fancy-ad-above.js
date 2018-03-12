@@ -16,6 +16,8 @@ export class BigFancyAdAbove {
 			mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
 			mainContainer: document.body,
 			handleNavbar: false,
+			autoPlayAllowed: true,
+			fullscreenAllowed: true,
 			stickinessAllowed: true,
 			slotSibling: '.topic-header',
 			slotsToEnable: [
@@ -62,6 +64,14 @@ export class BigFancyAdAbove {
 		if (!this.container) {
 			return;
 		}
+
+		// TODO Remove this hack when all mobile apps support autoplay and fullscreen
+		if (!this.config.autoPlayAllowed) {
+			this.params.autoPlay = false;
+			this.params.resolvedStateAutoPlay = false;
+		}
+		this.params.fullscreenAllowed = this.config.fullscreenAllowed;
+		// TODO: End of hack
 
 		const uapTheme = (this.params.theme === 'hivi') ? hiviTheme : classicTheme;
 

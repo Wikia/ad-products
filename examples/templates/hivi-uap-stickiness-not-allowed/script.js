@@ -17,6 +17,8 @@ templateService.register(BigFancyAdAbove);
 templateService.register(BigFancyAdBelow);
 templateService.register(FloatingRail);
 
+context.set('templates.bfaa.autoPlayAllowed', false);
+context.set('templates.bfaa.fullscreenAllowed', false);
 context.set('templates.bfaa.stickinessAllowed', false);
 context.set('templates.bfaa.mainContainer', document.querySelector('.header'));
 

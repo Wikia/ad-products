@@ -12,7 +12,7 @@ import ToggleVideo from './toggle-video';
 import VolumeControl from './volume-control';
 import Panel from './panel';
 
-const createBottomPanel = ({ theme = null }) => {
+const createBottomPanel = ({ fullscreenAllowed = true, theme = null }) => {
 	const isHiVi = theme === 'hivi';
 	let panelClassName = 'bottom-panel';
 
@@ -23,7 +23,7 @@ const createBottomPanel = ({ theme = null }) => {
 	return new Panel(panelClassName, [
 		isHiVi ? PauseControl : null,
 		VolumeControl,
-		isHiVi ? ToggleFullscreen : null
+		isHiVi && fullscreenAllowed ? ToggleFullscreen : null
 	]);
 };
 
