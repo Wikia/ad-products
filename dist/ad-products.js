@@ -2106,7 +2106,9 @@ var panel_Panel = function () {
 
 
 var ui_template_createBottomPanel = function createBottomPanel(_ref) {
-	var _ref$theme = _ref.theme,
+	var _ref$fullscreenAllowe = _ref.fullscreenAllowed,
+	    fullscreenAllowed = _ref$fullscreenAllowe === undefined ? true : _ref$fullscreenAllowe,
+	    _ref$theme = _ref.theme,
 	    theme = _ref$theme === undefined ? null : _ref$theme;
 
 	var isHiVi = theme === 'hivi';
@@ -2116,7 +2118,7 @@ var ui_template_createBottomPanel = function createBottomPanel(_ref) {
 		panelClassName += ' dynamic-panel';
 	}
 
-	return new panel_Panel(panelClassName, [isHiVi ? pause_control : null, volume_control, isHiVi ? toggle_fullscreen : null]);
+	return new panel_Panel(panelClassName, [isHiVi ? pause_control : null, volume_control, isHiVi && fullscreenAllowed ? toggle_fullscreen : null]);
 };
 
 var ui_template_getTemplates = function getTemplates(params, videoSettings) {
@@ -2505,6 +2507,10 @@ function templateSupportsResolvedState(params) {
 function isResolvedState(params) {
 	var result = false;
 
+	if (params.resolvedStateForced) {
+		return true;
+	}
+
 	if (templateSupportsResolvedState(params)) {
 		var showResolvedState = !isBlockedByURLParam();
 		var defaultStateSeen = true;
@@ -2631,20 +2637,23 @@ var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
 // CONCATENATED MODULE: ./src/templates/uap/themes/theme.js
 
 
+
+
 var theme_BigFancyAdTheme = function () {
 	function BigFancyAdTheme(adSlot, params) {
 		classCallCheck_default()(this, BigFancyAdTheme);
 
 		this.adSlot = adSlot;
 		this.container = this.adSlot.getElement();
+		this.config = ad_engine_["context"].get('templates.bfaa');
 		this.params = params;
 	}
 
 	createClass_default()(BigFancyAdTheme, [{
-		key: "onAdReady",
+		key: 'onAdReady',
 		value: function onAdReady() {}
 	}, {
-		key: "onVideoReady",
+		key: 'onVideoReady',
 		value: function onVideoReady() {}
 	}]);
 
@@ -2722,7 +2731,7 @@ var classic_BfaaTheme = function (_BigFancyAdClassicThe) {
 		value: function recalculatePaddingTop(finalAspectRatio) {
 			var _this4 = this;
 
-			document.body.style.paddingTop = 100 / finalAspectRatio + '%';
+			this.config.mainContainer.style.paddingTop = 100 / finalAspectRatio + '%';
 
 			this.container.style.height = this.container.offsetHeight + 'px';
 			// get offsetWidth from existing DOM element in order to force repaint
@@ -3300,12 +3309,15 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 		_this2.stickyBfaa = null;
 		_this2.scrollListener = null;
 		_this2.video = null;
-		_this2.config = ad_engine_["context"].get('templates.bfaa');
 		_this2.isLocked = false;
 		_this2.onResolvedStateScroll = null;
 
-		if (_this2.params.isSticky) {
+		if (_this2.params.isSticky && _this2.config.stickinessAllowed) {
 			_this2.addStickinessPlugin();
+		}
+
+		if (!_this2.config.defaultStateAllowed) {
+			_this2.params.resolvedStateForced = true;
 		}
 		return _this2;
 	}
@@ -3469,7 +3481,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 		value: function onCloseClicked() {
 			this.unstickImmediately();
 
-			document.body.style.paddingTop = '0';
+			this.config.mainContainer.style.paddingTop = '0';
 
 			this.adSlot.disable();
 			this.adSlot.collapse();
@@ -3490,7 +3502,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 		key: 'updateAdSizes',
 		value: function updateAdSizes() {
 			var config = this.params.config;
-			var currentWidth = document.body.offsetWidth;
+			var currentWidth = this.config.mainContainer.offsetWidth;
 			var isResolved = this.container.classList.contains('theme-resolved');
 			var maxHeight = currentWidth / config.aspectRatio.default;
 			var minHeight = currentWidth / config.aspectRatio.resolved;
@@ -3623,7 +3635,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 				var aspectRatio = this.params.config.aspectRatio.resolved;
 
 				this.container.style.top = '';
-				document.body.style.paddingTop = 100 / aspectRatio + '%';
+				this.config.mainContainer.style.paddingTop = 100 / aspectRatio + '%';
 				ad_engine_["slotTweaker"].makeResponsive(this.adSlot, aspectRatio);
 				window.scrollBy(0, -Math.min(offset, window.scrollY));
 				this.updateAdSizes();
@@ -3649,6 +3661,10 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 		key: 'onAdReady',
 		value: function onAdReady() {
 			get_default()(BfabTheme.prototype.__proto__ || get_prototype_of_default()(BfabTheme.prototype), 'onAdReady', this).call(this);
+
+			if (!this.config.defaultStateAllowed) {
+				this.params.resolvedStateForced = true;
+			}
 
 			if (resolvedState.isResolvedState(this.params)) {
 				this.setResolvedState();
@@ -3774,7 +3790,12 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 			return {
 				desktopNavbarWrapperSelector: '.wds-global-navigation-wrapper',
 				mobileNavbarWrapperSelector: '.global-navigation-mobile-wrapper',
+				mainContainer: document.body,
 				handleNavbar: false,
+				autoPlayAllowed: true,
+				defaultStateAllowed: true,
+				fullscreenAllowed: true,
+				stickinessAllowed: true,
 				slotSibling: '.topic-header',
 				slotsToEnable: ['BOTTOM_LEADERBOARD', 'INCONTENT_BOXAD'],
 				onInit: function onInit() {},
@@ -3829,6 +3850,14 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 				return;
 			}
 
+			// TODO Remove this hack when all mobile apps support autoplay and fullscreen
+			if (!this.config.autoPlayAllowed) {
+				this.params.autoPlay = false;
+				this.params.resolvedStateAutoPlay = false;
+			}
+			this.params.fullscreenAllowed = this.config.fullscreenAllowed;
+			// TODO: End of hack
+
 			var uapTheme = this.params.theme === 'hivi' ? themes_hivi_namespaceObject : themes_classic_namespaceObject;
 
 			universalAdPackage.init(this.params, this.config.slotsToEnable);
@@ -3879,8 +3908,8 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 					while (1) {
 						switch (_context.prev = _context.next) {
 							case 0:
-								document.body.style.paddingTop = iframe.parentElement.style.paddingBottom;
-								document.body.classList.add('has-bfaa');
+								this.config.mainContainer.style.paddingTop = iframe.parentElement.style.paddingBottom;
+								this.config.mainContainer.classList.add('has-bfaa');
 
 								if (this.config.handleNavbar) {
 									this.setupNavbar();
@@ -3952,6 +3981,9 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 		key: 'getDefaultConfig',
 		value: function getDefaultConfig() {
 			return {
+				autoPlayAllowed: false,
+				defaultStateAllowed: true,
+				fullscreenAllowed: true,
 				onInit: function onInit() {}
 			};
 		}
@@ -3989,6 +4021,14 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 			if (!this.container) {
 				return;
 			}
+
+			// TODO Remove this hack when all mobile apps support autoplay and fullscreen
+			if (!this.config.autoPlayAllowed) {
+				this.params.autoPlay = false;
+				this.params.resolvedStateAutoPlay = false;
+			}
+			this.params.fullscreenAllowed = this.config.fullscreenAllowed;
+			// TODO: End of hack
 
 			var uapTheme = this.params.theme === 'hivi' ? themes_hivi_namespaceObject : themes_classic_namespaceObject;
 
@@ -4088,7 +4128,7 @@ if (get__default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set__default()(window, versionField, 'v4.2.5');
+set__default()(window, versionField, 'v4.2.6');
 
 
 
