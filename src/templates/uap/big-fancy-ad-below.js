@@ -13,6 +13,7 @@ export class BigFancyAdBelow {
 	static getDefaultConfig() {
 		return {
 			autoPlayAllowed: false,
+			defaultStateAllowed: true,
 			fullscreenAllowed: true,
 			onInit: () => {}
 		};

@@ -18,8 +18,12 @@ templateService.register(BigFancyAdBelow);
 templateService.register(FloatingRail);
 
 context.set('templates.bfaa.autoPlayAllowed', false);
+context.set('templates.bfaa.defaultStateAllowed', false);
 context.set('templates.bfaa.fullscreenAllowed', false);
 context.set('templates.bfaa.stickinessAllowed', false);
+context.set('templates.bfab.autoPlayAllowed', false);
+context.set('templates.bfab.defaultStateAllowed', false);
+context.set('templates.bfab.fullscreenAllowed', false);
 context.set('templates.bfaa.mainContainer', document.querySelector('.header'));
 
 new AdEngine().init();

@@ -17,6 +17,7 @@ export class BigFancyAdAbove {
 			mainContainer: document.body,
 			handleNavbar: false,
 			autoPlayAllowed: true,
+			defaultStateAllowed: true,
 			fullscreenAllowed: true,
 			stickinessAllowed: true,
 			slotSibling: '.topic-header',

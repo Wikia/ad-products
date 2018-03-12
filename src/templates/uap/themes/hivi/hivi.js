@@ -48,7 +48,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 			this.addStickinessPlugin();
 		}
 
-		if (!this.config.stickinessAllowed) {
+		if (!this.config.defaultStateAllowed) {
 			this.params.resolvedStateForced = true;
 		}
 	}
@@ -298,6 +298,10 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 export class BfabTheme extends BigFancyAdHiviTheme {
 	onAdReady() {
 		super.onAdReady();
+
+		if (!this.config.defaultStateAllowed) {
+			this.params.resolvedStateForced = true;
+		}
 
 		if (resolvedState.isResolvedState(this.params)) {
 			this.setResolvedState();
