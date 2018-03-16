@@ -7,7 +7,7 @@
 ## Installation
 
 ```bash
-npm install @wikia/ad-products --save
+npm install github:Wikia/ad-products#semver:^4.2.0 --save
 ```
 
 ## Usage (ES6)
@@ -178,3 +178,24 @@ Use [npm link](https://docs.npmjs.com/cli/link)
 ```npm link @wikia/ad-engine```
 
 From now changes in `ad-engine` repo will be visible on `ad-products` demo pages.
+
+
+## Publish new version
+
+:warning: Make sure you're using latest version of node/npm (preferably node@9.x.x and npm@5.x.x)
+1. Use your regular workflow. Push changes to branch, test them and create pull request to dev.
+2. Switch to dev branch once you merge all changes and pull new changes from github
+3. Bump version (remember to follow Semantic Versioning)
+```
+npm version patch
+```
+This command runs preversion script which:
+
+* run all tests
+* lint all files
+* build dist directory with output files for "client's" repositories
+* adds built files to commited version
+4. Push changes to github
+```
+git push --follow-tags
+```
