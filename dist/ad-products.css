@@ -343,19 +343,12 @@
   .gpt-ad.bfaa-template.theme-split-left .replay-overlay,
   .gpt-ad.bfab-template.theme-split-left .replay-overlay {
     left: 0; }
-  .gpt-ad.bfaa-template.is-dark .ui-visible .toggle-ui-overlay,
-  .gpt-ad.bfab-template.is-dark .ui-visible .toggle-ui-overlay {
-    background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 15%, rgba(255, 255, 255, 0) 30%); }
   .gpt-ad.bfaa-template.is-dark .advertisement-label,
   .gpt-ad.bfaa-template.is-dark .button-control .icon,
-  .gpt-ad.bfaa-template.is-dark .learn-more,
-  .gpt-ad.bfaa-template.is-dark .porvata-icon,
   .gpt-ad.bfab-template.is-dark .advertisement-label,
-  .gpt-ad.bfab-template.is-dark .button-control .icon,
-  .gpt-ad.bfab-template.is-dark .learn-more,
-  .gpt-ad.bfab-template.is-dark .porvata-icon {
-    color: #000;
-    fill: #000; }
+  .gpt-ad.bfab-template.is-dark .button-control .icon {
+    color: #9d9d9d;
+    fill: #9d9d9d; }
   .gpt-ad.bfaa-template.is-mobile-layout .video-player,
   .gpt-ad.bfab-template.is-mobile-layout .video-player {
     right: 0;
