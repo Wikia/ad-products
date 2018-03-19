@@ -3981,7 +3981,7 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 		key: 'getDefaultConfig',
 		value: function getDefaultConfig() {
 			return {
-				autoPlayAllowed: false,
+				autoPlayAllowed: true,
 				defaultStateAllowed: true,
 				fullscreenAllowed: true,
 				onInit: function onInit() {}
