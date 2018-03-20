@@ -3222,6 +3222,9 @@ __webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_STICKY_BFAA", fu
 __webpack_require__.d(constants_namespaceObject, "CSS_TIMING_EASE_IN_CUBIC", function() { return CSS_TIMING_EASE_IN_CUBIC; });
 __webpack_require__.d(constants_namespaceObject, "SLIDE_OUT_TIME", function() { return SLIDE_OUT_TIME; });
 __webpack_require__.d(constants_namespaceObject, "FADE_IN_TIME", function() { return FADE_IN_TIME; });
+__webpack_require__.d(constants_namespaceObject, "DEFAULT_UAP_ID", function() { return DEFAULT_UAP_ID; });
+__webpack_require__.d(constants_namespaceObject, "DEFAULT_UAP_TYPE", function() { return DEFAULT_UAP_TYPE; });
+__webpack_require__.d(constants_namespaceObject, "FAN_TAKEOVER_TYPES", function() { return FAN_TAKEOVER_TYPES; });
 var themes_classic_namespaceObject = {};
 __webpack_require__.d(themes_classic_namespaceObject, "BfaaTheme", function() { return classic_BfaaTheme; });
 __webpack_require__.d(themes_classic_namespaceObject, "BfabTheme", function() { return classic_BfabTheme; });
@@ -3969,6 +3972,10 @@ var CSS_TIMING_EASE_IN_CUBIC = 'cubic-bezier(0.55, 0.055, 0.675, 0.19)';
 // Animation time is defined also in CSS, remember to change it in both places
 var SLIDE_OUT_TIME = 600;
 var FADE_IN_TIME = 400;
+
+var DEFAULT_UAP_ID = 'none';
+var DEFAULT_UAP_TYPE = 'none';
+var FAN_TAKEOVER_TYPES = ['uap', 'vuap'];
 // CONCATENATED MODULE: ./src/templates/uap/universal-ad-package.js
 
 
@@ -4096,8 +4103,8 @@ var loadVideoAd = function () {
 
 
 
-var uapId = 'none';
-var uapType = 'uap';
+var uapId = DEFAULT_UAP_ID;
+var uapType = DEFAULT_UAP_TYPE;
 
 function getVideoSize(slot, params, videoSettings) {
 	var width = videoSettings.isSplitLayout() ? params.videoPlaceholderElement.offsetWidth : slot.clientWidth;
@@ -4166,6 +4173,15 @@ function initSlot(params) {
 	}
 }
 
+function universal_ad_package_reset() {
+	setType(DEFAULT_UAP_TYPE);
+	setUapId(DEFAULT_UAP_ID);
+}
+
+function isFanTakeoverLoaded() {
+	return getUapId() !== DEFAULT_UAP_ID && FAN_TAKEOVER_TYPES.indexOf(getType()) !== -1;
+}
+
 var universalAdPackage = extends_default()({}, constants_namespaceObject, {
 	init: function init(params) {
 		var slotsToEnable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
@@ -4186,6 +4202,7 @@ var universalAdPackage = extends_default()({}, constants_namespaceObject, {
 	},
 
 	initSlot: initSlot,
+	isFanTakeoverLoaded: isFanTakeoverLoaded,
 	getType: getType,
 	getUapId: getUapId,
 	isVideoEnabled: function isVideoEnabled(params) {
@@ -4195,6 +4212,7 @@ var universalAdPackage = extends_default()({}, constants_namespaceObject, {
 	},
 
 	loadVideoAd: loadVideoAd,
+	reset: universal_ad_package_reset,
 	setType: setType,
 	setUapId: setUapId
 });
@@ -5931,7 +5949,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v4.2.8');
+set_default()(window, versionField, 'v4.2.9');
 
 
 
