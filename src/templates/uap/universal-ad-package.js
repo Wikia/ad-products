@@ -3,8 +3,8 @@ import { btfBlockerService, context, Porvata, slotService, utils } from '@wikia/
 import * as videoUserInterface from './ui/video';
 import * as constants from './constants';
 
-let uapId = 'none';
-let uapType = 'uap';
+let uapId = constants.DEFAULT_UAP_ID;
+let uapType = constants.DEFAULT_UAP_TYPE;
 
 function getVideoSize(slot, params, videoSettings) {
 	const width = videoSettings.isSplitLayout() ? params.videoPlaceholderElement.offsetWidth : slot.clientWidth;
@@ -137,6 +137,15 @@ function initSlot(params) {
 	}
 }
 
+function reset() {
+	setType(constants.DEFAULT_UAP_TYPE);
+	setUapId(constants.DEFAULT_UAP_ID);
+}
+
+function isFanTakeoverLoaded() {
+	return getUapId() !== constants.DEFAULT_UAP_ID && constants.FAN_TAKEOVER_TYPES.indexOf(getType()) !== -1;
+}
+
 export const universalAdPackage = {
 	...constants,
 	init(params, slotsToEnable = []) {
@@ -155,6 +164,7 @@ export const universalAdPackage = {
 		initSlot(params);
 	},
 	initSlot,
+	isFanTakeoverLoaded,
 	getType,
 	getUapId,
 	isVideoEnabled(params) {
@@ -163,6 +173,7 @@ export const universalAdPackage = {
 		return !!params.videoAspectRatio && (params.videoPlaceholderElement || triggersArrayIsNotEmpty);
 	},
 	loadVideoAd,
+	reset,
 	setType,
 	setUapId
 };
