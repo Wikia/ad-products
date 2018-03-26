@@ -1,6 +1,7 @@
 import UiComponent from './ui-component';
+import { getTranslation } from '../../../common/i18n';
 
-const labelText = 'Advertisement';
+const labelText = getTranslation('labels', 'advertisement');
 
 export default class AdvertisementLabel extends UiComponent {
 	render() {

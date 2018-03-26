@@ -1,6 +1,7 @@
 import { createIcon, icons } from '../icons';
+import { getTranslation } from '../../../../common/i18n';
 
-const text = 'Learn More';
+const text = getTranslation('labels', 'learn-more');
 
 function add(video, container, params) {
 	const learnMore = document.createElement('div'),
