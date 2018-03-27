@@ -3449,10 +3449,8 @@ var icons_icons = keys_default()(icons_default.a).reduce(function (map, name) {
 	map[name] = name;
 	return map;
 }, {});
-// CONCATENATED MODULE: ./src/common/i18n.js
-var defaultLanguage = 'en';
-
-var i18n = {
+// CONCATENATED MODULE: ./src/common/translations.js
+var TRANSLATIONS = {
 	labels: {
 		en: {
 			advertisement: 'Advertisement',
@@ -3607,24 +3605,28 @@ var i18n = {
 		}
 	}
 };
+// CONCATENATED MODULE: ./src/common/i18n.js
+
+
+
+var defaultLanguage = 'en';
 
 function getTranslation(category, key) {
-	var language = window.wgContentLanguage && typeof i18n[category][window.wgContentLanguage] !== 'undefined' ? window.wgContentLanguage : defaultLanguage;
+	var lang = external___amd___ext_wikia_adEngine3__["context"].get('options.contentLanguage'),
+	    language = lang && typeof TRANSLATIONS[category][lang] !== 'undefined' ? lang : defaultLanguage;
 
-	return i18n[category][language][key] || i18n[category][defaultLanguage][key];
+	return TRANSLATIONS[category][language][key] || TRANSLATIONS[category][defaultLanguage][key];
 }
 // CONCATENATED MODULE: ./src/templates/uap/ui/video/learn-more.js
 
 
-
-var learn_more_text = getTranslation('labels', 'learn-more');
 
 function learn_more_add(video, container, params) {
 	var learnMore = document.createElement('div'),
 	    icon = createIcon(icons_icons.LEARN_MORE, ['learn-more-icon', 'porvata-icon']),
 	    label = document.createElement('div');
 
-	label.innerText = learn_more_text;
+	label.innerText = getTranslation('labels', 'learn-more');
 	learnMore.appendChild(label);
 	learnMore.appendChild(icon);
 
@@ -4848,8 +4850,6 @@ var ui_component_UiComponent = function () {
 
 
 
-var labelText = getTranslation('labels', 'advertisement');
-
 var advertisement_label_AdvertisementLabel = function (_UiComponent) {
 	inherits_default()(AdvertisementLabel, _UiComponent);
 
@@ -4864,7 +4864,7 @@ var advertisement_label_AdvertisementLabel = function (_UiComponent) {
 		value: function render() {
 			var label = document.createElement('div');
 
-			label.innerText = labelText;
+			label.innerText = getTranslation('labels', 'advertisement');
 			label.className = 'advertisement-label';
 
 			return label;
