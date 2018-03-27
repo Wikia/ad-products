@@ -1,13 +1,12 @@
 import { createIcon, icons } from '../icons';
-
-const text = 'Learn More';
+import { getTranslation } from '../../../../common/i18n';
 
 function add(video, container, params) {
 	const learnMore = document.createElement('div'),
 		icon = createIcon(icons.LEARN_MORE, ['learn-more-icon', 'porvata-icon']),
 		label = document.createElement('div');
 
-	label.innerText = text;
+	label.innerText = getTranslation('labels', 'learn-more');
 	learnMore.appendChild(label);
 	learnMore.appendChild(icon);
 
