@@ -60,7 +60,6 @@
     "lint": "./node_modules/.bin/eslint .",
     "preversion": "./maintenance/preversion.sh",
     "version": "./maintenance/version.sh",
-    "postversion": "./maintenance/postversion.sh",
     "serve": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --watch --inline --open-page=templates/ --content-base=./examples",
     "test": "mocha-webpack './spec/**/*.spec.js' -r jsdom-global/register --webpack-env.test",
     "test-coverage": "nyc mocha-webpack './spec/**/*.spec.js' -r jsdom-global/register --webpack-env.test --reporter mocha-junit-reporter --reporter-options mochaFile=./spec/build/tests.xml",
