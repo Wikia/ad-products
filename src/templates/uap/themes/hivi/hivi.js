@@ -171,7 +171,8 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		const isResolved = this.container.classList.contains('theme-resolved');
 		const maxHeight = currentWidth / config.aspectRatio.default;
 		const minHeight = currentWidth / config.aspectRatio.resolved;
-		const aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - window.scrollY);
+		const scrollY = (window.scrollY || window.pageYOffset || 0);
+		const aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - scrollY);
 		const currentAspectRatio = currentWidth / aspectScroll;
 		const aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved;
 		const currentDiff = config.aspectRatio.default - currentAspectRatio;
