@@ -195,4 +195,7 @@ This command runs preversion script which:
 * lint all files
 * build dist directory with output files for "client's" repositories
 * adds built files to commited version
-* pushes new tag to github
+4. Push changes to github
+```
+git push --follow-tags
+```
