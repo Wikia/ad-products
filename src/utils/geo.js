@@ -1,23 +1,28 @@
 import Cookies from 'js-cookie';
+import Random from './random';
 
-const earth = 'XX';
-const negativePrefix = 'non-';
+const earth = 'XX',
+	negativePrefix = 'non-',
+	samplingChar = '/';
 
-let geoData = null;
+let geoData = null,
+	cache = {};
 
 function isCountryWithSampling(geo) {
-	return function (value) {
-		return !value.startsWith(negativePrefix) && value.includes(geo + '/');
-	};
+	return value => !value.startsWith(negativePrefix) && value.includes(geo + samplingChar);
 }
 
-function sampleGeo(countryList, geo, random) {
-	let randomValue = random(),
+function getSamplingLimits(value) {
+	return parseFloat(value.split(samplingChar)[1]) / 100;
+}
+
+function sampleGeo(countryList, geo) {
+	let randomValue = Random.getRandom(),
 		countryListWithSampling = countryList.filter(isCountryWithSampling(geo));
 
 	return countryListWithSampling.length > 0 && countryListWithSampling
-		.map(function (e) { return parseFloat(e.split('/')[1]) / 100; })
-		.some(function (value) { return randomValue < value; });
+		.map(getSamplingLimits)
+		.some(value => randomValue < value);
 
 }
 
@@ -81,11 +86,11 @@ export function getRegionCode() {
  * @param {string[]} countryList
  * @returns {boolean}
  */
-export function isProperCountry(countryList = [], random = Math.random) {
+export function isProperCountry(countryList = []) {
 	return !!(
 		countryList &&
 		countryList.indexOf &&
-		(countryList.indexOf(getCountryCode()) > -1 || sampleGeo(countryList, getCountryCode(), random))
+		(countryList.indexOf(getCountryCode()) > -1 || sampleGeo(countryList, getCountryCode()))
 	);
 }
 
@@ -94,11 +99,12 @@ export function isProperCountry(countryList = [], random = Math.random) {
  * @param {string[]} countryList
  * @returns {boolean}
  */
-export function isProperRegion(countryList = [], random = Math.random) {
+export function isProperRegion(countryList = []) {
+	const code = `${getCountryCode()}-${getRegionCode()}`;
 	return !!(
 		countryList &&
 		countryList.indexOf &&
-		(countryList.indexOf(`${getCountryCode()}-${getRegionCode()}`) > -1 || sampleGeo(countryList, getRegionCode(), random))
+		(countryList.indexOf(code) > -1 || sampleGeo(countryList, code))
 	);
 }
 
@@ -112,11 +118,11 @@ function containsContinent(countryList = [], random = Math.random) {
  * @param {string[]} countryList
  * @returns {boolean}
  */
-export function isProperContinent(countryList = [], random = Math.random) {
+export function isProperContinent(countryList = []) {
 	return !!(
 		countryList &&
 		countryList.indexOf &&
-		(containsEarth(countryList, random) || containsContinent(countryList, random))
+		(containsEarth(countryList) || containsContinent(countryList))
 	);
 }
 
@@ -133,23 +139,32 @@ function isGeoExcluded(countryList = []) {
 	);
 }
 
+export function resetCache() {
+	cache = {};
+}
+
 /**
  * Checks whether current geo (from cookie) is listed in array and it's not excluded
  *
- * TODO remove random parameter
- * It is a workaround for issue with mocking Math.random in our environment
- * https://github.com/babel/babel/issues/5426#issuecomment-284839994
- *
  * @param {string[]} countryList
+ * @param {string|undefined} name
  * @returns {boolean}
  */
-export function isProperGeo(countryList = [], random = Math.random) {
-	return !!(
+export function isProperGeo(countryList = [], name = undefined) {
+	if (name !== undefined && typeof cache[name] !== 'undefined') {
+		return cache[name];
+	}
+
+	const result = !!(
 		countryList &&
 		countryList.indexOf &&
 		!isGeoExcluded(countryList) &&
-		(isProperContinent(countryList, random) || isProperCountry(countryList, random) || isProperRegion(countryList, random))
+		(isProperContinent(countryList) || isProperCountry(countryList) || isProperRegion(countryList))
 	);
+
+	cache[name] = result;
+
+	return result;
 }
 
 export default {
@@ -157,4 +172,5 @@ export default {
 	getCountryCode,
 	getRegionCode,
 	isProperGeo,
+	resetCache
 };

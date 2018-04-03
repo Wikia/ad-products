@@ -1,7 +1,8 @@
 import {assert} from 'chai';
-import {getCountryCode, getContinentCode, getRegionCode, isProperGeo, setGeoData} from '../../src/utils/geo.js';
+import {resetCache, getCountryCode, getContinentCode, getRegionCode, isProperGeo, setGeoData} from '../../src/utils/geo.js';
+import Random from '../../src/utils/random.js';
 import sinon from 'sinon';
-import {context, slotService} from "@wikia/ad-engine/dist/ad-engine";
+import {context, slotService} from '@wikia/ad-engine/dist/ad-engine';
 
 describe('Geo', () => {
 	let sandbox;
@@ -15,9 +16,11 @@ describe('Geo', () => {
 		});
 
 		sandbox = sinon.sandbox.create();
+		sandbox.stub(Random, 'getRandom')
 	});
 
 	afterEach(function () {
+		resetCache();
 		sandbox.restore();
 	});
 
@@ -73,66 +76,193 @@ describe('Geo', () => {
 	});
 
 	it('samples traffic for earth', () => {
-		assert.ok(isProperGeo(['XX/100'], () => 0));
-		assert.ok(isProperGeo(['XX/50'], () => 0));
-		assert.ok(isProperGeo(['XX/50'], () => 0.1));
-		assert.notOk(isProperGeo(['non-XX/50'], () => 0.1));
-		assert.ok(isProperGeo(['XX/50'], () => 0.49));
-		assert.ok(isProperGeo(['XX/50'], () => 0.499999));
-		assert.notOk(isProperGeo(['XX/50'], () => 0.5));
-		assert.notOk(isProperGeo(['XX/50'], () => 0.6));
-		assert.notOk(isProperGeo(['XX/50'], () => 0.8));
-		assert.notOk(isProperGeo(['XX/50'], () => 0.99));
-		assert.notOk(isProperGeo(['XX/50'], () => 0.999999));
+		Random.getRandom.returns(0);
+		assert.ok(isProperGeo(['XX/100']));
+
+		Random.getRandom.returns(0);
+		assert.ok(isProperGeo(['XX/50']));
+
+		Random.getRandom.returns(0.1);
+		assert.ok(isProperGeo(['XX/50']));
+
+		Random.getRandom.returns(0.1);
+		assert.notOk(isProperGeo(['non-XX/50']));
+
+		Random.getRandom.returns(0.49);
+		assert.ok(isProperGeo(['XX/50']));
+
+		Random.getRandom.returns(0.499999);
+		assert.ok(isProperGeo(['XX/50']));
+
+		Random.getRandom.returns(0.5);
+		assert.notOk(isProperGeo(['XX/50']));
+
+		Random.getRandom.returns(0.6);
+		assert.notOk(isProperGeo(['XX/50']));
+
+		Random.getRandom.returns(0.8);
+		assert.notOk(isProperGeo(['XX/50']));
+
+		Random.getRandom.returns(0.99);
+		assert.notOk(isProperGeo(['XX/50']));
+
+		Random.getRandom.returns(0.999999);
+		assert.notOk(isProperGeo(['XX/50']));
+
 	});
 
 	it('samples traffic for continent', () => {
-		assert.ok(isProperGeo(['XX-EU/100'], () => 0));
-		assert.ok(isProperGeo(['XX-EU/50'], () => 0));
-		assert.ok(isProperGeo(['XX-EU/50'], () => 0.1));
-		assert.notOk(isProperGeo(['non-XX-EU/50'], () => 0.1));
-		assert.ok(isProperGeo(['XX-EU/50'], () => 0.49));
-		assert.ok(isProperGeo(['XX-EU/50'], () => 0.499999));
-		assert.notOk(isProperGeo(['XX-EU/50'], () => 0.5));
-		assert.notOk(isProperGeo(['XX-EU/50'], () => 0.6));
-		assert.notOk(isProperGeo(['XX-EU/50'], () => 0.8));
-		assert.notOk(isProperGeo(['XX-EU/50'], () => 0.99));
-		assert.notOk(isProperGeo(['XX-EU/50'], () => 0.999999));
+		Random.getRandom.returns(0);
+		assert.ok(isProperGeo(['XX-EU/100']));
+
+		Random.getRandom.returns(0);
+		assert.ok(isProperGeo(['XX-EU/50']));
+
+		Random.getRandom.returns(0.1);
+		assert.ok(isProperGeo(['XX-EU/50']));
+
+		Random.getRandom.returns(0.1);
+		assert.notOk(isProperGeo(['non-XX-EU/50']));
+
+		Random.getRandom.returns(0.49);
+		assert.ok(isProperGeo(['XX-EU/50']));
+
+		Random.getRandom.returns(0.499999);
+		assert.ok(isProperGeo(['XX-EU/50']));
+
+		Random.getRandom.returns(0.5);
+		assert.notOk(isProperGeo(['XX-EU/50']));
+
+		Random.getRandom.returns(0.6);
+		assert.notOk(isProperGeo(['XX-EU/50']));
+
+		Random.getRandom.returns(0.8);
+		assert.notOk(isProperGeo(['XX-EU/50']));
+
+		Random.getRandom.returns(0.99);
+		assert.notOk(isProperGeo(['XX-EU/50']));
+
+		Random.getRandom.returns(0.999999);
+		assert.notOk(isProperGeo(['XX-EU/50']));
+
 	});
 
 	it('samples traffic for country', () => {
-		assert.ok(isProperGeo(['PL/100'], () => 0));
-		assert.ok(isProperGeo(['PL/50'], () => 0));
-		assert.ok(isProperGeo(['PL/50'], () => 0.1));
-		assert.notOk(isProperGeo(['non-PL/50'], () => 0.1));
-		assert.ok(isProperGeo(['PL/50'], () => 0.49));
-		assert.ok(isProperGeo(['PL/50'], () => 0.499999));
-		assert.notOk(isProperGeo(['PL/50'], () => 0.5));
-		assert.notOk(isProperGeo(['PL/50'], () => 0.6));
-		assert.notOk(isProperGeo(['PL/50'], () => 0.8));
-		assert.notOk(isProperGeo(['PL/50'], () => 0.99));
-		assert.notOk(isProperGeo(['PL/50'], () => 0.999999));
-		assert.notOk(isProperGeo(['PL/50'], () => 0.999999));
-		assert.notOk(isProperGeo(['non-PL/50'], () => 0.999999));
+		Random.getRandom.returns(0);
+		assert.ok(isProperGeo(['PL/100']));
+
+		Random.getRandom.returns(0);
+		assert.ok(isProperGeo(['PL/50']));
+
+		Random.getRandom.returns(0.1);
+		assert.ok(isProperGeo(['PL/50']));
+
+		Random.getRandom.returns(0.1);
+		assert.notOk(isProperGeo(['non-PL/50']));
+
+		Random.getRandom.returns(0.49);
+		assert.ok(isProperGeo(['PL/50']));
+
+		Random.getRandom.returns(0.499999);
+		assert.ok(isProperGeo(['PL/50']));
+
+		Random.getRandom.returns(0.5);
+		assert.notOk(isProperGeo(['PL/50']));
+
+		Random.getRandom.returns(0.6);
+		assert.notOk(isProperGeo(['PL/50']));
+
+		Random.getRandom.returns(0.8);
+		assert.notOk(isProperGeo(['PL/50']));
+
+		Random.getRandom.returns(0.99);
+		assert.notOk(isProperGeo(['PL/50']));
+
+		Random.getRandom.returns(0.999999);
+		assert.notOk(isProperGeo(['PL/50']));
+
+		Random.getRandom.returns(0.999999);
+		assert.notOk(isProperGeo(['PL/50']));
+
+		Random.getRandom.returns(0.999999);
+		assert.notOk(isProperGeo(['non-PL/50']));
+
 	});
 
 	it('samples traffic for region', () => {
-		assert.ok(isProperGeo(['PL-72/100'], () => 0));
-		assert.ok(isProperGeo(['PL-72/50'], () => 0));
-		assert.ok(isProperGeo(['PL-72/50'], () => 0.1));
-		assert.notOk(isProperGeo(['non-PL-72/50'], () => 0.1));
-		assert.ok(isProperGeo(['PL-72/50'], () => 0.49));
-		assert.ok(isProperGeo(['PL-72/50'], () => 0.499999));
-		assert.notOk(isProperGeo(['PL-72/50'], () => 0.5));
-		assert.notOk(isProperGeo(['PL-72/50'], () => 0.6));
-		assert.notOk(isProperGeo(['PL-72/50'], () => 0.8));
-		assert.notOk(isProperGeo(['PL-72/50'], () => 0.99));
-		assert.notOk(isProperGeo(['PL-72/50'], () => 0.999999));
-		assert.notOk(isProperGeo(['PL-72/50'], () => 0.999999));
-		assert.notOk(isProperGeo(['non-PL-72/50'], () => 0.999999));
+		Random.getRandom.returns(0);
+		assert.ok(isProperGeo(['PL-72/100']));
+
+		Random.getRandom.returns(0);
+		assert.ok(isProperGeo(['PL-72/50']));
+
+		Random.getRandom.returns(0.1);
+		assert.ok(isProperGeo(['PL-72/50']));
+
+		Random.getRandom.returns(0.1);
+		assert.notOk(isProperGeo(['non-PL-72/50']));
+
+		Random.getRandom.returns(0.49);
+		assert.ok(isProperGeo(['PL-72/50']));
+
+		Random.getRandom.returns(0.5);
+		assert.notOk(isProperGeo(['PL-72/50']));
+
+		Random.getRandom.returns(0.6);
+		assert.notOk(isProperGeo(['PL-72/50']));
+
+		Random.getRandom.returns(0.8);
+		assert.notOk(isProperGeo(['PL-72/50']));
+
+		Random.getRandom.returns(0.99);
+		assert.notOk(isProperGeo(['PL-72/50']));
+
+		Random.getRandom.returns(0.999999);
+		assert.notOk(isProperGeo(['PL-72/50']));
+
+		Random.getRandom.returns(0.999999);
+		assert.notOk(isProperGeo(['PL-72/50']));
+
+		Random.getRandom.returns(0.999999);
+		assert.notOk(isProperGeo(['non-PL-72/50']));
 	});
 
-	it('DEBUG',() => {
-		assert.notOk(isProperGeo(['non-PL-72/50'], () => 0.1));
+	it('samples traffic with storing results in cache', () => {
+		Random.getRandom.returns(0.1);
+		assert.ok(isProperGeo(['PL/50'], 'test'));
+		assert.ok(isProperGeo(['PL/50'], 'A'));
+
+		Random.getRandom.returns(0.3);
+		assert.ok(isProperGeo(['PL/50'], 'test'));
+		assert.ok(isProperGeo(['PL/50'], 'B'));
+
+		Random.getRandom.returns(0.49);
+		assert.ok(isProperGeo(['PL/50'], 'test'));
+		assert.ok(isProperGeo(['PL/50'], 'C'));
+
+		Random.getRandom.returns(0.5);
+		assert.ok(isProperGeo(['PL/50'], 'test'));
+		assert.notOk(isProperGeo(['PL/50'], 'D'));
+
+		Random.getRandom.returns(0.9);
+		assert.ok(isProperGeo(['PL/50'], 'test'));
+		assert.notOk(isProperGeo(['PL/50'], 'E'));
 	});
+
+	it('samples only specific geos', () => {
+		Random.getRandom.returns(0.3);
+		assert.notOk(isProperGeo(['PL-11/50']));
+
+		Random.getRandom.returns(0.3);
+		assert.notOk(isProperGeo(['XX-ZZ/50']));
+
+		Random.getRandom.returns(0.3);
+		assert.notOk(isProperGeo(['ZZ/50']));
+
+		Random.getRandom.returns(0.6);
+		assert.notOk(isProperGeo(['ZZ/50']));
+
+		Random.getRandom.returns(0.9);
+		assert.notOk(isProperGeo(['ZZ/50']));
+	})
 });
