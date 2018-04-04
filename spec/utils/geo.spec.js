@@ -264,5 +264,23 @@ describe('Geo', () => {
 
 		Random.getRandom.returns(0.9);
 		assert.notOk(isProperGeo(['ZZ/50']));
+	});
+
+	it('samples fractions', () => {
+		Random.getRandom.returns(0.0009);
+		assert.ok(isProperGeo(['PL/0.1']));
+
+		Random.getRandom.returns(0.001);
+		assert.notOk(isProperGeo(['PL/0.1']));
+
+		Random.getRandom.returns(0.001);
+		assert.ok(isProperGeo(['PL/0.2']));
+
+		Random.getRandom.returns(0.002);
+		assert.notOk(isProperGeo(['PL/0.2']));
+
+		Random.getRandom.returns(0.003);
+		assert.notOk(isProperGeo(['PL/0.2']));
 	})
+
 });
