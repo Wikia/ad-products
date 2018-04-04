@@ -143,7 +143,7 @@ exports.default = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var store = __webpack_require__(38)('wks');
-var uid = __webpack_require__(26);
+var uid = __webpack_require__(27);
 var Symbol = __webpack_require__(2).Symbol;
 var USE_SYMBOL = typeof Symbol == 'function';
 
@@ -326,7 +326,7 @@ module.exports = __webpack_require__(86);
 
 exports.__esModule = true;
 
-var _promise = __webpack_require__(28);
+var _promise = __webpack_require__(29);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -372,7 +372,7 @@ module.exports = { "default": __webpack_require__(114), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 // optional / simple context binding
-var aFunction = __webpack_require__(27);
+var aFunction = __webpack_require__(28);
 module.exports = function (fn, that, length) {
   aFunction(fn);
   if (that === undefined) return fn;
@@ -526,6 +526,12 @@ module.exports = {};
 
 /***/ }),
 /* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(79), __esModule: true };
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports) {
 
 var id = 0;
@@ -536,7 +542,7 @@ module.exports = function (key) {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 module.exports = function (it) {
@@ -546,20 +552,20 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = { "default": __webpack_require__(88), __esModule: true };
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 module.exports = true;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var def = __webpack_require__(7).f;
@@ -572,14 +578,14 @@ module.exports = function (it, tag, stat) {
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 exports.f = {}.propertyIsEnumerable;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -623,12 +629,6 @@ exports.default = function get(object, property, receiver) {
 };
 
 /***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(79), __esModule: true };
-
-/***/ }),
 /* 34 */
 /***/ (function(module, exports) {
 
@@ -668,7 +668,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var shared = __webpack_require__(38)('keys');
-var uid = __webpack_require__(26);
+var uid = __webpack_require__(27);
 module.exports = function (key) {
   return shared[key] || (shared[key] = uid(key));
 };
@@ -821,7 +821,7 @@ module.exports = Object.create || function create(O, Properties) {
 "use strict";
 
 // 25.4.1.5 NewPromiseCapability(C)
-var aFunction = __webpack_require__(27);
+var aFunction = __webpack_require__(28);
 
 function PromiseCapability(C) {
   var resolve, reject;
@@ -898,7 +898,7 @@ module.exports = { "default": __webpack_require__(118), __esModule: true };
 
 var global = __webpack_require__(2);
 var core = __webpack_require__(0);
-var LIBRARY = __webpack_require__(29);
+var LIBRARY = __webpack_require__(30);
 var wksExt = __webpack_require__(49);
 var defineProperty = __webpack_require__(7).f;
 module.exports = function (name) {
@@ -911,7 +911,7 @@ module.exports = function (name) {
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var pIE = __webpack_require__(31);
+var pIE = __webpack_require__(32);
 var createDesc = __webpack_require__(24);
 var toIObject = __webpack_require__(11);
 var toPrimitive = __webpack_require__(42);
@@ -985,14 +985,14 @@ module.exports = !__webpack_require__(9) && !__webpack_require__(18)(function ()
 
 "use strict";
 
-var LIBRARY = __webpack_require__(29);
+var LIBRARY = __webpack_require__(30);
 var $export = __webpack_require__(6);
 var redefine = __webpack_require__(58);
 var hide = __webpack_require__(12);
 var has = __webpack_require__(10);
 var Iterators = __webpack_require__(25);
 var $iterCreate = __webpack_require__(90);
-var setToStringTag = __webpack_require__(30);
+var setToStringTag = __webpack_require__(31);
 var getPrototypeOf = __webpack_require__(60);
 var ITERATOR = __webpack_require__(5)('iterator');
 var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
@@ -1196,7 +1196,7 @@ module.exports = __webpack_require__(0).getIteratorMethod = function (it) {
 
 // 7.3.20 SpeciesConstructor(O, defaultConstructor)
 var anObject = __webpack_require__(8);
-var aFunction = __webpack_require__(27);
+var aFunction = __webpack_require__(28);
 var SPECIES = __webpack_require__(5)('species');
 module.exports = function (O, D) {
   var C = anObject(O).constructor;
@@ -1444,7 +1444,7 @@ var styles = __webpack_require__(78);
 var styles_default = /*#__PURE__*/__webpack_require__.n(styles);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/core-js/object/keys.js
-var keys = __webpack_require__(33);
+var keys = __webpack_require__(26);
 var keys_default = /*#__PURE__*/__webpack_require__.n(keys);
 
 // EXTERNAL MODULE: external "@wikia/ad-engine"
@@ -2593,7 +2593,7 @@ var toArray = __webpack_require__(113);
 var toArray_default = /*#__PURE__*/__webpack_require__.n(toArray);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/core-js/promise.js
-var promise = __webpack_require__(28);
+var promise = __webpack_require__(29);
 var promise_default = /*#__PURE__*/__webpack_require__.n(promise);
 
 // CONCATENATED MODULE: ./src/templates/uap/resolved-state-switch.js
@@ -2812,7 +2812,7 @@ var possibleConstructorReturn = __webpack_require__(19);
 var possibleConstructorReturn_default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/get.js
-var helpers_get = __webpack_require__(32);
+var helpers_get = __webpack_require__(33);
 var get_default = /*#__PURE__*/__webpack_require__.n(helpers_get);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/inherits.js
@@ -4294,6 +4294,227 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 // CONCATENATED MODULE: ./src/templates/index.js
 
 
+// EXTERNAL MODULE: ./node_modules/js-cookie/src/js.cookie.js
+var js_cookie = __webpack_require__(141);
+var js_cookie_default = /*#__PURE__*/__webpack_require__.n(js_cookie);
+
+// CONCATENATED MODULE: ./src/utils/random.js
+// TODO remove this module
+// It is a workaround for issue with mocking Math.random in our environment
+// https://github.com/babel/babel/issues/5426#issuecomment-284839994
+
+function getRandom() {
+	return Math.random();
+}
+
+/* harmony default export */ var random = ({
+	getRandom: getRandom
+});
+// CONCATENATED MODULE: ./src/utils/geo.js
+
+
+
+
+var earth = 'XX',
+    negativePrefix = 'non-',
+    samplingChar = '/';
+
+var geoData = null,
+    cache = [];
+
+function isCountryWithSampling(geo) {
+	return function (value) {
+		return !value.startsWith(negativePrefix) && value.includes(geo + samplingChar);
+	};
+}
+
+function getSamplingLimits(value) {
+	return parseFloat(value.split(samplingChar)[1]) / 100;
+}
+
+function getResult(s, name) {
+	var randomValue = random.getRandom(),
+	    result = s.some(function (value) {
+		return randomValue < value;
+	}),
+	    limit = s[0] * 100;
+
+	if (name) {
+		cache[name] = {
+			name: name,
+			group: result ? 'B' : 'A',
+			limit: result ? limit : 100 - limit,
+			result: result
+		};
+	}
+
+	return result;
+}
+
+function sampleGeo(countryList, geo, name) {
+	var countryListWithSampling = countryList.filter(isCountryWithSampling(geo));
+
+	if (countryListWithSampling.length === 0) {
+		return false;
+	}
+
+	return getResult(countryListWithSampling.map(getSamplingLimits), name);
+}
+
+function containsEarth(countryList, name) {
+	return countryList.indexOf(earth) > -1 || sampleGeo(countryList, earth, name);
+}
+
+/**
+ * Return geo data from cookie
+ * @returns {Object}
+ */
+function getGeoData() {
+	if (geoData === null) {
+		var jsonData = decodeURIComponent(js_cookie_default.a.get('Geo'));
+
+		try {
+			geoData = JSON.parse(jsonData) || {};
+		} catch (e) {
+			geoData = {};
+		}
+	}
+
+	return geoData;
+}
+
+/**
+ * Set geo data
+ * @param {Object} data
+ * @returns {void}
+ */
+function setGeoData(data) {
+	geoData = data;
+}
+
+/**
+ * Return country code based on cookie
+ * @returns {string}
+ */
+function getCountryCode() {
+	return getGeoData().country;
+}
+
+/**
+ * Return continent code based on cookie
+ * @returns {string}
+ */
+function getContinentCode() {
+	return getGeoData().continent;
+}
+
+/**
+ * Return region code based on cookie
+ * @returns {*}
+ */
+function getRegionCode() {
+	return getGeoData().region;
+}
+
+/**
+ * Checks whether current country (from cookie) is listed in array
+ * @param {string[]} countryList
+ * @param {string|undefined}name
+ * @returns {boolean}
+ */
+function isProperCountry() {
+	var countryList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	var name = arguments[1];
+
+	return !!(countryList && countryList.indexOf && (countryList.indexOf(getCountryCode()) > -1 || sampleGeo(countryList, getCountryCode(), name)));
+}
+
+/**
+ * Checks whether current regions (from cookie) is listed in array
+ * @param {string[]} countryList
+ * @param {string|undefined} name
+ * @returns {boolean}
+ */
+function isProperRegion() {
+	var countryList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	var name = arguments[1];
+
+	var code = getCountryCode() + '-' + getRegionCode();
+	return !!(countryList && countryList.indexOf && (countryList.indexOf(code) > -1 || sampleGeo(countryList, code, name)));
+}
+
+function containsContinent() {
+	var countryList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	var name = arguments[1];
+
+	var geo = earth + '-' + getContinentCode();
+	return countryList.indexOf(geo) > -1 || sampleGeo(countryList, geo, name);
+}
+
+/**
+ * Checks whether current continent (from cookie) is listed in array
+ * @param {string[]} countryList
+ * @param {string|undefined} name
+ * @returns {boolean}
+ */
+function isProperContinent() {
+	var countryList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	var name = arguments[1];
+
+	return !!(countryList && countryList.indexOf && (containsEarth(countryList, name) || containsContinent(countryList, name)));
+}
+
+/**
+ * Checks whether current geo is excluded in array (by using non- prefix)
+ * @param {string[]} countryList
+ * @returns {boolean}
+ */
+function isGeoExcluded() {
+	var countryList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+	return !!(countryList.indexOf('' + negativePrefix + getCountryCode()) > -1 || countryList.indexOf('' + negativePrefix + getCountryCode() + '-' + getRegionCode()) > -1 || countryList.indexOf('' + negativePrefix + earth + '-' + getContinentCode()) > -1);
+}
+
+function getTrackingLog(e) {
+	var obj = cache[e];
+	return obj.name + '_' + obj.group + '_' + obj.limit;
+}
+
+function resetCache() {
+	cache = {};
+}
+
+function getTrackingValues() {
+	return keys_default()(cache).map(getTrackingLog);
+}
+
+/**
+ * Checks whether current geo (from cookie) is listed in array and it's not excluded
+ *
+ * @param {string[]} countryList
+ * @param {string|undefined} name
+ * @returns {boolean}
+ */
+function isProperGeo() {
+	var countryList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+
+	if (name !== undefined && typeof cache[name] !== 'undefined') {
+		return cache[name].result;
+	}
+	return !!(countryList && countryList.indexOf && !isGeoExcluded(countryList) && (isProperContinent(countryList, name) || isProperCountry(countryList, name) || isProperRegion(countryList, name)));
+}
+
+/* harmony default export */ var geo = ({
+	getContinentCode: getContinentCode,
+	getCountryCode: getCountryCode,
+	getRegionCode: getRegionCode,
+	getTrackingValues: getTrackingValues,
+	isProperGeo: isProperGeo,
+	resetCache: resetCache
+});
+// CONCATENATED MODULE: ./src/utils/index.js
+
 // CONCATENATED MODULE: ./src/index.js
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getAdProductInfo", function() { return getAdProductInfo; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "FloatingRail", function() { return floating_rail_FloatingRail; });
@@ -4301,6 +4522,16 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdAbove", function() { return big_fancy_ad_above_BigFancyAdAbove; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdBelow", function() { return big_fancy_ad_below_BigFancyAdBelow; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "universalAdPackage", function() { return universalAdPackage; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "setGeoData", function() { return setGeoData; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getCountryCode", function() { return getCountryCode; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getContinentCode", function() { return getContinentCode; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getRegionCode", function() { return getRegionCode; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperCountry", function() { return isProperCountry; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperRegion", function() { return isProperRegion; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperContinent", function() { return isProperContinent; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "resetCache", function() { return resetCache; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getTrackingValues", function() { return getTrackingValues; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperGeo", function() { return isProperGeo; });
 
 
 
@@ -4313,6 +4544,7 @@ if (get__default()(window, versionField, null)) {
 }
 
 set__default()(window, versionField, 'v5.0.1');
+
 
 
 
@@ -5244,7 +5476,7 @@ module.exports = function (TO_STRING) {
 
 var create = __webpack_require__(44);
 var descriptor = __webpack_require__(24);
-var setToStringTag = __webpack_require__(30);
+var setToStringTag = __webpack_require__(31);
 var IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
@@ -5338,13 +5570,13 @@ module.exports = function (done, value) {
 
 "use strict";
 
-var LIBRARY = __webpack_require__(29);
+var LIBRARY = __webpack_require__(30);
 var global = __webpack_require__(2);
 var ctx = __webpack_require__(17);
 var classof = __webpack_require__(62);
 var $export = __webpack_require__(6);
 var isObject = __webpack_require__(13);
-var aFunction = __webpack_require__(27);
+var aFunction = __webpack_require__(28);
 var anInstance = __webpack_require__(96);
 var forOf = __webpack_require__(97);
 var speciesConstructor = __webpack_require__(66);
@@ -5553,7 +5785,7 @@ if (!USE_NATIVE) {
 }
 
 $export($export.G + $export.W + $export.F * !USE_NATIVE, { Promise: $Promise });
-__webpack_require__(30)($Promise, PROMISE);
+__webpack_require__(31)($Promise, PROMISE);
 __webpack_require__(101)(PROMISE);
 Wrapper = __webpack_require__(0)[PROMISE];
 
@@ -5893,7 +6125,7 @@ $export($export.S + $export.F, 'Object', { assign: __webpack_require__(107) });
 // 19.1.2.1 Object.assign(target, source, ...)
 var getKeys = __webpack_require__(22);
 var gOPS = __webpack_require__(47);
-var pIE = __webpack_require__(31);
+var pIE = __webpack_require__(32);
 var toObject = __webpack_require__(21);
 var IObject = __webpack_require__(54);
 var $assign = Object.assign;
@@ -6088,8 +6320,8 @@ var redefine = __webpack_require__(58);
 var META = __webpack_require__(120).KEY;
 var $fails = __webpack_require__(18);
 var shared = __webpack_require__(38);
-var setToStringTag = __webpack_require__(30);
-var uid = __webpack_require__(26);
+var setToStringTag = __webpack_require__(31);
+var uid = __webpack_require__(27);
 var wks = __webpack_require__(5);
 var wksExt = __webpack_require__(49);
 var wksDefine = __webpack_require__(51);
@@ -6227,10 +6459,10 @@ if (!USE_NATIVE) {
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f = $defineProperty;
   __webpack_require__(73).f = gOPNExt.f = $getOwnPropertyNames;
-  __webpack_require__(31).f = $propertyIsEnumerable;
+  __webpack_require__(32).f = $propertyIsEnumerable;
   __webpack_require__(47).f = $getOwnPropertySymbols;
 
-  if (DESCRIPTORS && !__webpack_require__(29)) {
+  if (DESCRIPTORS && !__webpack_require__(30)) {
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
   }
 
@@ -6318,7 +6550,7 @@ setToStringTag(global.JSON, 'JSON', true);
 /* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var META = __webpack_require__(26)('meta');
+var META = __webpack_require__(27)('meta');
 var isObject = __webpack_require__(13);
 var has = __webpack_require__(10);
 var setDesc = __webpack_require__(7).f;
@@ -6380,7 +6612,7 @@ var meta = module.exports = {
 // all enumerable object keys, includes symbols
 var getKeys = __webpack_require__(22);
 var gOPS = __webpack_require__(47);
-var pIE = __webpack_require__(31);
+var pIE = __webpack_require__(32);
 module.exports = function (it) {
   var result = getKeys(it);
   var getSymbols = gOPS.f;
@@ -6585,6 +6817,181 @@ module.exports = require("lodash/debounce");
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/isFunction");
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * JavaScript Cookie v2.2.0
+ * https://github.com/js-cookie/js-cookie
+ *
+ * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+ * Released under the MIT license
+ */
+;(function (factory) {
+	var registeredInModuleLoader = false;
+	if (true) {
+		!(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		registeredInModuleLoader = true;
+	}
+	if (true) {
+		module.exports = factory();
+		registeredInModuleLoader = true;
+	}
+	if (!registeredInModuleLoader) {
+		var OldCookies = window.Cookies;
+		var api = window.Cookies = factory();
+		api.noConflict = function () {
+			window.Cookies = OldCookies;
+			return api;
+		};
+	}
+}(function () {
+	function extend () {
+		var i = 0;
+		var result = {};
+		for (; i < arguments.length; i++) {
+			var attributes = arguments[ i ];
+			for (var key in attributes) {
+				result[key] = attributes[key];
+			}
+		}
+		return result;
+	}
+
+	function init (converter) {
+		function api (key, value, attributes) {
+			var result;
+			if (typeof document === 'undefined') {
+				return;
+			}
+
+			// Write
+
+			if (arguments.length > 1) {
+				attributes = extend({
+					path: '/'
+				}, api.defaults, attributes);
+
+				if (typeof attributes.expires === 'number') {
+					var expires = new Date();
+					expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
+					attributes.expires = expires;
+				}
+
+				// We're using "expires" because "max-age" is not supported by IE
+				attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
+
+				try {
+					result = JSON.stringify(value);
+					if (/^[\{\[]/.test(result)) {
+						value = result;
+					}
+				} catch (e) {}
+
+				if (!converter.write) {
+					value = encodeURIComponent(String(value))
+						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+				} else {
+					value = converter.write(value, key);
+				}
+
+				key = encodeURIComponent(String(key));
+				key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
+				key = key.replace(/[\(\)]/g, escape);
+
+				var stringifiedAttributes = '';
+
+				for (var attributeName in attributes) {
+					if (!attributes[attributeName]) {
+						continue;
+					}
+					stringifiedAttributes += '; ' + attributeName;
+					if (attributes[attributeName] === true) {
+						continue;
+					}
+					stringifiedAttributes += '=' + attributes[attributeName];
+				}
+				return (document.cookie = key + '=' + value + stringifiedAttributes);
+			}
+
+			// Read
+
+			if (!key) {
+				result = {};
+			}
+
+			// To prevent the for loop in the first place assign an empty array
+			// in case there are no cookies at all. Also prevents odd result when
+			// calling "get()"
+			var cookies = document.cookie ? document.cookie.split('; ') : [];
+			var rdecode = /(%[0-9A-Z]{2})+/g;
+			var i = 0;
+
+			for (; i < cookies.length; i++) {
+				var parts = cookies[i].split('=');
+				var cookie = parts.slice(1).join('=');
+
+				if (!this.json && cookie.charAt(0) === '"') {
+					cookie = cookie.slice(1, -1);
+				}
+
+				try {
+					var name = parts[0].replace(rdecode, decodeURIComponent);
+					cookie = converter.read ?
+						converter.read(cookie, name) : converter(cookie, name) ||
+						cookie.replace(rdecode, decodeURIComponent);
+
+					if (this.json) {
+						try {
+							cookie = JSON.parse(cookie);
+						} catch (e) {}
+					}
+
+					if (key === name) {
+						result = cookie;
+						break;
+					}
+
+					if (!key) {
+						result[name] = cookie;
+					}
+				} catch (e) {}
+			}
+
+			return result;
+		}
+
+		api.set = api;
+		api.get = function (key) {
+			return api.call(api, key);
+		};
+		api.getJSON = function () {
+			return api.apply({
+				json: true
+			}, [].slice.call(arguments));
+		};
+		api.defaults = {};
+
+		api.remove = function (key, attributes) {
+			api(key, '', extend(attributes, {
+				expires: -1
+			}));
+		};
+
+		api.withConverter = init;
+
+		return api;
+	}
+
+	return init(function () {});
+}));
+
 
 /***/ })
 /******/ ]);
