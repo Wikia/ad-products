@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import {resetCache, getCountryCode, getContinentCode, getRegionCode, isProperGeo, setGeoData} from '../../src/utils/geo.js';
+import {resetCache, getCountryCode, getContinentCode, getRegionCode, isProperGeo, setGeoData, getTrackingValues} from '../../src/utils/geo.js';
 import Random from '../../src/utils/random.js';
 import sinon from 'sinon';
 import {context, slotService} from '@wikia/ad-engine/dist/ad-engine';
@@ -281,6 +281,43 @@ describe('Geo', () => {
 
 		Random.getRandom.returns(0.003);
 		assert.notOk(isProperGeo(['PL/0.2']));
+	});
+
+	it('returns cached values', () => {
+		isProperGeo(['PL/50']);
+		assert.deepEqual(getTrackingValues(), []);
+		resetCache();
+
+		Random.getRandom.returns(0.5);
+		assert.notOk(isProperGeo(['PL/10'], 'test'));
+		assert.deepEqual(getTrackingValues(), ['test_A_90']);
+		resetCache();
+
+		Random.getRandom.returns(0.01);
+		assert.ok(isProperGeo(['PL/10'], 'test'));
+		assert.deepEqual(getTrackingValues(), ['test_B_10']);
+		resetCache();
+
+		Random.getRandom.returns(0.0001);
+		assert.ok(isProperGeo(['PL/0.1'], 'test'));
+		assert.deepEqual(getTrackingValues(), ['test_B_0.1']);
+		resetCache();
+
+		Random.getRandom.returns(0.5);
+		assert.notOk(isProperGeo(['PL/0.1'], 'test'));
+		assert.deepEqual(getTrackingValues(), ['test_A_99.9']);
+		resetCache();
+
+		Random.getRandom.returns(0.15);
+		assert.ok(isProperGeo(['PL/25'], 'CAT'));
+		assert.notOk(isProperGeo(['PL/10'], 'DOG'));
+		assert.deepEqual(getTrackingValues(), ['CAT_B_25', 'DOG_A_90']);
+		resetCache();
+	});
+
+	it('blocks sampled countries before sample', () => {
+		Random.getRandom.returns(0.15);
+		assert.notOk(isProperGeo(['PL/25', 'non-PL'], 'test'));
 	})
 
 });

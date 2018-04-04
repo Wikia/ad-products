@@ -6,7 +6,7 @@ const earth = 'XX',
 	samplingChar = '/';
 
 let geoData = null,
-	cache = {};
+	cache = [];
 
 function isCountryWithSampling(geo) {
 	return value => !value.startsWith(negativePrefix) && value.includes(geo + samplingChar);
@@ -16,18 +16,36 @@ function getSamplingLimits(value) {
 	return parseFloat(value.split(samplingChar)[1]) / 100;
 }
 
-function sampleGeo(countryList, geo) {
-	let randomValue = Random.getRandom(),
-		countryListWithSampling = countryList.filter(isCountryWithSampling(geo));
+function getResult(s, name) {
+	const randomValue = Random.getRandom(),
+		result = s.some(value => randomValue < value),
+		limit = s[0] * 100;
 
-	return countryListWithSampling.length > 0 && countryListWithSampling
-		.map(getSamplingLimits)
-		.some(value => randomValue < value);
+	if (name) {
+		cache[name] = {
+			name: name,
+			group: result ? 'B' : 'A',
+			limit: result ? limit : 100 - limit,
+			result: result
+		};
+	}
+
+	return result;
+}
+
+function sampleGeo(countryList, geo, name) {
+	let countryListWithSampling = countryList.filter(isCountryWithSampling(geo));
+
+	if (countryListWithSampling.length === 0) {
+		return false;
+	}
+
+	return getResult(countryListWithSampling.map(getSamplingLimits), name);
 
 }
 
-function containsEarth(countryList, random) {
-	return countryList.indexOf(earth) > -1 || sampleGeo(countryList, earth, random);
+function containsEarth(countryList, name) {
+	return countryList.indexOf(earth) > -1 || sampleGeo(countryList, earth, name);
 }
 
 /**
@@ -84,45 +102,48 @@ export function getRegionCode() {
 /**
  * Checks whether current country (from cookie) is listed in array
  * @param {string[]} countryList
+ * @param {string|undefined}name
  * @returns {boolean}
  */
-export function isProperCountry(countryList = []) {
+export function isProperCountry(countryList = [], name) {
 	return !!(
 		countryList &&
 		countryList.indexOf &&
-		(countryList.indexOf(getCountryCode()) > -1 || sampleGeo(countryList, getCountryCode()))
+		(countryList.indexOf(getCountryCode()) > -1 || sampleGeo(countryList, getCountryCode(), name))
 	);
 }
 
 /**
  * Checks whether current regions (from cookie) is listed in array
  * @param {string[]} countryList
+ * @param {string|undefined} name
  * @returns {boolean}
  */
-export function isProperRegion(countryList = []) {
+export function isProperRegion(countryList = [], name) {
 	const code = `${getCountryCode()}-${getRegionCode()}`;
 	return !!(
 		countryList &&
 		countryList.indexOf &&
-		(countryList.indexOf(code) > -1 || sampleGeo(countryList, code))
+		(countryList.indexOf(code) > -1 || sampleGeo(countryList, code, name))
 	);
 }
 
-function containsContinent(countryList = [], random = Math.random) {
+function containsContinent(countryList = [], name) {
 	const geo = `${earth}-${getContinentCode()}`;
-	return countryList.indexOf(geo) > -1 || sampleGeo(countryList, geo, random);
+	return countryList.indexOf(geo) > -1 || sampleGeo(countryList, geo, name);
 }
 
 /**
  * Checks whether current continent (from cookie) is listed in array
  * @param {string[]} countryList
+ * @param {string|undefined} name
  * @returns {boolean}
  */
-export function isProperContinent(countryList = []) {
+export function isProperContinent(countryList = [], name) {
 	return !!(
 		countryList &&
 		countryList.indexOf &&
-		(containsEarth(countryList) || containsContinent(countryList))
+		(containsEarth(countryList, name) || containsContinent(countryList, name))
 	);
 }
 
@@ -139,8 +160,17 @@ function isGeoExcluded(countryList = []) {
 	);
 }
 
+function getTrackingLog (e) {
+	let obj = cache[e];
+	return `${obj.name}_${obj.group}_${obj.limit}`;
+}
+
 export function resetCache() {
 	cache = {};
+}
+
+export function getTrackingValues() {
+	return Object.keys(cache).map(getTrackingLog);
 }
 
 /**
@@ -152,25 +182,21 @@ export function resetCache() {
  */
 export function isProperGeo(countryList = [], name = undefined) {
 	if (name !== undefined && typeof cache[name] !== 'undefined') {
-		return cache[name];
+		return cache[name].result;
 	}
-
-	const result = !!(
+	return !!(
 		countryList &&
 		countryList.indexOf &&
 		!isGeoExcluded(countryList) &&
-		(isProperContinent(countryList) || isProperCountry(countryList) || isProperRegion(countryList))
+		(isProperContinent(countryList, name) || isProperCountry(countryList, name) || isProperRegion(countryList, name))
 	);
-
-	cache[name] = result;
-
-	return result;
 }
 
 export default {
 	getContinentCode,
 	getCountryCode,
 	getRegionCode,
+	getTrackingValues,
 	isProperGeo,
 	resetCache
 };
