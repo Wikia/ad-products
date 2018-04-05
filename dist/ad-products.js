@@ -4294,9 +4294,9 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 // CONCATENATED MODULE: ./src/templates/index.js
 
 
-// EXTERNAL MODULE: ./node_modules/js-cookie/src/js.cookie.js
-var js_cookie = __webpack_require__(141);
-var js_cookie_default = /*#__PURE__*/__webpack_require__.n(js_cookie);
+// EXTERNAL MODULE: external "js-cookie"
+var external__js_cookie_ = __webpack_require__(141);
+var external__js_cookie__default = /*#__PURE__*/__webpack_require__.n(external__js_cookie_);
 
 // CONCATENATED MODULE: ./src/utils/random.js
 // TODO remove this module
@@ -4322,9 +4322,9 @@ var earth = 'XX',
 var geoData = null,
     cache = [];
 
-function isCountryWithSampling(geo) {
+function hasSampling(geo) {
 	return function (value) {
-		return !value.startsWith(negativePrefix) && value.includes(geo + samplingChar);
+		return !value.startsWith(negativePrefix) && value.indexOf(geo + samplingChar) > -1;
 	};
 }
 
@@ -4337,13 +4337,14 @@ function getResult(s, name) {
 	    result = s.some(function (value) {
 		return randomValue < value;
 	}),
-	    limit = s[0] * 100;
+	    limitValue = s[0] * 100,
+	    group = result ? 'B' : 'A';
 
 	if (name) {
 		cache[name] = {
 			name: name,
-			group: result ? 'B' : 'A',
-			limit: result ? limit : 100 - limit,
+			group: group,
+			limit: result ? limitValue : 100 - limitValue,
 			result: result
 		};
 	}
@@ -4351,8 +4352,8 @@ function getResult(s, name) {
 	return result;
 }
 
-function sampleGeo(countryList, geo, name) {
-	var countryListWithSampling = countryList.filter(isCountryWithSampling(geo));
+function isSampledForGeo(countryList, geo, name) {
+	var countryListWithSampling = countryList.filter(hasSampling(geo));
 
 	if (countryListWithSampling.length === 0) {
 		return false;
@@ -4362,7 +4363,7 @@ function sampleGeo(countryList, geo, name) {
 }
 
 function containsEarth(countryList, name) {
-	return countryList.indexOf(earth) > -1 || sampleGeo(countryList, earth, name);
+	return countryList.indexOf(earth) > -1 || isSampledForGeo(countryList, earth, name);
 }
 
 /**
@@ -4371,7 +4372,7 @@ function containsEarth(countryList, name) {
  */
 function getGeoData() {
 	if (geoData === null) {
-		var jsonData = decodeURIComponent(js_cookie_default.a.get('Geo'));
+		var jsonData = decodeURIComponent(external__js_cookie__default.a.get('Geo'));
 
 		try {
 			geoData = JSON.parse(jsonData) || {};
@@ -4426,7 +4427,7 @@ function isProperCountry() {
 	var countryList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	var name = arguments[1];
 
-	return !!(countryList && countryList.indexOf && (countryList.indexOf(getCountryCode()) > -1 || sampleGeo(countryList, getCountryCode(), name)));
+	return !!(countryList && countryList.indexOf && (countryList.indexOf(getCountryCode()) > -1 || isSampledForGeo(countryList, getCountryCode(), name)));
 }
 
 /**
@@ -4440,7 +4441,7 @@ function isProperRegion() {
 	var name = arguments[1];
 
 	var code = getCountryCode() + '-' + getRegionCode();
-	return !!(countryList && countryList.indexOf && (countryList.indexOf(code) > -1 || sampleGeo(countryList, code, name)));
+	return !!(countryList && countryList.indexOf && (countryList.indexOf(code) > -1 || isSampledForGeo(countryList, code, name)));
 }
 
 function containsContinent() {
@@ -4448,7 +4449,7 @@ function containsContinent() {
 	var name = arguments[1];
 
 	var geo = earth + '-' + getContinentCode();
-	return countryList.indexOf(geo) > -1 || sampleGeo(countryList, geo, name);
+	return countryList.indexOf(geo) > -1 || isSampledForGeo(countryList, geo, name);
 }
 
 /**
@@ -4475,16 +4476,15 @@ function isGeoExcluded() {
 	return !!(countryList.indexOf('' + negativePrefix + getCountryCode()) > -1 || countryList.indexOf('' + negativePrefix + getCountryCode() + '-' + getRegionCode()) > -1 || countryList.indexOf('' + negativePrefix + earth + '-' + getContinentCode()) > -1);
 }
 
-function getTrackingLog(e) {
-	var obj = cache[e];
-	return obj.name + '_' + obj.group + '_' + obj.limit;
+function getTrackingLog(name) {
+	return cache[name].name + '_' + cache[name].group + '_' + cache[name].limit;
 }
 
-function resetCache() {
+function resetSamplingCache() {
 	cache = {};
 }
 
-function getTrackingValues() {
+function getSamplingResults() {
 	return keys_default()(cache).map(getTrackingLog);
 }
 
@@ -4509,9 +4509,9 @@ function isProperGeo() {
 	getContinentCode: getContinentCode,
 	getCountryCode: getCountryCode,
 	getRegionCode: getRegionCode,
-	getTrackingValues: getTrackingValues,
+	getSamplingResults: getSamplingResults,
 	isProperGeo: isProperGeo,
-	resetCache: resetCache
+	resetSamplingCache: resetSamplingCache
 });
 // CONCATENATED MODULE: ./src/utils/index.js
 
@@ -4529,8 +4529,8 @@ function isProperGeo() {
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperCountry", function() { return isProperCountry; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperRegion", function() { return isProperRegion; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperContinent", function() { return isProperContinent; });
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "resetCache", function() { return resetCache; });
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getTrackingValues", function() { return getTrackingValues; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "resetSamplingCache", function() { return resetSamplingCache; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getSamplingResults", function() { return getSamplingResults; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperGeo", function() { return isProperGeo; });
 
 
@@ -6820,178 +6820,9 @@ module.exports = require("lodash/isFunction");
 
 /***/ }),
 /* 141 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * JavaScript Cookie v2.2.0
- * https://github.com/js-cookie/js-cookie
- *
- * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
- * Released under the MIT license
- */
-;(function (factory) {
-	var registeredInModuleLoader = false;
-	if (true) {
-		!(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		registeredInModuleLoader = true;
-	}
-	if (true) {
-		module.exports = factory();
-		registeredInModuleLoader = true;
-	}
-	if (!registeredInModuleLoader) {
-		var OldCookies = window.Cookies;
-		var api = window.Cookies = factory();
-		api.noConflict = function () {
-			window.Cookies = OldCookies;
-			return api;
-		};
-	}
-}(function () {
-	function extend () {
-		var i = 0;
-		var result = {};
-		for (; i < arguments.length; i++) {
-			var attributes = arguments[ i ];
-			for (var key in attributes) {
-				result[key] = attributes[key];
-			}
-		}
-		return result;
-	}
-
-	function init (converter) {
-		function api (key, value, attributes) {
-			var result;
-			if (typeof document === 'undefined') {
-				return;
-			}
-
-			// Write
-
-			if (arguments.length > 1) {
-				attributes = extend({
-					path: '/'
-				}, api.defaults, attributes);
-
-				if (typeof attributes.expires === 'number') {
-					var expires = new Date();
-					expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
-					attributes.expires = expires;
-				}
-
-				// We're using "expires" because "max-age" is not supported by IE
-				attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
-
-				try {
-					result = JSON.stringify(value);
-					if (/^[\{\[]/.test(result)) {
-						value = result;
-					}
-				} catch (e) {}
-
-				if (!converter.write) {
-					value = encodeURIComponent(String(value))
-						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
-				} else {
-					value = converter.write(value, key);
-				}
-
-				key = encodeURIComponent(String(key));
-				key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
-				key = key.replace(/[\(\)]/g, escape);
-
-				var stringifiedAttributes = '';
-
-				for (var attributeName in attributes) {
-					if (!attributes[attributeName]) {
-						continue;
-					}
-					stringifiedAttributes += '; ' + attributeName;
-					if (attributes[attributeName] === true) {
-						continue;
-					}
-					stringifiedAttributes += '=' + attributes[attributeName];
-				}
-				return (document.cookie = key + '=' + value + stringifiedAttributes);
-			}
-
-			// Read
-
-			if (!key) {
-				result = {};
-			}
-
-			// To prevent the for loop in the first place assign an empty array
-			// in case there are no cookies at all. Also prevents odd result when
-			// calling "get()"
-			var cookies = document.cookie ? document.cookie.split('; ') : [];
-			var rdecode = /(%[0-9A-Z]{2})+/g;
-			var i = 0;
-
-			for (; i < cookies.length; i++) {
-				var parts = cookies[i].split('=');
-				var cookie = parts.slice(1).join('=');
-
-				if (!this.json && cookie.charAt(0) === '"') {
-					cookie = cookie.slice(1, -1);
-				}
-
-				try {
-					var name = parts[0].replace(rdecode, decodeURIComponent);
-					cookie = converter.read ?
-						converter.read(cookie, name) : converter(cookie, name) ||
-						cookie.replace(rdecode, decodeURIComponent);
-
-					if (this.json) {
-						try {
-							cookie = JSON.parse(cookie);
-						} catch (e) {}
-					}
-
-					if (key === name) {
-						result = cookie;
-						break;
-					}
-
-					if (!key) {
-						result[name] = cookie;
-					}
-				} catch (e) {}
-			}
-
-			return result;
-		}
-
-		api.set = api;
-		api.get = function (key) {
-			return api.call(api, key);
-		};
-		api.getJSON = function () {
-			return api.apply({
-				json: true
-			}, [].slice.call(arguments));
-		};
-		api.defaults = {};
-
-		api.remove = function (key, attributes) {
-			api(key, '', extend(attributes, {
-				expires: -1
-			}));
-		};
-
-		api.withConverter = init;
-
-		return api;
-	}
-
-	return init(function () {});
-}));
-
+module.exports = require("js-cookie");
 
 /***/ })
 /******/ ]);

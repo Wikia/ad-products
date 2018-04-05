@@ -6125,9 +6125,9 @@ var earth = 'XX',
 var geoData = null,
     cache = [];
 
-function isCountryWithSampling(geo) {
+function hasSampling(geo) {
 	return function (value) {
-		return !value.startsWith(negativePrefix) && value.includes(geo + samplingChar);
+		return !value.startsWith(negativePrefix) && value.indexOf(geo + samplingChar) > -1;
 	};
 }
 
@@ -6140,13 +6140,14 @@ function getResult(s, name) {
 	    result = s.some(function (value) {
 		return randomValue < value;
 	}),
-	    limit = s[0] * 100;
+	    limitValue = s[0] * 100,
+	    group = result ? 'B' : 'A';
 
 	if (name) {
 		cache[name] = {
 			name: name,
-			group: result ? 'B' : 'A',
-			limit: result ? limit : 100 - limit,
+			group: group,
+			limit: result ? limitValue : 100 - limitValue,
 			result: result
 		};
 	}
@@ -6154,8 +6155,8 @@ function getResult(s, name) {
 	return result;
 }
 
-function sampleGeo(countryList, geo, name) {
-	var countryListWithSampling = countryList.filter(isCountryWithSampling(geo));
+function isSampledForGeo(countryList, geo, name) {
+	var countryListWithSampling = countryList.filter(hasSampling(geo));
 
 	if (countryListWithSampling.length === 0) {
 		return false;
@@ -6165,7 +6166,7 @@ function sampleGeo(countryList, geo, name) {
 }
 
 function containsEarth(countryList, name) {
-	return countryList.indexOf(earth) > -1 || sampleGeo(countryList, earth, name);
+	return countryList.indexOf(earth) > -1 || isSampledForGeo(countryList, earth, name);
 }
 
 /**
@@ -6229,7 +6230,7 @@ function isProperCountry() {
 	var countryList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	var name = arguments[1];
 
-	return !!(countryList && countryList.indexOf && (countryList.indexOf(getCountryCode()) > -1 || sampleGeo(countryList, getCountryCode(), name)));
+	return !!(countryList && countryList.indexOf && (countryList.indexOf(getCountryCode()) > -1 || isSampledForGeo(countryList, getCountryCode(), name)));
 }
 
 /**
@@ -6243,7 +6244,7 @@ function isProperRegion() {
 	var name = arguments[1];
 
 	var code = getCountryCode() + '-' + getRegionCode();
-	return !!(countryList && countryList.indexOf && (countryList.indexOf(code) > -1 || sampleGeo(countryList, code, name)));
+	return !!(countryList && countryList.indexOf && (countryList.indexOf(code) > -1 || isSampledForGeo(countryList, code, name)));
 }
 
 function containsContinent() {
@@ -6251,7 +6252,7 @@ function containsContinent() {
 	var name = arguments[1];
 
 	var geo = earth + '-' + getContinentCode();
-	return countryList.indexOf(geo) > -1 || sampleGeo(countryList, geo, name);
+	return countryList.indexOf(geo) > -1 || isSampledForGeo(countryList, geo, name);
 }
 
 /**
@@ -6278,16 +6279,15 @@ function isGeoExcluded() {
 	return !!(countryList.indexOf('' + negativePrefix + getCountryCode()) > -1 || countryList.indexOf('' + negativePrefix + getCountryCode() + '-' + getRegionCode()) > -1 || countryList.indexOf('' + negativePrefix + earth + '-' + getContinentCode()) > -1);
 }
 
-function getTrackingLog(e) {
-	var obj = cache[e];
-	return obj.name + '_' + obj.group + '_' + obj.limit;
+function getTrackingLog(name) {
+	return cache[name].name + '_' + cache[name].group + '_' + cache[name].limit;
 }
 
-function resetCache() {
+function resetSamplingCache() {
 	cache = {};
 }
 
-function getTrackingValues() {
+function getSamplingResults() {
 	return keys_default()(cache).map(getTrackingLog);
 }
 
@@ -6312,9 +6312,9 @@ function isProperGeo() {
 	getContinentCode: getContinentCode,
 	getCountryCode: getCountryCode,
 	getRegionCode: getRegionCode,
-	getTrackingValues: getTrackingValues,
+	getSamplingResults: getSamplingResults,
 	isProperGeo: isProperGeo,
-	resetCache: resetCache
+	resetSamplingCache: resetSamplingCache
 });
 // CONCATENATED MODULE: ./src/utils/index.js
 
@@ -6332,8 +6332,8 @@ function isProperGeo() {
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperCountry", function() { return isProperCountry; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperRegion", function() { return isProperRegion; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperContinent", function() { return isProperContinent; });
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "resetCache", function() { return resetCache; });
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getTrackingValues", function() { return getTrackingValues; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "resetSamplingCache", function() { return resetSamplingCache; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getSamplingResults", function() { return getSamplingResults; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "isProperGeo", function() { return isProperGeo; });
 
 
