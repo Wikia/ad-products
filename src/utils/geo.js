@@ -8,44 +8,44 @@ const earth = 'XX',
 let geoData = null,
 	cache = [];
 
-function isCountryWithSampling(geo) {
-	return value => !value.startsWith(negativePrefix) && value.includes(geo + samplingChar);
+function hasSampling(geo) {
+	return value => !value.startsWith(negativePrefix) && value.indexOf(geo + samplingChar) > -1;
 }
 
 function getSamplingLimits(value) {
 	return parseFloat(value.split(samplingChar)[1]) / 100;
 }
 
-function getResult(s, name) {
+function getResult(samplingLimits, name) {
 	const randomValue = Random.getRandom(),
-		result = s.some(value => randomValue < value),
-		limit = s[0] * 100;
+		result = samplingLimits.some(value => randomValue < value),
+		limitValue = samplingLimits[0] * 100,
+		group = result ? 'B' : 'A';
 
 	if (name) {
 		cache[name] = {
-			name: name,
-			group: result ? 'B' : 'A',
-			limit: result ? limit : 100 - limit,
-			result: result
+			name,
+			group,
+			limit: result ? limitValue : 100 - limitValue,
+			result
 		};
 	}
 
 	return result;
 }
 
-function sampleGeo(countryList, geo, name) {
-	let countryListWithSampling = countryList.filter(isCountryWithSampling(geo));
+function isSampledForGeo(countryList, geo, name) {
+	const countryListWithSampling = countryList.filter(hasSampling(geo));
 
 	if (countryListWithSampling.length === 0) {
 		return false;
 	}
 
 	return getResult(countryListWithSampling.map(getSamplingLimits), name);
-
 }
 
 function containsEarth(countryList, name) {
-	return countryList.indexOf(earth) > -1 || sampleGeo(countryList, earth, name);
+	return countryList.indexOf(earth) > -1 || isSampledForGeo(countryList, earth, name);
 }
 
 /**
@@ -109,7 +109,7 @@ export function isProperCountry(countryList = [], name) {
 	return !!(
 		countryList &&
 		countryList.indexOf &&
-		(countryList.indexOf(getCountryCode()) > -1 || sampleGeo(countryList, getCountryCode(), name))
+		(countryList.indexOf(getCountryCode()) > -1 || isSampledForGeo(countryList, getCountryCode(), name))
 	);
 }
 
@@ -124,13 +124,13 @@ export function isProperRegion(countryList = [], name) {
 	return !!(
 		countryList &&
 		countryList.indexOf &&
-		(countryList.indexOf(code) > -1 || sampleGeo(countryList, code, name))
+		(countryList.indexOf(code) > -1 || isSampledForGeo(countryList, code, name))
 	);
 }
 
 function containsContinent(countryList = [], name) {
 	const geo = `${earth}-${getContinentCode()}`;
-	return countryList.indexOf(geo) > -1 || sampleGeo(countryList, geo, name);
+	return countryList.indexOf(geo) > -1 || isSampledForGeo(countryList, geo, name);
 }
 
 /**
@@ -160,17 +160,16 @@ function isGeoExcluded(countryList = []) {
 	);
 }
 
-function getTrackingLog (e) {
-	let obj = cache[e];
-	return `${obj.name}_${obj.group}_${obj.limit}`;
+function getResultLog(name) {
+	return `${cache[name].name}_${cache[name].group}_${cache[name].limit}`;
 }
 
-export function resetCache() {
+export function resetSamplingCache() {
 	cache = {};
 }
 
-export function getTrackingValues() {
-	return Object.keys(cache).map(getTrackingLog);
+export function getSamplingResults() {
+	return Object.keys(cache).map(getResultLog);
 }
 
 /**
@@ -196,7 +195,7 @@ export default {
 	getContinentCode,
 	getCountryCode,
 	getRegionCode,
-	getTrackingValues,
+	getSamplingResults,
 	isProperGeo,
-	resetCache
+	resetSamplingCache
 };

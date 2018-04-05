@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import {resetCache, getCountryCode, getContinentCode, getRegionCode, isProperGeo, setGeoData, getTrackingValues} from '../../src/utils/geo.js';
+import {resetSamplingCache, getCountryCode, getContinentCode, getRegionCode, isProperGeo, setGeoData, getSamplingResults} from '../../src/utils/geo.js';
 import Random from '../../src/utils/random.js';
 import sinon from 'sinon';
 import {context, slotService} from '@wikia/ad-engine/dist/ad-engine';
@@ -20,7 +20,7 @@ describe('Geo', () => {
 	});
 
 	afterEach(function () {
-		resetCache();
+		resetSamplingCache();
 		sandbox.restore();
 	});
 
@@ -285,34 +285,34 @@ describe('Geo', () => {
 
 	it('returns cached values', () => {
 		isProperGeo(['PL/50']);
-		assert.deepEqual(getTrackingValues(), []);
-		resetCache();
+		assert.deepEqual(getSamplingResults(), []);
+		resetSamplingCache();
 
 		Random.getRandom.returns(0.5);
 		assert.notOk(isProperGeo(['PL/10'], 'test'));
-		assert.deepEqual(getTrackingValues(), ['test_A_90']);
-		resetCache();
+		assert.deepEqual(getSamplingResults(), ['test_A_90']);
+		resetSamplingCache();
 
 		Random.getRandom.returns(0.01);
 		assert.ok(isProperGeo(['PL/10'], 'test'));
-		assert.deepEqual(getTrackingValues(), ['test_B_10']);
-		resetCache();
+		assert.deepEqual(getSamplingResults(), ['test_B_10']);
+		resetSamplingCache();
 
 		Random.getRandom.returns(0.0001);
 		assert.ok(isProperGeo(['PL/0.1'], 'test'));
-		assert.deepEqual(getTrackingValues(), ['test_B_0.1']);
-		resetCache();
+		assert.deepEqual(getSamplingResults(), ['test_B_0.1']);
+		resetSamplingCache();
 
 		Random.getRandom.returns(0.5);
 		assert.notOk(isProperGeo(['PL/0.1'], 'test'));
-		assert.deepEqual(getTrackingValues(), ['test_A_99.9']);
-		resetCache();
+		assert.deepEqual(getSamplingResults(), ['test_A_99.9']);
+		resetSamplingCache();
 
 		Random.getRandom.returns(0.15);
 		assert.ok(isProperGeo(['PL/25'], 'CAT'));
 		assert.notOk(isProperGeo(['PL/10'], 'DOG'));
-		assert.deepEqual(getTrackingValues(), ['CAT_B_25', 'DOG_A_90']);
-		resetCache();
+		assert.deepEqual(getSamplingResults(), ['CAT_B_25', 'DOG_A_90']);
+		resetSamplingCache();
 	});
 
 	it('blocks sampled countries before sample', () => {
