@@ -48,7 +48,7 @@ const common = {
 const environments = {
 	production: {
 		entry: {
-			'ad-products': './src/index.js'
+			'ad-products': './src/index.js',
 		},
 		devtool: 'source-map',
 		output: {
@@ -119,6 +119,32 @@ const targets = {
 	}
 };
 
+const geo = {
+	production: {
+		entry: {
+			'geo': './src/utils/geo.js'
+		},
+		output: {
+			path: path.resolve(__dirname, 'dist'),
+		},
+	},
+	amd: {
+		output: {
+			filename: '[name].amd.js',
+			library: 'ext.wikia.[name]',
+			libraryTarget: 'amd'
+		}
+	},
+	commonjs: {
+		externals: Object.keys(pkg.dependencies).map(key => new RegExp(`^${key}`)),
+		output: {
+			filename: '[name].js',
+			library: 'geo',
+			libraryTarget: 'commonjs2'
+		}
+	}
+};
+
 module.exports = function (env) {
 	const isProduction = (process.env.NODE_ENV === 'production') || (env && env.production);
 	const isTest = (env && env.test);
@@ -126,7 +152,9 @@ module.exports = function (env) {
 	if (isProduction) {
 		return [
 			merge(common, environments.production, targets.commonjs),
-			merge(common, environments.production, targets.amd)
+			merge(common, environments.production, targets.amd),
+			merge(common, geo.production, geo.amd),
+			merge(common, geo.production, geo.commonjs)
 		];
 	} else if (isTest) {
 		return merge(common, environments.test);

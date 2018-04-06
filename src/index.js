@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import * as utils from './utils';
 import './styles/styles.scss';
 
 const versionField = 'ads.adProductsVersion';
@@ -11,4 +12,6 @@ set(window, versionField, 'v<?= PACKAGE(version) ?>');
 
 export * from './common';
 export * from './templates';
-export * from './utils';
+export {
+	utils
+};
