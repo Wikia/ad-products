@@ -2,7 +2,7 @@ import {assert} from 'chai';
 import {resetSamplingCache, getCountryCode, getContinentCode, getRegionCode, isProperGeo, setGeoData, getSamplingResults} from '../../src/utils/geo.js';
 import Random from '../../src/utils/random.js';
 import sinon from 'sinon';
-import {context, slotService} from '@wikia/ad-engine/dist/ad-engine';
+import {context, slotService} from '@wikia/ad-engine';
 
 describe('Geo', () => {
 	let sandbox;
