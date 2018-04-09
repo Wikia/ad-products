@@ -102,7 +102,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 	}
 
 	onVideoReady(video) {
-		super.onVideoReady();
+		super.onVideoReady(video);
 
 		this.video = video;
 		video.addEventListener('wikiaAdStarted', () => this.updateAdSizes());
@@ -177,13 +177,14 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		const aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved;
 		const currentDiff = config.aspectRatio.default - currentAspectRatio;
 		const currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff);
-		const diff = config.state.height.default - config.state.height.resolved;
-		const value = (config.state.height.default - (diff * currentState)) / 100;
+		const heightDiff = config.state.height.default - config.state.height.resolved;
+		const heightFactor = (config.state.height.default - (heightDiff * currentState)) / 100;
+		const relativeHeight = aspectScroll * heightFactor;
 
-		this.adjustVideoSize(aspectScroll * value);
+		this.adjustVideoSize(relativeHeight);
 
 		if (this.params.thumbnail) {
-			this.setThumbnailStyle(currentState);
+			this.setThumbnailStyle(currentState, relativeHeight);
 		}
 
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
@@ -196,19 +197,23 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		slotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
 	}
 
-	adjustVideoSize(value) {
+	adjustVideoSize(relativeHeight) {
 		if (this.video && !this.video.isFullscreen()) {
-			this.video.container.style.width = `${this.params.videoAspectRatio * value}px`;
+			this.video.container.style.width = `${this.params.videoAspectRatio * relativeHeight}px`;
 		}
 	}
 
-	setThumbnailStyle(state) {
+	setThumbnailStyle(state, relativeHeight) {
 		const style = mapValues(this.params.config.state, (styleProperty) => {
 			const diff = styleProperty.default - styleProperty.resolved;
 			return `${(styleProperty.default - diff * state)}%`;
 		});
 
-		Object.assign(this.params.thumbnail.style, style);
+		Object.assign(
+			this.params.thumbnail.style,
+			style,
+			{ width: `${this.params.videoAspectRatio * relativeHeight}px` } // IE 11 fix
+		);
 
 		if (this.video) {
 			Object.assign(this.video.container.style, style);
@@ -311,17 +316,20 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 		if (resolvedState.isResolvedState(this.params)) {
 			this.setResolvedState();
 		} else {
+			this.setThumbnailStyle();
 			resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
 			slotTweaker.makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
 		}
 	}
 
 	onVideoReady(video) {
-		super.onVideoReady();
+		super.onVideoReady(video);
 
 		video.addEventListener('wikiaAdStarted', () => {
 			if (resolvedState.isResolvedState(this.params)) {
 				this.setResolvedState(video);
+			} else {
+				this.setThumbnailStyle(video);
 			}
 		});
 		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState(video));
@@ -340,14 +348,15 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 		this.container.classList.add('theme-resolved');
 		image2.element.classList.remove('hidden-state');
 		await slotTweaker.makeResponsive(this.adSlot, config.aspectRatio.resolved);
+
 		if (this.params.thumbnail) {
-			this.setThumbnailStyle(video);
+			this.setThumbnailStyle(video, 'resolved');
 		}
 	}
 
-	setThumbnailStyle(video) {
+	setThumbnailStyle(video, state = 'default') {
 		const thumbnail = this.params.thumbnail;
-		const style = mapValues(this.params.config.state, styleProperty => `${styleProperty.resolved}%`);
+		const style = mapValues(this.params.config.state, styleProperty => `${styleProperty[state]}%`);
 
 		Object.assign(thumbnail.style, style);
 

@@ -3587,7 +3587,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 		value: function onVideoReady(video) {
 			var _this6 = this;
 
-			get_default()(BfaaTheme.prototype.__proto__ || get_prototype_of_default()(BfaaTheme.prototype), 'onVideoReady', this).call(this);
+			get_default()(BfaaTheme.prototype.__proto__ || get_prototype_of_default()(BfaaTheme.prototype), 'onVideoReady', this).call(this, video);
 
 			this.video = video;
 			video.addEventListener('wikiaAdStarted', function () {
@@ -3696,13 +3696,14 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			var aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved;
 			var currentDiff = config.aspectRatio.default - currentAspectRatio;
 			var currentState = 1 - (aspectRatioDiff - currentDiff) / aspectRatioDiff;
-			var diff = config.state.height.default - config.state.height.resolved;
-			var value = (config.state.height.default - diff * currentState) / 100;
+			var heightDiff = config.state.height.default - config.state.height.resolved;
+			var heightFactor = (config.state.height.default - heightDiff * currentState) / 100;
+			var relativeHeight = aspectScroll * heightFactor;
 
-			this.adjustVideoSize(aspectScroll * value);
+			this.adjustVideoSize(relativeHeight);
 
 			if (this.params.thumbnail) {
-				this.setThumbnailStyle(currentState);
+				this.setThumbnailStyle(currentState, relativeHeight);
 			}
 
 			if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
@@ -3716,20 +3717,21 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 		}
 	}, {
 		key: 'adjustVideoSize',
-		value: function adjustVideoSize(value) {
+		value: function adjustVideoSize(relativeHeight) {
 			if (this.video && !this.video.isFullscreen()) {
-				this.video.container.style.width = this.params.videoAspectRatio * value + 'px';
+				this.video.container.style.width = this.params.videoAspectRatio * relativeHeight + 'px';
 			}
 		}
 	}, {
 		key: 'setThumbnailStyle',
-		value: function setThumbnailStyle(state) {
+		value: function setThumbnailStyle(state, relativeHeight) {
 			var style = mapValues__default()(this.params.config.state, function (styleProperty) {
 				var diff = styleProperty.default - styleProperty.resolved;
 				return styleProperty.default - diff * state + '%';
 			});
 
-			assign_default()(this.params.thumbnail.style, style);
+			assign_default()(this.params.thumbnail.style, style, { width: this.params.videoAspectRatio * relativeHeight + 'px' // IE 11 fix
+			});
 
 			if (this.video) {
 				assign_default()(this.video.container.style, style);
@@ -3854,6 +3856,7 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 			if (resolvedState.isResolvedState(this.params)) {
 				this.setResolvedState();
 			} else {
+				this.setThumbnailStyle();
 				resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
 				ad_engine_["slotTweaker"].makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
 			}
@@ -3863,11 +3866,13 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 		value: function onVideoReady(video) {
 			var _this9 = this;
 
-			get_default()(BfabTheme.prototype.__proto__ || get_prototype_of_default()(BfabTheme.prototype), 'onVideoReady', this).call(this);
+			get_default()(BfabTheme.prototype.__proto__ || get_prototype_of_default()(BfabTheme.prototype), 'onVideoReady', this).call(this, video);
 
 			video.addEventListener('wikiaAdStarted', function () {
 				if (resolvedState.isResolvedState(_this9.params)) {
 					_this9.setResolvedState(video);
+				} else {
+					_this9.setThumbnailStyle(video);
 				}
 			});
 			video.addEventListener('wikiaAdCompleted', function () {
@@ -3900,8 +3905,9 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 								return ad_engine_["slotTweaker"].makeResponsive(this.adSlot, config.aspectRatio.resolved);
 
 							case 5:
+
 								if (this.params.thumbnail) {
-									this.setThumbnailStyle(video);
+									this.setThumbnailStyle(video, 'resolved');
 								}
 
 							case 6:
@@ -3921,9 +3927,11 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 	}, {
 		key: 'setThumbnailStyle',
 		value: function setThumbnailStyle(video) {
+			var state = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+
 			var thumbnail = this.params.thumbnail;
 			var style = mapValues__default()(this.params.config.state, function (styleProperty) {
-				return styleProperty.resolved + '%';
+				return styleProperty[state] + '%';
 			});
 
 			assign_default()(thumbnail.style, style);
