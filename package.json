@@ -1,18 +1,19 @@
 {
   "name": "@wikia/ad-products",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Wikia ad products",
   "repository": {
     "type": "git",
     "url": "https://github.com/Wikia/ad-products"
   },
   "dependencies": {
-    "@wikia/ad-engine": "git+https://github.com/Wikia/ad-engine.git#v10.0.0",
+    "@wikia/ad-engine": "git+https://github.com/Wikia/ad-engine.git#v10.1.0",
     "core-decorators": "^0.20.0",
     "events": "^1.1.1",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "@slack/client": "4.1.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.0.0",
     "babel-loader": "^7.1.2",
