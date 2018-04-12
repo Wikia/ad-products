@@ -5738,7 +5738,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			this.adjustVideoSize(relativeHeight);
 
 			if (this.params.thumbnail) {
-				this.setThumbnailStyle(currentState, relativeHeight);
+				this.setThumbnailStyle(currentState);
 			}
 
 			if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
@@ -5748,7 +5748,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 				this.switchImagesInAd(false);
 			}
 
-			external___amd___ext_wikia_adEngine3__["slotTweaker"].makeResponsive(this.adSlot, currentAspectRatio);
+			return external___amd___ext_wikia_adEngine3__["slotTweaker"].makeResponsive(this.adSlot, currentAspectRatio);
 		}
 	}, {
 		key: 'adjustVideoSize',
@@ -5759,14 +5759,13 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 		}
 	}, {
 		key: 'setThumbnailStyle',
-		value: function setThumbnailStyle(state, relativeHeight) {
+		value: function setThumbnailStyle(state) {
 			var style = mapValues_default()(this.params.config.state, function (styleProperty) {
 				var diff = styleProperty.default - styleProperty.resolved;
 				return styleProperty.default - diff * state + '%';
 			});
 
-			assign_default()(this.params.thumbnail.style, style, { width: this.params.videoAspectRatio * relativeHeight + 'px' // IE 11 fix
-			});
+			assign_default()(this.params.thumbnail.style, style);
 
 			if (this.video) {
 				assign_default()(this.video.container.style, style);
@@ -5903,13 +5902,15 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 
 			helpers_get_default()(BfabTheme.prototype.__proto__ || get_prototype_of_default()(BfabTheme.prototype), 'onVideoReady', this).call(this, video);
 
-			video.addEventListener('wikiaAdStarted', function () {
+			var setThumbnailStyle = function setThumbnailStyle() {
 				if (resolvedState.isResolvedState(_this9.params)) {
 					_this9.setResolvedState(video);
 				} else {
 					_this9.setThumbnailStyle(video);
 				}
-			});
+			};
+
+			video.addEventListener('wikiaAdStarted', setThumbnailStyle);
 			video.addEventListener('wikiaAdCompleted', function () {
 				return _this9.setResolvedState(video);
 			});
@@ -5918,6 +5919,7 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 					_this9.container.classList.add('theme-video-fullscreen');
 				} else {
 					_this9.container.classList.remove('theme-video-fullscreen');
+					setThumbnailStyle();
 				}
 			});
 		}

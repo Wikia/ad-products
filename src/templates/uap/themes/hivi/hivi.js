@@ -184,7 +184,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		this.adjustVideoSize(relativeHeight);
 
 		if (this.params.thumbnail) {
-			this.setThumbnailStyle(currentState, relativeHeight);
+			this.setThumbnailStyle(currentState);
 		}
 
 		if (currentState >= HIVI_RESOLVED_THRESHOLD && !isResolved) {
@@ -194,7 +194,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 			this.switchImagesInAd(false);
 		}
 
-		slotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
+		return slotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
 	}
 
 	adjustVideoSize(relativeHeight) {
@@ -203,17 +203,13 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		}
 	}
 
-	setThumbnailStyle(state, relativeHeight) {
+	setThumbnailStyle(state) {
 		const style = mapValues(this.params.config.state, (styleProperty) => {
 			const diff = styleProperty.default - styleProperty.resolved;
 			return `${(styleProperty.default - diff * state)}%`;
 		});
 
-		Object.assign(
-			this.params.thumbnail.style,
-			style,
-			{ width: `${this.params.videoAspectRatio * relativeHeight}px` } // IE 11 fix
-		);
+		Object.assign(this.params.thumbnail.style, style);
 
 		if (this.video) {
 			Object.assign(this.video.container.style, style);
@@ -325,19 +321,22 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 	onVideoReady(video) {
 		super.onVideoReady(video);
 
-		video.addEventListener('wikiaAdStarted', () => {
+		const setThumbnailStyle = () => {
 			if (resolvedState.isResolvedState(this.params)) {
 				this.setResolvedState(video);
 			} else {
 				this.setThumbnailStyle(video);
 			}
-		});
+		};
+
+		video.addEventListener('wikiaAdStarted', setThumbnailStyle);
 		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState(video));
 		video.addEventListener('wikiaFullscreenChange', () => {
 			if (video.isFullscreen()) {
 				this.container.classList.add('theme-video-fullscreen');
 			} else {
 				this.container.classList.remove('theme-video-fullscreen');
+				setThumbnailStyle();
 			}
 		});
 	}
