@@ -116,7 +116,19 @@ const targets = {
 			library: 'adEngine',
 			libraryTarget: 'commonjs2'
 		}
-	}
+	},
+	assign: {
+		externals: {
+			'@wikia/ad-engine': {
+				root: ['Wikia', 'adEngine']
+			}
+		},
+		output: {
+			filename: '[name].global.js',
+			library: 'Wikia.adProducts',
+			libraryTarget: 'assign'
+		}
+	},
 };
 
 const geo = {
@@ -142,7 +154,14 @@ const geo = {
 			library: 'geo',
 			libraryTarget: 'commonjs2'
 		}
-	}
+	},
+	assign: {
+		output: {
+			filename: '[name].global.js',
+			library: 'Wikia.adProductsGeo',
+			libraryTarget: 'assign'
+		}
+	},
 };
 
 module.exports = function (env) {
@@ -153,8 +172,10 @@ module.exports = function (env) {
 		return [
 			merge(common, environments.production, targets.commonjs),
 			merge(common, environments.production, targets.amd),
+			merge(common, environments.production, targets.assign),
 			merge(common, geo.production, geo.amd),
-			merge(common, geo.production, geo.commonjs)
+			merge(common, geo.production, geo.commonjs),
+			merge(common, geo.production, geo.assign)
 		];
 	} else if (isTest) {
 		return merge(common, environments.test);
