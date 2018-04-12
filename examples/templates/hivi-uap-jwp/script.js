@@ -11,7 +11,7 @@ const clickDelay = {
 		getName: () => 'click-to-load',
 		getPromise: () => new Promise((resolve) => {
 			document.getElementById('clickDelay').addEventListener('click', () => {
-				loadCustomAd({
+				window.loadCustomAd({
 					type: 'bfp',
 					slotName: 'FEATURED',
 					uap: '4617193627'

@@ -1,4 +1,4 @@
-import { context, utils, slotService } from '@wikia/ad-engine';
+import { context, slotService } from '@wikia/ad-engine';
 
 import { universalAdPackage } from './universal-ad-package';
 
