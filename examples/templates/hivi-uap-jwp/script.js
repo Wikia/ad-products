@@ -71,6 +71,15 @@ if (document.body.offsetWidth < 728) {
 	context.set('targeting.skin', 'fandom_mobile');
 }
 
-templateService.register(BigFancyAdInPlayer);
+templateService.register(BigFancyAdInPlayer, {
+	slotsToDisable: [
+		'TOP_LEADERBOARD',
+		'BOTTOM_LEADERBOARD',
+	],
+	slotsToEnable: [
+		'TOP_BOXAD',
+		'INCONTENT_BOXAD',
+	]
+});
 
 new AdEngine().init();

@@ -1,4 +1,4 @@
-import { context, utils } from '@wikia/ad-engine';
+import { context, utils, slotService } from '@wikia/ad-engine';
 
 import { universalAdPackage } from './universal-ad-package';
 
@@ -9,10 +9,8 @@ export class BigFancyAdInPlayer {
 
 	static getDefaultConfig() {
 		return {
-			slotsToEnable: [
-				'TOP_RIGHT_BOXAD',
-				'INCONTENT_BOXAD'
-			],
+			slotsToDisable: [],
+			slotsToEnable: [],
 			onInit: () => {
 			}
 		};
@@ -28,8 +26,11 @@ export class BigFancyAdInPlayer {
 	init(params) {
 		this.params = params;
 
-		universalAdPackage.setUapId(params.lineItemId);
-		universalAdPackage.setType('jwp');
+		this.config.slotsToDisable.forEach((slotName) => {
+			slotService.disable(slotName);
+		});
+
+		universalAdPackage.init(this.params, this.config.slotsToEnable);
 		this.config.onInit(this.params, this.config);
 	}
 }
