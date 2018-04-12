@@ -10,9 +10,7 @@ export class BigFancyAdInPlayer {
 	static getDefaultConfig() {
 		return {
 			slotsToDisable: [],
-			slotsToEnable: [],
-			onInit: () => {
-			}
+			slotsToEnable: []
 		};
 	}
 
@@ -26,11 +24,6 @@ export class BigFancyAdInPlayer {
 	init(params) {
 		this.params = params;
 
-		this.config.slotsToDisable.forEach((slotName) => {
-			slotService.disable(slotName);
-		});
-
-		universalAdPackage.init(this.params, this.config.slotsToEnable);
-		this.config.onInit(this.params, this.config);
+		universalAdPackage.init(this.params, this.config.slotsToEnable, this.config.slotsToDisable);
 	}
 }
