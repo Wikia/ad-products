@@ -12,8 +12,8 @@ const clickDelay = {
 		getPromise: () => new Promise((resolve) => {
 			document.getElementById('clickDelay').addEventListener('click', () => {
 				window.loadCustomAd({
+					adProduct: 'jwp',
 					type: 'bfp',
-					slotName: 'FEATURED',
 					uap: '4617193627'
 				});
 				resolve();

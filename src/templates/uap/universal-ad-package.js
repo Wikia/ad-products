@@ -159,12 +159,10 @@ export const universalAdPackage = {
 
 		setUapId(params.uap);
 		enableSlots(slotsToEnable);
+		setType(params.adProduct);
 
-		if (params.type !== 'bfp') {
-			setType(params.adProduct);
+		if (params.slotName) {
 			initSlot(params);
-		} else {
-			setType('jwp');
 		}
 	},
 	initSlot,
