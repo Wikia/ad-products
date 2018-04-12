@@ -158,10 +158,14 @@ export const universalAdPackage = {
 		params.adProduct = params.adProduct || adProduct;
 
 		setUapId(params.uap);
-		setType(params.adProduct);
 		enableSlots(slotsToEnable);
 
-		initSlot(params);
+		if (params.type !== 'bfp') {
+			setType(params.adProduct);
+			initSlot(params);
+		} else {
+			setType('jwp');
+		}
 	},
 	initSlot,
 	isFanTakeoverLoaded,

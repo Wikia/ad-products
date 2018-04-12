@@ -14,7 +14,7 @@ const clickDelay = {
 				loadCustomAd({
 					type: 'bfp',
 					slotName: 'FEATURED',
-					lineItemId: '4617193627'
+					uap: '4617193627'
 				});
 				resolve();
 				time = 0;
