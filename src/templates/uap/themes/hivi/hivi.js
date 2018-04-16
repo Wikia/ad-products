@@ -102,7 +102,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 	}
 
 	onVideoReady(video) {
-		super.onVideoReady();
+		super.onVideoReady(video);
 
 		this.video = video;
 		video.addEventListener('wikiaAdStarted', () => this.updateAdSizes());
@@ -171,15 +171,17 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		const isResolved = this.container.classList.contains('theme-resolved');
 		const maxHeight = currentWidth / config.aspectRatio.default;
 		const minHeight = currentWidth / config.aspectRatio.resolved;
-		const aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - window.scrollY);
+		const scrollY = (window.scrollY || window.pageYOffset || 0);
+		const aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - scrollY);
 		const currentAspectRatio = currentWidth / aspectScroll;
 		const aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved;
 		const currentDiff = config.aspectRatio.default - currentAspectRatio;
 		const currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff);
-		const diff = config.state.height.default - config.state.height.resolved;
-		const value = (config.state.height.default - (diff * currentState)) / 100;
+		const heightDiff = config.state.height.default - config.state.height.resolved;
+		const heightFactor = (config.state.height.default - (heightDiff * currentState)) / 100;
+		const relativeHeight = aspectScroll * heightFactor;
 
-		this.adjustVideoSize(aspectScroll * value);
+		this.adjustVideoSize(relativeHeight);
 
 		if (this.params.thumbnail) {
 			this.setThumbnailStyle(currentState);
@@ -192,12 +194,12 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 			this.switchImagesInAd(false);
 		}
 
-		slotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
+		return slotTweaker.makeResponsive(this.adSlot, currentAspectRatio);
 	}
 
-	adjustVideoSize(value) {
+	adjustVideoSize(relativeHeight) {
 		if (this.video && !this.video.isFullscreen()) {
-			this.video.container.style.width = `${this.params.videoAspectRatio * value}px`;
+			this.video.container.style.width = `${this.params.videoAspectRatio * relativeHeight}px`;
 		}
 	}
 
@@ -310,25 +312,31 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 		if (resolvedState.isResolvedState(this.params)) {
 			this.setResolvedState();
 		} else {
+			this.setThumbnailStyle();
 			resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
 			slotTweaker.makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
 		}
 	}
 
 	onVideoReady(video) {
-		super.onVideoReady();
+		super.onVideoReady(video);
 
-		video.addEventListener('wikiaAdStarted', () => {
+		const setThumbnailStyle = () => {
 			if (resolvedState.isResolvedState(this.params)) {
 				this.setResolvedState(video);
+			} else {
+				this.setThumbnailStyle(video);
 			}
-		});
+		};
+
+		video.addEventListener('wikiaAdStarted', setThumbnailStyle);
 		video.addEventListener('wikiaAdCompleted', () => this.setResolvedState(video));
 		video.addEventListener('wikiaFullscreenChange', () => {
 			if (video.isFullscreen()) {
 				this.container.classList.add('theme-video-fullscreen');
 			} else {
 				this.container.classList.remove('theme-video-fullscreen');
+				setThumbnailStyle();
 			}
 		});
 	}
@@ -339,14 +347,15 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 		this.container.classList.add('theme-resolved');
 		image2.element.classList.remove('hidden-state');
 		await slotTweaker.makeResponsive(this.adSlot, config.aspectRatio.resolved);
+
 		if (this.params.thumbnail) {
-			this.setThumbnailStyle(video);
+			this.setThumbnailStyle(video, 'resolved');
 		}
 	}
 
-	setThumbnailStyle(video) {
+	setThumbnailStyle(video, state = 'default') {
 		const thumbnail = this.params.thumbnail;
-		const style = mapValues(this.params.config.state, styleProperty => `${styleProperty.resolved}%`);
+		const style = mapValues(this.params.config.state, styleProperty => `${styleProperty[state]}%`);
 
 		Object.assign(thumbnail.style, style);
 

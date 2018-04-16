@@ -199,7 +199,7 @@
     display: none; }
   .gpt-ad.bfaa-template .porvata-switchable-icon.is-on .porvata-off-icon,
   .gpt-ad.bfab-template .porvata-switchable-icon.is-on .porvata-off-icon {
-    display: unset; }
+    display: inline-block; }
   .gpt-ad.bfaa-template .porvata-switchable-icon.is-on .porvata-on-icon,
   .gpt-ad.bfab-template .porvata-switchable-icon.is-on .porvata-on-icon {
     display: none; }
