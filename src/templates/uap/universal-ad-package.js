@@ -122,6 +122,12 @@ function enableSlots(slotsToEnable) {
 	}
 }
 
+function disableSlots(slotsToDisable) {
+	slotsToDisable.forEach((slotName) => {
+		slotService.disable(slotName);
+	});
+}
+
 function initSlot(params) {
 	const adSlot = slotService.getBySlotName(params.slotName);
 	params.container = adSlot.getElement();
@@ -148,7 +154,7 @@ function isFanTakeoverLoaded() {
 
 export const universalAdPackage = {
 	...constants,
-	init(params, slotsToEnable = []) {
+	init(params, slotsToEnable = [], slotsToDisable = []) {
 		let adProduct = 'uap';
 
 		if (this.isVideoEnabled(params)) {
@@ -158,10 +164,13 @@ export const universalAdPackage = {
 		params.adProduct = params.adProduct || adProduct;
 
 		setUapId(params.uap);
-		setType(params.adProduct);
+		disableSlots(slotsToDisable);
 		enableSlots(slotsToEnable);
+		setType(params.adProduct);
 
-		initSlot(params);
+		if (params.slotName) {
+			initSlot(params);
+		}
 	},
 	initSlot,
 	isFanTakeoverLoaded,
