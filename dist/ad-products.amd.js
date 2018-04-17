@@ -79,18 +79,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
-
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-var global = module.exports = typeof window != 'undefined' && window.Math == Math
-  ? window : typeof self != 'undefined' && self.Math == Math ? self
-  // eslint-disable-next-line no-new-func
-  : Function('return this')();
-if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
-
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -105,7 +93,7 @@ exports.default = function (instance, Constructor) {
 };
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -138,12 +126,24 @@ exports.default = function () {
 }();
 
 /***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self
+  // eslint-disable-next-line no-new-func
+  : Function('return this')();
+if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
+
+/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var store = __webpack_require__(59)('wks');
 var uid = __webpack_require__(40);
-var Symbol = __webpack_require__(2).Symbol;
+var Symbol = __webpack_require__(4).Symbol;
 var USE_SYMBOL = typeof Symbol == 'function';
 
 var $exports = module.exports = function (name) {
@@ -158,7 +158,7 @@ $exports.store = store;
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(2);
+var global = __webpack_require__(4);
 var core = __webpack_require__(0);
 var ctx = __webpack_require__(21);
 var hide = __webpack_require__(16);
@@ -1286,7 +1286,7 @@ module.exports = function (key) {
 /* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(2);
+var global = __webpack_require__(4);
 var SHARED = '__core-js_shared__';
 var store = global[SHARED] || (global[SHARED] = {});
 module.exports = function (key) {
@@ -1325,7 +1325,7 @@ module.exports = function (KEY, exec) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(17);
-var document = __webpack_require__(2).document;
+var document = __webpack_require__(4).document;
 // typeof document.createElement is 'object' in old IE
 var is = isObject(document) && isObject(document.createElement);
 module.exports = function (it) {
@@ -1504,7 +1504,7 @@ module.exports = { "default": __webpack_require__(193), __esModule: true };
 /* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(2);
+var global = __webpack_require__(4);
 var core = __webpack_require__(0);
 var LIBRARY = __webpack_require__(43);
 var wksExt = __webpack_require__(70);
@@ -1905,7 +1905,7 @@ module.exports = __webpack_require__(16);
 /* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var document = __webpack_require__(2).document;
+var document = __webpack_require__(4).document;
 module.exports = document && document.documentElement;
 
 
@@ -1933,7 +1933,7 @@ module.exports = Object.getPrototypeOf || function (O) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(165);
-var global = __webpack_require__(2);
+var global = __webpack_require__(4);
 var hide = __webpack_require__(16);
 var Iterators = __webpack_require__(32);
 var TO_STRING_TAG = __webpack_require__(5)('toStringTag');
@@ -2051,7 +2051,7 @@ var ctx = __webpack_require__(21);
 var invoke = __webpack_require__(171);
 var html = __webpack_require__(87);
 var cel = __webpack_require__(62);
-var global = __webpack_require__(2);
+var global = __webpack_require__(4);
 var process = global.process;
 var setTask = global.setImmediate;
 var clearTask = global.clearImmediate;
@@ -3520,11 +3520,11 @@ function getAdProductInfo(slotName, loadedTemplate, loadedProduct) {
 // CONCATENATED MODULE: ./src/common/index.js
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/classCallCheck.js
-var classCallCheck = __webpack_require__(3);
+var classCallCheck = __webpack_require__(2);
 var classCallCheck_default = /*#__PURE__*/__webpack_require__.n(classCallCheck);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/createClass.js
-var createClass = __webpack_require__(4);
+var createClass = __webpack_require__(3);
 var createClass_default = /*#__PURE__*/__webpack_require__.n(createClass);
 
 // CONCATENATED MODULE: ./src/templates/floating-rail.js
@@ -4557,6 +4557,12 @@ function enableSlots(slotsToEnable) {
 	}
 }
 
+function disableSlots(slotsToDisable) {
+	slotsToDisable.forEach(function (slotName) {
+		external___amd___ext_wikia_adEngine3__["slotService"].disable(slotName);
+	});
+}
+
 function initSlot(params) {
 	var adSlot = external___amd___ext_wikia_adEngine3__["slotService"].getBySlotName(params.slotName);
 	params.container = adSlot.getElement();
@@ -4584,6 +4590,7 @@ function isFanTakeoverLoaded() {
 var universalAdPackage = extends_default()({}, constants_namespaceObject, {
 	init: function init(params) {
 		var slotsToEnable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+		var slotsToDisable = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
 		var adProduct = 'uap';
 
@@ -4594,10 +4601,13 @@ var universalAdPackage = extends_default()({}, constants_namespaceObject, {
 		params.adProduct = params.adProduct || adProduct;
 
 		setUapId(params.uap);
-		setType(params.adProduct);
+		disableSlots(slotsToDisable);
 		enableSlots(slotsToEnable);
+		setType(params.adProduct);
 
-		initSlot(params);
+		if (params.slotName) {
+			initSlot(params);
+		}
 	},
 
 	initSlot: initSlot,
@@ -6331,7 +6341,53 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 
 	return BigFancyAdBelow;
 }();
+// CONCATENATED MODULE: ./src/templates/uap/big-fancy-ad-in-player.js
+
+
+
+
+
+
+var big_fancy_ad_in_player_BigFancyAdInPlayer = function () {
+	createClass_default()(BigFancyAdInPlayer, null, [{
+		key: 'getName',
+		value: function getName() {
+			return 'bfp';
+		}
+	}, {
+		key: 'getDefaultConfig',
+		value: function getDefaultConfig() {
+			return {
+				slotsToDisable: [],
+				slotsToEnable: []
+			};
+		}
+	}]);
+
+	function BigFancyAdInPlayer() {
+		classCallCheck_default()(this, BigFancyAdInPlayer);
+
+		this.config = external___amd___ext_wikia_adEngine3__["context"].get('templates.bfp');
+	}
+
+	/**
+  * Initializes the BFP unit
+  */
+
+
+	createClass_default()(BigFancyAdInPlayer, [{
+		key: 'init',
+		value: function init(params) {
+			this.params = params;
+
+			universalAdPackage.init(this.params, this.config.slotsToEnable, this.config.slotsToDisable);
+		}
+	}]);
+
+	return BigFancyAdInPlayer;
+}();
 // CONCATENATED MODULE: ./src/templates/uap/index.js
+
 
 
 
@@ -6346,6 +6402,7 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "resolvedState", function() { return resolvedState; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdAbove", function() { return big_fancy_ad_above_BigFancyAdAbove; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdBelow", function() { return big_fancy_ad_below_BigFancyAdBelow; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdInPlayer", function() { return big_fancy_ad_in_player_BigFancyAdInPlayer; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "universalAdPackage", function() { return universalAdPackage; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "utils", function() { return utils_namespaceObject; });
 
@@ -6360,7 +6417,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v5.2.2');
+set_default()(window, versionField, 'v5.3.0');
 
 
 
@@ -8587,7 +8644,7 @@ module.exports = function (done, value) {
 "use strict";
 
 var LIBRARY = __webpack_require__(43);
-var global = __webpack_require__(2);
+var global = __webpack_require__(4);
 var ctx = __webpack_require__(21);
 var classof = __webpack_require__(90);
 var $export = __webpack_require__(6);
@@ -8935,7 +8992,7 @@ module.exports = function (fn, args, that) {
 /* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(2);
+var global = __webpack_require__(4);
 var macrotask = __webpack_require__(95).set;
 var Observer = global.MutationObserver || global.WebKitMutationObserver;
 var process = global.process;
@@ -9024,7 +9081,7 @@ module.exports = function (target, src, safe) {
 
 "use strict";
 
-var global = __webpack_require__(2);
+var global = __webpack_require__(4);
 var core = __webpack_require__(0);
 var dP = __webpack_require__(8);
 var DESCRIPTORS = __webpack_require__(12);
@@ -9048,7 +9105,7 @@ module.exports = function (KEY) {
 
 var $export = __webpack_require__(6);
 var core = __webpack_require__(0);
-var global = __webpack_require__(2);
+var global = __webpack_require__(4);
 var speciesConstructor = __webpack_require__(94);
 var promiseResolve = __webpack_require__(97);
 
@@ -9498,7 +9555,7 @@ module.exports = __webpack_require__(0).Symbol;
 "use strict";
 
 // ECMAScript 6 symbols shim
-var global = __webpack_require__(2);
+var global = __webpack_require__(4);
 var has = __webpack_require__(14);
 var DESCRIPTORS = __webpack_require__(12);
 var $export = __webpack_require__(6);
