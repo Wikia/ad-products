@@ -11,9 +11,18 @@ const ASPECT_RATIO = 1,
 	RESOLVED_STATE_ASPECT_RATIO = 2,
 	RESOLVED_IMAGE = 'resolvedImage.png',
 	RESOLVED_IMAGE_2 = 'resolvedImage2.png',
+	addEventListener = (name, callback) => {
+		const event = {
+			target: {}
+		}
+		setTimeout(() => callback(event), 0);
+	},
 	stubs = {
 		videoSettings: {
 			getParams() {
+				return {};
+			},
+			updateParams() {
 				return {};
 			},
 			isResolvedState() {
@@ -39,7 +48,8 @@ function createCorrectParams() {
 		resolvedStateAspectRatio: RESOLVED_STATE_ASPECT_RATIO,
 		image1: {
 			element: {
-				src: DEFAULT_IMAGE
+				src: DEFAULT_IMAGE,
+				addEventListener
 			},
 			defaultStateSrc: BIG_IMAGE,
 			resolvedStateSrc: RESOLVED_IMAGE
@@ -53,7 +63,8 @@ function createIncorrectParams() {
 		resolvedStateAspectRatio: 0,
 		image1: {
 			element: {
-				src: DEFAULT_IMAGE
+				src: DEFAULT_IMAGE,
+				addEventListener
 			},
 			defaultStateSrc: BIG_IMAGE,
 			resolvedStateSrc: ''
@@ -67,14 +78,16 @@ function createCorrectParamsWithTwoAssets() {
 		resolvedStateAspectRatio: RESOLVED_STATE_ASPECT_RATIO,
 		image1: {
 			element: {
-				src: DEFAULT_IMAGE
+				src: DEFAULT_IMAGE,
+				addEventListener
 			},
 			defaultStateSrc: BIG_IMAGE,
 			resolvedStateSrc: RESOLVED_IMAGE
 		},
 		image2: {
 			element: {
-				src: DEFAULT_IMAGE
+				src: DEFAULT_IMAGE,
+				addEventListener
 			},
 			defaultStateSrc: BIG_IMAGE_2,
 			resolvedStateSrc: RESOLVED_IMAGE_2
