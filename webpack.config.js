@@ -4,24 +4,23 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 const get = require('lodash/get');
 const pkg = require('./package.json');
 
 const common = {
+	mode: 'development',
 	context: __dirname,
 	module: {
 		rules: [
 			{
 				test: /\.s?css$/,
-				loader: ExtractTextPlugin.extract({
-					fallback: 'style-loader',
-					use: [
-						'css-loader',
-						'sass-loader'
-					]
-				}),
+				use: [
+					MiniCssExtractPlugin.loader,
+					'css-loader',
+					'sass-loader'
+				],
 				exclude: /node_modules/
 			},
 			{
@@ -47,6 +46,7 @@ const common = {
 
 const environments = {
 	production: {
+		mode: 'production',
 		entry: {
 			'ad-products': './src/index.js',
 		},
@@ -58,7 +58,7 @@ const environments = {
 			new webpack.DefinePlugin({
 				'process.env.NODE_ENV': JSON.stringify('production')
 			}),
-			new ExtractTextPlugin({ filename: '[name].css' }),
+			new MiniCssExtractPlugin({ filename: '[name].css' }),
 			new StringReplacePlugin(),
 			new webpack.optimize.ModuleConcatenationPlugin()
 		]
@@ -76,17 +76,24 @@ const environments = {
 			'vuap': './examples/templates/vuap/script.js'
 		},
 		devtool: 'cheap-module-eval-source-map',
+		optimization: {
+			splitChunks: {
+				cacheGroups: {
+					commons: {
+						name: 'vendor',
+						filename: '[name]/dist/vendor.js',
+						chunks: 'all'
+					}
+				}
+			}
+		},
 		output: {
 			path: path.resolve(__dirname, 'examples'),
 			filename: 'templates/[name]/dist/bundle.js'
 		},
 		plugins: [
-			new ExtractTextPlugin({ filename: '[name]/dist/styles.css' }),
-			new StringReplacePlugin(),
-			new webpack.optimize.CommonsChunkPlugin({
-				name: 'vendor',
-				filename: '[name]/dist/vendor.js'
-			})
+			new MiniCssExtractPlugin({ filename: '[name]/dist/styles.css' }),
+			new StringReplacePlugin()
 		],
 		resolve: {
 			alias: {
@@ -116,6 +123,9 @@ const targets = {
 			filename: '[name].js',
 			library: 'adEngine',
 			libraryTarget: 'commonjs2'
+		},
+		optimization: {
+			minimize: false
 		}
 	},
 	assign: {
@@ -154,6 +164,9 @@ const geo = {
 			filename: '[name].js',
 			library: 'geo',
 			libraryTarget: 'commonjs2'
+		},
+		optimization: {
+			minimize: false
 		}
 	},
 	assign: {
