@@ -71,6 +71,7 @@ const environments = {
 			'hivi-uap-ctp': './examples/templates/hivi-uap-ctp/script.js',
 			'hivi-uap-stickiness-not-allowed': './examples/templates/hivi-uap-stickiness-not-allowed/script.js',
 			'hivi-uap-static': './examples/templates/hivi-uap-static/script.js',
+			'hivi-uap-jwp': './examples/templates/hivi-uap-jwp/script.js',
 			'sticky-bfaa': './examples/templates/sticky-bfaa/script.js',
 			'vuap': './examples/templates/vuap/script.js'
 		},
