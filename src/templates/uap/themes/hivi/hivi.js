@@ -166,19 +166,19 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 	}
 
 	updateAdSizes() {
-		const config = this.params.config;
-		const currentWidth = this.config.mainContainer.offsetWidth;
+		const { aspectRatio, state } = this.params.config;
+		const { mainContainer: { offsetWidth: currentWidth } } = this.config;
 		const isResolved = this.container.classList.contains('theme-resolved');
-		const maxHeight = currentWidth / config.aspectRatio.default;
-		const minHeight = currentWidth / config.aspectRatio.resolved;
+		const maxHeight = currentWidth / aspectRatio.default;
+		const minHeight = currentWidth / aspectRatio.resolved;
 		const scrollY = (window.scrollY || window.pageYOffset || 0);
 		const aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - scrollY);
 		const currentAspectRatio = currentWidth / aspectScroll;
-		const aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved;
-		const currentDiff = config.aspectRatio.default - currentAspectRatio;
+		const aspectRatioDiff = aspectRatio.default - aspectRatio.resolved;
+		const currentDiff = aspectRatio.default - currentAspectRatio;
 		const currentState = 1 - ((aspectRatioDiff - currentDiff) / aspectRatioDiff);
-		const heightDiff = config.state.height.default - config.state.height.resolved;
-		const heightFactor = (config.state.height.default - (heightDiff * currentState)) / 100;
+		const heightDiff = state.height.default - state.height.resolved;
+		const heightFactor = (state.height.default - (heightDiff * currentState)) / 100;
 		const relativeHeight = aspectScroll * heightFactor;
 
 		this.adjustVideoSize(relativeHeight);
@@ -243,7 +243,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 	setResolvedState(immediately) {
 		const isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 		const width = this.container.offsetWidth;
-		const aspectRatio = this.params.config.aspectRatio;
+		const { aspectRatio } = this.params.config;
 		const resolvedHeight = width / aspectRatio.resolved;
 		const offset = this.getHeightDifferenceBetweenStates();
 
@@ -283,7 +283,7 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 
 	getHeightDifferenceBetweenStates() {
 		const width = this.container.offsetWidth;
-		const aspectRatio = this.params.config.aspectRatio;
+		const { aspectRatio } = this.params.config;
 
 		return Math.round(width / aspectRatio.default - width / aspectRatio.resolved);
 	}
@@ -354,7 +354,7 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 	}
 
 	setThumbnailStyle(video, state = 'default') {
-		const thumbnail = this.params.thumbnail;
+		const { thumbnail } = this.params;
 		const style = mapValues(this.params.config.state, styleProperty => `${styleProperty[state]}%`);
 
 		Object.assign(thumbnail.style, style);

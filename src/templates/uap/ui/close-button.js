@@ -9,7 +9,7 @@ export default class CloseButton extends UiComponent {
 
 	render() {
 		const { onClick } = this.props;
-		const classNames = this.classNames;
+		const { classNames } = this;
 		const button = new Button({ onClick, classNames }).render();
 		const closeIcon = createIcon(icons.CROSS, ['icon']);
 

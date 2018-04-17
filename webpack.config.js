@@ -142,15 +142,19 @@ const targets = {
 	},
 };
 
-const geo = {
+const geoEnvironments = {
 	production: {
+		mode: 'production',
 		entry: {
 			'geo': './src/utils/geo.js'
 		},
 		output: {
 			path: path.resolve(__dirname, 'dist'),
-		},
-	},
+		}
+	}
+};
+
+const geoTargets = {
 	amd: {
 		output: {
 			filename: '[name].amd.js',
@@ -184,12 +188,12 @@ module.exports = function (env) {
 
 	if (isProduction) {
 		return [
-			merge(common, environments.production, targets.commonjs),
 			merge(common, environments.production, targets.amd),
 			merge(common, environments.production, targets.assign),
-			merge(common, geo.production, geo.amd),
-			merge(common, geo.production, geo.commonjs),
-			merge(common, geo.production, geo.assign)
+			merge(common, environments.production, targets.commonjs),
+			merge(common, geoEnvironments.production, geoTargets.amd),
+			merge(common, geoEnvironments.production, geoTargets.assign),
+			merge(common, geoEnvironments.production, geoTargets.commonjs)
 		];
 	} else if (isTest) {
 		return merge(common, environments.test);

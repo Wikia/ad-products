@@ -3315,13 +3315,9 @@ var adIsReady = function () {
 						return resolvedState.setImage(videoSettings);
 
 					case 2:
-						_context.next = 4;
-						return ad_engine_["slotTweaker"].makeResponsive(adSlot, params.aspectRatio);
+						return _context.abrupt('return', ad_engine_["slotTweaker"].makeResponsive(adSlot, params.aspectRatio));
 
-					case 4:
-						return _context.abrupt('return', _context.sent);
-
-					case 5:
+					case 3:
 					case 'end':
 						return _context.stop();
 				}
@@ -3507,8 +3503,8 @@ var close_button_CloseButton = function (_UiComponent) {
 		key: 'render',
 		value: function render() {
 			var onClick = this.props.onClick;
-
 			var classNames = this.classNames;
+
 			var button = new button_Button({ onClick: onClick, classNames: classNames }).render();
 			var closeIcon = createIcon(icons_icons.CROSS, ['icon']);
 
@@ -4037,19 +4033,22 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 	}, {
 		key: 'updateAdSizes',
 		value: function updateAdSizes() {
-			var config = this.params.config;
+			var _params$config = this.params.config,
+			    aspectRatio = _params$config.aspectRatio,
+			    state = _params$config.state;
 			var currentWidth = this.config.mainContainer.offsetWidth;
+
 			var isResolved = this.container.classList.contains('theme-resolved');
-			var maxHeight = currentWidth / config.aspectRatio.default;
-			var minHeight = currentWidth / config.aspectRatio.resolved;
+			var maxHeight = currentWidth / aspectRatio.default;
+			var minHeight = currentWidth / aspectRatio.resolved;
 			var scrollY = window.scrollY || window.pageYOffset || 0;
 			var aspectScroll = this.isLocked ? minHeight : Math.max(minHeight, maxHeight - scrollY);
 			var currentAspectRatio = currentWidth / aspectScroll;
-			var aspectRatioDiff = config.aspectRatio.default - config.aspectRatio.resolved;
-			var currentDiff = config.aspectRatio.default - currentAspectRatio;
+			var aspectRatioDiff = aspectRatio.default - aspectRatio.resolved;
+			var currentDiff = aspectRatio.default - currentAspectRatio;
 			var currentState = 1 - (aspectRatioDiff - currentDiff) / aspectRatioDiff;
-			var heightDiff = config.state.height.default - config.state.height.resolved;
-			var heightFactor = (config.state.height.default - heightDiff * currentState) / 100;
+			var heightDiff = state.height.default - state.height.resolved;
+			var heightFactor = (state.height.default - heightDiff * currentState) / 100;
 			var relativeHeight = aspectScroll * heightFactor;
 
 			this.adjustVideoSize(relativeHeight);
@@ -4122,6 +4121,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			var isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 			var width = this.container.offsetWidth;
 			var aspectRatio = this.params.config.aspectRatio;
+
 			var resolvedHeight = width / aspectRatio.resolved;
 			var offset = this.getHeightDifferenceBetweenStates();
 
@@ -4163,6 +4163,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 		value: function getHeightDifferenceBetweenStates() {
 			var width = this.container.offsetWidth;
 			var aspectRatio = this.params.config.aspectRatio;
+
 
 			return Math.round(width / aspectRatio.default - width / aspectRatio.resolved);
 		}
@@ -4282,8 +4283,8 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 		key: 'setThumbnailStyle',
 		value: function setThumbnailStyle(video) {
 			var state = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
-
 			var thumbnail = this.params.thumbnail;
+
 			var style = mapValues_default()(this.params.config.state, function (styleProperty) {
 				return styleProperty[state] + '%';
 			});

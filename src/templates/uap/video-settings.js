@@ -1,7 +1,6 @@
 import { resolvedState } from './resolved-state';
 
 export class VideoSettings {
-
 	constructor(params) {
 		this.params = params;
 
