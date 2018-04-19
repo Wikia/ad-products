@@ -164,7 +164,7 @@ const geoTargets = {
 	amd: {
 		output: {
 			filename: '[name].amd.js',
-			library: 'ext.wikia.[name]',
+			library: 'ext.wikia.adEngine.[name]',
 			libraryTarget: 'amd'
 		}
 	},
