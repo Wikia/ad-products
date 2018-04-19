@@ -12,6 +12,4 @@ set(window, versionField, 'v<?= PACKAGE(version) ?>');
 
 export * from './common';
 export * from './templates';
-export {
-	utils
-};
+export { utils };
