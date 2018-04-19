@@ -32,6 +32,12 @@ const common = {
 				]
 			},
 			{
+				test: /\.json$/,
+				loader: 'json-loader',
+				type: 'javascript/auto',
+				exclude: /node_modules/
+			},
+			{
 				test: path.resolve(__dirname, 'src/index.js'),
 				loader: StringReplacePlugin.replace({
 					replacements: [{
