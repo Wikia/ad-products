@@ -228,21 +228,29 @@ function getSamplingLimits(value) {
 	return parseFloat(value.split(samplingChar)[1]) / 100;
 }
 
+function eliminateFloatingPointDiscrepancy(a) {
+	return Number(parseFloat(a).toPrecision(12)).toString();
+}
+
+function addResultToCache(name, result, samplingLimits) {
+	var limitValue = eliminateFloatingPointDiscrepancy(samplingLimits[0] * 100);
+
+	cache[name] = {
+		name: name,
+		group: result ? 'B' : 'A',
+		limit: result ? limitValue : 100 - limitValue,
+		result: result
+	};
+}
+
 function getResult(samplingLimits, name) {
 	var randomValue = random.getRandom(),
 	    result = samplingLimits.some(function (value) {
 		return randomValue < value;
-	}),
-	    limitValue = samplingLimits[0] * 100,
-	    group = result ? 'B' : 'A';
+	});
 
 	if (name) {
-		cache[name] = {
-			name: name,
-			group: group,
-			limit: result ? limitValue : 100 - limitValue,
-			result: result
-		};
+		addResultToCache(name, result, samplingLimits);
 	}
 
 	return result;
