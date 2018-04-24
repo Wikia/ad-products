@@ -318,6 +318,29 @@ describe('Geo', () => {
 	it('blocks sampled countries before sample', () => {
 		Random.getRandom.returns(0.15);
 		assert.notOk(isProperGeo(['PL/25', 'non-PL'], 'test'));
-	})
+	});
 
+	it('eliminates JS floating point discrepancy', () => {
+		Random.getRandom.returns(0.8);
+		isProperGeo(['PL/57'], 'TEST');
+		assert.deepEqual(getSamplingResults(), ['TEST_A_43']);
+
+		resetSamplingCache();
+
+		Random.getRandom.returns(0.3);
+		isProperGeo(['PL/57'], 'TEST');
+		assert.deepEqual(getSamplingResults(), ['TEST_B_57']);
+	});
+
+	it('supports small values', () => {
+		Random.getRandom.returns(0.000000001);
+		isProperGeo(['PL/0.000001'], 'TEST');
+		assert.deepEqual(getSamplingResults(), ['TEST_B_0.000001']);
+
+		resetSamplingCache();
+
+		Random.getRandom.returns(0.3);
+		isProperGeo(['PL/0.000001'], 'TEST');
+		assert.deepEqual(getSamplingResults(), ['TEST_A_99.999999']);
+	});
 });

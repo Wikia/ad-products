@@ -16,19 +16,27 @@ function getSamplingLimits(value) {
 	return parseFloat(value.split(samplingChar)[1]) / 100;
 }
 
+function eliminateFloatingPointDiscrepancy(a) {
+	return Number(parseFloat(a).toPrecision(12)).toString();
+}
+
+function addResultToCache(name, result, samplingLimits) {
+	const limitValue = eliminateFloatingPointDiscrepancy(samplingLimits[0] * 100);
+
+	cache[name] = {
+		name,
+		group: result ? 'B' : 'A',
+		limit: result ? limitValue : 100 - limitValue,
+		result
+	};
+}
+
 function getResult(samplingLimits, name) {
 	const randomValue = Random.getRandom(),
-		result = samplingLimits.some(value => randomValue < value),
-		limitValue = samplingLimits[0] * 100,
-		group = result ? 'B' : 'A';
+		result = samplingLimits.some(value => randomValue < value);
 
 	if (name) {
-		cache[name] = {
-			name,
-			group,
-			limit: result ? limitValue : 100 - limitValue,
-			result
-		};
+		addResultToCache(name, result, samplingLimits);
 	}
 
 	return result;
