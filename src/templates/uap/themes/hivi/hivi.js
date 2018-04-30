@@ -54,6 +54,13 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 	}
 
 	addStickinessPlugin() {
+		this.addUnstickLogic();
+		this.addUnstickButton();
+		this.addUnstickEvents();
+		this.stickyBfaa.run();
+	}
+
+	addUnstickLogic() {
 		const { stickyAdditionalTime, stickyUntilVideoViewed } = this.params;
 		const whenResolvedAndVideoViewed = async () => {
 			await Promise.all([
@@ -70,11 +77,6 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		};
 
 		this.stickyBfaa = new StickyBfaa(this.adSlot, whenResolvedAndVideoViewed());
-		this.addUnstickButton();
-		this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
-		this.stickyBfaa.on(StickyBfaa.CLOSE_CLICKED_EVENT, this.onCloseClicked.bind(this));
-		this.stickyBfaa.on(StickyBfaa.UNSTICK_IMMEDIATELY_EVENT, this.unstickImmediately.bind(this));
-		this.stickyBfaa.run();
 	}
 
 	addUnstickButton() {
@@ -86,6 +88,12 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		});
 
 		this.container.appendChild(closeButton.render());
+	}
+
+	addUnstickEvents() {
+		this.stickyBfaa.on(StickyBfaa.STICKINESS_CHANGE_EVENT, isSticky => this.onStickinessChange(isSticky));
+		this.stickyBfaa.on(StickyBfaa.CLOSE_CLICKED_EVENT, this.onCloseClicked.bind(this));
+		this.stickyBfaa.on(StickyBfaa.UNSTICK_IMMEDIATELY_EVENT, this.unstickImmediately.bind(this));
 	}
 
 	onAdReady() {
@@ -105,7 +113,13 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		super.onVideoReady(video);
 
 		this.video = video;
-		video.addEventListener('wikiaAdStarted', () => this.updateAdSizes());
+		video.addEventListener('wikiaAdStarted', () => {
+			this.updateAdSizes();
+
+			if (!video.params.autoPlay) {
+				this.resetResolvedState();
+			}
+		});
 		video.addEventListener('wikiaAdCompleted', () => {
 			if (!this.isLocked) {
 				this.setResolvedState(true);
@@ -154,15 +168,16 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		this.adSlot.collapse();
 	}
 
-	unstickImmediately() {
+	unstickImmediately(stopVideo = true) {
 		scrollListener.removeCallback(this.scrollListener);
 		this.adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
 
-		if (this.video && this.video.ima.getAdsManager()) {
+		if (stopVideo && this.video && this.video.ima.getAdsManager()) {
 			this.video.stop();
 		}
 
 		this.config.moveNavbar(0, 0);
+		this.stickyBfaa.sticky = false;
 	}
 
 	updateAdSizes() {
@@ -240,6 +255,12 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 		this.emit(BfaaTheme.RESOLVED_STATE_EVENT);
 	}
 
+	unlock() {
+		this.isLocked = false;
+		this.container.classList.remove('theme-locked');
+		this.scrollListener = scrollListener.addCallback(() => this.updateAdSizes());
+	}
+
 	setResolvedState(immediately) {
 		const isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 		const width = this.container.offsetWidth;
@@ -279,6 +300,26 @@ export class BfaaTheme extends BigFancyAdHiviTheme {
 				this.onResolvedStateScroll();
 			}
 		});
+	}
+
+	resetResolvedState() {
+		const offset = this.getHeightDifferenceBetweenStates();
+
+		if (this.isLocked && this.config.defaultStateAllowed && window.scrollY < offset) {
+			const aspectRatio = this.params.config.aspectRatio.default;
+
+			this.container.style.top = '';
+			this.config.mainContainer.style.paddingTop = `${100 / aspectRatio}%`;
+
+			if (this.params.isSticky && this.config.stickinessAllowed) {
+				this.unstickImmediately(false);
+			}
+
+			this.unlock();
+			this.switchImagesInAd(false);
+			this.setResolvedState(false);
+			this.updateAdSizes();
+		}
 	}
 
 	getHeightDifferenceBetweenStates() {
