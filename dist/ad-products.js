@@ -3866,6 +3866,14 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 	createClass_default()(BfaaTheme, [{
 		key: 'addStickinessPlugin',
 		value: function addStickinessPlugin() {
+			this.addUnstickLogic();
+			this.addUnstickButton();
+			this.addUnstickEvents();
+			this.stickyBfaa.run();
+		}
+	}, {
+		key: 'addUnstickLogic',
+		value: function addUnstickLogic() {
 			var _this3 = this;
 
 			var _params = this.params,
@@ -3899,13 +3907,6 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			}();
 
 			this.stickyBfaa = new sticky_bfaa_StickyBfaa(this.adSlot, whenResolvedAndVideoViewed());
-			this.addUnstickButton();
-			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
-				return _this3.onStickinessChange(isSticky);
-			});
-			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT, this.onCloseClicked.bind(this));
-			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.UNSTICK_IMMEDIATELY_EVENT, this.unstickImmediately.bind(this));
-			this.stickyBfaa.run();
 		}
 	}, {
 		key: 'addUnstickButton',
@@ -3922,9 +3923,20 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			this.container.appendChild(closeButton.render());
 		}
 	}, {
+		key: 'addUnstickEvents',
+		value: function addUnstickEvents() {
+			var _this5 = this;
+
+			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.STICKINESS_CHANGE_EVENT, function (isSticky) {
+				return _this5.onStickinessChange(isSticky);
+			});
+			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.CLOSE_CLICKED_EVENT, this.onCloseClicked.bind(this));
+			this.stickyBfaa.on(sticky_bfaa_StickyBfaa.UNSTICK_IMMEDIATELY_EVENT, this.unstickImmediately.bind(this));
+		}
+	}, {
 		key: 'onAdReady',
 		value: function onAdReady() {
-			var _this5 = this;
+			var _this6 = this;
 
 			helpers_get_default()(BfaaTheme.prototype.__proto__ || get_prototype_of_default()(BfaaTheme.prototype), 'onAdReady', this).call(this);
 
@@ -3933,7 +3945,7 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			} else {
 				resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
 				this.scrollListener = ad_engine_["scrollListener"].addCallback(function () {
-					return _this5.updateAdSizes();
+					return _this6.updateAdSizes();
 				});
 				// Manually run update on scroll once
 				this.updateAdSizes();
@@ -3942,27 +3954,31 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 	}, {
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this6 = this;
+			var _this7 = this;
 
 			helpers_get_default()(BfaaTheme.prototype.__proto__ || get_prototype_of_default()(BfaaTheme.prototype), 'onVideoReady', this).call(this, video);
 
 			this.video = video;
 			video.addEventListener('wikiaAdStarted', function () {
-				return _this6.updateAdSizes();
+				_this7.updateAdSizes();
+
+				if (!video.params.autoPlay) {
+					_this7.resetResolvedState();
+				}
 			});
 			video.addEventListener('wikiaAdCompleted', function () {
-				if (!_this6.isLocked) {
-					_this6.setResolvedState(true);
+				if (!_this7.isLocked) {
+					_this7.setResolvedState(true);
 				}
 			});
 			video.addEventListener('wikiaFullscreenChange', function () {
 				if (video.isFullscreen()) {
-					_this6.stickyBfaa.blockRevertStickiness();
-					_this6.container.classList.add('theme-video-fullscreen');
+					_this7.stickyBfaa.blockRevertStickiness();
+					_this7.container.classList.add('theme-video-fullscreen');
 				} else {
-					_this6.stickyBfaa.unblockRevertStickiness();
-					_this6.container.classList.remove('theme-video-fullscreen');
-					_this6.updateAdSizes();
+					_this7.stickyBfaa.unblockRevertStickiness();
+					_this7.container.classList.remove('theme-video-fullscreen');
+					_this7.updateAdSizes();
 				}
 			});
 		}
@@ -4030,14 +4046,17 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 	}, {
 		key: 'unstickImmediately',
 		value: function unstickImmediately() {
+			var stopVideo = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
 			ad_engine_["scrollListener"].removeCallback(this.scrollListener);
 			this.adSlot.getElement().classList.remove(CSS_CLASSNAME_STICKY_BFAA);
 
-			if (this.video && this.video.ima.getAdsManager()) {
+			if (stopVideo && this.video && this.video.ima.getAdsManager()) {
 				this.video.stop();
 			}
 
 			this.config.moveNavbar(0, 0);
+			this.stickyBfaa.sticky = false;
 		}
 	}, {
 		key: 'updateAdSizes',
@@ -4123,9 +4142,20 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 			this.emit(BfaaTheme.RESOLVED_STATE_EVENT);
 		}
 	}, {
+		key: 'unlock',
+		value: function unlock() {
+			var _this8 = this;
+
+			this.isLocked = false;
+			this.container.classList.remove('theme-locked');
+			this.scrollListener = ad_engine_["scrollListener"].addCallback(function () {
+				return _this8.updateAdSizes();
+			});
+		}
+	}, {
 		key: 'setResolvedState',
 		value: function setResolvedState(immediately) {
-			var _this7 = this;
+			var _this9 = this;
 
 			var isSticky = this.stickyBfaa && this.stickyBfaa.isSticky();
 			var width = this.container.offsetWidth;
@@ -4149,23 +4179,44 @@ var hivi_BfaaTheme = function (_BigFancyAdHiviTheme) {
 
 			return new promise_default.a(function (resolve) {
 				if (immediately) {
-					_this7.lock();
+					_this9.lock();
 					resolve();
 				} else {
-					_this7.onResolvedStateScroll = debounce_default()(function () {
+					_this9.onResolvedStateScroll = debounce_default()(function () {
 						if (window.scrollY < offset) {
 							return;
 						}
 
-						window.removeEventListener('scroll', _this7.onResolvedStateScroll);
-						_this7.onResolvedStateScroll = null;
-						_this7.lock();
+						window.removeEventListener('scroll', _this9.onResolvedStateScroll);
+						_this9.onResolvedStateScroll = null;
+						_this9.lock();
 						resolve();
 					}, 50);
-					window.addEventListener('scroll', _this7.onResolvedStateScroll);
-					_this7.onResolvedStateScroll();
+					window.addEventListener('scroll', _this9.onResolvedStateScroll);
+					_this9.onResolvedStateScroll();
 				}
 			});
+		}
+	}, {
+		key: 'resetResolvedState',
+		value: function resetResolvedState() {
+			var offset = this.getHeightDifferenceBetweenStates();
+
+			if (this.isLocked && this.config.defaultStateAllowed && window.scrollY < offset) {
+				var aspectRatio = this.params.config.aspectRatio.default;
+
+				this.container.style.top = '';
+				this.config.mainContainer.style.paddingTop = 100 / aspectRatio + '%';
+
+				if (this.params.isSticky && this.config.stickinessAllowed) {
+					this.unstickImmediately(false);
+				}
+
+				this.unlock();
+				this.switchImagesInAd(false);
+				this.setResolvedState(false);
+				this.updateAdSizes();
+			}
 		}
 	}, {
 		key: 'getHeightDifferenceBetweenStates',
@@ -4225,27 +4276,27 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 	}, {
 		key: 'onVideoReady',
 		value: function onVideoReady(video) {
-			var _this9 = this;
+			var _this11 = this;
 
 			helpers_get_default()(BfabTheme.prototype.__proto__ || get_prototype_of_default()(BfabTheme.prototype), 'onVideoReady', this).call(this, video);
 
 			var setThumbnailStyle = function setThumbnailStyle() {
-				if (resolvedState.isResolvedState(_this9.params)) {
-					_this9.setResolvedState(video);
+				if (resolvedState.isResolvedState(_this11.params)) {
+					_this11.setResolvedState(video);
 				} else {
-					_this9.setThumbnailStyle(video);
+					_this11.setThumbnailStyle(video);
 				}
 			};
 
 			video.addEventListener('wikiaAdStarted', setThumbnailStyle);
 			video.addEventListener('wikiaAdCompleted', function () {
-				return _this9.setResolvedState(video);
+				return _this11.setResolvedState(video);
 			});
 			video.addEventListener('wikiaFullscreenChange', function () {
 				if (video.isFullscreen()) {
-					_this9.container.classList.add('theme-video-fullscreen');
+					_this11.container.classList.add('theme-video-fullscreen');
 				} else {
-					_this9.container.classList.remove('theme-video-fullscreen');
+					_this11.container.classList.remove('theme-video-fullscreen');
 					setThumbnailStyle();
 				}
 			});
@@ -4282,7 +4333,7 @@ var hivi_BfabTheme = function (_BigFancyAdHiviTheme2) {
 				}, _callee3, this);
 			}));
 
-			function setResolvedState(_x2) {
+			function setResolvedState(_x3) {
 				return _ref3.apply(this, arguments);
 			}
 
@@ -4734,7 +4785,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v5.5.1');
+set_default()(window, versionField, 'v5.6.0');
 
 
 
