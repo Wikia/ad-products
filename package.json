@@ -59,7 +59,7 @@
   ],
   "main": "./dist/ad-products.js",
   "scripts": {
-    "build": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules && cat node_modules/@wikia/ad-engine/dist/*.global.js ./dist/*.global.js > ./dist/global-bundle.js",
+    "build": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules && cat node_modules/@wikia/ad-engine/dist/ad-engine.global.js <(echo) ./dist/ad-products.global.js <(echo) ./dist/geo.global.js > ./dist/global-bundle.js",
     "lint": "./node_modules/.bin/eslint .",
     "preversion": "./maintenance/preversion.sh",
     "version": "./maintenance/version.sh",
