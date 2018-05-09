@@ -4785,7 +4785,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v5.8.1');
+set_default()(window, versionField, 'v5.8.2');
 
 
 
