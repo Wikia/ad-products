@@ -1537,6 +1537,7 @@ __webpack_require__.d(utils_namespaceObject, "isProperContinent", function() { r
 __webpack_require__.d(utils_namespaceObject, "resetSamplingCache", function() { return resetSamplingCache; });
 __webpack_require__.d(utils_namespaceObject, "getSamplingResults", function() { return getSamplingResults; });
 __webpack_require__.d(utils_namespaceObject, "isProperGeo", function() { return isProperGeo; });
+__webpack_require__.d(utils_namespaceObject, "setupNpaContext", function() { return setupNpaContext; });
 var constants_namespaceObject = {};
 __webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_FADE_IN_ANIMATION", function() { return CSS_CLASSNAME_FADE_IN_ANIMATION; });
 __webpack_require__.d(constants_namespaceObject, "CSS_CLASSNAME_SLIDE_OUT_ANIMATION", function() { return CSS_CLASSNAME_SLIDE_OUT_ANIMATION; });
@@ -1795,13 +1796,23 @@ function isProperGeo() {
 	isProperGeo: isProperGeo,
 	resetSamplingCache: resetSamplingCache
 });
+// EXTERNAL MODULE: external "@wikia/ad-engine"
+var ad_engine_ = __webpack_require__(0);
+
+// CONCATENATED MODULE: ./src/utils/npa.js
+
+
+var tracking = 'gpt';
+
+function setupNpaContext() {
+	var optedOut = ad_engine_["trackingOptOut"].isOptedOut(tracking) ? 1 : 0;
+	ad_engine_["context"].set('targeting.npa', optedOut.toString());
+}
 // CONCATENATED MODULE: ./src/utils/index.js
+
 
 // EXTERNAL MODULE: ./src/styles/styles.scss
 var styles = __webpack_require__(138);
-
-// EXTERNAL MODULE: external "@wikia/ad-engine"
-var ad_engine_ = __webpack_require__(0);
 
 // CONCATENATED MODULE: ./src/common/product-info.js
 
@@ -4785,7 +4796,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v5.9.0');
+set_default()(window, versionField, 'v5.10.0');
 
 
 
