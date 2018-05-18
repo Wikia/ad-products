@@ -1,6 +1,6 @@
 import {assert} from 'chai';
 import sinon from 'sinon';
-import {context, slotService, trackingOptOut} from '@wikia/ad-engine';
+import {context, slotService, trackingOptIn} from '@wikia/ad-engine';
 import {setupNpaContext} from '../../src/utils/npa';
 
 describe('NPA - setup context ', () => {
@@ -8,28 +8,22 @@ describe('NPA - setup context ', () => {
 
 	beforeEach(() => {
 		sandbox = sinon.sandbox.create();
-		sandbox.stub(trackingOptOut, 'isOptedOut')
+		sandbox.stub(trackingOptIn, 'isOptedIn')
 	});
 
 	afterEach(function () {
 		sandbox.restore();
 	});
 
-	it('sets npa targeting for not defined tracking opt-out', () => {
-		trackingOptOut.isOptedOut.returns(undefined);
-		setupNpaContext();
-		assert.equal(context.get('targeting.npa'), '0');
-	});
-
-	it('sets npa targeting for turned off tracking opt-out', () => {
-		trackingOptOut.isOptedOut.returns(false);
-		setupNpaContext();
-		assert.equal(context.get('targeting.npa'), '0');
-	});
-
-	it('sets npa targeting for tracking opt-out', () => {
-		trackingOptOut.isOptedOut.returns(true);
+	it('sets npa targeting for turned off tracking opt-in', () => {
+		trackingOptIn.isOptedIn.returns(false);
 		setupNpaContext();
 		assert.equal(context.get('targeting.npa'), '1');
+	});
+
+	it('sets npa targeting for tracking opt-in', () => {
+		trackingOptIn.isOptedIn.returns(true);
+		setupNpaContext();
+		assert.equal(context.get('targeting.npa'), '0');
 	});
 });

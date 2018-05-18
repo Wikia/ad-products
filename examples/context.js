@@ -30,9 +30,6 @@ export default {
 				partnerCode: 'wikiaimajsint377461931603',
 				sampling: 1
 			}
-		},
-		trackingOptOutBlacklist: {
-			gpt: true
 		}
 	},
 	slots: {
