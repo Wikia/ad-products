@@ -3,36 +3,35 @@ import Random from './random';
 
 const earth = 'XX',
 	negativePrefix = 'non-',
-	samplingChar = '/';
+	precision = 10 ** 6, // precision to 0.00000001 (or 0.000001%) of traffic
+	samplingSeparator = '/';
 
 let geoData = null,
-	cache = [];
+	cache = {};
 
 function hasSampling(geo) {
-	return value => !value.startsWith(negativePrefix) && value.indexOf(geo + samplingChar) > -1;
+	return value => !value.startsWith(negativePrefix) && value.indexOf(geo + samplingSeparator) > -1;
 }
 
 function getSamplingLimits(value) {
-	return parseFloat(value.split(samplingChar)[1]) / 100;
-}
+	const [, samplingValue] = value.split(samplingSeparator);
 
-function eliminateFloatingPointDiscrepancy(a) {
-	return Number(parseFloat(a).toPrecision(12)).toString();
+	return Math.round(parseFloat(samplingValue) * precision) | 0; // eslint-disable-line no-bitwise
 }
 
 function addResultToCache(name, result, samplingLimits) {
-	const limitValue = eliminateFloatingPointDiscrepancy(samplingLimits[0] * 100);
+	const [limitValue] = samplingLimits;
 
 	cache[name] = {
 		name,
 		group: result ? 'B' : 'A',
-		limit: result ? limitValue : 100 - limitValue,
+		limit: (result ? limitValue : (precision * 100) - limitValue) / precision,
 		result
 	};
 }
 
 function getResult(samplingLimits, name) {
-	const randomValue = Random.getRandom(),
+	const randomValue = Math.round(Random.getRandom() * (precision * 100)) | 0, // eslint-disable-line no-bitwise
 		result = samplingLimits.some(value => randomValue < value);
 
 	if (name) {
@@ -169,7 +168,9 @@ function isGeoExcluded(countryList = []) {
 }
 
 function getResultLog(name) {
-	return `${cache[name].name}_${cache[name].group}_${cache[name].limit}`;
+	const entry = cache[name];
+
+	return `${entry.name}_${entry.group}_${entry.limit}`;
 }
 
 export function resetSamplingCache() {
