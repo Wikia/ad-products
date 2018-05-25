@@ -1,8 +1,7 @@
-import { context, trackingOptOut } from '@wikia/ad-engine';
-
-const tracking = 'gpt';
+import { context, trackingOptIn } from '@wikia/ad-engine';
 
 export function setupNpaContext() {
-	const optedOut = trackingOptOut.isOptedOut(tracking) ? 1 : 0;
+	const optedOut = trackingOptIn.isOptedIn() ? 0 : 1;
+
 	context.set('targeting.npa', optedOut.toString());
 }
