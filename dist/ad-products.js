@@ -1870,10 +1870,9 @@ var ad_engine_ = __webpack_require__(0);
 // CONCATENATED MODULE: ./src/utils/npa.js
 
 
-var tracking = 'gpt';
-
 function setupNpaContext() {
-	var optedOut = ad_engine_["trackingOptOut"].isOptedOut(tracking) ? 1 : 0;
+	var optedOut = ad_engine_["trackingOptIn"].isOptedIn() ? 0 : 1;
+
 	ad_engine_["context"].set('targeting.npa', optedOut.toString());
 }
 // CONCATENATED MODULE: ./src/utils/index.js
@@ -4864,7 +4863,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v5.10.1');
+set_default()(window, versionField, 'v6.0.0');
 
 
 
