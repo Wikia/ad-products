@@ -330,9 +330,21 @@ describe('Geo', () => {
 		Random.getRandom.returns(0.3);
 		isProperGeo(['PL/57'], 'TEST');
 		assert.deepEqual(getSamplingResults(), ['TEST_B_57']);
+
+		resetSamplingCache();
+
+		Random.getRandom.returns(0.56876436787446);
+		isProperGeo(['PL/99.9'], 'TEST');
+		assert.deepEqual(getSamplingResults(), ['TEST_B_99.9']);
+
+		resetSamplingCache();
+
+		Random.getRandom.returns(0.9990001);
+		isProperGeo(['PL/99.9'], 'TEST');
+		assert.deepEqual(getSamplingResults(), ['TEST_A_0.1']);
 	});
 
-	it('supports small values', () => {
+	it('supports small values (to 0.000001 precision)', () => {
 		Random.getRandom.returns(0.000000001);
 		isProperGeo(['PL/0.000001'], 'TEST');
 		assert.deepEqual(getSamplingResults(), ['TEST_B_0.000001']);
