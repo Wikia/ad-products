@@ -22,8 +22,8 @@ export class BigFancyAdAbove {
 			stickinessAllowed: true,
 			slotSibling: '.topic-header',
 			slotsToEnable: [
-				'BOTTOM_LEADERBOARD',
-				'INCONTENT_BOXAD'
+				'bottom_leaderboard',
+				'incontent_boxad'
 			],
 			onInit: () => {},
 			onBeforeStickBfaaCallback: () => {},

@@ -60,8 +60,8 @@ Name: **bfaa**
 	"mobileNavbarWrapperSelector": ".global-navigation-mobile-wrapper",
 	"slotSibling": ".topic-header",
 	"slotsToEnable": [
-		"BOTTOM_LEADERBOARD",
-		"INCONTENT_BOXAD"
+		"bottom_leaderboard",
+		"incontent_boxad"
 	]
 }
 ```

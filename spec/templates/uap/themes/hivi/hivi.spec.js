@@ -22,7 +22,7 @@ function getSlotElement() {
 function getAdSlotObject() {
 	return {
 		getElement: () => getSlotElement(),
-		getSlotName: () => 'TOP_LEADERBOARD',
+		getSlotName: () => 'top_leaderboard',
 		isEnabled: () => true
 	};
 }
@@ -45,7 +45,7 @@ function getParams() {
 				'top': {'default': 4, 'resolved': 0}
 			}
 		},
-		'slotName': 'TOP_LEADERBOARD',
+		'slotName': 'top_leaderboard',
 		'src': 'test',
 		'uap': '4466763538',
 		'lineItemId': '4466763538',

@@ -35,7 +35,7 @@ const clickDelay = {
 customContext.targeting.artid = '496';
 customContext.slots['incontent-boxad'] = {
 	disable: false,
-	slotName: 'INCONTENT_BOXAD',
+	slotName: 'incontent_boxad',
 	sizes: [
 		{
 			viewportSize: [768, 0],
@@ -49,7 +49,7 @@ customContext.slots['incontent-boxad'] = {
 };
 customContext.slots['bottom-leaderboard'] = {
 	disable: false,
-	slotName: 'BOTTOM_LEADERBOARD',
+	slotName: 'bottom_leaderboard',
 	sizes: [
 		{
 			viewportSize: [728, 0],
@@ -73,12 +73,12 @@ if (document.body.offsetWidth < 728) {
 
 templateService.register(BigFancyAdInPlayer, {
 	slotsToDisable: [
-		'TOP_LEADERBOARD',
-		'BOTTOM_LEADERBOARD',
+		'top_leaderboard',
+		'bottom_leaderboard',
 	],
 	slotsToEnable: [
-		'TOP_BOXAD',
-		'INCONTENT_BOXAD',
+		'top_boxad',
+		'incontent_boxad',
 	]
 });
 

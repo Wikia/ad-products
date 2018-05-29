@@ -7,8 +7,8 @@ export default {
 	events: {
 		pushOnScroll: {
 			ids: [
-				'INCONTENT_BOXAD',
-				'BOTTOM_LEADERBOARD'
+				'incontent_boxad',
+				'bottom_leaderboard'
 			],
 			threshold: 100
 		}
@@ -33,7 +33,7 @@ export default {
 		}
 	},
 	slots: {
-		TOP_LEADERBOARD: {
+		top_leaderboard: {
 			aboveTheFold: true,
 			sizes: [
 				{
@@ -46,7 +46,7 @@ export default {
 				loc: 'top'
 			}
 		},
-		TOP_BOXAD: {
+		top_boxad: {
 			aboveTheFold: true,
 			sizes: [
 				{
@@ -61,7 +61,7 @@ export default {
 				}
 			}
 		},
-		INCONTENT_BOXAD: {
+		incontent_boxad: {
 			disabled: true,
 			sizes: [
 				{
@@ -74,7 +74,7 @@ export default {
 				loc: 'hivi'
 			}
 		},
-		BOTTOM_LEADERBOARD: {
+		bottom_leaderboard: {
 			disabled: true,
 			sizes: [
 				{
