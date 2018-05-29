@@ -7,8 +7,8 @@ export default {
 	events: {
 		pushOnScroll: {
 			ids: [
-				'gpt-incontent-boxad',
-				'gpt-bottom-leaderboard'
+				'INCONTENT_BOXAD',
+				'BOTTOM_LEADERBOARD'
 			],
 			threshold: 100
 		}
@@ -33,8 +33,7 @@ export default {
 		}
 	},
 	slots: {
-		'top-leaderboard': {
-			slotName: 'TOP_LEADERBOARD',
+		TOP_LEADERBOARD: {
 			aboveTheFold: true,
 			sizes: [
 				{
@@ -47,8 +46,7 @@ export default {
 				loc: 'top'
 			}
 		},
-		'top-boxad': {
-			slotName: 'TOP_BOXAD',
+		TOP_BOXAD: {
 			aboveTheFold: true,
 			sizes: [
 				{
@@ -63,9 +61,8 @@ export default {
 				}
 			}
 		},
-		'incontent-boxad': {
+		INCONTENT_BOXAD: {
 			disabled: true,
-			slotName: 'INCONTENT_BOXAD',
 			sizes: [
 				{
 					viewportSize: [768, 0],
@@ -77,9 +74,8 @@ export default {
 				loc: 'hivi'
 			}
 		},
-		'bottom-leaderboard': {
+		BOTTOM_LEADERBOARD: {
 			disabled: true,
-			slotName: 'BOTTOM_LEADERBOARD',
 			sizes: [
 				{
 					viewportSize: [728, 0],

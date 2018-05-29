@@ -129,7 +129,7 @@ function disableSlots(slotsToDisable) {
 }
 
 function initSlot(params) {
-	const adSlot = slotService.getBySlotName(params.slotName);
+	const adSlot = slotService.get(params.slotName);
 	params.container = adSlot.getElement();
 
 	if (params.isDarkTheme) {
