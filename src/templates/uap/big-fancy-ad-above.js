@@ -22,8 +22,8 @@ export class BigFancyAdAbove {
 			stickinessAllowed: true,
 			slotSibling: '.topic-header',
 			slotsToEnable: [
-				'BOTTOM_LEADERBOARD',
-				'INCONTENT_BOXAD'
+				'bottom_leaderboard',
+				'incontent_boxad'
 			],
 			onInit: () => {},
 			onBeforeStickBfaaCallback: () => {},
@@ -51,7 +51,7 @@ export class BigFancyAdAbove {
 	constructor(adSlot) {
 		this.adSlot = adSlot;
 		this.config = context.get('templates.bfaa');
-		this.container = document.getElementById(this.adSlot.getId());
+		this.container = document.getElementById(this.adSlot.getSlotName());
 		this.videoSettings = null;
 		this.theme = null;
 	}
