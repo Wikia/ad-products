@@ -2959,7 +2959,7 @@ function disableSlots(slotsToDisable) {
 }
 
 function initSlot(params) {
-	var adSlot = ad_engine_["slotService"].getBySlotName(params.slotName);
+	var adSlot = ad_engine_["slotService"].get(params.slotName);
 	params.container = adSlot.getElement();
 
 	if (params.isDarkTheme) {
@@ -4483,7 +4483,7 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 				fullscreenAllowed: true,
 				stickinessAllowed: true,
 				slotSibling: '.topic-header',
-				slotsToEnable: ['BOTTOM_LEADERBOARD', 'INCONTENT_BOXAD'],
+				slotsToEnable: ['bottom_leaderboard', 'incontent_boxad'],
 				onInit: function onInit() {},
 				onBeforeStickBfaaCallback: function onBeforeStickBfaaCallback() {},
 				onAfterStickBfaaCallback: function onAfterStickBfaaCallback() {},
@@ -4515,7 +4515,7 @@ var big_fancy_ad_above_BigFancyAdAbove = function () {
 
 		this.adSlot = adSlot;
 		this.config = ad_engine_["context"].get('templates.bfaa');
-		this.container = document.getElementById(this.adSlot.getId());
+		this.container = document.getElementById(this.adSlot.getSlotName());
 		this.videoSettings = null;
 		this.theme = null;
 	}
@@ -4687,7 +4687,7 @@ var big_fancy_ad_below_BigFancyAdBelow = function () {
 
 		this.adSlot = adSlot;
 		this.config = ad_engine_["context"].get('templates.bfab');
-		this.container = document.getElementById(this.adSlot.getId());
+		this.container = document.getElementById(this.adSlot.getSlotName());
 		this.theme = null;
 		this.videoSettings = null;
 	}
@@ -4863,7 +4863,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v6.0.0');
+set_default()(window, versionField, 'v7.0.0');
 
 
 
