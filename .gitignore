@@ -1,5 +1,6 @@
 .idea
 .nyc_output
+env
 previous-package.json
 examples/**/dist/*
 node_modules
