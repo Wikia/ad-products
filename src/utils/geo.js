@@ -10,7 +10,7 @@ let geoData = null,
 	cache = {};
 
 function hasSampling(geo) {
-	return value => !value.startsWith(negativePrefix) && value.indexOf(geo + samplingSeparator) > -1;
+	return value => value.indexOf(negativePrefix) !== 0 && value.indexOf(geo + samplingSeparator) > -1;
 }
 
 function getSamplingLimits(value) {
