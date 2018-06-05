@@ -135,10 +135,11 @@ const targets = {
 		}
 	},
 	assign: {
-		externals: {
-			'@wikia/ad-engine': {
-				root: ['Wikia', 'adEngine']
+		externals: function (context, request, callback) {
+			if (request === '@wikia/ad-engine') {
+				return callback(null, 'WikiaAdEngine', 'window');
 			}
+			callback();
 		},
 		output: {
 			filename: '[name].global.js',
