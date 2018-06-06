@@ -137,12 +137,12 @@ const targets = {
 	window: {
 		externals: {
 			'@wikia/ad-engine': {
-				window: [ 'Wikia', 'adEngine' ]
+				window: ['Wikia', 'adEngine']
 			}
 		},
 		output: {
 			filename: '[name].global.js',
-			library: [ 'Wikia', 'adProducts' ],
+			library: ['Wikia', 'adProducts'],
 			libraryTarget: 'window'
 		}
 	},
@@ -182,7 +182,7 @@ const geoTargets = {
 	window: {
 		output: {
 			filename: '[name].global.js',
-			library: [ 'Wikia', 'adProductsGeo' ],
+			library: ['Wikia', 'adProductsGeo'],
 			libraryTarget: 'window'
 		}
 	},
