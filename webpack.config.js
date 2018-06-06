@@ -134,17 +134,16 @@ const targets = {
 			minimize: false
 		}
 	},
-	assign: {
-		externals: function (context, request, callback) {
-			if (request === '@wikia/ad-engine') {
-				return callback(null, 'WikiaAdEngine', 'window');
+	window: {
+		externals: {
+			'@wikia/ad-engine': {
+				window: [ 'Wikia', 'adEngine' ]
 			}
-			callback();
 		},
 		output: {
 			filename: '[name].global.js',
-			library: 'Wikia.adProducts',
-			libraryTarget: 'assign'
+			library: [ 'Wikia', 'adProducts' ],
+			libraryTarget: 'window'
 		}
 	},
 };
@@ -180,11 +179,11 @@ const geoTargets = {
 			minimize: false
 		}
 	},
-	assign: {
+	window: {
 		output: {
 			filename: '[name].global.js',
-			library: 'Wikia.adProductsGeo',
-			libraryTarget: 'assign'
+			library: [ 'Wikia', 'adProductsGeo' ],
+			libraryTarget: 'window'
 		}
 	},
 };
@@ -196,10 +195,10 @@ module.exports = function (env) {
 	if (isProduction) {
 		return [
 			merge(common, environments.production, targets.amd),
-			merge(common, environments.production, targets.assign),
+			merge(common, environments.production, targets.window),
 			merge(common, environments.production, targets.commonjs),
 			merge(common, geoEnvironments.production, geoTargets.amd),
-			merge(common, geoEnvironments.production, geoTargets.assign),
+			merge(common, geoEnvironments.production, geoTargets.window),
 			merge(common, geoEnvironments.production, geoTargets.commonjs)
 		];
 	} else if (isTest) {
