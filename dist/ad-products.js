@@ -1663,7 +1663,7 @@ var geoData = null,
 
 function hasSampling(geo) {
 	return function (value) {
-		return !value.startsWith(negativePrefix) && value.indexOf(geo + samplingSeparator) > -1;
+		return value.indexOf(negativePrefix) !== 0 && value.indexOf(geo + samplingSeparator) > -1;
 	};
 }
 
@@ -4863,7 +4863,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v7.0.2');
+set_default()(window, versionField, 'v7.0.3');
 
 
 

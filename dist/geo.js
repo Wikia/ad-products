@@ -706,7 +706,7 @@ var geoData = null,
 
 function hasSampling(geo) {
 	return function (value) {
-		return !value.startsWith(negativePrefix) && value.indexOf(geo + samplingSeparator) > -1;
+		return value.indexOf(negativePrefix) !== 0 && value.indexOf(geo + samplingSeparator) > -1;
 	};
 }
 
