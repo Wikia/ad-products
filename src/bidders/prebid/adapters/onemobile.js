@@ -8,12 +8,12 @@ export class Onemobile extends BaseAdapter {
 		this.siteId = '2c9d2b50015e5e9a6540a64f3eac0266';
 	}
 
-	prepareConfigForAdUnit(code, { sizes, pos }) {
+	prepareConfigForAdUnit(code, { size, pos }) {
 		return {
 			code,
 			mediaTypes: {
 				banner: {
-					sizes
+					sizes: [size]
 				}
 			},
 			bids: [

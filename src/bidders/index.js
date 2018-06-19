@@ -1,5 +1,5 @@
 import { context } from '@wikia/ad-engine';
-// import A9 from './a9/index';
+import { A9 } from './a9/index';
 import { Prebid } from './prebid/index';
 
 
@@ -18,6 +18,7 @@ const bidIndex = {
 
 let bidderMarker = ['x', 'x', 'x', 'x', 'x'];
 const biddersRegistry = {};
+const realSlotPrices = {};
 
 function applyTargetingParams(slotId, targeting) {
 	Object
@@ -90,17 +91,36 @@ function getCurrentSlotPrices(slotName) {
 	return slotPrices;
 }
 
-function requestBids({ config, resetListener, timeout }) {
+function storeRealSlotPrices(slotName) {
+	realSlotPrices[slotName] = getCurrentSlotPrices(slotName);
+}
+
+function getDfpSlotPrices(slotName) {
+	return realSlotPrices[slotName] || {};
+}
+
+function requestBids({ resetListener = null, responseListener = null }) {
+	const config = context.get('bidders');
+
 	if (config.prebid) {
-		biddersRegistry.prebid = new Prebid(config.prebid, resetListener, timeout);
+		biddersRegistry.prebid = new Prebid(config.prebid, resetListener, config.timeout);
+
+		if (responseListener) {
+			biddersRegistry.prebid.addResponseListener(responseListener);
+		}
+
 		biddersRegistry.prebid.call();
 	}
 
-	//if (bidders.a9) {
-	//	biddersRegistry.a9 = new A9(bidders.a9, resetListener, timeout);
-	//}
+	if (config.a9 && config.a9.enabled) {
+		biddersRegistry.a9 = new A9(config.a9, resetListener, config.timeout);
 
-	updateSlotsTargeting();
+		if (responseListener) {
+			biddersRegistry.a9.addResponseListener(responseListener);
+		}
+
+		biddersRegistry.a9.call();
+	}
 }
 
 function updateBidderMarker(bidderName, bidMarker) {
@@ -127,5 +147,6 @@ function updateSlotsTargeting() {
 }
 
 export const bidders = {
-	requestBids
+	requestBids,
+	updateSlotsTargeting
 };

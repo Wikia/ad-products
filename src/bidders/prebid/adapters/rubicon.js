@@ -13,7 +13,7 @@ export class Rubicon extends BaseAdapter {
 	prepareConfigForAdUnit(code, {
 		siteId, zoneId, sizeId, position
 	}) {
-		if (code === 'FEATURED' && !context.get('bidders.rubiconInFV')) {
+		if (code === 'FEATURED' && !context.get('custom.rubiconInFV')) {
 			return null;
 		}
 

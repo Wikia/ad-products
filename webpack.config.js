@@ -72,7 +72,7 @@ const environments = {
 	development: {
 		entry: {
 			'abcd': './examples/templates/abcd/script.js',
-			'bidders-display': './examples/templates/bidders-display/script.js',
+			'bidders': './examples/templates/bidders/script.js',
 			'floating-rail': './examples/templates/floating-rail/script.js',
 			'hivi-uap': './examples/templates/hivi-uap/script.js',
 			'hivi-uap-ctp': './examples/templates/hivi-uap-ctp/script.js',

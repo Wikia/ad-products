@@ -15,22 +15,17 @@ export class BaseBidder {
 		this.onResponse = () => this.onResponseCall();
 	}
 
-	static responseCallback(callback) {
-		callback();
-	}
-
 	addResponseListener(callback) {
 		this.onResponseCallbacks.push(callback);
 	}
 
 	call() {
 		this.response = false;
+		this.called = true;
 
 		if (this.callBids) {
 			this.callBids(this.onResponse);
 		}
-
-		this.called = true;
 	}
 
 	createWithTimeout(func, msToTimeout = 2000) {
@@ -74,7 +69,10 @@ export class BaseBidder {
 	}
 
 	onResponseCall() {
-		// this.calculatePrices();
+		if (this.calculatePrices) {
+			this.calculatePrices();
+		}
+
 		if (this.onResponseCallbacks) {
 			this.onResponseCallbacks.start();
 		}
@@ -87,7 +85,11 @@ export class BaseBidder {
 		this.response = false;
 		this.onResponseCallbacks = [];
 
-		utils.makeLazyQueue(this.onResponseCallbacks, BaseBidder.responseCallback);
+		utils.makeLazyQueue(this.onResponseCallbacks, this.responseCallback);
+	}
+
+	responseCallback(callback) {
+		callback();
 	}
 
 	waitForResponse() {

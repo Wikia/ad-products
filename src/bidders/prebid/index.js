@@ -1,18 +1,22 @@
-import { utils } from '@wikia/ad-engine';
+import { context, utils } from '@wikia/ad-engine';
 import { BaseBidder } from './../base-bidder';
+import { universalAdPackage } from './../../templates/uap/universal-ad-package';
 import { getPriorities } from './adapters-registry';
 import { getPrebidBestPrice } from './price-helper';
 import { getSettings } from './prebid-settings';
 import { setupAdUnits } from './prebid-helper';
 
 export class Prebid extends BaseBidder {
-	constructor(...args) {
-		super(...args);
+	constructor(bidderConfig, resetListener, timeout = 2000) {
+		super(bidderConfig, resetListener, timeout);
 
 		this.logGroup = 'prebid-bidder';
 		this.name = 'prebid';
-		this.adUnits = setupAdUnits(this.bidderConfig);
-		this.isCMPEnabled = false;
+		this.loaded = false;
+		this.lazyLoaded = false;
+		this.isLazyLoadingEnabled = this.bidderConfig.lazyLoadingEnabled;
+		this.isCMPEnabled = context.get('custom.isCMPEnabled');
+		this.adUnits = setupAdUnits(this.bidderConfig, this.isLazyLoadingEnabled ? 'pre' : 'off');
 		this.prebidConfig = {
 			debug: utils.queryString.get('pbjs_debug') === '1',
 			enableSendAllBids: true,
@@ -43,20 +47,45 @@ export class Prebid extends BaseBidder {
 	static validResponseStatusCode = 1;
 	static errorResponseStatusCode = 2;
 
+	calculatePrices() {
+		// biddersPerformanceMap = performanceTracker.updatePerformanceMap(biddersPerformanceMap);
+	}
+
 	callBids(bidsBackHandler) {
+		if (!this.adUnits) {
+			this.adUnits = setupAdUnits(this.bidderConfig, this.isLazyLoadingEnabled ? 'pre' : 'off');
+		}
+
 		if (this.adUnits.length > 0) {
 			window.pbjs.que.push(() => {
 				window.pbjs.bidderSettings = getSettings();
 			});
 
-			window.pbjs.que.push(() => {
-				this.removeAdUnits();
+			this.requestBids(this.adUnits, bidsBackHandler, true);
+		}
 
-				window.pbjs.requestBids({
-					adUnits: this.adUnits,
-					bidsBackHandler
-				});
+		this.loaded = true;
+
+		if (this.isLazyLoadingEnabled) {
+			window.addEventListener('adengine.lookup.prebid.lazy', () => {
+				this.lazyCall(bidsBackHandler);
 			});
+		}
+	}
+
+	lazyCall(bidsBackHandler) {
+		if (!this.lazyLoaded) {
+			this.lazyLoaded = true;
+
+			if (!universalAdPackage.isFanTakeoverLoaded()) {
+				const adUnitsLazy = setupAdUnits(this.bidderConfig, 'post');
+
+				if (adUnitsLazy.length > 0) {
+					this.requestBids(adUnitsLazy, bidsBackHandler, false);
+
+					this.adUnits = this.adUnits.concat(adUnitsLazy);
+				}
+			}
 		}
 	}
 
@@ -105,5 +134,18 @@ export class Prebid extends BaseBidder {
 		return this.adUnits && this.adUnits.some(
 			adUnit => adUnit.code === slotName
 		);
+	}
+
+	requestBids(adUnits, bidsBackHandler, withRemove) {
+		window.pbjs.que.push(() => {
+			if (withRemove) {
+				this.removeAdUnits();
+			}
+
+			window.pbjs.requestBids({
+				adUnits,
+				bidsBackHandler
+			});
+		});
 	}
 }

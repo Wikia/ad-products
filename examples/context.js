@@ -1,6 +1,45 @@
 export default {
 	src: 'test',
 	adUnitId: '/5441/wka.life/_project43//{custom.namespace}/{slotConfig.targeting.src}/{slotConfig.slotName}',
+	bidders: {
+		timeout: 2000,
+		a9: {
+			enabled: true,
+			videoEnabled: false,
+			slots: {},
+			slotsVideo: []
+		},
+		prebid: {
+			lazyLoadingEnabled: false,
+			wikia: {
+				enabled: true,
+				slots: {
+					top_leaderboard: {
+						sizes: [
+							[728, 90]
+						]
+					},
+					top_boxad: {
+						sizes: [
+							[300, 250]
+						]
+					},
+					bottom_leaderboard: {
+						sizes: [
+							[728, 90]
+						]
+					}
+				}
+			},
+			wikiaVideo: {
+				enabled: true,
+				slots: {
+					featured: {},
+					incontent_player: {}
+				}
+			}
+		}
+	},
 	custom: {
 		namespace: 'article'
 	},
