@@ -42,14 +42,9 @@ const updateLazyCallTargetingInterval = setInterval(() => {
 	bidders.updateSlotsTargeting();
 }, 1500);
 
-// ToDo: install and build Prebid
-// ToDo: passing bids to video
-// ToDo: tests
-// ToDo: logs
-// ToDo: CMP module
-// ToDo: video demo page
+new AdEngine().init();
 
-// CONFIG DESKTOP ===============================================================================
+// =================================== CONFIG DESKTOP ===================================
 /* bidders.requestBids({
 	config: {
 		prebid: {
@@ -408,5 +403,3 @@ const updateLazyCallTargetingInterval = setInterval(() => {
 	resetListener: null,
 	timeout: 2000
 }); */
-
-new AdEngine().init();
