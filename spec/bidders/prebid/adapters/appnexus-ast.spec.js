@@ -43,5 +43,5 @@ describe('AppnexusAst bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
 });

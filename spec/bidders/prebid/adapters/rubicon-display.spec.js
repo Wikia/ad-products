@@ -64,5 +64,5 @@ describe('RubiconDisplay bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
 });

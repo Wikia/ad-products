@@ -34,5 +34,5 @@ describe('WikiaVideo bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
 });

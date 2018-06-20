@@ -60,5 +60,5 @@ describe('Rubicon bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
 });

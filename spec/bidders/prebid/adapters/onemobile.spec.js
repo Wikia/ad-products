@@ -42,5 +42,5 @@ describe('Onemobile bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
 });

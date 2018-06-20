@@ -46,5 +46,5 @@ describe('Openx bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
 });

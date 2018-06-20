@@ -7,7 +7,7 @@ const bidderConfig = {
 };
 
 describe('A9 bidder', () => {
-	it('can be enabled', () => {
+	it('can be initialized', () => {
 		const a9 = new A9(bidderConfig);
 	});
 });

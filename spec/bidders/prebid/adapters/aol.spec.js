@@ -48,5 +48,5 @@ describe('Aol bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
 });

@@ -39,5 +39,5 @@ describe('Beachfront bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
 });

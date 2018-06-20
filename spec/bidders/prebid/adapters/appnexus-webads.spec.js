@@ -47,5 +47,5 @@ describe('AppnexusWebAds bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
 });

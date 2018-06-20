@@ -44,5 +44,5 @@ describe('AudienceNetwork bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
 });

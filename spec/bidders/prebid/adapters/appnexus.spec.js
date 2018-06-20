@@ -1,3 +1,4 @@
+import { context } from '@wikia/ad-engine';
 import { expect } from 'chai';
 import { Appnexus }  from '../../../../src/bidders/prebid/adapters/appnexus'
 
@@ -50,5 +51,22 @@ describe('Appnexus bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
+
+	it('getPlacement on mobile returns correct placementId', () => {
+		let appnexus = new Appnexus({
+			enabled: true,
+			slots: {},
+			placements: {
+				ent: '9412992',
+				gaming: '9412993',
+				life: '9412994',
+				other: '9412994'
+			}
+		});
+
+		context.set('targeting.mappedVerticalName', 'gaming');
+
+		expect(appnexus.getPlacement('mobile')).to.equal('9412993');
+	});
 });

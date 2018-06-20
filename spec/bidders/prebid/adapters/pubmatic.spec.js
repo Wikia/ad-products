@@ -56,5 +56,5 @@ describe('Pubmatic bidder adapter', () => {
 				]
 			}
 		]);
-	})
+	});
 });

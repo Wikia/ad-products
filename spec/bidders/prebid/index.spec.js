@@ -6,7 +6,7 @@ const bidderConfig = {
 };
 
 describe('Prebid bidder', () => {
-	it('can be enabled', () => {
+	it('can be initialized', () => {
 		let prebid = new Prebid(bidderConfig);
 	});
 });
