@@ -91,10 +91,6 @@ function getCurrentSlotPrices(slotName) {
 	return slotPrices;
 }
 
-function storeRealSlotPrices(slotName) {
-	realSlotPrices[slotName] = getCurrentSlotPrices(slotName);
-}
-
 function getDfpSlotPrices(slotName) {
 	return realSlotPrices[slotName] || {};
 }
@@ -123,6 +119,10 @@ function requestBids({ resetListener = null, responseListener = null }) {
 	}
 }
 
+function storeRealSlotPrices(slotName) {
+	realSlotPrices[slotName] = getCurrentSlotPrices(slotName);
+}
+
 function updateBidderMarker(bidderName, bidMarker) {
 	if (!bidIndex[bidderName]) {
 		return bidMarker;
@@ -147,6 +147,8 @@ function updateSlotsTargeting() {
 }
 
 export const bidders = {
+	getDfpSlotPrices,
 	requestBids,
+	storeRealSlotPrices,
 	updateSlotsTargeting
 };

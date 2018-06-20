@@ -19,7 +19,8 @@
             "error",
             {
                 "allow": [
-                    "__useDefault"
+                    "__useDefault",
+                    "_Q"
                 ]
             }
         ]
