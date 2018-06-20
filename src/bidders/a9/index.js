@@ -12,6 +12,7 @@ export class A9 extends BaseBidder {
 		this.amazonId = '3115';
 		this.slots = this.bidderConfig.slots;
 		this.slotsVideo = this.bidderConfig.slotsVideo;
+		this.gdpr = this.bidderConfig.gdpr;
 		this.bids = {};
 		this.priceMap = {};
 		this.timeout = timeout;
@@ -36,8 +37,8 @@ export class A9 extends BaseBidder {
 				pubID: this.amazonId,
 				videoAdServer: 'DFP',
 				gdpr: this.isCMPEnabled ? {
-					// enabled: cmp.getGdprApplies(),
-					// consent: cmp.getConsentString(optIn),
+					enabled: this.gdpr.enabled,
+					consent: this.gdpr.consent,
 					cmpTimeout: 2000
 				} : undefined
 			});
