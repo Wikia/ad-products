@@ -13,6 +13,7 @@ describe('Pubmatic bidder adapter', () => {
 	it('prepareAdUnits returns data in correct shape', () => {
 		let pubmatic = new Pubmatic({
 			enabled: true,
+			publisherId: '112233',
 			slots: {
 				mobile_in_content: {
 					sizes: [
@@ -20,8 +21,8 @@ describe('Pubmatic bidder adapter', () => {
 						[320, 480]
 					],
 					ids: [
-						'/5441/MOBILE_IN_CONTENT_300x250@300x250',
-						'/5441/MOBILE_IN_CONTENT_320x480@320x480'
+						'/1234/MOBILE_IN_CONTENT_300x250@300x250',
+						'/1234/MOBILE_IN_CONTENT_320x480@320x480'
 					]
 				}
 			}
@@ -42,15 +43,15 @@ describe('Pubmatic bidder adapter', () => {
 					{
 						bidder: 'pubmatic',
 						params: {
-							adSlot: '/5441/MOBILE_IN_CONTENT_300x250@300x250',
-							publisherId: '156260'
+							adSlot: '/1234/MOBILE_IN_CONTENT_300x250@300x250',
+							publisherId: '112233'
 						}
 					},
 					{
 						bidder: 'pubmatic',
 						params: {
-							adSlot: '/5441/MOBILE_IN_CONTENT_320x480@320x480',
-							publisherId: '156260'
+							adSlot: '/1234/MOBILE_IN_CONTENT_320x480@320x480',
+							publisherId: '112233'
 						}
 					}
 				]

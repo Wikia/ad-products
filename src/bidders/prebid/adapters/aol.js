@@ -5,7 +5,7 @@ export class Aol extends BaseAdapter {
 		super(options);
 
 		this.bidderName = 'aol';
-		this.network = '9435.1';
+		this.network = options.network;
 	}
 
 	prepareConfigForAdUnit(code, {

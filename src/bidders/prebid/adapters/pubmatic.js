@@ -5,7 +5,7 @@ export class Pubmatic extends BaseAdapter {
 		super(options);
 
 		this.bidderName = 'pubmatic';
-		this.publisherId = '156260';
+		this.publisherId = options.publisherId;
 	}
 
 	prepareConfigForAdUnit(code, { sizes, ids }) {

@@ -7,7 +7,7 @@ export class Rubicon extends BaseAdapter {
 		super(options);
 
 		this.bidderName = 'rubicon';
-		this.accountId = 7450;
+		this.accountId = options.accountId;
 	}
 
 	prepareConfigForAdUnit(code, {

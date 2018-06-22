@@ -18,7 +18,7 @@ describe('AudienceNetwork bidder adapter', () => {
 					sizes: [
 						[300, 250]
 					],
-					placementId: '963689110376230_1245838625494609'
+					placementId: '112233445566_77889900'
 				}
 			}
 		});
@@ -38,7 +38,7 @@ describe('AudienceNetwork bidder adapter', () => {
 						bidder: 'audienceNetwork',
 						params: {
 							testMode: false,
-							placementId: '963689110376230_1245838625494609'
+							placementId: '112233445566_77889900'
 						}
 					}
 				]

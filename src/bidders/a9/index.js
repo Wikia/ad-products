@@ -9,7 +9,7 @@ export class A9 extends BaseBidder {
 		this.name = 'a9';
 		this.loaded = false;
 		this.isCMPEnabled = context.get('custom.isCMPEnabled');
-		this.amazonId = '3115';
+		this.amazonId = this.bidderConfig.amazonId;
 		this.slots = this.bidderConfig.slots;
 		this.slotsVideo = this.bidderConfig.slotsVideo;
 		this.gdpr = this.bidderConfig.gdpr;

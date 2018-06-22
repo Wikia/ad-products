@@ -13,13 +13,14 @@ describe('Openx bidder adapter', () => {
 	it('prepareAdUnits returns data in correct shape', () => {
 		let openx = new Openx({
 			enabled: true,
+			delDomain: 'wikia.com',
 			slots: {
 				mobile_in_content: {
 					sizes: [
 						[300, 250],
 						[320, 480]
 					],
-					unit: 538735699
+					unit: 11223344
 				}
 			}
 		});
@@ -39,8 +40,8 @@ describe('Openx bidder adapter', () => {
 					{
 						bidder: 'openx',
 						params: {
-							unit: 538735699,
-							delDomain: 'wikia-d.openx.net'
+							unit: 11223344,
+							delDomain: 'wikia.com'
 						}
 					}
 				]

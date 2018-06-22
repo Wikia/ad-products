@@ -15,7 +15,7 @@ describe('AppnexusAst bidder adapter', () => {
 			enabled: true,
 			slots: {
 				mobile_in_content: {
-					placementId: '11543173'
+					placementId: '11223344'
 				}
 			}
 		});
@@ -33,7 +33,7 @@ describe('AppnexusAst bidder adapter', () => {
 					{
 						bidder: 'appnexusAst',
 						params: {
-							placementId: '11543173',
+							placementId: '11223344',
 							video: {
 								skippable: false,
 								playback_method: ['auto_play_sound_off']

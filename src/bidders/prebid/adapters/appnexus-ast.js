@@ -9,7 +9,7 @@ export class AppnexusAst extends BaseAdapter {
 		this.aliases = {
 			appnexus: [this.bidderName]
 		};
-		this.debugPlacementId = '5768085';
+		this.debugPlacementId = options.debugPlacementId;
 		this.isDebugMode = utils.queryString.get('appnexusast_debug_mode') === '1';
 	}
 

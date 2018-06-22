@@ -1,3 +1,4 @@
+import { decorate } from 'core-decorators';
 import { context, utils } from '@wikia/ad-engine';
 import { BaseBidder } from './../base-bidder';
 import { universalAdPackage } from './../../templates/uap/universal-ad-package';
@@ -5,6 +6,8 @@ import { getPriorities } from './adapters-registry';
 import { getPrebidBestPrice } from './price-helper';
 import { getSettings } from './prebid-settings';
 import { setupAdUnits } from './prebid-helper';
+
+export const prebidLazyRun = method => (...args) => window.pbjs.que.push(() => method.apply(this, args));
 
 export class Prebid extends BaseBidder {
 	constructor(bidderConfig, resetListener, timeout = 2000) {
@@ -39,13 +42,22 @@ export class Prebid extends BaseBidder {
 
 		window.pbjs = window.pbjs || {};
 		window.pbjs.que = window.pbjs.que || [];
-		window.pbjs.que.push(() => {
-			window.pbjs.setConfig(this.prebidConfig);
-		});
+
+		this.applyConfig(this.prebidConfig);
 	}
 
 	static validResponseStatusCode = 1;
 	static errorResponseStatusCode = 2;
+
+	@decorate(prebidLazyRun)
+	applyConfig(config) {
+		window.pbjs.setConfig(config);
+	}
+
+	@decorate(prebidLazyRun)
+	applySettings() {
+		window.pbjs.bidderSettings = getSettings();
+	}
 
 	calculatePrices() {
 		// biddersPerformanceMap = performanceTracker.updatePerformanceMap(biddersPerformanceMap);
@@ -57,11 +69,8 @@ export class Prebid extends BaseBidder {
 		}
 
 		if (this.adUnits.length > 0) {
-			window.pbjs.que.push(() => {
-				window.pbjs.bidderSettings = getSettings();
-			});
-
-			this.requestBids(this.adUnits, bidsBackHandler, true);
+			this.applySettings();
+			this.requestBids(this.adUnits, bidsBackHandler, this.removeAdUnits);
 		}
 
 		this.loaded = true;
@@ -81,7 +90,7 @@ export class Prebid extends BaseBidder {
 				const adUnitsLazy = setupAdUnits(this.bidderConfig, 'post');
 
 				if (adUnitsLazy.length > 0) {
-					this.requestBids(adUnitsLazy, bidsBackHandler, false);
+					this.requestBids(adUnitsLazy, bidsBackHandler);
 
 					this.adUnits = this.adUnits.concat(adUnitsLazy);
 				}
@@ -136,16 +145,15 @@ export class Prebid extends BaseBidder {
 		);
 	}
 
-	requestBids(adUnits, bidsBackHandler, withRemove) {
-		window.pbjs.que.push(() => {
-			if (withRemove) {
-				this.removeAdUnits();
-			}
+	@decorate(prebidLazyRun)
+	requestBids(adUnits, bidsBackHandler, withRemove = undefined) {
+		if (withRemove) {
+			withRemove();
+		}
 
-			window.pbjs.requestBids({
-				adUnits,
-				bidsBackHandler
-			});
+		window.pbjs.requestBids({
+			adUnits,
+			bidsBackHandler
 		});
 	}
 }

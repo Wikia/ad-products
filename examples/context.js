@@ -114,6 +114,7 @@ export default {
 			}
 		},
 		bottom_leaderboard: {
+			disabled: true,
 			sizes: [
 				{
 					viewportSize: [728, 0],

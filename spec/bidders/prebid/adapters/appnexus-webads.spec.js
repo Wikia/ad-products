@@ -15,7 +15,7 @@ describe('AppnexusWebAds bidder adapter', () => {
 			enabled: true,
 			slots: {
 				bottom_leaderboard: {
-					placementId: '13104398',
+					placementId: '11223344',
 					sizes: [
 						[300, 250],
 						[320, 100],
@@ -41,7 +41,7 @@ describe('AppnexusWebAds bidder adapter', () => {
 					{
 						bidder: 'appnexusWebAds',
 						params: {
-							placementId: '13104398'
+							placementId: '11223344'
 						}
 					}
 				]

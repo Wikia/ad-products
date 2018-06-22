@@ -23,10 +23,10 @@ describe('Appnexus bidder adapter', () => {
 				}
 			},
 			placements: {
-				ent: '9412992',
-				gaming: '9412993',
-				life: '9412994',
-				other: '9412994'
+				ent: '99220011',
+				gaming: '99220022',
+				life: '99220033',
+				other: '99220044'
 			}
 		});
 
@@ -45,7 +45,7 @@ describe('Appnexus bidder adapter', () => {
 					{
 						bidder: 'appnexus',
 						params: {
-							placementId: '9412994'
+							placementId: '99220044'
 						}
 					}
 				]
@@ -58,15 +58,15 @@ describe('Appnexus bidder adapter', () => {
 			enabled: true,
 			slots: {},
 			placements: {
-				ent: '9412992',
-				gaming: '9412993',
-				life: '9412994',
-				other: '9412994'
+				ent: '99220011',
+				gaming: '99220022',
+				life: '99220033',
+				other: '99220044'
 			}
 		});
 
 		context.set('targeting.mappedVerticalName', 'gaming');
 
-		expect(appnexus.getPlacement('mobile')).to.equal('9412993');
+		expect(appnexus.getPlacement('mobile')).to.equal('99220022');
 	});
 });

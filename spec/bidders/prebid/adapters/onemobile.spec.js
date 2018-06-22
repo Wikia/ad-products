@@ -13,10 +13,11 @@ describe('Onemobile bidder adapter', () => {
 	it('prepareAdUnits returns data in correct shape', () => {
 		let onemobile = new Onemobile({
 			enabled: true,
+			siteId: '1122a3344b5566c778899d00',
 			slots: {
 				mobile_in_content: {
 					size: [300, 250],
-					pos: 'wikia_mw_incontent_hb'
+					pos: 'wikia_incontent_ab'
 				}
 			}
 		});
@@ -35,8 +36,8 @@ describe('Onemobile bidder adapter', () => {
 					{
 						bidder: 'onemobile',
 						params: {
-							dcn: '2c9d2b50015e5e9a6540a64f3eac0266',
-							pos: 'wikia_mw_incontent_hb'
+							dcn: '1122a3344b5566c778899d00',
+							pos: 'wikia_incontent_ab'
 						}
 					}
 				]

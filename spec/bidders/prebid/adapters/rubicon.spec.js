@@ -13,11 +13,12 @@ describe('Rubicon bidder adapter', () => {
 	it('prepareAdUnits returns data in correct shape', () => {
 		let rubicon = new Rubicon({
 			enabled: true,
+			accountId: 1234,
 			slots: {
 				mobile_in_content: {
-					siteId: '55412',
-					sizeId: '203',
-					zoneId: '563110',
+					siteId: '55111',
+					sizeId: '101',
+					zoneId: '88888',
 					position: 'btf'
 				}
 			}
@@ -36,9 +37,9 @@ describe('Rubicon bidder adapter', () => {
 					{
 						bidder: 'rubicon',
 						params: {
-							accountId: 7450,
-							siteId: '55412',
-							zoneId: '563110',
+							accountId: 1234,
+							siteId: '55111',
+							zoneId: '88888',
 							name: 'mobile_in_content',
 							position: 'btf',
 							inventory: {
@@ -52,7 +53,7 @@ describe('Rubicon bidder adapter', () => {
 							video: {
 								playerWidth: '640',
 								playerHeight: '480',
-								size_id: '203',
+								size_id: '101',
 								language: 'en'
 							}
 						}

@@ -25,6 +25,7 @@ const biddersDelay = {
 	})
 };
 
+context.set('slots.bottom_leaderboard.disabled', false);
 context.set('options.maxDelayTimeout', 1000);
 context.push('delayModules', biddersDelay);
 
@@ -45,11 +46,42 @@ const updateLazyCallTargetingInterval = setInterval(() => {
 new AdEngine().init();
 
 // =================================== CONFIG DESKTOP ===================================
-/* bidders.requestBids({
-	config: {
+/* {
+	bidders: {
+		timeout: 2000,
+		a9: {
+			enabled: false,
+			videoEnabled: false,
+			amazonId: '3115',
+			slots: {
+				BOTTOM_LEADERBOARD: [
+					[728, 90],
+					[970, 250]
+				],
+				INCONTENT_BOXAD_1: [
+					[300, 250],
+					[300, 600]
+				],
+				TOP_LEADERBOARD: [
+					[728, 90],
+					[970, 250]
+				],
+				TOP_RIGHT_BOXAD: [
+					[300, 250],
+					[300, 600]
+				]
+			},
+			slotsVideo: ['featured'],
+			gdpr: {
+				enabled: false,
+				consent: ''
+			}
+		},
 		prebid: {
+			lazyLoadingEnabled: false,
 			aol: {
-				enabled: true,
+				enabled: false,
+				network: '9435.1',
 				slots: {
 					TOP_LEADERBOARD: {
 						sizes: [
@@ -71,7 +103,7 @@ new AdEngine().init();
 				}
 			},
 			appnexus: {
-				enabled: true,
+				enabled: false,
 				slots: {
 					TOP_LEADERBOARD: {
 						sizes: [
@@ -111,7 +143,8 @@ new AdEngine().init();
 				}
 			},
 			appnexusAst: {
-				enabled: true,
+				enabled: false,
+				debugPlacementId: '5768085',
 				slots: {
 					INCONTENT_PLAYER: {
 						placementId: '11543172'
@@ -119,7 +152,7 @@ new AdEngine().init();
 				}
 			},
 			appnexusWebads: {
-				enabled: true,
+				enabled: false,
 				slots: {
 					TOP_LEADERBOARD: {
 						placementId: '13104394',
@@ -156,7 +189,8 @@ new AdEngine().init();
 				slots: {}
 			},
 			beachfront: {
-				enabled: true,
+				enabled: false,
+				debugAppId: '2e55f7ad-3558-49eb-a3e1-056ccd0e74e2',
 				slots: {
 					INCONTENT_PLAYER: {
 						appId: 'd239e601-dd57-4163-fe5d-35012d77395f'
@@ -164,7 +198,7 @@ new AdEngine().init();
 				}
 			},
 			indexExchange: {
-				enabled: true,
+				enabled: false,
 				slots: {
 					TOP_LEADERBOARD: {
 						sizes: [
@@ -202,7 +236,8 @@ new AdEngine().init();
 				slots: {}
 			},
 			openx: {
-				enabled: true,
+				enabled: false,
+				delDomain: 'wikia-d.openx.net',
 				slots: {
 					TOP_LEADERBOARD: {
 						sizes: [
@@ -236,7 +271,8 @@ new AdEngine().init();
 				}
 			},
 			pubmatic: {
-				enabled: true,
+				enabled: false,
+				publisherId: '156260',
 				slots: {
 					TOP_LEADERBOARD: {
 						sizes: [
@@ -283,7 +319,8 @@ new AdEngine().init();
 				}
 			},
 			rubicon: {
-				enabled: true,
+				enabled: false,
+				accountId: 7450,
 				slots: {
 					FEATURED: {
 						siteId: '147980',
@@ -300,7 +337,8 @@ new AdEngine().init();
 				}
 			},
 			rubiconDisplay: {
-				enabled: true,
+				enabled: false,
+				accountId: 7450,
 				slots: {
 					TOP_LEADERBOARD: {
 						sizes: [
@@ -377,29 +415,6 @@ new AdEngine().init();
 					INCONTENT_PLAYER: {}
 				}
 			}
-		},
-		a9: {
-			videoBidderEnabled: true,
-			slots: {
-				BOTTOM_LEADERBOARD: [
-					[728, 90],
-					[970, 250]
-				],
-				INCONTENT_BOXAD_1: [
-					[300, 250],
-					[300, 600]
-				],
-				TOP_LEADERBOARD: [
-					[728, 90],
-					[970, 250]
-				],
-				TOP_RIGHT_BOXAD: [
-					[300, 250],
-					[300, 600]
-				]
-			}
 		}
-	},
-	resetListener: null,
-	timeout: 2000
-}); */
+	}
+} */

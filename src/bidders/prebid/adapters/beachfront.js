@@ -7,7 +7,7 @@ export class Beachfront extends BaseAdapter {
 
 		this.bidderName = 'beachfront';
 		this.bidfloor = 0.01;
-		this.debugAppId = '2e55f7ad-3558-49eb-a3e1-056ccd0e74e2';
+		this.debugAppId = options.debugAppId;
 		this.isDebugMode = utils.queryString.get('beachfront_debug_mode') === '1';
 	}
 

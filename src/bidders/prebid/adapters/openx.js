@@ -5,7 +5,7 @@ export class Openx extends BaseAdapter {
 		super(options);
 
 		this.bidderName = 'openx';
-		this.delDomain = 'wikia-d.openx.net';
+		this.delDomain = options.delDomain;
 	}
 
 	prepareConfigForAdUnit(code, { sizes, unit }) {

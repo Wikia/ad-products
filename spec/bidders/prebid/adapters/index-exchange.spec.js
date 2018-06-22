@@ -19,7 +19,7 @@ describe('IndexExchange bidder adapter', () => {
 						[300, 250],
 						[320, 50]
 					],
-					siteId: '185056'
+					siteId: '112233'
 				}
 			}
 		});
@@ -39,14 +39,14 @@ describe('IndexExchange bidder adapter', () => {
 					{
 						bidder: 'indexExchange',
 						params: {
-							siteId: '185056',
+							siteId: '112233',
 							size: [300, 250]
 						}
 					},
 					{
 						bidder: 'indexExchange',
 						params: {
-							siteId: '185056',
+							siteId: '112233',
 							size: [320, 50]
 						}
 					}

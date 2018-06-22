@@ -9,7 +9,7 @@ export class RubiconDisplay extends BaseAdapter {
 		this.aliases = {
 			rubicon: [this.bidderName]
 		};
-		this.accountId = 7450;
+		this.accountId = options.accountId;
 	}
 
 	prepareConfigForAdUnit(code, {

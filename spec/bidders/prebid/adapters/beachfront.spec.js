@@ -15,7 +15,7 @@ describe('Beachfront bidder adapter', () => {
 			enabled: true,
 			slots: {
 				mobile_in_content: {
-					appId: 'f377a8b1-c5c0-4108-f932-0102a81ff43d'
+					appId: '1122-3344-556677-8899-0000'
 				}
 			}
 		});
@@ -33,7 +33,7 @@ describe('Beachfront bidder adapter', () => {
 						bidder: 'beachfront',
 						params: {
 							bidfloor: 0.01,
-							appId: 'f377a8b1-c5c0-4108-f932-0102a81ff43d'
+							appId: '1122-3344-556677-8899-0000'
 						}
 					}
 				]

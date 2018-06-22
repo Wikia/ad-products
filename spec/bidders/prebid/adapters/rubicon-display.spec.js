@@ -13,6 +13,7 @@ describe('RubiconDisplay bidder adapter', () => {
 	it('prepareAdUnits returns data in correct shape', () => {
 		let rubiconDisplay = new RubiconDisplay({
 			enabled: true,
+			accountId: 1234,
 			slots: {
 				bottom_leaderboard: {
 					sizes: [
@@ -23,8 +24,8 @@ describe('RubiconDisplay bidder adapter', () => {
 						loc: ['top']
 					},
 					position: 'btf',
-					siteId: '23565',
-					zoneId: '87671'
+					siteId: '55111',
+					zoneId: '88888'
 				}
 			}
 		});
@@ -44,9 +45,9 @@ describe('RubiconDisplay bidder adapter', () => {
 					{
 						bidder: 'rubicon_display',
 						params: {
-							accountId: 7450,
-							siteId: '23565',
-							zoneId: '87671',
+							accountId: 1234,
+							siteId: '55111',
+							zoneId: '88888',
 							name: 'bottom_leaderboard',
 							position: 'btf',
 							keywords: ['rp.fastlane'],

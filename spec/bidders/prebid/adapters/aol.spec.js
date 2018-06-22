@@ -13,14 +13,15 @@ describe('Aol bidder adapter', () => {
 	it('prepareAdUnits returns data in correct shape', () => {
 		let aol = new Aol({
 			enabled: true,
+			network: '1234.1',
 			slots: {
 				mobile_top_leaderboard: {
 					sizes: [
 						[320, 50]
 					],
-					placement: '4436772',
-					alias: '4436772',
-					sizeId: '3055'
+					placement: '11223344',
+					alias: '54321',
+					sizeId: '0404'
 				}
 			}
 		});
@@ -39,10 +40,10 @@ describe('Aol bidder adapter', () => {
 					{
 						bidder: 'aol',
 						params: {
-							placement: '4436772',
-							network: '9435.1',
-							alias: '4436772',
-							sizeId: '3055'
+							placement: '11223344',
+							network: '1234.1',
+							alias: '54321',
+							sizeId: '0404'
 						}
 					}
 				]
