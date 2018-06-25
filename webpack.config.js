@@ -8,6 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 const get = require('lodash/get');
 const pkg = require('./package.json');
+const ucFirst = require('upper-case-first');
 
 const common = {
 	mode: 'development',
@@ -149,59 +150,77 @@ const targets = {
 	},
 };
 
-const geoEnvironments = {
-	production: {
-		mode: 'production',
-		entry: {
-			'geo': './src/utils/geo.js'
-		},
-		output: {
-			path: path.resolve(__dirname, 'dist'),
-		}
-	}
+const packages = {
+	geo: './src/utils/geo.js',
+	bidders: './src/bidders/index.js'
 };
 
-const geoTargets = {
-	amd: {
-		output: {
-			filename: '[name].amd.js',
-			library: 'ext.wikia.adEngine.[name]',
-			libraryTarget: 'amd'
+Object
+	.keys(packages)
+	.forEach((pack) => {
+		packages[pack] = {
+			environments: {
+				production: {
+					mode: 'production',
+					entry: {
+						[pack]: packages[pack]
+					},
+					output: {
+						path: path.resolve(__dirname, 'dist'),
+					}
+				}
+			},
+			targets: {
+				amd: {
+					output: {
+						filename: '[name].amd.js',
+						library: 'ext.wikia.adEngine.[name]',
+						libraryTarget: 'amd'
+					}
+				},
+				commonjs: {
+					externals: Object.keys(pkg.dependencies).map(key => new RegExp(`^${key}`)),
+					output: {
+						filename: '[name].js',
+						library: pack,
+						libraryTarget: 'commonjs2'
+					},
+					optimization: {
+						minimize: false
+					}
+				},
+				window: {
+					output: {
+						filename: '[name].global.js',
+						library: ['Wikia', `adProducts${ucFirst(pack)}`],
+						libraryTarget: 'window'
+					}
+				},
+			}
 		}
-	},
-	commonjs: {
-		externals: Object.keys(pkg.dependencies).map(key => new RegExp(`^${key}`)),
-		output: {
-			filename: '[name].js',
-			library: 'geo',
-			libraryTarget: 'commonjs2'
-		},
-		optimization: {
-			minimize: false
-		}
-	},
-	window: {
-		output: {
-			filename: '[name].global.js',
-			library: ['Wikia', 'adProductsGeo'],
-			libraryTarget: 'window'
-		}
-	},
-};
+	});
 
 module.exports = function (env) {
 	const isProduction = (process.env.NODE_ENV === 'production') || (env && env.production);
 	const isTest = (env && env.test);
 
 	if (isProduction) {
-		return [
+		const productionModule = [
 			merge(common, environments.production, targets.amd),
 			merge(common, environments.production, targets.window),
-			merge(common, environments.production, targets.commonjs),
-			merge(common, geoEnvironments.production, geoTargets.amd),
-			merge(common, geoEnvironments.production, geoTargets.window),
-			merge(common, geoEnvironments.production, geoTargets.commonjs)
+			merge(common, environments.production, targets.commonjs)
 		];
+
+		Object
+			.keys(packages)
+			.forEach((pack) => {
+				productionModule.push();
+				productionModule.push(merge(common, packages[pack].environments.production, packages[pack].targets.amd));
+				productionModule.push(merge(common, packages[pack].environments.production, packages[pack].targets.window));
+				productionModule.push(merge(common, packages[pack].environments.production, packages[pack].targets.commonjs));
+			});
+
+		return productionModule;
 	} else if (isTest) {
 		return merge(common, environments.test);
 	}

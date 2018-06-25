@@ -2,7 +2,6 @@ import { context } from '@wikia/ad-engine';
 import { A9 } from './a9/index';
 import { Prebid } from './prebid/index';
 
-
 require('./../../lib/prebid.min');
 
 const bidIndex = {
@@ -16,7 +15,6 @@ const bidIndex = {
 	}
 };
 
-let bidderMarker = ['x', 'x', 'x', 'x', 'x'];
 const biddersRegistry = {};
 const realSlotPrices = {};
 
@@ -57,14 +55,8 @@ function getBidParameters(slotName) {
 					.forEach((key) => {
 						slotParams[key] = params[key];
 					});
-
-				if (bidder.hasResponse()) {
-					bidderMarker = updateBidderMarker(bidder.getName(), bidderMarker);
-				}
 			}
 		});
-
-	slotParams.bid = bidderMarker.join('');
 
 	return slotParams;
 }
@@ -121,17 +113,6 @@ function requestBids({ resetListener = null, responseListener = null }) {
 
 function storeRealSlotPrices(slotName) {
 	realSlotPrices[slotName] = getCurrentSlotPrices(slotName);
-}
-
-function updateBidderMarker(bidderName, bidMarker) {
-	if (!bidIndex[bidderName]) {
-		return bidMarker;
-	}
-
-	const bidder = bidIndex[bidderName];
-	bidMarker[bidder.pos] = bidder.char;
-
-	return bidMarker;
 }
 
 function updateSlotsTargeting() {

@@ -37,7 +37,8 @@ function registerAliases() {
 			window.pbjs.que.push(() => {
 				const aliasMap = adapter.aliases;
 
-				Object.keys(aliasMap)
+				Object
+					.keys(aliasMap)
 					.forEach((bidderName) => {
 						aliasMap[bidderName].forEach((alias) => {
 							window.pbjs.aliasBidder(bidderName, alias);
