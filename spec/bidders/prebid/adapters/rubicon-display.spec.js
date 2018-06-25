@@ -53,11 +53,6 @@ describe('RubiconDisplay bidder adapter', () => {
 							keywords: ['rp.fastlane'],
 							inventory: {
 								pos: ['bottom_leaderboard'],
-								src: ['gpt'],
-								s0: [''],
-								s1: ['not a top1k wiki'],
-								s2: [''],
-								lang: ['en'],
 								loc: ['top']
 							}
 						}

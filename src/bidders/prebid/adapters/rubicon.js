@@ -41,7 +41,7 @@ export class Rubicon extends BaseAdapter {
 							playerWidth: '640',
 							playerHeight: '480',
 							size_id: sizeId,
-							language: targeting.lang[0]
+							language: targeting.lang ? targeting.lang[0] : 'en'
 						}
 					}
 				}

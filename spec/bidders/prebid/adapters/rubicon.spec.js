@@ -43,12 +43,7 @@ describe('Rubicon bidder adapter', () => {
 							name: 'mobile_in_content',
 							position: 'btf',
 							inventory: {
-								pos: ['mobile_in_content'],
-								src: ['gpt'],
-								s0: [''],
-								s1: ['not a top1k wiki'],
-								s2: [''],
-								lang: ['en']
+								pos: ['mobile_in_content']
 							},
 							video: {
 								playerWidth: '640',
