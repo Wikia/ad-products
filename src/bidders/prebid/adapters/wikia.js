@@ -87,7 +87,7 @@ export class Wikia extends BaseAdapter {
 
 		const details = document.createElement('small');
 
-		details.innerText = `price: ${this.price}, ${size}: ${size.join('x')}`;
+		details.innerText = `price: ${this.price}, size: ${size.join('x')}`;
 
 		creative.appendChild(title);
 		creative.appendChild(details);
