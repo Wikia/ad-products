@@ -214,7 +214,6 @@ module.exports = function (env) {
 		Object
 			.keys(packages)
 			.forEach((pack) => {
-				productionModule.push();
 				productionModule.push(merge(common, packages[pack].environments.production, packages[pack].targets.amd));
 				productionModule.push(merge(common, packages[pack].environments.production, packages[pack].targets.window));
 				productionModule.push(merge(common, packages[pack].environments.production, packages[pack].targets.commonjs));

@@ -4202,17 +4202,6 @@ prebid_Prebid.errorResponseStatusCode = 2;
 
 __webpack_require__(73);
 
-var bidIndex = {
-	a9: {
-		pos: 2,
-		char: '9'
-	},
-	prebid: {
-		pos: 4,
-		char: 'P'
-	}
-};
-
 var biddersRegistry = {};
 var realSlotPrices = {};
 

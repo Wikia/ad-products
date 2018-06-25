@@ -4,17 +4,6 @@ import { Prebid } from './prebid/index';
 
 require('./../../lib/prebid.min');
 
-const bidIndex = {
-	a9: {
-		pos: 2,
-		char: '9'
-	},
-	prebid: {
-		pos: 4,
-		char: 'P'
-	}
-};
-
 const biddersRegistry = {};
 const realSlotPrices = {};
 
