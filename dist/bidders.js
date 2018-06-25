@@ -3359,17 +3359,11 @@ function getPrebid() {
 }
 
 function getTargeting(slotName) {
-	var provider = ad_engine_["context"].get('state.isMobile') ? 'mobile' : 'gpt',
-	    s1 = ad_engine_["context"].get('targeting.wikiIsTop1000') ? ad_engine_["context"].get('targeting.s1') : 'not a top1k wiki';
+	var targeting = ad_engine_["context"].get('bidders.prebid.targeting') || {};
 
-	return {
-		pos: [slotName],
-		src: [provider],
-		s0: [ad_engine_["context"].get('targeting.s0') || ''],
-		s1: [s1],
-		s2: [ad_engine_["context"].get('targeting.s2') || ''],
-		lang: [ad_engine_["context"].get('targeting.wikiLanguage') || 'en']
-	};
+	targeting.pos = [slotName];
+
+	return targeting;
 }
 
 function getWinningVideoBidBySlotName(slotName, allowedBidders) {
@@ -3454,7 +3448,7 @@ var rubicon_Rubicon = function (_BaseAdapter) {
 							playerWidth: '640',
 							playerHeight: '480',
 							size_id: sizeId,
-							language: targeting.lang[0]
+							language: targeting.lang ? targeting.lang[0] : 'en'
 						}
 					}
 				}]
