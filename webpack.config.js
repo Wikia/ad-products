@@ -199,15 +199,6 @@ const bidderEnvironments = {
 		output: {
 			path: path.resolve(__dirname, 'dist'),
 		}
-	},
-	development: {
-		entry: {
-			'bidders': './src/bidders/index.js'
-		},
-		output: {
-			path: path.resolve(__dirname, 'examples'),
-			filename: 'templates/[name]/dist/[name].js'
-		}
 	}
 };
 
@@ -259,7 +250,5 @@ module.exports = function (env) {
 		return merge(common, environments.test);
 	}
 
-	return [
-		merge(common, environments.development)
-	];
+	return merge(common, environments.development);
 };
