@@ -204,6 +204,11 @@ const bidderEnvironments = {
 
 const bidderTargets = {
 	amd: {
+		externals: {
+			'@wikia/ad-engine': {
+				amd: 'ext.wikia.adEngine3'
+			}
+		},
 		output: {
 			filename: '[name].amd.js',
 			library: 'ext.wikia.adEngine.[name]',
@@ -222,6 +227,11 @@ const bidderTargets = {
 		}
 	},
 	window: {
+		externals: {
+			'@wikia/ad-engine': {
+				window: ['Wikia', 'adEngine']
+			}
+		},
 		output: {
 			filename: '[name].global.js',
 			library: ['Wikia', 'adProductsBidders'],
