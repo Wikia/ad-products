@@ -1,7 +1,6 @@
 import { decorate } from 'core-decorators';
 import { context, utils } from '@wikia/ad-engine';
 import { BaseBidder } from './../base-bidder';
-import { universalAdPackage } from './../../templates/uap/universal-ad-package';
 import { getPriorities } from './adapters-registry';
 import { getPrebidBestPrice } from './price-helper';
 import { getSettings } from './prebid-settings';
@@ -86,14 +85,12 @@ export class Prebid extends BaseBidder {
 		if (!this.lazyLoaded) {
 			this.lazyLoaded = true;
 
-			if (!universalAdPackage.isFanTakeoverLoaded()) {
-				const adUnitsLazy = setupAdUnits(this.bidderConfig, 'post');
+			const adUnitsLazy = setupAdUnits(this.bidderConfig, 'post');
 
-				if (adUnitsLazy.length > 0) {
-					this.requestBids(adUnitsLazy, bidsBackHandler);
+			if (adUnitsLazy.length > 0) {
+				this.requestBids(adUnitsLazy, bidsBackHandler);
 
-					this.adUnits = this.adUnits.concat(adUnitsLazy);
-				}
+				this.adUnits = this.adUnits.concat(adUnitsLazy);
 			}
 		}
 	}
