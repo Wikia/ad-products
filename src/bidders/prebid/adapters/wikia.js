@@ -64,8 +64,8 @@ export class Wikia extends BaseAdapter {
 			bidResponse.height = height;
 
 			addBidResponse(bid.adUnitCode, bidResponse);
-			done();
 		});
+		done();
 	}
 
 	getCreative(size) {
