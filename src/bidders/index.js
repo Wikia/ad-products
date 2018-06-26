@@ -5,12 +5,13 @@ import { Prebid } from './prebid/index';
 require('./../../lib/prebid.min');
 
 const biddersRegistry = {};
+const realSlotPrices = {};
 
-function applyTargetingParams(slotId, targeting) {
+function applyTargetingParams(slotName, targeting) {
 	Object
 		.keys(targeting)
 		.forEach(
-			key => context.set(`slots.${slotId}.targeting.${key}`, targeting[key])
+			key => context.set(`slots.${slotName}.targeting.${key}`, targeting[key])
 		);
 }
 
@@ -71,6 +72,10 @@ function getCurrentSlotPrices(slotName) {
 	return slotPrices;
 }
 
+function getDfpSlotPrices(slotName) {
+	return realSlotPrices[slotName] || {};
+}
+
 function requestBids({ resetListener = null, responseListener = null }) {
 	const config = context.get('bidders');
 
@@ -95,20 +100,26 @@ function requestBids({ resetListener = null, responseListener = null }) {
 	}
 }
 
+function storeRealSlotPrices(slotName) {
+	realSlotPrices[slotName] = getCurrentSlotPrices(slotName);
+}
+
 function updateSlotsTargeting() {
 	const slots = context.get('slots');
 
 	Object
 		.keys(slots)
-		.forEach((slotId) => {
-			const bidderTargeting = getBidParameters(slotId);
+		.forEach((slotName) => {
+			const bidderTargeting = getBidParameters(slotName);
 
-			applyTargetingParams(slotId, bidderTargeting);
+			storeRealSlotPrices(slotName);
+
+			applyTargetingParams(slotName, bidderTargeting);
 		});
 }
 
 export const bidders = {
-	getCurrentSlotPrices,
+	getDfpSlotPrices,
 	requestBids,
 	updateSlotsTargeting
 };
