@@ -72,6 +72,7 @@ const environments = {
 	development: {
 		entry: {
 			'abcd': './examples/templates/abcd/script.js',
+			'bidders': './examples/templates/bidders/script.js',
 			'floating-rail': './examples/templates/floating-rail/script.js',
 			'hivi-uap': './examples/templates/hivi-uap/script.js',
 			'hivi-uap-ctp': './examples/templates/hivi-uap-ctp/script.js',
@@ -103,7 +104,8 @@ const environments = {
 		],
 		resolve: {
 			alias: {
-				[pkg.name]: path.join(__dirname, 'src')
+				[pkg.name]: path.join(__dirname, 'src'),
+				'@wikia/bidders': path.join(__dirname, 'src/bidders')
 			}
 		}
 	},
@@ -188,6 +190,46 @@ const geoTargets = {
 	},
 };
 
+const bidderEnvironments = {
+	production: {
+		mode: 'production',
+		entry: {
+			'bidders': './src/bidders/index.js'
+		},
+		output: {
+			path: path.resolve(__dirname, 'dist'),
+		}
+	}
+};
+
+const bidderTargets = {
+	amd: {
+		output: {
+			filename: '[name].amd.js',
+			library: 'ext.wikia.adEngine.[name]',
+			libraryTarget: 'amd'
+		}
+	},
+	commonjs: {
+		externals: Object.keys(pkg.dependencies).map(key => new RegExp(`^${key}`)),
+		output: {
+			filename: '[name].js',
+			library: 'bidders',
+			libraryTarget: 'commonjs2'
+		},
+		optimization: {
+			minimize: false
+		}
+	},
+	window: {
+		output: {
+			filename: '[name].global.js',
+			library: ['Wikia', 'adProductsBidders'],
+			libraryTarget: 'window'
+		}
+	},
+};
+
 module.exports = function (env) {
 	const isProduction = (process.env.NODE_ENV === 'production') || (env && env.production);
 	const isTest = (env && env.test);
@@ -199,7 +241,10 @@ module.exports = function (env) {
 			merge(common, environments.production, targets.commonjs),
 			merge(common, geoEnvironments.production, geoTargets.amd),
 			merge(common, geoEnvironments.production, geoTargets.window),
-			merge(common, geoEnvironments.production, geoTargets.commonjs)
+			merge(common, geoEnvironments.production, geoTargets.commonjs),
+			merge(common, bidderEnvironments.production, bidderTargets.amd),
+			merge(common, bidderEnvironments.production, bidderTargets.window),
+			merge(common, bidderEnvironments.production, bidderTargets.commonjs)
 		];
 	} else if (isTest) {
 		return merge(common, environments.test);

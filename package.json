@@ -60,6 +60,7 @@
   "main": "./dist/ad-products.js",
   "scripts": {
     "build": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules && bash ./maintenance/build-bundle.sh",
+    "build-prebid": "cd ../Prebid.js && gulp build-all --modules=modules.json && cp build/dist/prebid.js ../ad-products/lib/prebid.min.js",
     "lint": "./node_modules/.bin/eslint .",
     "preversion": "./maintenance/preversion.sh",
     "version": "./maintenance/version.sh",

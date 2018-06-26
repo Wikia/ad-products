@@ -15,6 +15,13 @@ html, body {
 	display: none;
 }
 
+pre {
+	background: #eee;
+	border: #ddd 1px solid;
+	border-radius: 2px;
+	padding: 15px;
+}
+
 .wrapper {
 	background: #fff;
 	box-shadow: 0 2px 26px 3px rgba(0,0,0,0.05);
