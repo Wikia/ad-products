@@ -119,6 +119,7 @@ function updateSlotsTargeting() {
 }
 
 export const bidders = {
+	getCurrentSlotPrices,
 	getDfpSlotPrices,
 	requestBids,
 	updateSlotsTargeting
