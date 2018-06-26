@@ -5,7 +5,6 @@ import { Prebid } from './prebid/index';
 require('./../../lib/prebid.min');
 
 const biddersRegistry = {};
-const realSlotPrices = {};
 
 function applyTargetingParams(slotId, targeting) {
 	Object
@@ -72,10 +71,6 @@ function getCurrentSlotPrices(slotName) {
 	return slotPrices;
 }
 
-function getDfpSlotPrices(slotName) {
-	return realSlotPrices[slotName] || {};
-}
-
 function requestBids({ resetListener = null, responseListener = null }) {
 	const config = context.get('bidders');
 
@@ -100,10 +95,6 @@ function requestBids({ resetListener = null, responseListener = null }) {
 	}
 }
 
-function storeRealSlotPrices(slotName) {
-	realSlotPrices[slotName] = getCurrentSlotPrices(slotName);
-}
-
 function updateSlotsTargeting() {
 	const slots = context.get('slots');
 
@@ -117,8 +108,7 @@ function updateSlotsTargeting() {
 }
 
 export const bidders = {
-	getDfpSlotPrices,
+	getCurrentSlotPrices,
 	requestBids,
-	storeRealSlotPrices,
 	updateSlotsTargeting
 };
