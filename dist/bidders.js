@@ -3077,9 +3077,9 @@ __webpack_require__(67);
 var biddersRegistry = {};
 var realSlotPrices = {};
 
-function applyTargetingParams(slotId, targeting) {
+function applyTargetingParams(slotName, targeting) {
 	keys_default()(targeting).forEach(function (key) {
-		return ad_engine_["context"].set('slots.' + slotId + '.targeting.' + key, targeting[key]);
+		return ad_engine_["context"].set('slots.' + slotName + '.targeting.' + key, targeting[key]);
 	});
 }
 
@@ -3170,17 +3170,19 @@ function storeRealSlotPrices(slotName) {
 function updateSlotsTargeting() {
 	var slots = ad_engine_["context"].get('slots');
 
-	keys_default()(slots).forEach(function (slotId) {
-		var bidderTargeting = getBidParameters(slotId);
+	keys_default()(slots).forEach(function (slotName) {
+		var bidderTargeting = getBidParameters(slotName);
 
-		applyTargetingParams(slotId, bidderTargeting);
+		storeRealSlotPrices(slotName);
+
+		applyTargetingParams(slotName, bidderTargeting);
 	});
 }
 
 var bidders_bidders = {
+	getCurrentSlotPrices: getCurrentSlotPrices,
 	getDfpSlotPrices: getDfpSlotPrices,
 	requestBids: requestBids,
-	storeRealSlotPrices: storeRealSlotPrices,
 	updateSlotsTargeting: updateSlotsTargeting
 };
 
