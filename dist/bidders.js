@@ -3645,7 +3645,7 @@ var wikia_Wikia = function (_BaseAdapter) {
 
 			var details = document.createElement('small');
 
-			details.innerText = 'price: ' + this.price + ', ' + size + ': ' + size.join('x');
+			details.innerText = 'price: ' + this.price + ', size: ' + size.join('x');
 
 			creative.appendChild(title);
 			creative.appendChild(details);
