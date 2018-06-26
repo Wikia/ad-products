@@ -69,6 +69,8 @@ export class BaseBidder {
 	}
 
 	onResponseCall() {
+		this.response = true;
+
 		if (this.calculatePrices) {
 			this.calculatePrices();
 		}
@@ -76,8 +78,6 @@ export class BaseBidder {
 		if (this.onResponseCallbacks) {
 			this.onResponseCallbacks.start();
 		}
-
-		this.response = true;
 	}
 
 	resetState() {
@@ -85,11 +85,9 @@ export class BaseBidder {
 		this.response = false;
 		this.onResponseCallbacks = [];
 
-		utils.makeLazyQueue(this.onResponseCallbacks, this.responseCallback);
-	}
-
-	responseCallback(callback) {
-		callback();
+		utils.makeLazyQueue(this.onResponseCallbacks, (callback) => {
+			callback(this.name);
+		});
 	}
 
 	waitForResponse() {
