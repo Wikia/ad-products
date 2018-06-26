@@ -74,7 +74,7 @@ export class WikiaVideo extends BaseAdapter {
 			);
 
 			addBidResponse(bid.adUnitCode, bidResponse);
-			done();
 		});
+		done();
 	}
 }

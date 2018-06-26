@@ -14,12 +14,13 @@ if (document.body.offsetWidth < 728) {
 
 utils.setupNpaContext();
 
+let resolveBidders;
+
 const biddersDelay = {
 	isEnabled: () => true,
 	getName: () => 'bidders-delay',
 	getPromise: () => new Promise((resolve) => {
-		resolve();
-		bidders.updateSlotsTargeting();
+		resolveBidders = resolve;
 	})
 };
 
@@ -27,6 +28,14 @@ context.set('slots.bottom_leaderboard.disabled', false);
 context.set('options.maxDelayTimeout', 1000);
 context.push('delayModules', biddersDelay);
 
-bidders.requestBids({});
+bidders.requestBids({
+	responseListener: () => {
+		bidders.updateSlotsTargeting();
+		if (resolveBidders) {
+			resolveBidders();
+			resolveBidders = null;
+		}
+	}
+});
 
 new AdEngine().init();
