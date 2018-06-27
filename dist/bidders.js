@@ -1396,6 +1396,8 @@ var base_bidder_BaseBidder = function () {
 	}, {
 		key: 'onResponseCall',
 		value: function onResponseCall() {
+			this.response = true;
+
 			if (this.calculatePrices) {
 				this.calculatePrices();
 			}
@@ -1403,33 +1405,30 @@ var base_bidder_BaseBidder = function () {
 			if (this.onResponseCallbacks) {
 				this.onResponseCallbacks.start();
 			}
-
-			this.response = true;
 		}
 	}, {
 		key: 'resetState',
 		value: function resetState() {
+			var _this2 = this;
+
 			this.called = false;
 			this.response = false;
 			this.onResponseCallbacks = [];
 
-			ad_engine_["utils"].makeLazyQueue(this.onResponseCallbacks, this.responseCallback);
-		}
-	}, {
-		key: 'responseCallback',
-		value: function responseCallback(callback) {
-			callback();
+			ad_engine_["utils"].makeLazyQueue(this.onResponseCallbacks, function (callback) {
+				callback(_this2.name);
+			});
 		}
 	}, {
 		key: 'waitForResponse',
 		value: function waitForResponse() {
-			var _this2 = this;
+			var _this3 = this;
 
 			return this.createWithTimeout(function (resolve) {
-				if (_this2.hasResponse()) {
+				if (_this3.hasResponse()) {
 					resolve();
 				} else {
-					_this2.addResponseListener(resolve);
+					_this3.addResponseListener(resolve);
 				}
 			}, this.timeout);
 		}
@@ -1486,8 +1485,8 @@ var a9_A9 = function (_BaseBidder) {
 			});
 		}
 	}, {
-		key: 'call',
-		value: function call(onResponse) {
+		key: 'callBids',
+		value: function callBids(onResponse) {
 			var _this3 = this;
 
 			var a9Slots = void 0;
@@ -1534,22 +1533,26 @@ var a9_A9 = function (_BaseBidder) {
 		value: function configureApstag() {
 			var _this4 = this;
 
-			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-				args[_key] = arguments[_key];
-			}
-
 			window.apstag = window.apstag || {};
 			window.apstag._Q = window.apstag._Q || [];
 
 			if (typeof window.apstag.init === 'undefined') {
 				window.apstag.init = function () {
+					for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+						args[_key] = arguments[_key];
+					}
+
 					_this4.configureApstagCommand('i', args);
 				};
 			}
 
 			if (typeof window.apstag.fetchBids === 'undefined') {
 				window.apstag.fetchBids = function () {
-					_this4.configureApstagCommand.apply(_this4, ['f'].concat(args));
+					for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+						args[_key2] = arguments[_key2];
+					}
+
+					_this4.configureApstagCommand('f', args);
 				};
 			}
 		}
@@ -3144,23 +3147,19 @@ function requestBids(_ref) {
 
 	if (config.prebid) {
 		biddersRegistry.prebid = new prebid_Prebid(config.prebid, resetListener, config.timeout);
-
-		if (responseListener) {
-			biddersRegistry.prebid.addResponseListener(responseListener);
-		}
-
-		biddersRegistry.prebid.call();
 	}
 
 	if (config.a9 && config.a9.enabled) {
 		biddersRegistry.a9 = new a9_A9(config.a9, resetListener, config.timeout);
+	}
 
+	keys_default()(biddersRegistry).forEach(function (bidderName) {
 		if (responseListener) {
-			biddersRegistry.a9.addResponseListener(responseListener);
+			biddersRegistry[bidderName].addResponseListener(responseListener);
 		}
 
-		biddersRegistry.a9.call();
-	}
+		biddersRegistry[bidderName].call();
+	});
 }
 
 function storeRealSlotPrices(slotName) {
@@ -3179,9 +3178,18 @@ function updateSlotsTargeting() {
 	});
 }
 
+function hasAllResponses() {
+	var missingBidders = keys_default()(biddersRegistry).filter(function (bidderName) {
+		return !biddersRegistry[bidderName].hasResponse();
+	});
+
+	return missingBidders.length === 0;
+}
+
 var bidders_bidders = {
 	getCurrentSlotPrices: getCurrentSlotPrices,
 	getDfpSlotPrices: getDfpSlotPrices,
+	hasAllResponses: hasAllResponses,
 	requestBids: requestBids,
 	updateSlotsTargeting: updateSlotsTargeting
 };
