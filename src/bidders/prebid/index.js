@@ -101,10 +101,10 @@ export class Prebid extends BaseBidder {
 		});
 	}
 
-	getBestPrice(name) {
-		const slotName = context.get(`slots.${name}.bidderAlias`) || name;
+	getBestPrice(slotName) {
+		const slotAlias = context.get(`slots.${slotName}.bidderAlias`) || slotName;
 
-		return getPrebidBestPrice(slotName);
+		return getPrebidBestPrice(slotAlias);
 	}
 
 	getTargetingKeysToReset() {
@@ -116,19 +116,23 @@ export class Prebid extends BaseBidder {
 		];
 	}
 
-	getTargetingParams(name) {
+	getTargetingParams(slotName) {
 		let slotParams = {};
 
-		const slotName = context.get(`slots.${name}.bidderAlias`) || name;
+		const slotAlias = context.get(`slots.${slotName}.bidderAlias`) || slotName;
 
 		if (window.pbjs && typeof window.pbjs.getBidResponsesForAdUnitCode === 'function') {
-			const bids = window.pbjs.getBidResponsesForAdUnitCode(slotName).bids || [];
+			const bids = window.pbjs.getBidResponsesForAdUnitCode(slotAlias).bids || [];
 
 			if (bids.length) {
 				let bidParams = null;
 				const priorities = getPriorities();
 
 				bids.forEach((param) => {
+					if (param.status === 'rendered') {
+						return;
+					}
+
 					if (!bidParams) {
 						bidParams = param;
 					} else if (bidParams.cpm === param.cpm) {
@@ -142,18 +146,20 @@ export class Prebid extends BaseBidder {
 					}
 				});
 
-				slotParams = bidParams.adserverTargeting;
+				if (bidParams) {
+					slotParams = bidParams.adserverTargeting;
+				}
 			}
 		}
 
 		return slotParams || {};
 	}
 
-	isSupported(name) {
-		const slotName = context.get(`slots.${name}.bidderAlias`) || name;
+	isSupported(slotName) {
+		const slotAlias = context.get(`slots.${slotName}.bidderAlias`) || slotName;
 
 		return this.adUnits && this.adUnits.some(
-			adUnit => adUnit.code === slotName
+			adUnit => adUnit.code === slotAlias
 		);
 	}
 

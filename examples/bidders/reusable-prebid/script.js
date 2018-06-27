@@ -58,3 +58,7 @@ btfBlockerService.finishAboveTheFold();
 window.adsQueue.push({
 	id: 'repeatable_boxad_1'
 });
+
+document.getElementById('requestBids').addEventListener('click', () => {
+	bidders.requestBids({});
+});
