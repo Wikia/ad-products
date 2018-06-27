@@ -1,4 +1,4 @@
-import { context } from '@wikia/ad-engine';
+import { context, events } from '@wikia/ad-engine';
 import { A9 } from './a9/index';
 import { Prebid } from './prebid/index';
 
@@ -88,6 +88,7 @@ function requestBids({ resetListener = null, responseListener = null }) {
 	const config = context.get('bidders');
 
 	if (config.prebid) {
+		events.registerEvent('PREBID_LAZY_CALL');
 		biddersRegistry.prebid = new Prebid(config.prebid, resetListener, config.timeout);
 	}
 

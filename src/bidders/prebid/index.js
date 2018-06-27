@@ -1,5 +1,5 @@
 import { decorate } from 'core-decorators';
-import { context, utils } from '@wikia/ad-engine';
+import { context, events, utils } from '@wikia/ad-engine';
 import { BaseBidder } from './../base-bidder';
 import { getPriorities } from './adapters-registry';
 import { getPrebidBestPrice } from './price-helper';
@@ -75,7 +75,7 @@ export class Prebid extends BaseBidder {
 		this.loaded = true;
 
 		if (this.isLazyLoadingEnabled) {
-			window.addEventListener('adengine.lookup.prebid.lazy', () => {
+			events.on(events.PREBID_LAZY_CALL, () => {
 				this.lazyCall(bidsBackHandler);
 			});
 		}
