@@ -87,8 +87,10 @@ function getDfpSlotPrices(slotName) {
 function requestBids({ resetListener = null, responseListener = null }) {
 	const config = context.get('bidders');
 
-	if (config.prebid) {
-		events.registerEvent('PREBID_LAZY_CALL');
+	if (config.prebid && config.prebid.enabled) {
+		if (!events.PREBID_LAZY_CALL) {
+			events.registerEvent('PREBID_LAZY_CALL');
+		}
 		biddersRegistry.prebid = new Prebid(config.prebid, resetListener, config.timeout);
 	}
 

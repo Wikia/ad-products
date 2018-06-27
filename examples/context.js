@@ -18,6 +18,7 @@ export default {
 			slotsVideo: []
 		},
 		prebid: {
+			enabled: true,
 			lazyLoadingEnabled: false,
 			wikia: {
 				enabled: true,
