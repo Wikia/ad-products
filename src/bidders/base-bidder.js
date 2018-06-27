@@ -1,4 +1,4 @@
-import { utils } from '@wikia/ad-engine';
+import { context, utils } from '@wikia/ad-engine';
 
 export class BaseBidder {
 	constructor(bidderConfig, resetListener, timeout = 2000) {

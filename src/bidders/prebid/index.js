@@ -2,7 +2,7 @@ import { decorate } from 'core-decorators';
 import { context, utils } from '@wikia/ad-engine';
 import { BaseBidder } from './../base-bidder';
 import { getPriorities } from './adapters-registry';
-import { getPrebidBestPrice } from './price-helper';
+import {getPrebidBestPrice, transformPriceFromCpm} from './price-helper';
 import { getSettings } from './prebid-settings';
 import { setupAdUnits } from './prebid-helper';
 
@@ -101,12 +101,25 @@ export class Prebid extends BaseBidder {
 		});
 	}
 
-	getBestPrice(slotName) {
+	getBestPrice(name) {
+		const slotName = context.get(`slots.${name}.bidderAlias`) || name;
+
 		return getPrebidBestPrice(slotName);
 	}
 
-	getTargetingParams(slotName) {
+	getTargetingKeysToReset() {
+		return [
+			'hb_bidder',
+			'hb_adid',
+			'hb_pb',
+			'hb_size'
+		];
+	}
+
+	getTargetingParams(name) {
 		let slotParams = {};
+
+		const slotName = context.get(`slots.${name}.bidderAlias`) || name;
 
 		if (window.pbjs && typeof window.pbjs.getBidResponsesForAdUnitCode === 'function') {
 			const bids = window.pbjs.getBidResponsesForAdUnitCode(slotName).bids || [];
@@ -136,7 +149,9 @@ export class Prebid extends BaseBidder {
 		return slotParams || {};
 	}
 
-	isSupported(slotName) {
+	isSupported(name) {
+		const slotName = context.get(`slots.${name}.bidderAlias`) || name;
+
 		return this.adUnits && this.adUnits.some(
 			adUnit => adUnit.code === slotName
 		);

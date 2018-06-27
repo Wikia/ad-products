@@ -1,4 +1,4 @@
-import { AdEngine, context } from '@wikia/ad-engine';
+import { AdEngine, context, events } from '@wikia/ad-engine';
 import { utils } from '@wikia/ad-products';
 import { bidders } from '@wikia/bidders';
 
@@ -26,13 +26,16 @@ context.push('delayModules', biddersDelay);
 bidders.requestBids({
 	responseListener: () => {
 		if (bidders.hasAllResponses()) {
-			bidders.updateSlotsTargeting();
 			if (resolveBidders) {
 				resolveBidders();
 				resolveBidders = null;
 			}
 		}
 	}
+});
+
+events.on(events.AD_SLOT_CREATED, (slot) => {
+	bidders.updateSlotTargeting(slot.getSlotName());
 });
 
 new AdEngine().init();

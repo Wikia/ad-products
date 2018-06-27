@@ -7,6 +7,22 @@ require('./../../lib/prebid.min');
 const biddersRegistry = {};
 const realSlotPrices = {};
 
+function forEachBidder(callback) {
+	Object
+		.keys(biddersRegistry)
+		.forEach((bidderName) => {
+			callback(biddersRegistry[bidderName]);
+		});
+}
+
+function resetTargetingKeys(slotName) {
+	forEachBidder((bidder) => {
+		bidder.getTargetingKeysToReset().forEach((key) => {
+			context.set(`slots.${slotName}.targeting.${key}`, null);
+		});
+	});
+}
+
 function applyTargetingParams(slotName, targeting) {
 	Object
 		.keys(targeting)
@@ -31,21 +47,17 @@ function getBidParameters(slotName) {
 		);
 	}
 
-	Object
-		.keys(biddersRegistry)
-		.forEach((bidderName) => {
-			const bidder = biddersRegistry[bidderName];
+	forEachBidder((bidder) => {
+		if (bidder && bidder.wasCalled()) {
+			const params = bidder.getSlotTargetingParams(slotName, floorPrice);
 
-			if (bidder && bidder.wasCalled()) {
-				const params = bidder.getSlotTargetingParams(slotName, floorPrice);
-
-				Object
-					.keys(params)
-					.forEach((key) => {
-						slotParams[key] = params[key];
-					});
-			}
-		});
+			Object
+				.keys(params)
+				.forEach((key) => {
+					slotParams[key] = params[key];
+				});
+		}
+	});
 
 	return slotParams;
 }
@@ -53,21 +65,17 @@ function getBidParameters(slotName) {
 function getCurrentSlotPrices(slotName) {
 	const slotPrices = {};
 
-	Object
-		.keys(biddersRegistry)
-		.forEach((bidder) => {
-			bidder = biddersRegistry[bidder];
+	forEachBidder((bidder) => {
+		if (bidder && bidder.isSlotSupported(slotName)) {
+			const priceFromBidder = bidder.getSlotBestPrice(slotName);
 
-			if (bidder && bidder.isSlotSupported(slotName)) {
-				const priceFromBidder = bidder.getSlotBestPrice(slotName);
-
-				Object
-					.keys(priceFromBidder)
-					.forEach((bidderName) => {
-						slotPrices[bidderName] = priceFromBidder[bidderName];
-					});
-			}
-		});
+			Object
+				.keys(priceFromBidder)
+				.forEach((bidderName) => {
+					slotPrices[bidderName] = priceFromBidder[bidderName];
+				});
+		}
+	});
 
 	return slotPrices;
 }
@@ -87,12 +95,12 @@ function requestBids({ resetListener = null, responseListener = null }) {
 		biddersRegistry.a9 = new A9(config.a9, resetListener, config.timeout);
 	}
 
-	Object.keys(biddersRegistry).forEach((bidderName) => {
+	forEachBidder((bidder) => {
 		if (responseListener) {
-			biddersRegistry[bidderName].addResponseListener(responseListener);
+			bidder.addResponseListener(responseListener);
 		}
 
-		biddersRegistry[bidderName].call();
+		bidder.call();
 	});
 }
 
@@ -100,17 +108,25 @@ function storeRealSlotPrices(slotName) {
 	realSlotPrices[slotName] = getCurrentSlotPrices(slotName);
 }
 
+function updateSlotTargeting(slotName) {
+	const bidderTargeting = getBidParameters(slotName);
+
+	storeRealSlotPrices(slotName);
+
+	resetTargetingKeys(slotName);
+	applyTargetingParams(slotName, bidderTargeting);
+}
+
+/**
+ * @deprecated since v12.1.0
+ */
 function updateSlotsTargeting() {
 	const slots = context.get('slots');
 
 	Object
 		.keys(slots)
 		.forEach((slotName) => {
-			const bidderTargeting = getBidParameters(slotName);
-
-			storeRealSlotPrices(slotName);
-
-			applyTargetingParams(slotName, bidderTargeting);
+			updateSlotTargeting(slotName);
 		});
 }
 
@@ -118,7 +134,9 @@ function hasAllResponses() {
 	const missingBidders = Object
 		.keys(biddersRegistry)
 		.filter((bidderName) => {
-			return !biddersRegistry[bidderName].wasCalled() && !biddersRegistry[bidderName].hasResponse();
+			const bidder = biddersRegistry[bidderName];
+
+			return !bidder.wasCalled() && !bidder.hasResponse();
 		});
 
 	return missingBidders.length === 0;
@@ -129,5 +147,6 @@ export const bidders = {
 	getDfpSlotPrices,
 	hasAllResponses,
 	requestBids,
+	updateSlotTargeting,
 	updateSlotsTargeting
 };

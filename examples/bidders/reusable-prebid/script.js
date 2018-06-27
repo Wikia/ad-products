@@ -1,4 +1,4 @@
-import { AdEngine, btfBlockerService, context, utils } from '@wikia/ad-engine';
+import { AdEngine, btfBlockerService, context, events, utils } from '@wikia/ad-engine';
 import { bidders } from '@wikia/bidders';
 import adContext from '../../context';
 
@@ -32,19 +32,23 @@ const biddersDelay = {
 	})
 };
 
+context.set('targeting.artid', '266');
 context.set('options.maxDelayTimeout', 1000);
 context.push('delayModules', biddersDelay);
 
 bidders.requestBids({
 	responseListener: () => {
 		if (bidders.hasAllResponses()) {
-			bidders.updateSlotsTargeting();
 			if (resolveBidders) {
 				resolveBidders();
 				resolveBidders = null;
 			}
 		}
 	}
+});
+
+events.on(events.AD_SLOT_CREATED, (slot) => {
+	bidders.updateSlotTargeting(slot.getSlotName());
 });
 
 new AdEngine().init();

@@ -123,6 +123,7 @@ export default {
 			}
 		},
 		repeatable_boxad_1: {
+			bidderAlias: 'top_boxad',
 			defaultSizes: [[300, 250]],
 			repeat: {
 				additionalClasses: 'hide',

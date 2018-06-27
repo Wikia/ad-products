@@ -114,6 +114,15 @@ export class A9 extends BaseBidder {
 		return this.priceMap;
 	}
 
+	getTargetingKeysToReset() {
+		return [
+			'amznbid',
+			'amzniid',
+			'amznsz',
+			'amznp'
+		];
+	}
+
 	getTargetingParams(slotName) {
 		const bid = this.bids[slotName];
 
