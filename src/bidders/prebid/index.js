@@ -2,7 +2,7 @@ import { decorate } from 'core-decorators';
 import { context, utils } from '@wikia/ad-engine';
 import { BaseBidder } from './../base-bidder';
 import { getPriorities } from './adapters-registry';
-import {getPrebidBestPrice, transformPriceFromCpm} from './price-helper';
+import { getPrebidBestPrice } from './price-helper';
 import { getSettings } from './prebid-settings';
 import { setupAdUnits } from './prebid-helper';
 
