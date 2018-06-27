@@ -117,7 +117,9 @@ function updateSlotsTargeting() {
 function hasAllResponses() {
 	const missingBidders = Object
 		.keys(biddersRegistry)
-		.filter(bidderName => !biddersRegistry[bidderName].hasResponse());
+		.filter((bidderName) => {
+			return !biddersRegistry[bidderName].wasCalled() && !biddersRegistry[bidderName].hasResponse();
+		});
 
 	return missingBidders.length === 0;
 }
