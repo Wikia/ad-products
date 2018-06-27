@@ -61,6 +61,7 @@ export class A9 extends BaseBidder {
 			slots: a9Slots,
 			timeout: this.timeout
 		}, (currentBids) => {
+			window.a9bids = currentBids;
 			currentBids.forEach((bid) => {
 				this.bids[bid.slotID] = bid;
 			});

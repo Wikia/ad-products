@@ -10,6 +10,9 @@ export default {
 			slots: {
 				top_leaderboard: [
 					[728, 90]
+				],
+				top_boxad: [
+					[300, 250]
 				]
 			},
 			slotsVideo: []
@@ -74,7 +77,8 @@ export default {
 				partnerCode: 'wikiaimajsint377461931603',
 				sampling: 1
 			}
-		}
+		},
+		slotRepeater: true
 	},
 	slots: {
 		top_leaderboard: {
@@ -116,6 +120,30 @@ export default {
 			defaultSizes: [[300, 250]],
 			targeting: {
 				loc: 'hivi'
+			}
+		},
+		repeatable_boxad_1: {
+			defaultSizes: [[300, 250]],
+			repeat: {
+				additionalClasses: 'hide',
+				index: 1,
+				insertBeforeSelector: '.main p',
+				limit: null,
+				slotNamePattern: 'repeatable_boxad_{slotConfig.repeat.index}',
+				updateProperties: {
+					'targeting.rv': '{slotConfig.repeat.index}'
+				}
+			},
+			sizes: [
+				{
+					viewportSize: [768, 0],
+					sizes: [[300, 250], [300, 600]]
+				}
+			],
+			targeting: {
+				loc: 'hivi',
+				pos: 'repeatable_boxad',
+				rv: 1
 			}
 		},
 		bottom_leaderboard: {
