@@ -81,23 +81,19 @@ function requestBids({ resetListener = null, responseListener = null }) {
 
 	if (config.prebid) {
 		biddersRegistry.prebid = new Prebid(config.prebid, resetListener, config.timeout);
-
-		if (responseListener) {
-			biddersRegistry.prebid.addResponseListener(responseListener);
-		}
-
-		biddersRegistry.prebid.call();
 	}
 
 	if (config.a9 && config.a9.enabled) {
 		biddersRegistry.a9 = new A9(config.a9, resetListener, config.timeout);
+	}
 
+	Object.keys(biddersRegistry).forEach((bidderName) => {
 		if (responseListener) {
-			biddersRegistry.a9.addResponseListener(responseListener);
+			biddersRegistry[bidderName].addResponseListener(responseListener);
 		}
 
-		biddersRegistry.a9.call();
-	}
+		biddersRegistry[bidderName].call();
+	});
 }
 
 function storeRealSlotPrices(slotName) {
@@ -118,9 +114,18 @@ function updateSlotsTargeting() {
 		});
 }
 
+function hasAllResponses() {
+	const missingBidders = Object
+		.keys(biddersRegistry)
+		.filter(bidderName => !biddersRegistry[bidderName].hasResponse());
+
+	return missingBidders.length === 0;
+}
+
 export const bidders = {
 	getCurrentSlotPrices,
 	getDfpSlotPrices,
+	hasAllResponses,
 	requestBids,
 	updateSlotsTargeting
 };

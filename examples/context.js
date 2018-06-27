@@ -6,7 +6,12 @@ export default {
 		a9: {
 			enabled: true,
 			videoEnabled: false,
-			slots: {},
+			amazonId: '3115',
+			slots: {
+				top_leaderboard: [
+					[728, 90]
+				]
+			},
 			slotsVideo: []
 		},
 		prebid: {

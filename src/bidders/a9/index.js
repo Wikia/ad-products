@@ -26,7 +26,7 @@ export class A9 extends BaseBidder {
 			});
 	}
 
-	call(onResponse) {
+	callBids(onResponse) {
 		let a9Slots;
 
 		if (!this.loaded) {
@@ -69,19 +69,19 @@ export class A9 extends BaseBidder {
 		});
 	}
 
-	configureApstag(...args) {
+	configureApstag() {
 		window.apstag = window.apstag || {};
 		window.apstag._Q = window.apstag._Q || [];
 
 		if (typeof window.apstag.init === 'undefined') {
-			window.apstag.init = () => {
+			window.apstag.init = (...args) => {
 				this.configureApstagCommand('i', args);
 			};
 		}
 
 		if (typeof window.apstag.fetchBids === 'undefined') {
-			window.apstag.fetchBids = () => {
-				this.configureApstagCommand('f', ...args);
+			window.apstag.fetchBids = (...args) => {
+				this.configureApstagCommand('f', args);
 			};
 		}
 	}

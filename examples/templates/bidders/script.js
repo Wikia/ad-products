@@ -30,10 +30,12 @@ context.push('delayModules', biddersDelay);
 
 bidders.requestBids({
 	responseListener: () => {
-		bidders.updateSlotsTargeting();
-		if (resolveBidders) {
-			resolveBidders();
-			resolveBidders = null;
+		if (bidders.hasAllResponses()) {
+			bidders.updateSlotsTargeting();
+			if (resolveBidders) {
+				resolveBidders();
+				resolveBidders = null;
+			}
 		}
 	}
 });
