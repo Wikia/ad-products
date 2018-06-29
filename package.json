@@ -7,7 +7,7 @@
     "url": "https://github.com/Wikia/ad-products"
   },
   "dependencies": {
-    "@wikia/ad-engine": "git+https://github.com/Wikia/ad-engine.git#v12.0.5",
+    "@wikia/ad-engine": "git+https://github.com/Wikia/ad-engine.git#v12.0.7",
     "core-decorators": "^0.20.0",
     "events": "^1.1.1",
     "js-cookie": "^2.1.4",
@@ -64,7 +64,7 @@
     "lint": "./node_modules/.bin/eslint .",
     "preversion": "./maintenance/preversion.sh",
     "version": "./maintenance/version.sh",
-    "serve": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --watch --inline --open-page=templates/ --content-base=./examples",
+    "serve": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --watch --inline --open --content-base=./examples",
     "test": "mocha-webpack './spec/**/*.spec.js' -r jsdom-global/register --webpack-env.test",
     "test-coverage": "nyc mocha-webpack './spec/**/*.spec.js' -r jsdom-global/register --webpack-env.test --reporter mocha-junit-reporter --reporter-options mochaFile=./spec/build/tests.xml",
     "watch": "./node_modules/webpack/bin/webpack.js --progress --colors --hide-modules --watch"
