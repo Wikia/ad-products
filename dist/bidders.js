@@ -72,6 +72,12 @@ module.exports =
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+module.exports = require("@wikia/ad-engine");
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -104,7 +110,7 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -119,7 +125,7 @@ exports.default = function (instance, Constructor) {
 };
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -158,7 +164,7 @@ exports.default = function (subClass, superClass) {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -181,16 +187,10 @@ exports.default = function (self, call) {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = { "default": __webpack_require__(117), __esModule: true };
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-module.exports = require("@wikia/ad-engine");
 
 /***/ }),
 /* 6 */
@@ -1275,26 +1275,26 @@ var keys = __webpack_require__(6);
 var keys_default = /*#__PURE__*/__webpack_require__.n(keys);
 
 // EXTERNAL MODULE: external "@wikia/ad-engine"
-var ad_engine_ = __webpack_require__(5);
+var ad_engine_ = __webpack_require__(0);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/core-js/object/get-prototype-of.js
-var get_prototype_of = __webpack_require__(4);
+var get_prototype_of = __webpack_require__(5);
 var get_prototype_of_default = /*#__PURE__*/__webpack_require__.n(get_prototype_of);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/classCallCheck.js
-var classCallCheck = __webpack_require__(1);
+var classCallCheck = __webpack_require__(2);
 var classCallCheck_default = /*#__PURE__*/__webpack_require__.n(classCallCheck);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/createClass.js
-var createClass = __webpack_require__(0);
+var createClass = __webpack_require__(1);
 var createClass_default = /*#__PURE__*/__webpack_require__.n(createClass);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/possibleConstructorReturn.js
-var possibleConstructorReturn = __webpack_require__(3);
+var possibleConstructorReturn = __webpack_require__(4);
 var possibleConstructorReturn_default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/inherits.js
-var inherits = __webpack_require__(2);
+var inherits = __webpack_require__(3);
 var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/core-js/promise.js
@@ -1587,6 +1587,11 @@ var a9_A9 = function (_BaseBidder) {
 		key: 'getPrices',
 		value: function getPrices() {
 			return this.priceMap;
+		}
+	}, {
+		key: 'getTargetingKeysToReset',
+		value: function getTargetingKeysToReset() {
+			return ['amznbid', 'amzniid', 'amznsz', 'amznp'];
 		}
 	}, {
 		key: 'getTargetingParams',
@@ -2977,7 +2982,7 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 			this.loaded = true;
 
 			if (this.isLazyLoadingEnabled) {
-				window.addEventListener('adengine.lookup.prebid.lazy', function () {
+				ad_engine_["events"].on(ad_engine_["events"].PREBID_LAZY_CALL, function () {
 					_this3.lazyCall(bidsBackHandler);
 				});
 			}
@@ -3007,21 +3012,34 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 	}, {
 		key: 'getBestPrice',
 		value: function getBestPrice(slotName) {
-			return getPrebidBestPrice(slotName);
+			var slotAlias = ad_engine_["context"].get('slots.' + slotName + '.bidderAlias') || slotName;
+
+			return getPrebidBestPrice(slotAlias);
+		}
+	}, {
+		key: 'getTargetingKeysToReset',
+		value: function getTargetingKeysToReset() {
+			return ['hb_bidder', 'hb_adid', 'hb_pb', 'hb_size'];
 		}
 	}, {
 		key: 'getTargetingParams',
 		value: function getTargetingParams(slotName) {
 			var slotParams = {};
 
+			var slotAlias = ad_engine_["context"].get('slots.' + slotName + '.bidderAlias') || slotName;
+
 			if (window.pbjs && typeof window.pbjs.getBidResponsesForAdUnitCode === 'function') {
-				var bids = window.pbjs.getBidResponsesForAdUnitCode(slotName).bids || [];
+				var bids = window.pbjs.getBidResponsesForAdUnitCode(slotAlias).bids || [];
 
 				if (bids.length) {
 					var bidParams = null;
 					var priorities = getPriorities();
 
 					bids.forEach(function (param) {
+						if (param.status === 'rendered') {
+							return;
+						}
+
 						if (!bidParams) {
 							bidParams = param;
 						} else if (bidParams.cpm === param.cpm) {
@@ -3035,7 +3053,9 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 						}
 					});
 
-					slotParams = bidParams.adserverTargeting;
+					if (bidParams) {
+						slotParams = bidParams.adserverTargeting;
+					}
 				}
 			}
 
@@ -3044,8 +3064,10 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 	}, {
 		key: 'isSupported',
 		value: function isSupported(slotName) {
+			var slotAlias = ad_engine_["context"].get('slots.' + slotName + '.bidderAlias') || slotName;
+
 			return this.adUnits && this.adUnits.some(function (adUnit) {
-				return adUnit.code === slotName;
+				return adUnit.code === slotAlias;
 			});
 		}
 	}, {
@@ -3080,6 +3102,20 @@ __webpack_require__(67);
 var biddersRegistry = {};
 var realSlotPrices = {};
 
+function forEachBidder(callback) {
+	keys_default()(biddersRegistry).forEach(function (bidderName) {
+		callback(biddersRegistry[bidderName]);
+	});
+}
+
+function resetTargetingKeys(slotName) {
+	forEachBidder(function (bidder) {
+		bidder.getTargetingKeysToReset().forEach(function (key) {
+			ad_engine_["context"].set('slots.' + slotName + '.targeting.' + key, null);
+		});
+	});
+}
+
 function applyTargetingParams(slotName, targeting) {
 	keys_default()(targeting).forEach(function (key) {
 		return ad_engine_["context"].set('slots.' + slotName + '.targeting.' + key, targeting[key]);
@@ -3100,9 +3136,7 @@ function getBidParameters(slotName) {
 		}));
 	}
 
-	keys_default()(biddersRegistry).forEach(function (bidderName) {
-		var bidder = biddersRegistry[bidderName];
-
+	forEachBidder(function (bidder) {
 		if (bidder && bidder.wasCalled()) {
 			var params = bidder.getSlotTargetingParams(slotName, floorPrice);
 
@@ -3118,9 +3152,7 @@ function getBidParameters(slotName) {
 function getCurrentSlotPrices(slotName) {
 	var slotPrices = {};
 
-	keys_default()(biddersRegistry).forEach(function (bidder) {
-		bidder = biddersRegistry[bidder];
-
+	forEachBidder(function (bidder) {
 		if (bidder && bidder.isSlotSupported(slotName)) {
 			var priceFromBidder = bidder.getSlotBestPrice(slotName);
 
@@ -3145,7 +3177,10 @@ function requestBids(_ref) {
 
 	var config = ad_engine_["context"].get('bidders');
 
-	if (config.prebid) {
+	if (config.prebid && config.prebid.enabled) {
+		if (!ad_engine_["events"].PREBID_LAZY_CALL) {
+			ad_engine_["events"].registerEvent('PREBID_LAZY_CALL');
+		}
 		biddersRegistry.prebid = new prebid_Prebid(config.prebid, resetListener, config.timeout);
 	}
 
@@ -3153,12 +3188,12 @@ function requestBids(_ref) {
 		biddersRegistry.a9 = new a9_A9(config.a9, resetListener, config.timeout);
 	}
 
-	keys_default()(biddersRegistry).forEach(function (bidderName) {
+	forEachBidder(function (bidder) {
 		if (responseListener) {
-			biddersRegistry[bidderName].addResponseListener(responseListener);
+			bidder.addResponseListener(responseListener);
 		}
 
-		biddersRegistry[bidderName].call();
+		bidder.call();
 	});
 }
 
@@ -3166,21 +3201,31 @@ function storeRealSlotPrices(slotName) {
 	realSlotPrices[slotName] = getCurrentSlotPrices(slotName);
 }
 
+function updateSlotTargeting(slotName) {
+	var bidderTargeting = getBidParameters(slotName);
+
+	storeRealSlotPrices(slotName);
+
+	resetTargetingKeys(slotName);
+	applyTargetingParams(slotName, bidderTargeting);
+}
+
+/**
+ * @deprecated since v12.1.0
+ */
 function updateSlotsTargeting() {
 	var slots = ad_engine_["context"].get('slots');
 
 	keys_default()(slots).forEach(function (slotName) {
-		var bidderTargeting = getBidParameters(slotName);
-
-		storeRealSlotPrices(slotName);
-
-		applyTargetingParams(slotName, bidderTargeting);
+		updateSlotTargeting(slotName);
 	});
 }
 
 function hasAllResponses() {
 	var missingBidders = keys_default()(biddersRegistry).filter(function (bidderName) {
-		return !biddersRegistry[bidderName].hasResponse();
+		var bidder = biddersRegistry[bidderName];
+
+		return !bidder.wasCalled() && !bidder.hasResponse();
 	});
 
 	return missingBidders.length === 0;
@@ -3191,6 +3236,7 @@ var bidders_bidders = {
 	getDfpSlotPrices: getDfpSlotPrices,
 	hasAllResponses: hasAllResponses,
 	requestBids: requestBids,
+	updateSlotTargeting: updateSlotTargeting,
 	updateSlotsTargeting: updateSlotsTargeting
 };
 

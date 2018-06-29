@@ -71,16 +71,18 @@ const environments = {
 	},
 	development: {
 		entry: {
-			'abcd': './examples/templates/abcd/script.js',
-			'bidders': './examples/templates/bidders/script.js',
-			'floating-rail': './examples/templates/floating-rail/script.js',
-			'hivi-uap': './examples/templates/hivi-uap/script.js',
-			'hivi-uap-ctp': './examples/templates/hivi-uap-ctp/script.js',
-			'hivi-uap-stickiness-not-allowed': './examples/templates/hivi-uap-stickiness-not-allowed/script.js',
-			'hivi-uap-static': './examples/templates/hivi-uap-static/script.js',
-			'hivi-uap-jwp': './examples/templates/hivi-uap-jwp/script.js',
-			'sticky-bfaa': './examples/templates/sticky-bfaa/script.js',
-			'vuap': './examples/templates/vuap/script.js'
+			'bidders/a9': './examples/bidders/a9/script.js',
+			'bidders/prebid': './examples/bidders/prebid/script.js',
+			'bidders/reusable-prebid': './examples/bidders/reusable-prebid/script.js',
+			'templates/abcd': './examples/templates/abcd/script.js',
+			'templates/floating-rail': './examples/templates/floating-rail/script.js',
+			'templates/hivi-uap': './examples/templates/hivi-uap/script.js',
+			'templates/hivi-uap-ctp': './examples/templates/hivi-uap-ctp/script.js',
+			'templates/hivi-uap-stickiness-not-allowed': './examples/templates/hivi-uap-stickiness-not-allowed/script.js',
+			'templates/hivi-uap-static': './examples/templates/hivi-uap-static/script.js',
+			'templates/hivi-uap-jwp': './examples/templates/hivi-uap-jwp/script.js',
+			'templates/sticky-bfaa': './examples/templates/sticky-bfaa/script.js',
+			'templates/vuap': './examples/templates/vuap/script.js'
 		},
 		devtool: 'cheap-module-eval-source-map',
 		optimization: {
@@ -96,7 +98,7 @@ const environments = {
 		},
 		output: {
 			path: path.resolve(__dirname, 'examples'),
-			filename: 'templates/[name]/dist/bundle.js'
+			filename: '[name]/dist/bundle.js'
 		},
 		plugins: [
 			new MiniCssExtractPlugin({ filename: '[name]/dist/styles.css' }),

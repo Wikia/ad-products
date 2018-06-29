@@ -1,5 +1,5 @@
 import { decorate } from 'core-decorators';
-import { context, utils } from '@wikia/ad-engine';
+import { context, events, utils } from '@wikia/ad-engine';
 import { BaseBidder } from './../base-bidder';
 import { getPriorities } from './adapters-registry';
 import { getPrebidBestPrice } from './price-helper';
@@ -75,7 +75,7 @@ export class Prebid extends BaseBidder {
 		this.loaded = true;
 
 		if (this.isLazyLoadingEnabled) {
-			window.addEventListener('adengine.lookup.prebid.lazy', () => {
+			events.on(events.PREBID_LAZY_CALL, () => {
 				this.lazyCall(bidsBackHandler);
 			});
 		}
@@ -102,20 +102,37 @@ export class Prebid extends BaseBidder {
 	}
 
 	getBestPrice(slotName) {
-		return getPrebidBestPrice(slotName);
+		const slotAlias = context.get(`slots.${slotName}.bidderAlias`) || slotName;
+
+		return getPrebidBestPrice(slotAlias);
+	}
+
+	getTargetingKeysToReset() {
+		return [
+			'hb_bidder',
+			'hb_adid',
+			'hb_pb',
+			'hb_size'
+		];
 	}
 
 	getTargetingParams(slotName) {
 		let slotParams = {};
 
+		const slotAlias = context.get(`slots.${slotName}.bidderAlias`) || slotName;
+
 		if (window.pbjs && typeof window.pbjs.getBidResponsesForAdUnitCode === 'function') {
-			const bids = window.pbjs.getBidResponsesForAdUnitCode(slotName).bids || [];
+			const bids = window.pbjs.getBidResponsesForAdUnitCode(slotAlias).bids || [];
 
 			if (bids.length) {
 				let bidParams = null;
 				const priorities = getPriorities();
 
 				bids.forEach((param) => {
+					if (param.status === 'rendered') {
+						return;
+					}
+
 					if (!bidParams) {
 						bidParams = param;
 					} else if (bidParams.cpm === param.cpm) {
@@ -129,7 +146,9 @@ export class Prebid extends BaseBidder {
 					}
 				});
 
-				slotParams = bidParams.adserverTargeting;
+				if (bidParams) {
+					slotParams = bidParams.adserverTargeting;
+				}
 			}
 		}
 
@@ -137,8 +156,10 @@ export class Prebid extends BaseBidder {
 	}
 
 	isSupported(slotName) {
+		const slotAlias = context.get(`slots.${slotName}.bidderAlias`) || slotName;
+
 		return this.adUnits && this.adUnits.some(
-			adUnit => adUnit.code === slotName
+			adUnit => adUnit.code === slotAlias
 		);
 	}
 
