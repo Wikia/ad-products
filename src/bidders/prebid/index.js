@@ -4,7 +4,7 @@ import { BaseBidder } from './../base-bidder';
 import { getPriorities } from './adapters-registry';
 import { getPrebidBestPrice } from './price-helper';
 import { getSettings } from './prebid-settings';
-import { setupAdUnits } from './prebid-helper';
+import { getBidByAdUnitCode, setupAdUnits } from './prebid-helper';
 
 export const prebidLazyRun = method => (...args) => window.pbjs.que.push(() => method.apply(this, args));
 
@@ -19,8 +19,10 @@ export class Prebid extends BaseBidder {
 		this.isLazyLoadingEnabled = this.bidderConfig.lazyLoadingEnabled;
 		this.isCMPEnabled = context.get('custom.isCMPEnabled');
 		this.adUnits = setupAdUnits(this.bidderConfig, this.isLazyLoadingEnabled ? 'pre' : 'off');
+		this.refreshEnabled = false;
+		this.refreshSlots = [];
 		this.prebidConfig = {
-			debug: utils.queryString.get('pbjs_debug') === '1',
+			debug: utils.queryString.get('pbjs_debug') === '1' || utils.queryString.get('pbjs_debug') === 'true',
 			enableSendAllBids: true,
 			bidderSequence: 'random',
 			bidderTimeout: this.timeout,
@@ -120,35 +122,28 @@ export class Prebid extends BaseBidder {
 		let slotParams = {};
 
 		const slotAlias = context.get(`slots.${slotName}.bidderAlias`) || slotName;
+		const bids = getBidByAdUnitCode(slotAlias, false);
 
-		if (window.pbjs && typeof window.pbjs.getBidResponsesForAdUnitCode === 'function') {
-			const bids = window.pbjs.getBidResponsesForAdUnitCode(slotAlias).bids || [];
+		if (bids.length) {
+			let bidParams = null;
+			const priorities = getPriorities();
 
-			if (bids.length) {
-				let bidParams = null;
-				const priorities = getPriorities();
-
-				bids.forEach((param) => {
-					if (param.status === 'rendered') {
-						return;
-					}
-
-					if (!bidParams) {
-						bidParams = param;
-					} else if (bidParams.cpm === param.cpm) {
-						if (priorities[bidParams.bidder] === priorities[param.bidder]) {
-							bidParams = bidParams.timeToRespond > param.timeToRespond ? param : bidParams;
-						} else {
-							bidParams = priorities[bidParams.bidder] < priorities[param.bidder] ? param : bidParams;
-						}
+			bids.forEach((param) => {
+				if (!bidParams) {
+					bidParams = param;
+				} else if (bidParams.cpm === param.cpm) {
+					if (priorities[bidParams.bidder] === priorities[param.bidder]) {
+						bidParams = bidParams.timeToRespond > param.timeToRespond ? param : bidParams;
 					} else {
-						bidParams = bidParams.cpm < param.cpm ? param : bidParams;
+						bidParams = priorities[bidParams.bidder] < priorities[param.bidder] ? param : bidParams;
 					}
-				});
-
-				if (bidParams) {
-					slotParams = bidParams.adserverTargeting;
+				} else {
+					bidParams = bidParams.cpm < param.cpm ? param : bidParams;
 				}
+			});
+
+			if (bidParams) {
+				slotParams = bidParams.adserverTargeting;
 			}
 		}
 
@@ -161,6 +156,31 @@ export class Prebid extends BaseBidder {
 		return this.adUnits && this.adUnits.some(
 			adUnit => adUnit.code === slotAlias
 		);
+	}
+
+	refreshBids(slotAlias) {
+		if (!this.refreshSlots.includes(slotAlias)) {
+			this.refreshSlots.push(slotAlias);
+		}
+
+		if (!this.refreshEnabled) {
+			this.refreshEnabled = true;
+
+			window.pbjs.onEvent('bidWon', (winningBid) => {
+				if (this.refreshSlots.includes(winningBid.adUnitCode)) {
+					const adUnitRefresh = this.adUnits.filter(
+						adUnit => (
+							adUnit.code === winningBid.adUnitCode &&
+							adUnit.bids &&
+							adUnit.bids[0] &&
+							adUnit.bids[0].bidder === winningBid.bidderCode
+						)
+					);
+
+					this.requestBids(adUnitRefresh);
+				}
+			});
+		}
 	}
 
 	@decorate(prebidLazyRun)

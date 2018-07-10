@@ -49,6 +49,7 @@ bidders.requestBids({
 
 events.on(events.AD_SLOT_CREATED, (slot) => {
 	bidders.updateSlotTargeting(slot.getSlotName());
+	bidders.refreshBids(slot.config);
 });
 
 new AdEngine().init();

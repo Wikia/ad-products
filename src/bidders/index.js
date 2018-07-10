@@ -32,24 +32,11 @@ function applyTargetingParams(slotName, targeting) {
 }
 
 function getBidParameters(slotName) {
-	let floorPrice = 0;
 	const slotParams = {};
-
-	if (biddersRegistry.prebid && biddersRegistry.prebid.wasCalled()) {
-		const prebidPrices = biddersRegistry.prebid.getSlotBestPrice(slotName);
-
-		floorPrice = Math.max.apply(
-			null,
-			Object
-				.keys(prebidPrices)
-				.filter(key => !isNaN(parseFloat(prebidPrices[key])) && parseFloat(prebidPrices[key]) > 0)
-				.map(key => parseFloat(prebidPrices[key]))
-		);
-	}
 
 	forEachBidder((bidder) => {
 		if (bidder && bidder.wasCalled()) {
-			const params = bidder.getSlotTargetingParams(slotName, floorPrice);
+			const params = bidder.getSlotTargetingParams(slotName);
 
 			Object
 				.keys(params)
@@ -82,6 +69,14 @@ function getCurrentSlotPrices(slotName) {
 
 function getDfpSlotPrices(slotName) {
 	return realSlotPrices[slotName] || {};
+}
+
+function refreshBids({ bidderAlias, repeat }) {
+	if (bidderAlias && repeat) {
+		forEachBidder((bidder) => {
+			bidder.refresh(bidderAlias);
+		});
+	}
 }
 
 function requestBids({ resetListener = null, responseListener = null }) {
@@ -120,19 +115,6 @@ function updateSlotTargeting(slotName) {
 	applyTargetingParams(slotName, bidderTargeting);
 }
 
-/**
- * @deprecated since v12.1.0
- */
-function updateSlotsTargeting() {
-	const slots = context.get('slots');
-
-	Object
-		.keys(slots)
-		.forEach((slotName) => {
-			updateSlotTargeting(slotName);
-		});
-}
-
 function hasAllResponses() {
 	const missingBidders = Object
 		.keys(biddersRegistry)
@@ -149,7 +131,7 @@ export const bidders = {
 	getCurrentSlotPrices,
 	getDfpSlotPrices,
 	hasAllResponses,
+	refreshBids,
 	requestBids,
-	updateSlotTargeting,
-	updateSlotsTargeting
+	updateSlotTargeting
 };

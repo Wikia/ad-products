@@ -48,12 +48,12 @@ export class BaseBidder {
 		return {};
 	}
 
-	getSlotTargetingParams(slotName, floorPrice) {
+	getSlotTargetingParams(slotName) {
 		if (!this.called || !this.isSlotSupported(slotName) || !this.getTargetingParams) {
 			return {};
 		}
 
-		return this.getTargetingParams(slotName, floorPrice);
+		return this.getTargetingParams(slotName);
 	}
 
 	hasResponse() {
@@ -77,6 +77,12 @@ export class BaseBidder {
 
 		if (this.onResponseCallbacks) {
 			this.onResponseCallbacks.start();
+		}
+	}
+
+	refresh(slotAlias) {
+		if (this.refreshBids) {
+			this.refreshBids(slotAlias);
 		}
 	}
 
