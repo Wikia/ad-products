@@ -1407,13 +1407,6 @@ var base_bidder_BaseBidder = function () {
 			}
 		}
 	}, {
-		key: 'refresh',
-		value: function refresh(slotAlias) {
-			if (this.refreshBids) {
-				this.refreshBids(slotAlias);
-			}
-		}
-	}, {
 		key: 'resetState',
 		value: function resetState() {
 			var _this2 = this;
@@ -2250,15 +2243,13 @@ function getBidByAdId(adId) {
 	return bids.length ? bids[0] : null;
 }
 
-function getBidByAdUnitCode(adUnitCode) {
-	var rendered = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
+function getAvailableBidsByAdUnitCode(adUnitCode) {
 	var bids = [];
 
 	if (window.pbjs && typeof window.pbjs.getBidResponsesForAdUnitCode === 'function') {
 		bids = window.pbjs.getBidResponsesForAdUnitCode(adUnitCode).bids || [];
 		bids = bids.filter(function (bid) {
-			return rendered ? bid.status === 'rendered' : bid.status !== 'rendered';
+			return bid.status !== 'rendered';
 		});
 	}
 
@@ -2945,8 +2936,7 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 		_this2.isLazyLoadingEnabled = _this2.bidderConfig.lazyLoadingEnabled;
 		_this2.isCMPEnabled = ad_engine_["context"].get('custom.isCMPEnabled');
 		_this2.adUnits = setupAdUnits(_this2.bidderConfig, _this2.isLazyLoadingEnabled ? 'pre' : 'off');
-		_this2.refreshEnabled = false;
-		_this2.refreshSlots = [];
+		_this2.bidsRefreshing = ad_engine_["context"].get('bidders.prebid.bidsRefreshing');
 		_this2.prebidConfig = {
 			debug: ad_engine_["utils"].queryString.get('pbjs_debug') === '1' || ad_engine_["utils"].queryString.get('pbjs_debug') === 'true',
 			enableSendAllBids: true,
@@ -2971,6 +2961,10 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 		window.pbjs.que = window.pbjs.que || [];
 
 		_this2.applyConfig(_this2.prebidConfig);
+
+		if (_this2.bidsRefreshing && _this2.bidsRefreshing.enabled) {
+			_this2.registerBidsRefreshing();
+		}
 		return _this2;
 	}
 
@@ -3051,7 +3045,7 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 			var slotParams = {};
 
 			var slotAlias = ad_engine_["context"].get('slots.' + slotName + '.bidderAlias') || slotName;
-			var bids = getBidByAdUnitCode(slotAlias, false);
+			var bids = getAvailableBidsByAdUnitCode(slotAlias);
 
 			if (bids.length) {
 				var bidParams = null;
@@ -3088,27 +3082,19 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 			});
 		}
 	}, {
-		key: 'refreshBids',
-		value: function refreshBids(slotAlias) {
+		key: 'registerBidsRefreshing',
+		value: function registerBidsRefreshing() {
 			var _this4 = this;
 
-			if (!this.refreshSlots.includes(slotAlias)) {
-				this.refreshSlots.push(slotAlias);
-			}
+			window.pbjs.onEvent('bidWon', function (winningBid) {
+				if (_this4.bidsRefreshing.slots.indexOf(winningBid.adUnitCode) !== -1) {
+					var adUnitsToRefresh = _this4.adUnits.filter(function (adUnit) {
+						return adUnit.code === winningBid.adUnitCode && adUnit.bids && adUnit.bids[0] && adUnit.bids[0].bidder === winningBid.bidderCode;
+					});
 
-			if (!this.refreshEnabled) {
-				this.refreshEnabled = true;
-
-				window.pbjs.onEvent('bidWon', function (winningBid) {
-					if (_this4.refreshSlots.includes(winningBid.adUnitCode)) {
-						var adUnitRefresh = _this4.adUnits.filter(function (adUnit) {
-							return adUnit.code === winningBid.adUnitCode && adUnit.bids && adUnit.bids[0] && adUnit.bids[0].bidder === winningBid.bidderCode;
-						});
-
-						_this4.requestBids(adUnitRefresh);
-					}
-				});
-			}
+					_this4.requestBids(adUnitsToRefresh);
+				}
+			});
 		}
 	}, {
 		key: 'requestBids',
@@ -3198,22 +3184,11 @@ function getDfpSlotPrices(slotName) {
 	return realSlotPrices[slotName] || {};
 }
 
-function refreshBids(_ref) {
-	var bidderAlias = _ref.bidderAlias,
-	    repeat = _ref.repeat;
-
-	if (bidderAlias && repeat) {
-		forEachBidder(function (bidder) {
-			bidder.refresh(bidderAlias);
-		});
-	}
-}
-
-function requestBids(_ref2) {
-	var _ref2$resetListener = _ref2.resetListener,
-	    resetListener = _ref2$resetListener === undefined ? null : _ref2$resetListener,
-	    _ref2$responseListene = _ref2.responseListener,
-	    responseListener = _ref2$responseListene === undefined ? null : _ref2$responseListene;
+function requestBids(_ref) {
+	var _ref$resetListener = _ref.resetListener,
+	    resetListener = _ref$resetListener === undefined ? null : _ref$resetListener,
+	    _ref$responseListener = _ref.responseListener,
+	    responseListener = _ref$responseListener === undefined ? null : _ref$responseListener;
 
 	var config = ad_engine_["context"].get('bidders');
 
@@ -3264,7 +3239,6 @@ var bidders_bidders = {
 	getCurrentSlotPrices: getCurrentSlotPrices,
 	getDfpSlotPrices: getDfpSlotPrices,
 	hasAllResponses: hasAllResponses,
-	refreshBids: refreshBids,
 	requestBids: requestBids,
 	updateSlotTargeting: updateSlotTargeting
 };

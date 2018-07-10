@@ -46,7 +46,7 @@ export class Prebid extends BaseBidder {
 		this.applyConfig(this.prebidConfig);
 
 		if (this.bidsRefreshing && this.bidsRefreshing.enabled) {
-			this.refreshBids();
+			this.registerBidsRefreshing();
 		}
 	}
 
@@ -161,7 +161,7 @@ export class Prebid extends BaseBidder {
 		);
 	}
 
-	refreshBids() {
+	registerBidsRefreshing() {
 		window.pbjs.onEvent('bidWon', (winningBid) => {
 			if (this.bidsRefreshing.slots.indexOf(winningBid.adUnitCode) !== -1) {
 				const adUnitsToRefresh = this.adUnits.filter(
