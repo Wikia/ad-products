@@ -2,7 +2,10 @@ import { expect } from 'chai';
 import { Prebid } from '../../../src/bidders/prebid/index'
 
 const bidderConfig = {
-	lazyLoadingEnabled: false
+	lazyLoadingEnabled: false,
+	bidsRefreshing: {
+		enabled: false
+	}
 };
 
 describe('Prebid bidder', () => {

@@ -20,6 +20,10 @@ export default {
 		prebid: {
 			enabled: true,
 			lazyLoadingEnabled: false,
+			bidsRefreshing: {
+				enabled: true,
+				slots: ['top_boxad']
+			},
 			wikia: {
 				enabled: true,
 				slots: {

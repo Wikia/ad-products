@@ -71,14 +71,6 @@ function getDfpSlotPrices(slotName) {
 	return realSlotPrices[slotName] || {};
 }
 
-function refreshBids({ bidderAlias, repeat }) {
-	if (bidderAlias && repeat) {
-		forEachBidder((bidder) => {
-			bidder.refresh(bidderAlias);
-		});
-	}
-}
-
 function requestBids({ resetListener = null, responseListener = null }) {
 	const config = context.get('bidders');
 
@@ -131,7 +123,6 @@ export const bidders = {
 	getCurrentSlotPrices,
 	getDfpSlotPrices,
 	hasAllResponses,
-	refreshBids,
 	requestBids,
 	updateSlotTargeting
 };

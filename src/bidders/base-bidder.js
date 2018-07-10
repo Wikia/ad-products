@@ -80,12 +80,6 @@ export class BaseBidder {
 		}
 	}
 
-	refresh(slotAlias) {
-		if (this.refreshBids) {
-			this.refreshBids(slotAlias);
-		}
-	}
-
 	resetState() {
 		this.called = false;
 		this.response = false;

@@ -4,7 +4,7 @@ import { BaseBidder } from './../base-bidder';
 import { getPriorities } from './adapters-registry';
 import { getPrebidBestPrice } from './price-helper';
 import { getSettings } from './prebid-settings';
-import { getBidByAdUnitCode, setupAdUnits } from './prebid-helper';
+import { getAvailableBidsByAdUnitCode, setupAdUnits } from './prebid-helper';
 
 export const prebidLazyRun = method => (...args) => window.pbjs.que.push(() => method.apply(this, args));
 
@@ -19,8 +19,7 @@ export class Prebid extends BaseBidder {
 		this.isLazyLoadingEnabled = this.bidderConfig.lazyLoadingEnabled;
 		this.isCMPEnabled = context.get('custom.isCMPEnabled');
 		this.adUnits = setupAdUnits(this.bidderConfig, this.isLazyLoadingEnabled ? 'pre' : 'off');
-		this.refreshEnabled = false;
-		this.refreshSlots = [];
+		this.bidsRefreshing = context.get('bidders.prebid.bidsRefreshing');
 		this.prebidConfig = {
 			debug: utils.queryString.get('pbjs_debug') === '1' || utils.queryString.get('pbjs_debug') === 'true',
 			enableSendAllBids: true,
@@ -45,6 +44,10 @@ export class Prebid extends BaseBidder {
 		window.pbjs.que = window.pbjs.que || [];
 
 		this.applyConfig(this.prebidConfig);
+
+		if (this.bidsRefreshing && this.bidsRefreshing.enabled) {
+			this.refreshBids();
+		}
 	}
 
 	static validResponseStatusCode = 1;
@@ -122,7 +125,7 @@ export class Prebid extends BaseBidder {
 		let slotParams = {};
 
 		const slotAlias = context.get(`slots.${slotName}.bidderAlias`) || slotName;
-		const bids = getBidByAdUnitCode(slotAlias, false);
+		const bids = getAvailableBidsByAdUnitCode(slotAlias);
 
 		if (bids.length) {
 			let bidParams = null;
@@ -158,29 +161,21 @@ export class Prebid extends BaseBidder {
 		);
 	}
 
-	refreshBids(slotAlias) {
-		if (!this.refreshSlots.includes(slotAlias)) {
-			this.refreshSlots.push(slotAlias);
-		}
+	refreshBids() {
+		window.pbjs.onEvent('bidWon', (winningBid) => {
+			if (this.bidsRefreshing.slots.indexOf(winningBid.adUnitCode) !== -1) {
+				const adUnitsToRefresh = this.adUnits.filter(
+					adUnit => (
+						adUnit.code === winningBid.adUnitCode &&
+						adUnit.bids &&
+						adUnit.bids[0] &&
+						adUnit.bids[0].bidder === winningBid.bidderCode
+					)
+				);
 
-		if (!this.refreshEnabled) {
-			this.refreshEnabled = true;
-
-			window.pbjs.onEvent('bidWon', (winningBid) => {
-				if (this.refreshSlots.includes(winningBid.adUnitCode)) {
-					const adUnitRefresh = this.adUnits.filter(
-						adUnit => (
-							adUnit.code === winningBid.adUnitCode &&
-							adUnit.bids &&
-							adUnit.bids[0] &&
-							adUnit.bids[0].bidder === winningBid.bidderCode
-						)
-					);
-
-					this.requestBids(adUnitRefresh);
-				}
-			});
-		}
+				this.requestBids(adUnitsToRefresh);
+			}
+		});
 	}
 
 	@decorate(prebidLazyRun)

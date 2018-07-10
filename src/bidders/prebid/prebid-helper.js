@@ -57,14 +57,12 @@ export function getBidByAdId(adId) {
 	return bids.length ? bids[0] : null;
 }
 
-export function getBidByAdUnitCode(adUnitCode, rendered = false) {
+export function getAvailableBidsByAdUnitCode(adUnitCode) {
 	let bids = [];
 
 	if (window.pbjs && typeof window.pbjs.getBidResponsesForAdUnitCode === 'function') {
 		bids = window.pbjs.getBidResponsesForAdUnitCode(adUnitCode).bids || [];
-		bids = bids.filter(
-			bid => (rendered ? bid.status === 'rendered' : bid.status !== 'rendered')
-		);
+		bids = bids.filter(bid => bid.status !== 'rendered');
 	}
 
 	return bids;
