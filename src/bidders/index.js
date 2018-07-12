@@ -1,4 +1,4 @@
-import { context, events } from '@wikia/ad-engine';
+import { context, events, utils } from '@wikia/ad-engine';
 import { A9 } from './a9/index';
 import { Prebid } from './prebid/index';
 
@@ -6,6 +6,7 @@ require('./../../lib/prebid.min');
 
 const biddersRegistry = {};
 const realSlotPrices = {};
+const logGroup = 'bidders';
 
 function forEachBidder(callback) {
 	Object
@@ -21,6 +22,8 @@ function resetTargetingKeys(slotName) {
 			context.set(`slots.${slotName}.targeting.${key}`, null);
 		});
 	});
+
+	utils.logger(logGroup, 'resetTargetingKeys', slotName);
 }
 
 function applyTargetingParams(slotName, targeting) {
@@ -71,18 +74,18 @@ function getDfpSlotPrices(slotName) {
 	return realSlotPrices[slotName] || {};
 }
 
-function requestBids({ resetListener = null, responseListener = null }) {
+function requestBids({ responseListener = null }) {
 	const config = context.get('bidders');
 
 	if (config.prebid && config.prebid.enabled) {
 		if (!events.PREBID_LAZY_CALL) {
 			events.registerEvent('PREBID_LAZY_CALL');
 		}
-		biddersRegistry.prebid = new Prebid(config.prebid, resetListener, config.timeout);
+		biddersRegistry.prebid = new Prebid(config.prebid, config.timeout);
 	}
 
 	if (config.a9 && config.a9.enabled) {
-		biddersRegistry.a9 = new A9(config.a9, resetListener, config.timeout);
+		biddersRegistry.a9 = new A9(config.a9, config.timeout);
 	}
 
 	forEachBidder((bidder) => {
@@ -105,6 +108,8 @@ function updateSlotTargeting(slotName) {
 
 	resetTargetingKeys(slotName);
 	applyTargetingParams(slotName, bidderTargeting);
+
+	utils.logger(logGroup, 'updateSlotTargeting', slotName, bidderTargeting);
 }
 
 function hasAllResponses() {
@@ -113,7 +118,7 @@ function hasAllResponses() {
 		.filter((bidderName) => {
 			const bidder = biddersRegistry[bidderName];
 
-			return !bidder.wasCalled() && !bidder.hasResponse();
+			return !bidder.hasResponse();
 		});
 
 	return missingBidders.length === 0;

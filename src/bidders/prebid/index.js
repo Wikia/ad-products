@@ -9,11 +9,9 @@ import { getAvailableBidsByAdUnitCode, setupAdUnits } from './prebid-helper';
 export const prebidLazyRun = method => (...args) => window.pbjs.que.push(() => method.apply(this, args));
 
 export class Prebid extends BaseBidder {
-	constructor(bidderConfig, resetListener, timeout = 2000) {
-		super(bidderConfig, resetListener, timeout);
+	constructor(bidderConfig, timeout = 2000) {
+		super('prebid', bidderConfig, timeout);
 
-		this.logGroup = 'prebid-bidder';
-		this.name = 'prebid';
 		this.loaded = false;
 		this.lazyLoaded = false;
 		this.isLazyLoadingEnabled = this.bidderConfig.lazyLoadingEnabled;
