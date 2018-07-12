@@ -14,6 +14,7 @@ if (!webhookUrl) {
 }
 
 const webhook = new IncomingWebhook(webhookUrl);
+const jenkinsUrl = 'http://jenkins.wikia-prod:8080';
 
 let text;
 let attachments = [];
@@ -37,17 +38,17 @@ if (failed) {
 				{
 					type: 'button',
 					text: 'app',
-					url: `http://jenkins:8080/job/update_dependencies_app/parambuild/?adproducts_version=v${version}`
+					url: `${jenkinsUrl}/job/update_dependencies_app/parambuild/?adproducts_version=v${version}`
 				},
 				{
 					type: 'button',
 					text: 'f2',
-					url: `http://jenkins:8080/job/update_dependencies_f2/parambuild/?adproducts_version=v${version}`
+					url: `${jenkinsUrl}/job/update_dependencies_f2/parambuild/?adproducts_version=v${version}`
 				},
 				{
 					type: 'button',
 					text: 'mobile-wiki',
-					url: `http://jenkins:8080/job/update_dependencies_mobilewiki/parambuild/?adproducts_version=v${version}`
+					url: `${jenkinsUrl}/job/update_dependencies_mobilewiki/parambuild/?adproducts_version=v${version}`
 				},
 			]
 		}
