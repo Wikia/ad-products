@@ -1372,12 +1372,12 @@ var base_bidder_BaseBidder = function () {
 		}
 	}, {
 		key: 'getSlotTargetingParams',
-		value: function getSlotTargetingParams(slotName, floorPrice) {
+		value: function getSlotTargetingParams(slotName) {
 			if (!this.called || !this.isSlotSupported(slotName) || !this.getTargetingParams) {
 				return {};
 			}
 
-			return this.getTargetingParams(slotName, floorPrice);
+			return this.getTargetingParams(slotName);
 		}
 	}, {
 		key: 'hasResponse',
@@ -2243,6 +2243,19 @@ function getBidByAdId(adId) {
 	return bids.length ? bids[0] : null;
 }
 
+function getAvailableBidsByAdUnitCode(adUnitCode) {
+	var bids = [];
+
+	if (window.pbjs && typeof window.pbjs.getBidResponsesForAdUnitCode === 'function') {
+		bids = window.pbjs.getBidResponsesForAdUnitCode(adUnitCode).bids || [];
+		bids = bids.filter(function (bid) {
+			return bid.status !== 'rendered';
+		});
+	}
+
+	return bids;
+}
+
 function getPrebid() {
 	return window.pbjs;
 }
@@ -2923,8 +2936,9 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 		_this2.isLazyLoadingEnabled = _this2.bidderConfig.lazyLoadingEnabled;
 		_this2.isCMPEnabled = ad_engine_["context"].get('custom.isCMPEnabled');
 		_this2.adUnits = setupAdUnits(_this2.bidderConfig, _this2.isLazyLoadingEnabled ? 'pre' : 'off');
+		_this2.bidsRefreshing = ad_engine_["context"].get('bidders.prebid.bidsRefreshing');
 		_this2.prebidConfig = {
-			debug: ad_engine_["utils"].queryString.get('pbjs_debug') === '1',
+			debug: ad_engine_["utils"].queryString.get('pbjs_debug') === '1' || ad_engine_["utils"].queryString.get('pbjs_debug') === 'true',
 			enableSendAllBids: true,
 			bidderSequence: 'random',
 			bidderTimeout: _this2.timeout,
@@ -2947,6 +2961,10 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 		window.pbjs.que = window.pbjs.que || [];
 
 		_this2.applyConfig(_this2.prebidConfig);
+
+		if (_this2.bidsRefreshing && _this2.bidsRefreshing.enabled) {
+			_this2.registerBidsRefreshing();
+		}
 		return _this2;
 	}
 
@@ -3027,35 +3045,28 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 			var slotParams = {};
 
 			var slotAlias = ad_engine_["context"].get('slots.' + slotName + '.bidderAlias') || slotName;
+			var bids = getAvailableBidsByAdUnitCode(slotAlias);
 
-			if (window.pbjs && typeof window.pbjs.getBidResponsesForAdUnitCode === 'function') {
-				var bids = window.pbjs.getBidResponsesForAdUnitCode(slotAlias).bids || [];
+			if (bids.length) {
+				var bidParams = null;
+				var priorities = getPriorities();
 
-				if (bids.length) {
-					var bidParams = null;
-					var priorities = getPriorities();
-
-					bids.forEach(function (param) {
-						if (param.status === 'rendered') {
-							return;
-						}
-
-						if (!bidParams) {
-							bidParams = param;
-						} else if (bidParams.cpm === param.cpm) {
-							if (priorities[bidParams.bidder] === priorities[param.bidder]) {
-								bidParams = bidParams.timeToRespond > param.timeToRespond ? param : bidParams;
-							} else {
-								bidParams = priorities[bidParams.bidder] < priorities[param.bidder] ? param : bidParams;
-							}
+				bids.forEach(function (param) {
+					if (!bidParams) {
+						bidParams = param;
+					} else if (bidParams.cpm === param.cpm) {
+						if (priorities[bidParams.bidder] === priorities[param.bidder]) {
+							bidParams = bidParams.timeToRespond > param.timeToRespond ? param : bidParams;
 						} else {
-							bidParams = bidParams.cpm < param.cpm ? param : bidParams;
+							bidParams = priorities[bidParams.bidder] < priorities[param.bidder] ? param : bidParams;
 						}
-					});
-
-					if (bidParams) {
-						slotParams = bidParams.adserverTargeting;
+					} else {
+						bidParams = bidParams.cpm < param.cpm ? param : bidParams;
 					}
+				});
+
+				if (bidParams) {
+					slotParams = bidParams.adserverTargeting;
 				}
 			}
 
@@ -3068,6 +3079,21 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 
 			return this.adUnits && this.adUnits.some(function (adUnit) {
 				return adUnit.code === slotAlias;
+			});
+		}
+	}, {
+		key: 'registerBidsRefreshing',
+		value: function registerBidsRefreshing() {
+			var _this4 = this;
+
+			window.pbjs.onEvent('bidWon', function (winningBid) {
+				if (_this4.bidsRefreshing.slots.indexOf(winningBid.adUnitCode) !== -1) {
+					var adUnitsToRefresh = _this4.adUnits.filter(function (adUnit) {
+						return adUnit.code === winningBid.adUnitCode && adUnit.bids && adUnit.bids[0] && adUnit.bids[0].bidder === winningBid.bidderCode;
+					});
+
+					_this4.requestBids(adUnitsToRefresh);
+				}
 			});
 		}
 	}, {
@@ -3123,22 +3149,11 @@ function applyTargetingParams(slotName, targeting) {
 }
 
 function getBidParameters(slotName) {
-	var floorPrice = 0;
 	var slotParams = {};
-
-	if (biddersRegistry.prebid && biddersRegistry.prebid.wasCalled()) {
-		var prebidPrices = biddersRegistry.prebid.getSlotBestPrice(slotName);
-
-		floorPrice = Math.max.apply(null, keys_default()(prebidPrices).filter(function (key) {
-			return !isNaN(parseFloat(prebidPrices[key])) && parseFloat(prebidPrices[key]) > 0;
-		}).map(function (key) {
-			return parseFloat(prebidPrices[key]);
-		}));
-	}
 
 	forEachBidder(function (bidder) {
 		if (bidder && bidder.wasCalled()) {
-			var params = bidder.getSlotTargetingParams(slotName, floorPrice);
+			var params = bidder.getSlotTargetingParams(slotName);
 
 			keys_default()(params).forEach(function (key) {
 				slotParams[key] = params[key];
@@ -3210,17 +3225,6 @@ function updateSlotTargeting(slotName) {
 	applyTargetingParams(slotName, bidderTargeting);
 }
 
-/**
- * @deprecated since v12.1.0
- */
-function updateSlotsTargeting() {
-	var slots = ad_engine_["context"].get('slots');
-
-	keys_default()(slots).forEach(function (slotName) {
-		updateSlotTargeting(slotName);
-	});
-}
-
 function hasAllResponses() {
 	var missingBidders = keys_default()(biddersRegistry).filter(function (bidderName) {
 		var bidder = biddersRegistry[bidderName];
@@ -3236,8 +3240,7 @@ var bidders_bidders = {
 	getDfpSlotPrices: getDfpSlotPrices,
 	hasAllResponses: hasAllResponses,
 	requestBids: requestBids,
-	updateSlotTargeting: updateSlotTargeting,
-	updateSlotsTargeting: updateSlotsTargeting
+	updateSlotTargeting: updateSlotTargeting
 };
 
 /***/ }),

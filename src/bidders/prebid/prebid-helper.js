@@ -57,6 +57,17 @@ export function getBidByAdId(adId) {
 	return bids.length ? bids[0] : null;
 }
 
+export function getAvailableBidsByAdUnitCode(adUnitCode) {
+	let bids = [];
+
+	if (window.pbjs && typeof window.pbjs.getBidResponsesForAdUnitCode === 'function') {
+		bids = window.pbjs.getBidResponsesForAdUnitCode(adUnitCode).bids || [];
+		bids = bids.filter(bid => bid.status !== 'rendered');
+	}
+
+	return bids;
+}
+
 export function getPrebid() {
 	return window.pbjs;
 }
