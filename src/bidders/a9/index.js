@@ -2,11 +2,9 @@ import { context } from '@wikia/ad-engine';
 import { BaseBidder } from './../base-bidder';
 
 export class A9 extends BaseBidder {
-	constructor(bidderConfig, resetListener, timeout = 2000) {
-		super(bidderConfig, resetListener, timeout);
+	constructor(bidderConfig, timeout = 2000) {
+		super('a9', bidderConfig, timeout);
 
-		this.logGroup = 'a9-bidder';
-		this.name = 'a9';
 		this.loaded = false;
 		this.isCMPEnabled = context.get('custom.isCMPEnabled');
 		this.amazonId = this.bidderConfig.amazonId;

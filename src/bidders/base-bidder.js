@@ -1,18 +1,16 @@
 import { utils } from '@wikia/ad-engine';
 
 export class BaseBidder {
-	constructor(bidderConfig, resetListener, timeout = 2000) {
-		this.logGroup = 'bidder';
+	constructor(name, bidderConfig, timeout = 2000) {
+		this.name = name;
+		this.logGroup = `${name}-bidder`;
 		this.bidderConfig = bidderConfig;
 		this.timeout = timeout;
 
 		this.resetState();
-
-		if (resetListener) {
-			resetListener(this.resetState);
-		}
-
 		this.onResponse = () => this.onResponseCall();
+
+		utils.logger(this.logGroup, 'created');
 	}
 
 	addResponseListener(callback) {
@@ -26,6 +24,8 @@ export class BaseBidder {
 		if (this.callBids) {
 			this.callBids(this.onResponse);
 		}
+
+		utils.logger(this.logGroup, 'called');
 	}
 
 	createWithTimeout(func, msToTimeout = 2000) {
@@ -34,10 +34,6 @@ export class BaseBidder {
 		});
 
 		return Promise.race([new Promise(func), timeout]);
-	}
-
-	getName() {
-		return this.name;
 	}
 
 	getSlotBestPrice(slotName) {
@@ -78,6 +74,8 @@ export class BaseBidder {
 		if (this.onResponseCallbacks) {
 			this.onResponseCallbacks.start();
 		}
+
+		utils.logger(this.logGroup, 'respond');
 	}
 
 	resetState() {
