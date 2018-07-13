@@ -1308,26 +1308,24 @@ var promise_default = /*#__PURE__*/__webpack_require__.n(promise);
 
 
 var base_bidder_BaseBidder = function () {
-	function BaseBidder(bidderConfig, resetListener) {
+	function BaseBidder(name, bidderConfig) {
 		var _this = this;
 
 		var timeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2000;
 
 		classCallCheck_default()(this, BaseBidder);
 
-		this.logGroup = 'bidder';
+		this.name = name;
+		this.logGroup = name + '-bidder';
 		this.bidderConfig = bidderConfig;
 		this.timeout = timeout;
 
 		this.resetState();
-
-		if (resetListener) {
-			resetListener(this.resetState);
-		}
-
 		this.onResponse = function () {
 			return _this.onResponseCall();
 		};
+
+		ad_engine_["utils"].logger(this.logGroup, 'created');
 	}
 
 	createClass_default()(BaseBidder, [{
@@ -1344,6 +1342,8 @@ var base_bidder_BaseBidder = function () {
 			if (this.callBids) {
 				this.callBids(this.onResponse);
 			}
+
+			ad_engine_["utils"].logger(this.logGroup, 'called');
 		}
 	}, {
 		key: 'createWithTimeout',
@@ -1355,11 +1355,6 @@ var base_bidder_BaseBidder = function () {
 			});
 
 			return promise_default.a.race([new promise_default.a(func), timeout]);
-		}
-	}, {
-		key: 'getName',
-		value: function getName() {
-			return this.name;
 		}
 	}, {
 		key: 'getSlotBestPrice',
@@ -1405,6 +1400,8 @@ var base_bidder_BaseBidder = function () {
 			if (this.onResponseCallbacks) {
 				this.onResponseCallbacks.start();
 			}
+
+			ad_engine_["utils"].logger(this.logGroup, 'respond');
 		}
 	}, {
 		key: 'resetState',
@@ -1454,15 +1451,13 @@ var base_bidder_BaseBidder = function () {
 var a9_A9 = function (_BaseBidder) {
 	inherits_default()(A9, _BaseBidder);
 
-	function A9(bidderConfig, resetListener) {
-		var timeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2000;
+	function A9(bidderConfig) {
+		var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2000;
 
 		classCallCheck_default()(this, A9);
 
-		var _this = possibleConstructorReturn_default()(this, (A9.__proto__ || get_prototype_of_default()(A9)).call(this, bidderConfig, resetListener, timeout));
+		var _this = possibleConstructorReturn_default()(this, (A9.__proto__ || get_prototype_of_default()(A9)).call(this, 'a9', bidderConfig, timeout));
 
-		_this.logGroup = 'a9-bidder';
-		_this.name = 'a9';
 		_this.loaded = false;
 		_this.isCMPEnabled = ad_engine_["context"].get('custom.isCMPEnabled');
 		_this.amazonId = _this.bidderConfig.amazonId;
@@ -2922,15 +2917,13 @@ var prebidLazyRun = function prebidLazyRun(method) {
 var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebidLazyRun), _dec2 = Object(external_core_decorators_["decorate"])(prebidLazyRun), _dec3 = Object(external_core_decorators_["decorate"])(prebidLazyRun), (_class = function (_BaseBidder) {
 	inherits_default()(Prebid, _BaseBidder);
 
-	function Prebid(bidderConfig, resetListener) {
-		var timeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2000;
+	function Prebid(bidderConfig) {
+		var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2000;
 
 		classCallCheck_default()(this, Prebid);
 
-		var _this2 = possibleConstructorReturn_default()(this, (Prebid.__proto__ || get_prototype_of_default()(Prebid)).call(this, bidderConfig, resetListener, timeout));
+		var _this2 = possibleConstructorReturn_default()(this, (Prebid.__proto__ || get_prototype_of_default()(Prebid)).call(this, 'prebid', bidderConfig, timeout));
 
-		_this2.logGroup = 'prebid-bidder';
-		_this2.name = 'prebid';
 		_this2.loaded = false;
 		_this2.lazyLoaded = false;
 		_this2.isLazyLoadingEnabled = _this2.bidderConfig.lazyLoadingEnabled;
@@ -3127,6 +3120,7 @@ __webpack_require__(67);
 
 var biddersRegistry = {};
 var realSlotPrices = {};
+var logGroup = 'bidders';
 
 function forEachBidder(callback) {
 	keys_default()(biddersRegistry).forEach(function (bidderName) {
@@ -3140,6 +3134,8 @@ function resetTargetingKeys(slotName) {
 			ad_engine_["context"].set('slots.' + slotName + '.targeting.' + key, null);
 		});
 	});
+
+	ad_engine_["utils"].logger(logGroup, 'resetTargetingKeys', slotName);
 }
 
 function applyTargetingParams(slotName, targeting) {
@@ -3185,9 +3181,7 @@ function getDfpSlotPrices(slotName) {
 }
 
 function requestBids(_ref) {
-	var _ref$resetListener = _ref.resetListener,
-	    resetListener = _ref$resetListener === undefined ? null : _ref$resetListener,
-	    _ref$responseListener = _ref.responseListener,
+	var _ref$responseListener = _ref.responseListener,
 	    responseListener = _ref$responseListener === undefined ? null : _ref$responseListener;
 
 	var config = ad_engine_["context"].get('bidders');
@@ -3196,11 +3190,11 @@ function requestBids(_ref) {
 		if (!ad_engine_["events"].PREBID_LAZY_CALL) {
 			ad_engine_["events"].registerEvent('PREBID_LAZY_CALL');
 		}
-		biddersRegistry.prebid = new prebid_Prebid(config.prebid, resetListener, config.timeout);
+		biddersRegistry.prebid = new prebid_Prebid(config.prebid, config.timeout);
 	}
 
 	if (config.a9 && config.a9.enabled) {
-		biddersRegistry.a9 = new a9_A9(config.a9, resetListener, config.timeout);
+		biddersRegistry.a9 = new a9_A9(config.a9, config.timeout);
 	}
 
 	forEachBidder(function (bidder) {
@@ -3223,13 +3217,15 @@ function updateSlotTargeting(slotName) {
 
 	resetTargetingKeys(slotName);
 	applyTargetingParams(slotName, bidderTargeting);
+
+	ad_engine_["utils"].logger(logGroup, 'updateSlotTargeting', slotName, bidderTargeting);
 }
 
 function hasAllResponses() {
 	var missingBidders = keys_default()(biddersRegistry).filter(function (bidderName) {
 		var bidder = biddersRegistry[bidderName];
 
-		return !bidder.wasCalled() && !bidder.hasResponse();
+		return !bidder.hasResponse();
 	});
 
 	return missingBidders.length === 0;
