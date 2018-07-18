@@ -5,6 +5,7 @@ import { AppnexusWebads } from './adapters/appnexus-webads';
 import { AudienceNetwork } from './adapters/audience-network';
 import { Beachfront } from './adapters/beachfront';
 import { IndexExchange } from './adapters/index-exchange';
+import { Kargo } from './adapters/kargo';
 import { Onemobile } from './adapters/onemobile';
 import { Openx } from './adapters/openx';
 import { Pubmatic } from './adapters/pubmatic';
@@ -23,6 +24,7 @@ const availableAdapters = {
 	audienceNetwork: AudienceNetwork,
 	beachfront: Beachfront,
 	indexExchange: IndexExchange,
+	kargo: Kargo,
 	onemobile: Onemobile,
 	openx: Openx,
 	pubmatic: Pubmatic,
