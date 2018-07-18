@@ -16,7 +16,7 @@ export function getPrebidBestPrice(slotName) {
 		});
 
 		slotBids.forEach((bid) => {
-			if (isValidPrice(bid)) {
+			if (isValidPrice(bid) && bid.status !== 'rendered') {
 				const { bidderCode, cpm } = bid;
 				const cpmPrice = transformPriceFromCpm(cpm);
 

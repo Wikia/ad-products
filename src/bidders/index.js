@@ -8,30 +8,20 @@ const biddersRegistry = {};
 const realSlotPrices = {};
 const logGroup = 'bidders';
 
-function forEachBidder(callback) {
-	Object
-		.keys(biddersRegistry)
-		.forEach((bidderName) => {
-			callback(biddersRegistry[bidderName]);
-		});
-}
-
-function resetTargetingKeys(slotName) {
-	forEachBidder((bidder) => {
-		bidder.getTargetingKeysToReset().forEach((key) => {
-			context.set(`slots.${slotName}.targeting.${key}`, null);
-		});
-	});
-
-	utils.logger(logGroup, 'resetTargetingKeys', slotName);
-}
-
 function applyTargetingParams(slotName, targeting) {
 	Object
 		.keys(targeting)
 		.forEach(
 			key => context.set(`slots.${slotName}.targeting.${key}`, targeting[key])
 		);
+}
+
+function forEachBidder(callback) {
+	Object
+		.keys(biddersRegistry)
+		.forEach((bidderName) => {
+			callback(biddersRegistry[bidderName]);
+		});
 }
 
 function getBidParameters(slotName) {
@@ -74,6 +64,28 @@ function getDfpSlotPrices(slotName) {
 	return realSlotPrices[slotName] || {};
 }
 
+function hasAllResponses() {
+	const missingBidders = Object
+		.keys(biddersRegistry)
+		.filter((bidderName) => {
+			const bidder = biddersRegistry[bidderName];
+
+			return !bidder.hasResponse();
+		});
+
+	return missingBidders.length === 0;
+}
+
+function resetTargetingKeys(slotName) {
+	forEachBidder((bidder) => {
+		bidder.getTargetingKeysToReset().forEach((key) => {
+			context.set(`slots.${slotName}.targeting.${key}`, null);
+		});
+	});
+
+	utils.logger(logGroup, 'resetTargetingKeys', slotName);
+}
+
 function requestBids({ responseListener = null }) {
 	const config = context.get('bidders');
 
@@ -110,18 +122,6 @@ function updateSlotTargeting(slotName) {
 	applyTargetingParams(slotName, bidderTargeting);
 
 	utils.logger(logGroup, 'updateSlotTargeting', slotName, bidderTargeting);
-}
-
-function hasAllResponses() {
-	const missingBidders = Object
-		.keys(biddersRegistry)
-		.filter((bidderName) => {
-			const bidder = biddersRegistry[bidderName];
-
-			return !bidder.hasResponse();
-		});
-
-	return missingBidders.length === 0;
 }
 
 export const bidders = {
