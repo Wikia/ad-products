@@ -1,4 +1,4 @@
-import { utils } from '@wikia/ad-engine';
+import { context, utils } from '@wikia/ad-engine';
 import { BaseAdapter } from './base-adapter';
 
 export class Wikia extends BaseAdapter {
@@ -7,10 +7,6 @@ export class Wikia extends BaseAdapter {
 
 		this.bidderName = 'wikia';
 		this.enabled = !!(utils.queryString.get('wikia_adapter'));
-
-		if (this.enabled) {
-			this.price = this.getPrice();
-		}
 
 		this.create = () => this;
 	}
@@ -39,7 +35,7 @@ export class Wikia extends BaseAdapter {
 	}
 
 	getPrice() {
-		const price = utils.queryString.get('wikia_adapter');
+		const price = context.get('bidders.prebid.wikia.price') || utils.queryString.get('wikia_adapter');
 
 		return parseInt(price, 10) / 100;
 	}
@@ -57,7 +53,7 @@ export class Wikia extends BaseAdapter {
 
 			bidResponse.ad = this.getCreative(bid.sizes[0]);
 			bidResponse.bidderCode = bidRequest.bidderCode;
-			bidResponse.cpm = this.price;
+			bidResponse.cpm = this.getPrice();
 			bidResponse.ttl = 300;
 			bidResponse.mediaType = 'banner';
 			bidResponse.width = width;
@@ -87,7 +83,7 @@ export class Wikia extends BaseAdapter {
 
 		const details = document.createElement('small');
 
-		details.innerText = `price: ${this.price}, size: ${size.join('x')}`;
+		details.innerText = `cpm: ${this.getPrice()}, size: ${size.join('x')}`;
 
 		creative.appendChild(title);
 		creative.appendChild(details);

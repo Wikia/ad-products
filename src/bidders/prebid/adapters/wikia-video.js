@@ -1,4 +1,4 @@
-import { utils, buildVastUrl } from '@wikia/ad-engine';
+import { context, buildVastUrl, utils } from '@wikia/ad-engine';
 import { BaseAdapter } from './base-adapter';
 
 export class WikiaVideo extends BaseAdapter {
@@ -7,10 +7,6 @@ export class WikiaVideo extends BaseAdapter {
 
 		this.bidderName = 'wikiaVideo';
 		this.enabled = !!(utils.queryString.get('wikia_video_adapter'));
-
-		if (this.enabled) {
-			this.price = this.getPrice();
-		}
 
 		this.create = () => this;
 	}
@@ -40,7 +36,7 @@ export class WikiaVideo extends BaseAdapter {
 	}
 
 	getPrice() {
-		const price = utils.queryString.get('wikia_video_adapter');
+		const price = context.get('bidders.prebid.wikiaVideo.price') || utils.queryString.get('wikia_video_adapter');
 
 		return parseInt(price, 10) / 100;
 	}
@@ -57,7 +53,7 @@ export class WikiaVideo extends BaseAdapter {
 				[width, height] = bid.sizes[0];
 
 			bidResponse.bidderCode = bidRequest.bidderCode;
-			bidResponse.cpm = this.price;
+			bidResponse.cpm = this.getPrice();
 			bidResponse.creativeId = 'foo123_wikiaVideoCreativeId';
 			bidResponse.ttl = 300;
 			bidResponse.mediaType = 'video';
