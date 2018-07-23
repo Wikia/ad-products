@@ -2446,10 +2446,6 @@ var wikia_Wikia = function (_BaseAdapter) {
 		_this.bidderName = 'wikia';
 		_this.enabled = !!ad_engine_["utils"].queryString.get('wikia_adapter');
 
-		if (_this.enabled) {
-			_this.price = _this.getPrice();
-		}
-
 		_this.create = function () {
 			return _this;
 		};
@@ -2484,7 +2480,7 @@ var wikia_Wikia = function (_BaseAdapter) {
 	}, {
 		key: 'getPrice',
 		value: function getPrice() {
-			var price = ad_engine_["utils"].queryString.get('wikia_adapter');
+			var price = ad_engine_["context"].get('bidders.prebid.wikia.price') || ad_engine_["utils"].queryString.get('wikia_adapter');
 
 			return parseInt(price, 10) / 100;
 		}
@@ -2511,7 +2507,7 @@ var wikia_Wikia = function (_BaseAdapter) {
 
 				bidResponse.ad = _this3.getCreative(bid.sizes[0]);
 				bidResponse.bidderCode = bidRequest.bidderCode;
-				bidResponse.cpm = _this3.price;
+				bidResponse.cpm = _this3.getPrice();
 				bidResponse.ttl = 300;
 				bidResponse.mediaType = 'banner';
 				bidResponse.width = width;
@@ -2542,7 +2538,7 @@ var wikia_Wikia = function (_BaseAdapter) {
 
 			var details = document.createElement('small');
 
-			details.innerText = 'price: ' + this.price + ', size: ' + size.join('x');
+			details.innerText = 'cpm: ' + this.getPrice() + ', size: ' + size.join('x');
 
 			creative.appendChild(title);
 			creative.appendChild(details);
@@ -2573,10 +2569,6 @@ var wikia_video_WikiaVideo = function (_BaseAdapter) {
 
 		_this.bidderName = 'wikiaVideo';
 		_this.enabled = !!ad_engine_["utils"].queryString.get('wikia_video_adapter');
-
-		if (_this.enabled) {
-			_this.price = _this.getPrice();
-		}
 
 		_this.create = function () {
 			return _this;
@@ -2611,7 +2603,7 @@ var wikia_video_WikiaVideo = function (_BaseAdapter) {
 	}, {
 		key: 'getPrice',
 		value: function getPrice() {
-			var price = ad_engine_["utils"].queryString.get('wikia_video_adapter');
+			var price = ad_engine_["context"].get('bidders.prebid.wikiaVideo.price') || ad_engine_["utils"].queryString.get('wikia_video_adapter');
 
 			return parseInt(price, 10) / 100;
 		}
@@ -2637,7 +2629,7 @@ var wikia_video_WikiaVideo = function (_BaseAdapter) {
 
 
 				bidResponse.bidderCode = bidRequest.bidderCode;
-				bidResponse.cpm = _this3.price;
+				bidResponse.cpm = _this3.getPrice();
 				bidResponse.creativeId = 'foo123_wikiaVideoCreativeId';
 				bidResponse.ttl = 300;
 				bidResponse.mediaType = 'video';
@@ -2774,7 +2766,7 @@ function getPrebidBestPrice(slotName) {
 		});
 
 		slotBids.forEach(function (bid) {
-			if (isValidPrice(bid)) {
+			if (isValidPrice(bid) && bid.status !== 'rendered') {
 				var bidderCode = bid.bidderCode,
 				    cpm = bid.cpm;
 
@@ -3122,25 +3114,15 @@ var biddersRegistry = {};
 var realSlotPrices = {};
 var logGroup = 'bidders';
 
-function forEachBidder(callback) {
-	keys_default()(biddersRegistry).forEach(function (bidderName) {
-		callback(biddersRegistry[bidderName]);
-	});
-}
-
-function resetTargetingKeys(slotName) {
-	forEachBidder(function (bidder) {
-		bidder.getTargetingKeysToReset().forEach(function (key) {
-			ad_engine_["context"].set('slots.' + slotName + '.targeting.' + key, null);
-		});
-	});
-
-	ad_engine_["utils"].logger(logGroup, 'resetTargetingKeys', slotName);
-}
-
 function applyTargetingParams(slotName, targeting) {
 	keys_default()(targeting).forEach(function (key) {
 		return ad_engine_["context"].set('slots.' + slotName + '.targeting.' + key, targeting[key]);
+	});
+}
+
+function forEachBidder(callback) {
+	keys_default()(biddersRegistry).forEach(function (bidderName) {
+		callback(biddersRegistry[bidderName]);
 	});
 }
 
@@ -3178,6 +3160,26 @@ function getCurrentSlotPrices(slotName) {
 
 function getDfpSlotPrices(slotName) {
 	return realSlotPrices[slotName] || {};
+}
+
+function hasAllResponses() {
+	var missingBidders = keys_default()(biddersRegistry).filter(function (bidderName) {
+		var bidder = biddersRegistry[bidderName];
+
+		return !bidder.hasResponse();
+	});
+
+	return missingBidders.length === 0;
+}
+
+function resetTargetingKeys(slotName) {
+	forEachBidder(function (bidder) {
+		bidder.getTargetingKeysToReset().forEach(function (key) {
+			ad_engine_["context"].set('slots.' + slotName + '.targeting.' + key, null);
+		});
+	});
+
+	ad_engine_["utils"].logger(logGroup, 'resetTargetingKeys', slotName);
 }
 
 function requestBids(_ref) {
@@ -3219,16 +3221,6 @@ function updateSlotTargeting(slotName) {
 	applyTargetingParams(slotName, bidderTargeting);
 
 	ad_engine_["utils"].logger(logGroup, 'updateSlotTargeting', slotName, bidderTargeting);
-}
-
-function hasAllResponses() {
-	var missingBidders = keys_default()(biddersRegistry).filter(function (bidderName) {
-		var bidder = biddersRegistry[bidderName];
-
-		return !bidder.hasResponse();
-	});
-
-	return missingBidders.length === 0;
 }
 
 var bidders_bidders = {
