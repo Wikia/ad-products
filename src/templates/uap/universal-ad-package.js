@@ -148,8 +148,12 @@ function reset() {
 	setUapId(constants.DEFAULT_UAP_ID);
 }
 
+function isUapLoaded() {
+	return getUapId() !== constants.DEFAULT_UAP_ID;
+}
+
 function isFanTakeoverLoaded() {
-	return getUapId() !== constants.DEFAULT_UAP_ID && constants.FAN_TAKEOVER_TYPES.indexOf(getType()) !== -1;
+	return isUapLoaded() && constants.FAN_TAKEOVER_TYPES.indexOf(getType()) !== -1;
 }
 
 export const universalAdPackage = {
@@ -174,6 +178,7 @@ export const universalAdPackage = {
 	},
 	initSlot,
 	isFanTakeoverLoaded,
+	isUapLoaded,
 	getType,
 	getUapId,
 	isVideoEnabled(params) {
