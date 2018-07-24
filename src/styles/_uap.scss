@@ -441,7 +441,7 @@ body.ctp-vuap-loaded {
 	transition: padding $uap-video-animation-duration ease;
 }
 
-.sticky-bfaa {
+.sticky-bfaa, .sticky-bfab {
 	// Hack: Force BFAA to repaint to fix issue with not visible slot on safari iOS
 	animation: repaint 1ms;
 	position: fixed;
@@ -473,6 +473,11 @@ body.ctp-vuap-loaded {
 	overflow: hidden;
 	position: relative;
 	transition: height $uap-video-animation-duration ease;
+
+	&.theme-hivi.sticky-bfab {
+		position: fixed;
+		top: 0;
+	}
 
 	video {
 		left: 0;

@@ -81,7 +81,7 @@ const environments = {
 			'templates/hivi-uap-stickiness-not-allowed': './examples/templates/hivi-uap-stickiness-not-allowed/script.js',
 			'templates/hivi-uap-static': './examples/templates/hivi-uap-static/script.js',
 			'templates/hivi-uap-jwp': './examples/templates/hivi-uap-jwp/script.js',
-			'templates/sticky-bfaa': './examples/templates/sticky-bfaa/script.js',
+			'templates/hivi-uap-sticky-bfab': './examples/templates/hivi-uap-sticky-bfab/script.js',
 			'templates/vuap': './examples/templates/vuap/script.js'
 		},
 		devtool: 'cheap-module-eval-source-map',
