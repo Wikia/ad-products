@@ -88,8 +88,8 @@ export default {
 	services: {
 		billTheLizard: {
 			enabled: true,
-			host: 'localhost:8080',
-			endpoint: 'predict',
+			host: 'services.wikia-dev.pl',
+			endpoint: 'bill-the-lizard/predict',
 			models: [
 				'ctp_desktop'
 			],
