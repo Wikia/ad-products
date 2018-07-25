@@ -93,8 +93,8 @@ describe('Bill the Lizard service', () => {
 
 		expect(url.match(/\/\/service.com\/predict/)).to.be.ok;
 		expect(url.match(/models=ctp_desktop/)).to.be.ok;
-		expect(url.match(/&h=\d+&/)).to.be.ok;
-		expect(url.match(/&dow=\d+&/)).to.be.ok;
+		expect(url.match(/&h=\d{1,2}&/)).to.be.ok;
+		expect(url.match(/&dow=\d&/)).to.be.ok;
 		expect(url.match(/foo=1&bar=test&echo=one,two/)).to.be.ok;
 	});
 });
