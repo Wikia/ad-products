@@ -36,6 +36,7 @@ describe('Bill the Lizard service', () => {
 		billTheLizard.parsePredictions({});
 
 		expect(JSON.stringify(billTheLizard.getPredictions())).to.equal('{}');
+		expect(billTheLizard.serialize()).to.equal('');
 	});
 
 	it('should return parsed prediction', () => {
