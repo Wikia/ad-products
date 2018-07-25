@@ -85,6 +85,25 @@ export default {
 		},
 		slotRepeater: true
 	},
+	services: {
+		billTheLizard: {
+			enabled: true,
+			host: 'localhost:8080',
+			endpoint: 'predict',
+			models: [
+				'ctp_desktop'
+			],
+			parameters: {
+				device: 'tablet',
+				v1: 'Fgas3ooM',
+				geo: 'PL',
+				wiki_id: 245424,
+				vtags: 'Twin Peaks',
+				esrb: 'mature'
+			},
+			timeout: 2000
+		}
+	},
 	slots: {
 		top_leaderboard: {
 			aboveTheFold: true,

@@ -74,6 +74,7 @@ const environments = {
 			'bidders/a9': './examples/bidders/a9/script.js',
 			'bidders/prebid': './examples/bidders/prebid/script.js',
 			'bidders/reusable-prebid': './examples/bidders/reusable-prebid/script.js',
+			'services/bill-the-lizard': './examples/services/bill-the-lizard/script.js',
 			'templates/abcd': './examples/templates/abcd/script.js',
 			'templates/floating-rail': './examples/templates/floating-rail/script.js',
 			'templates/hivi-uap': './examples/templates/hivi-uap/script.js',
