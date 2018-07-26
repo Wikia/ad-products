@@ -69,13 +69,13 @@ class BillTheLizard {
 		const parameters = context.get('services.billTheLizard.parameters');
 		const timeout = context.get('services.billTheLizard.timeout');
 
-		if (models.length < 1) {
+		if (!models || models.length < 1) {
 			utils.logger(logGroup, 'no models to predict');
 			return new Promise((resolve, reject) => reject(new Error('Missing models')));
 		}
 
 		const queryParameters = getQueryParameters(models, parameters);
-		utils.logger(logGroup, 'calling service', host, queryParameters);
+		utils.logger(logGroup, 'calling service', host, endpoint queryParameters);
 
 		return httpRequest(host, endpoint, queryParameters, timeout)
 			.then(response => this.parsePredictions(response));
