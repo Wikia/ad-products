@@ -84,10 +84,11 @@ class BillTheLizard {
 	parsePredictions(response) {
 		this.predictions = {};
 		Object.keys(response).forEach((key) => {
-			const { result } = response[key];
+			const { result, version } = response[key];
+			const suffix = key.indexOf('version') > 0 ? '' : `:${version}`;
 
 			if (typeof result !== 'undefined') {
-				this.predictions[key] = result;
+				this.predictions[`${key}${suffix}`] = result;
 			}
 		});
 

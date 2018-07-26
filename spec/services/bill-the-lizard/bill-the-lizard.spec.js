@@ -47,9 +47,9 @@ describe('Bill the Lizard service', () => {
 			}
 		});
 
-		expect(billTheLizard.getPredictions().foo).to.equal(1);
-		expect(billTheLizard.getPrediction('foo')).to.equal(1);
-		expect(billTheLizard.serialize()).to.equal('foo_1');
+		expect(billTheLizard.getPredictions()['foo:1.0.0']).to.equal(1);
+		expect(billTheLizard.getPrediction('foo:1.0.0')).to.equal(1);
+		expect(billTheLizard.serialize()).to.equal('foo:1.0.0_1');
 	});
 
 	it('should return parsed predictions', () => {
@@ -64,11 +64,11 @@ describe('Bill the Lizard service', () => {
 			}
 		});
 
-		expect(billTheLizard.getPredictions().foo).to.equal(1);
-		expect(billTheLizard.getPrediction('foo')).to.equal(1);
-		expect(billTheLizard.getPredictions().bar).to.equal(0);
-		expect(billTheLizard.getPrediction('bar')).to.equal(0);
-		expect(billTheLizard.serialize()).to.equal('foo_1,bar_0');
+		expect(billTheLizard.getPredictions()['foo:1.0.0']).to.equal(1);
+		expect(billTheLizard.getPrediction('foo:1.0.0')).to.equal(1);
+		expect(billTheLizard.getPredictions()['bar:0.0.0']).to.equal(0);
+		expect(billTheLizard.getPrediction('bar:0.0.0')).to.equal(0);
+		expect(billTheLizard.serialize()).to.equal('foo:1.0.0_1,bar:0.0.0_0');
 	});
 
 	it('should not call service if it is disabled in context', () => {
