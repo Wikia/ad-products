@@ -75,7 +75,7 @@ class BillTheLizard {
 		}
 
 		const queryParameters = getQueryParameters(models, parameters);
-		utils.logger(logGroup, 'calling service', host, endpoint queryParameters);
+		utils.logger(logGroup, 'calling service', host, endpoint, queryParameters);
 
 		return httpRequest(host, endpoint, queryParameters, timeout)
 			.then(response => this.parsePredictions(response));
