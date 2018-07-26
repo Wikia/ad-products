@@ -106,7 +106,7 @@ class BillTheLizard {
 	}
 
 	serialize() {
-		return Object.keys(this.predictions).map(key => `${key}_${this.predictions[key]}`).toString();
+		return Object.keys(this.predictions).map(key => `${key}=${this.predictions[key]}`).join(';');
 	}
 }
 
