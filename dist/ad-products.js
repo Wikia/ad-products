@@ -5083,7 +5083,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v7.4.0');
+set_default()(window, versionField, 'v7.5.0');
 
 
 
