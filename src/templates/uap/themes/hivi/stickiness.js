@@ -2,8 +2,8 @@ import { EventEmitter } from 'events';
 import { isFunction } from 'lodash';
 import { AdSlot, slotTweaker, utils } from '@wikia/ad-engine';
 
-export class StickyBfaa extends EventEmitter {
-	static LOG_GROUP = 'sticky-bfaa';
+export class Stickiness extends EventEmitter {
+	static LOG_GROUP = 'stickiness';
 	static STICKINESS_CHANGE_EVENT = Symbol('stickinessChange');
 	static CLOSE_CLICKED_EVENT = Symbol('closeClicked');
 	static UNSTICK_IMMEDIATELY_EVENT = Symbol('unstickImmediately');
@@ -18,7 +18,7 @@ export class StickyBfaa extends EventEmitter {
 		this.customWhen = customWhen;
 		this.sticky = false;
 		this.isRevertStickinessBlocked = false;
-		this.logger = (...args) => utils.logger(StickyBfaa.LOG_GROUP, ...args);
+		this.logger = (...args) => utils.logger(Stickiness.LOG_GROUP, ...args);
 	}
 
 	async run() {
@@ -29,8 +29,8 @@ export class StickyBfaa extends EventEmitter {
 		}
 
 		this.adSlot.once('unstickImmediately', () => {
-			this.logger('Unsticking bfaa');
-			this.emit(StickyBfaa.UNSTICK_IMMEDIATELY_EVENT);
+			this.logger('Unsticking');
+			this.emit(Stickiness.UNSTICK_IMMEDIATELY_EVENT);
 			this.sticky = false;
 		});
 
@@ -43,27 +43,27 @@ export class StickyBfaa extends EventEmitter {
 
 	applyStickiness() {
 		if (!this.sticky) {
-			this.logger('Applying bfaa stickiness');
+			this.logger('Applying stickiness');
 			this.sticky = true;
-			this.emit(StickyBfaa.STICKINESS_CHANGE_EVENT, this.sticky);
+			this.emit(Stickiness.STICKINESS_CHANGE_EVENT, this.sticky);
 		} else {
-			this.logger('bfaa stickiness is already applied');
+			this.logger('Stickiness is already applied');
 		}
 	}
 
 	revertStickiness() {
 		if (this.sticky) {
-			this.logger('Reverting bfaa stickiness');
+			this.logger('Reverting stickiness');
 			this.sticky = false;
-			this.emit(StickyBfaa.STICKINESS_CHANGE_EVENT, this.sticky);
+			this.emit(Stickiness.STICKINESS_CHANGE_EVENT, this.sticky);
 		} else {
-			this.logger('bfaa stickiness is already reverted');
+			this.logger('Stickiness is already reverted');
 		}
 	}
 
 	close() {
-		this.logger('Closing and removing bfaa');
-		this.emit(StickyBfaa.CLOSE_CLICKED_EVENT, this.sticky);
+		this.logger('Closing and removing stickiness');
+		this.emit(Stickiness.CLOSE_CLICKED_EVENT, this.sticky);
 		this.sticky = false;
 	}
 

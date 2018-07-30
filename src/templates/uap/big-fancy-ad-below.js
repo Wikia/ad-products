@@ -15,6 +15,10 @@ export class BigFancyAdBelow {
 			autoPlayAllowed: true,
 			defaultStateAllowed: true,
 			fullscreenAllowed: true,
+			stickinessAllowed: false,
+			bfaaSlotName: 'top_leaderboard',
+			unstickInstantlyBelowPosition: 500,
+			topThreshold: 58,
 			onInit: () => {}
 		};
 	}
@@ -33,7 +37,7 @@ export class BigFancyAdBelow {
 	}
 
 	/**
-	 * Initializes the BFAA unit
+	 * Initializes the BFAB unit
 	 */
 	init(params) {
 		this.params = params;
