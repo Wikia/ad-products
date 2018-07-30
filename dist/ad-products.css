@@ -358,7 +358,7 @@
 body.ctp-vuap-loaded {
   transition: padding 0.4s ease; }
 
-.sticky-bfaa {
+.sticky-bfaa, .sticky-bfab {
   animation: repaint 1ms;
   position: fixed;
   top: 0; }
@@ -383,6 +383,9 @@ body.ctp-vuap-loaded {
   overflow: hidden;
   position: relative;
   transition: height 0.4s ease; }
+  .gpt-ad.bfab-template.theme-hivi.sticky-bfab {
+    position: fixed;
+    top: 0; }
   .gpt-ad.bfab-template video {
     left: 0; }
 
