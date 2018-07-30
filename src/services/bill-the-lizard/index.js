@@ -9,7 +9,7 @@ function buildUrl(host, endpoint, queryParameters = {}) {
 		params.push(`${key}=${queryParameters[key]}`);
 	});
 
-	return `//${host}/${endpoint}?${encodeURI(params.join('&'))}`;
+	return `${host}/${endpoint}?${encodeURI(params.join('&'))}`;
 }
 
 function httpRequest(host, endpoint, queryParameters = {}, timeout = 0) {
