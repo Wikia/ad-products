@@ -14,7 +14,7 @@ describe('Bill the Lizard service', () => {
 		};
 		context.set('services.billTheLizard', {
 			enabled: true,
-			host: 'service.com',
+			host: 'http://service.com',
 			endpoint: 'predict',
 			models: [
 				'ctp_desktop'
@@ -92,7 +92,7 @@ describe('Bill the Lizard service', () => {
 
 		const url = requests[0].url;
 
-		expect(url.match(/\/\/service.com\/predict/)).to.be.ok;
+		expect(url.match(/http:\/\/service.com\/predict/)).to.be.ok;
 		expect(url.match(/models=ctp_desktop/)).to.be.ok;
 		expect(url.match(/&h=\d{1,2}&/)).to.be.ok;
 		expect(url.match(/&dow=\d&/)).to.be.ok;
