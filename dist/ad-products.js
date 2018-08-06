@@ -2429,7 +2429,7 @@ var appnexus_ast_AppnexusAst = function (_BaseAdapter) {
 				code: code,
 				mediaTypes: {
 					video: {
-						context: 'outstream',
+						context: code.toLowerCase() === 'featured' ? 'instream' : 'outstream',
 						playerSize: [640, 480]
 					}
 				},
@@ -3470,6 +3470,7 @@ function transformPriceFromCpm(cpm) {
 // CONCATENATED MODULE: ./src/bidders/prebid/prebid-settings.js
 
 
+
 function getSettings() {
 	return {
 		standard: {
@@ -3496,6 +3497,11 @@ function getSettings() {
 				val: function val(_ref3) {
 					var size = _ref3.size;
 					return size;
+				}
+			}, {
+				key: 'hb_uuid',
+				val: function val(bidResponse) {
+					return bidResponse.bidderCode === 'appnexusAst' && ad_engine_["context"].get('custom.appnexusDfp') || bidResponse.bidderCode === 'rubicon' && ad_engine_["context"].get('custom.rubiconDfp') ? bidResponse.videoCacheKey : 'disabled';
 				}
 			}]
 		}
@@ -3685,7 +3691,7 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 	}, {
 		key: 'getTargetingKeysToReset',
 		value: function getTargetingKeysToReset() {
-			return ['hb_bidder', 'hb_adid', 'hb_pb', 'hb_size'];
+			return ['hb_bidder', 'hb_adid', 'hb_pb', 'hb_size', 'hb_uuid'];
 		}
 	}, {
 		key: 'getTargetingParams',
@@ -3716,6 +3722,9 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 				if (bidParams) {
 					slotParams = bidParams.adserverTargeting;
 				}
+
+				// ADEN-7436: AppNexus hb_uuid fix (adserverTargeting params are being set before cache key is returned)
+				slotParams.hb_uuid = slotParams.hb_uuid || bidParams.videoCacheKey || 'disabled';
 			}
 
 			return slotParams || {};

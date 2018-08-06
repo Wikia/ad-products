@@ -18,7 +18,7 @@ export class AppnexusAst extends BaseAdapter {
 			code,
 			mediaTypes: {
 				video: {
-					context: 'outstream',
+					context: code.toLowerCase() === 'featured' ? 'instream' : 'outstream',
 					playerSize: [640, 480]
 				}
 			},

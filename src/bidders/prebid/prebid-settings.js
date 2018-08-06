@@ -1,3 +1,4 @@
+import { context } from '@wikia/ad-engine';
 import { transformPriceFromCpm } from './price-helper';
 
 export function getSettings() {
@@ -16,6 +17,12 @@ export function getSettings() {
 			}, {
 				key: 'hb_size',
 				val: ({ size }) => size
+			}, {
+				key: 'hb_uuid',
+				val: bidResponse => ((
+					bidResponse.bidderCode === 'appnexusAst' && context.get('custom.appnexusDfp')) || (
+					bidResponse.bidderCode === 'rubicon' && context.get('custom.rubiconDfp'))
+					? bidResponse.videoCacheKey : 'disabled')
 			}]
 		}
 	};
