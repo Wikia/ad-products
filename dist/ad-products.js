@@ -3846,8 +3846,7 @@ function requestBids(_ref) {
 	    responseListener = _ref$responseListener === undefined ? null : _ref$responseListener;
 
 	var config = ad_engine_["context"].get('bidders');
-	console.log(ad_engine_["context"]);
-	console.log(config);
+
 	if (config.prebid && config.prebid.enabled) {
 		if (!ad_engine_["events"].PREBID_LAZY_CALL) {
 			ad_engine_["events"].registerEvent('PREBID_LAZY_CALL');
