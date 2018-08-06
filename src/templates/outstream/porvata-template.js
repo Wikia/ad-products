@@ -1,4 +1,4 @@
-import { events, Porvata, slotTweaker, utils } from '@wikia/ad-engine';
+import { events, Porvata, slotTweaker } from '@wikia/ad-engine';
 import * as videoUserInterface from '../interface/video';
 
 export const DEFAULT_VIDEO_ASPECT_RATIO = 640 / 360;
@@ -23,7 +23,7 @@ export class PorvataTemplate {
 		const slotName = this.adSlot.getSlotName();
 		const isInsecureMode = params.vpaidMode === IMA_VPAID_INSECURE_MODE;
 
-		if (!this.isVideoAutoplaySupported()) {
+		if (!Porvata.isVideoAutoplaySupported()) {
 			return this.adSlot.collapse();
 		}
 
@@ -82,7 +82,7 @@ export class PorvataTemplate {
 		video.addEventListener('loaded', () => {
 			const ad = video.ima.getAdsManager().getCurrentAd();
 
-			if (ad && this.isVpaid(ad.getContentType) || '') {
+			if (ad && Porvata.isVpaid(ad.getContentType) || '') {
 				container.classList.add('vpaid-enabled');
 				videoPlayer.classList.remove('hide');
 			}
@@ -105,18 +105,5 @@ export class PorvataTemplate {
 		this.adSlot.getElement().appendChild(container);
 
 		return displayWrapper;
-	}
-
-	// TODO: Move to ad-engine
-	isVpaid(contentType) {
-		return contentType === 'application/javascript';
-	}
-
-	isVideoAutoplaySupported() {
-		const isAndroid = utils.client.getOperatingSystem() === 'Android';
-		const browserInfo = utils.client.getBrowser().split(' ');
-		const isCompatibleChrome = browserInfo[0].indexOf('Chrome') !== -1 && parseInt(browserInfo[1], 10) >= 54;
-
-		return !isAndroid || isCompatibleChrome;
 	}
 }
