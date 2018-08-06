@@ -6,6 +6,7 @@ export const IMA_VPAID_INSECURE_MODE = 2;
 
 export class PorvataTemplate {
 	static getName() {
+		// TODO: rename me
 		return 'porvata';
 	}
 
@@ -18,8 +19,10 @@ export class PorvataTemplate {
 	}
 
 	init(params) {
+		// TODO: remove me
 		params.theme = 'hivi';
 		params.blockOutOfViewportPausing = false;
+		///////////
 		const slotName = this.adSlot.getSlotName();
 		const isInsecureMode = params.vpaidMode === IMA_VPAID_INSECURE_MODE;
 
