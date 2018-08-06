@@ -123,6 +123,8 @@ function updateSlotTargeting(slotName) {
 	applyTargetingParams(slotName, bidderTargeting);
 
 	utils.logger(logGroup, 'updateSlotTargeting', slotName, bidderTargeting);
+
+	return bidderTargeting;
 }
 
 export const bidders = {

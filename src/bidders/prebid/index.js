@@ -23,6 +23,9 @@ export class Prebid extends BaseBidder {
 			enableSendAllBids: true,
 			bidderSequence: 'random',
 			bidderTimeout: this.timeout,
+			cache: {
+				url: 'https://prebid.adnxs.com/pbc/v1/cache'
+			},
 			userSync: {
 				iframeEnabled: true,
 				enabledBidders: [],

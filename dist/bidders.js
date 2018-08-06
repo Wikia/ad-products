@@ -2974,6 +2974,9 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 			enableSendAllBids: true,
 			bidderSequence: 'random',
 			bidderTimeout: _this2.timeout,
+			cache: {
+				url: 'https://prebid.adnxs.com/pbc/v1/cache'
+			},
 			userSync: {
 				iframeEnabled: true,
 				enabledBidders: [],
@@ -3269,6 +3272,8 @@ function updateSlotTargeting(slotName) {
 	applyTargetingParams(slotName, bidderTargeting);
 
 	ad_engine_["utils"].logger(logGroup, 'updateSlotTargeting', slotName, bidderTargeting);
+
+	return bidderTargeting;
 }
 
 var bidders_bidders = {
