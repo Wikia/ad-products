@@ -2,6 +2,9 @@ function add(video, container, params) {
 	const isTouchDevice = 'ontouchstart' in window || 'onmsgesturechange' in window;
 	const onMouseEnter = () => {
 		video.setVolume(1, true);
+		if (!video.isPlaying()) {
+			video.resume();
+		}
 	};
 	const onMouseLeave = () => {
 		video.setVolume(0, true);
@@ -17,11 +20,11 @@ function add(video, container, params) {
 
 	if (!isTouchDevice) {
 		video.addEventListener('loaded', () => {
-			container.addEventListener('mouseenter', onMouseEnter);
-			container.addEventListener('mouseleave', onMouseLeave);
+			params.container.addEventListener('mouseenter', onMouseEnter);
+			params.container.addEventListener('mouseleave', onMouseLeave);
 			video.addEventListener('wikiaVolumeChangeClicked', () => {
-				container.removeEventListener('mouseenter', onMouseEnter);
-				container.removeEventListener('mouseleave', onMouseLeave);
+				params.container.removeEventListener('mouseenter', onMouseEnter);
+				params.container.removeEventListener('mouseleave', onMouseLeave);
 			});
 		});
 	}
