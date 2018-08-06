@@ -1,4 +1,4 @@
-import { events, Porvata, slotTweaker } from '@wikia/ad-engine';
+import { context, events, Porvata, slotTweaker } from '@wikia/ad-engine';
 import * as videoUserInterface from '../interface/video';
 
 export const DEFAULT_VIDEO_ASPECT_RATIO = 640 / 360;
@@ -11,17 +11,21 @@ export class PorvataTemplate {
 	}
 
 	static getDefaultConfig() {
-		return {};
+		return {
+			isFloatingEnabled: true,
+			inViewportOffsetTop: 0,
+			inViewportOffsetBottom: 0
+		};
 	}
 
 	constructor(adSlot) {
 		this.adSlot = adSlot;
+		this.config = context.get('templates.porvata');
 	}
 
 	init(params) {
 		// TODO: remove me
 		params.theme = 'hivi';
-		params.blockOutOfViewportPausing = false;
 		///////////
 		const slotName = this.adSlot.getSlotName();
 		const isInsecureMode = params.vpaidMode === IMA_VPAID_INSECURE_MODE;
@@ -73,6 +77,9 @@ export class PorvataTemplate {
 
 		videoUserInterface.setup(video, template, {
 			container: videoContainer,
+			inViewportOffsetTop: this.config.inViewportOffsetTop,
+			inViewportOffsetBottom: this.config.inViewportOffsetBottom,
+			isFloatingEnabled: this.config.isFloatingEnabled && params.enableInContentFloating,
 			slotName: params.slotName
 		});
 

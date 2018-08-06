@@ -9,6 +9,8 @@ context.extend(customContext);
 context.set('targeting.artid', '401');
 context.set('slots.incontent_boxad.disabled', false);
 
-templateService.register(PorvataTemplate);
+templateService.register(PorvataTemplate, {
+	inViewportOffsetTop: 58
+});
 
 new AdEngine().init();

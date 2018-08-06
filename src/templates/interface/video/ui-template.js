@@ -1,5 +1,6 @@
 import CloseButton from './close-button';
 import DynamicReveal from './dynamic-reveal';
+import Floating from './floating';
 import LearnMore from './learn-more';
 import MouseEvents from './mouse-events';
 import PauseControl from './pause-control';
@@ -70,6 +71,7 @@ const getTemplates = (params, videoSettings) => ({
 	],
 	'outstream-incontent': [
 		DynamicReveal,
+		Floating,
 		MouseEvents,
 		ProgressBar,
 		VolumeControl

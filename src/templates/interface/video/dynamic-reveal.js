@@ -14,7 +14,7 @@ function add(video, container, params) {
 			// Delay dispatching event so it's run after browser really start expanding the slot
 			setTimeout(() => {
 				video.ima.dispatchEvent('wikiaSlotExpanded');
-			}, 0);
+			}, 1500);
 		}
 
 		// TODO: Make sure floater and resize works
