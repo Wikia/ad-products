@@ -60,6 +60,7 @@ export default {
 		pushOnScroll: {
 			ids: [
 				'incontent_boxad',
+				'incontent_player',
 				'bottom_leaderboard'
 			],
 			threshold: 100
@@ -138,10 +139,16 @@ export default {
 			sizes: [
 				{
 					viewportSize: [768, 0],
-					sizes: [[300, 250], [300, 600]]
+					sizes: [[1, 1], [300, 250], [300, 600]]
 				}
 			],
 			defaultSizes: [[300, 250]],
+			targeting: {
+				loc: 'hivi'
+			}
+		},
+		incontent_player: {
+			defaultSizes: [[1, 1]],
 			targeting: {
 				loc: 'hivi'
 			}

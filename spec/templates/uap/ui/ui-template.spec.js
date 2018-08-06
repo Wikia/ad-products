@@ -1,10 +1,10 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 import { VideoSettings } from '../../../../src/templates/uap/video-settings';
-import { selectTemplate } from '../../../../src/templates/uap/ui/video/ui-template';
-import CloseButton from '../../../../src/templates/uap/ui/video/close-button';
-import ReplayOverlay from '../../../../src/templates/uap/ui/video/replay-overlay';
-import ToggleFullscreen from '../../../../src/templates/uap/ui/video/toggle-fullscreen';
+import { selectTemplate } from '../../../../src/templates/interface/video/ui-template';
+import CloseButton from '../../../../src/templates/interface/video/close-button';
+import ReplayOverlay from '../../../../src/templates/interface/video/replay-overlay';
+import ToggleFullscreen from '../../../../src/templates/interface/video/toggle-fullscreen';
 
 function getContainer() {
 	return document.createElement('div');

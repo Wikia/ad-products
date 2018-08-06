@@ -1,0 +1,121 @@
+@import '_mixin';
+
+$controls-z-index: 11;
+$outstream-button-color: #fff;
+$outstream-button-size: 24px;
+$outstream-progress-bar-color: #7c7c7c;
+$outstream-progress-bar-current-time-color: #fff;
+$outstream-progress-bar-height: 4px;
+$vpaid-z-index: 10;
+
+.video-overlay {
+	@include absolute-fill();
+	height: 0;
+}
+
+.video-display-wrapper {
+	background: #000;
+	height: 100%;
+	position: relative;
+	width: 100%;
+
+	video, &.vpaid-enabled > div {
+		@include absolute-fill();
+	}
+
+	&.vpaid-enabled {
+		video, > div:last-child {
+			z-index: $vpaid-z-index;
+		}
+	}
+
+	.video-player {
+		background: #000;
+		margin: 0 auto;
+		pointer-events: auto;
+	}
+}
+
+.porvata-outstream {
+	max-width: 640px;
+	position: relative;
+
+	& > div {
+		height: 0;
+	}
+
+	&.slot-animation {
+		@include transition(max-height, 1s, ease, 0);
+		overflow: hidden;
+	}
+
+	&::before {
+		content: attr(data-label);
+		display: none;
+		font-size: 0.625rem;
+		font-weight: 700;
+		line-height: 0.75rem;
+		padding-bottom: 6px;
+		padding-top: 6px;
+		text-align: center;
+		text-transform: uppercase;
+	}
+
+	.video-overlay {
+		background: #000;
+	}
+
+	.button-control .icon,
+	.porvata-icon {
+		cursor: pointer;
+		fill: $outstream-button-color;
+		height: $outstream-button-size;
+		overflow: hidden;
+		position: absolute;
+		width: $outstream-button-size;
+	}
+
+	.progress-bar {
+		background: $outstream-progress-bar-color;
+		bottom: 0;
+		height: $outstream-progress-bar-height;
+		left: 0;
+		position: absolute;
+		width: 100%;
+		z-index: $controls-z-index;
+	}
+
+	.current-time {
+		@include transition(width, 1s, linear, 0);
+		background: $outstream-progress-bar-current-time-color;
+		height: 100%;
+		max-width: 100%;
+		width: 0;
+		z-index: $controls-z-index;
+	}
+
+	.volume-button {
+		bottom: 0;
+		height: $outstream-button-size;
+		padding: 14px 12px 14px 7px;
+		position: absolute;
+		right: 0;
+		width: $outstream-button-size;
+	}
+
+	.porvata-switchable-icon {
+		.porvata-off-icon {
+			display: none;
+		}
+
+		&.is-on {
+			.porvata-off-icon {
+				display: inline-block;
+			}
+
+			.porvata-on-icon {
+				display: none;
+			}
+		}
+	}
+}
