@@ -1,3 +1,4 @@
+import { context } from '@wikia/ad-engine';
 import { BaseAdapter } from './base-adapter';
 
 export class IndexExchange extends BaseAdapter {
@@ -8,6 +9,7 @@ export class IndexExchange extends BaseAdapter {
 		this.aliases = {
 			ix: [this.bidderName]
 		};
+		this.recPlacements = options.recPlacements;
 	}
 
 	prepareConfigForAdUnit(code, { sizes, siteId }) {
@@ -21,7 +23,8 @@ export class IndexExchange extends BaseAdapter {
 			bids: sizes.map(size => ({
 				bidder: this.bidderName,
 				params: {
-					siteId,
+					// ToDo: Recovery detection
+					siteId: this.recPlacements && context.get('targeting.rec') ? this.recPlacements[code] : siteId,
 					size
 				}
 			}))

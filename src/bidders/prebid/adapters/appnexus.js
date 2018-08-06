@@ -7,11 +7,7 @@ export class Appnexus extends BaseAdapter {
 
 		this.bidderName = 'appnexus';
 		this.placements = options.placements;
-		/* this.recoveryPlacements = {
-			atf: '11823778',
-			btf: '11823724',
-			hivi: '11823799'
-		} */
+		this.recPlacements = options.recPlacements;
 	}
 
 	prepareConfigForAdUnit(code, { sizes, position = 'mobile' }) {
@@ -38,6 +34,11 @@ export class Appnexus extends BaseAdapter {
 			const vertical = context.get('targeting.mappedVerticalName');
 
 			position = vertical && this.placements[vertical] ? vertical : 'other';
+		}
+
+		// ToDo: Recovery detection
+		if (this.recPlacements && context.get('targeting.rec')) {
+			return this.recPlacements[position];
 		}
 
 		return this.placements[position];

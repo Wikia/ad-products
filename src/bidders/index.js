@@ -93,6 +93,7 @@ function requestBids({ responseListener = null }) {
 		if (!events.PREBID_LAZY_CALL) {
 			events.registerEvent('PREBID_LAZY_CALL');
 		}
+
 		biddersRegistry.prebid = new Prebid(config.prebid, config.timeout);
 	}
 

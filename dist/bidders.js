@@ -1731,11 +1731,7 @@ var appnexus_Appnexus = function (_BaseAdapter) {
 
 		_this.bidderName = 'appnexus';
 		_this.placements = options.placements;
-		/* this.recoveryPlacements = {
-  	atf: '11823778',
-  	btf: '11823724',
-  	hivi: '11823799'
-  } */
+		_this.recPlacements = options.recPlacements;
 		return _this;
 	}
 
@@ -1768,6 +1764,11 @@ var appnexus_Appnexus = function (_BaseAdapter) {
 				var vertical = ad_engine_["context"].get('targeting.mappedVerticalName');
 
 				position = vertical && this.placements[vertical] ? vertical : 'other';
+			}
+
+			// ToDo: Recovery detection
+			if (this.recPlacements && ad_engine_["context"].get('targeting.rec')) {
+				return this.recPlacements[position];
 			}
 
 			return this.placements[position];
@@ -1985,6 +1986,7 @@ var beachfront_Beachfront = function (_BaseAdapter) {
 
 
 
+
 var index_exchange_IndexExchange = function (_BaseAdapter) {
 	inherits_default()(IndexExchange, _BaseAdapter);
 
@@ -1997,6 +1999,7 @@ var index_exchange_IndexExchange = function (_BaseAdapter) {
 		_this.aliases = {
 			ix: [_this.bidderName]
 		};
+		_this.recPlacements = options.recPlacements;
 		return _this;
 	}
 
@@ -2019,7 +2022,8 @@ var index_exchange_IndexExchange = function (_BaseAdapter) {
 					return {
 						bidder: _this2.bidderName,
 						params: {
-							siteId: siteId,
+							// ToDo: Recovery detection
+							siteId: _this2.recPlacements && ad_engine_["context"].get('targeting.rec') ? _this2.recPlacements[code] : siteId,
 							size: size
 						}
 					};
@@ -3230,11 +3234,13 @@ function requestBids(_ref) {
 	    responseListener = _ref$responseListener === undefined ? null : _ref$responseListener;
 
 	var config = ad_engine_["context"].get('bidders');
-
+	console.log(ad_engine_["context"]);
+	console.log(config);
 	if (config.prebid && config.prebid.enabled) {
 		if (!ad_engine_["events"].PREBID_LAZY_CALL) {
 			ad_engine_["events"].registerEvent('PREBID_LAZY_CALL');
 		}
+
 		biddersRegistry.prebid = new prebid_Prebid(config.prebid, config.timeout);
 	}
 
