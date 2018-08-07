@@ -139,7 +139,7 @@ export default {
 			sizes: [
 				{
 					viewportSize: [768, 0],
-					sizes: [[1, 1], [300, 250], [300, 600]]
+					sizes: [[300, 250], [300, 600]]
 				}
 			],
 			defaultSizes: [[300, 250]],
