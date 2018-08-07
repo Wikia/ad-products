@@ -1,11 +1,11 @@
-import { AdEngine, context, events } from '@wikia/ad-engine';
-import { utils } from '@wikia/ad-products';
+import { AdEngine, context, events, utils } from '@wikia/ad-engine';
+import { utils as adProductsUtils } from '@wikia/ad-products';
 import { bidders } from '@wikia/bidders';
 
 import customContext from '../../context';
 import '../../styles.scss';
 
-const optIn = true;
+const optIn = utils.queryString.get('opt-in') !== '0';
 
 window.__cmp = function (cmd, param, cb) {
 	if (cmd === 'getConsentData') {
@@ -35,7 +35,7 @@ context.extend(customContext);
 context.set('targeting.artid', '266');
 context.set('slots.incontent_boxad.disabled', false);
 
-utils.setupNpaContext();
+adProductsUtils.setupNpaContext();
 
 let resolveBidders;
 
