@@ -11,10 +11,10 @@ function add(video, container, params) {
 			slotTweaker.expand(slot);
 			slotExpanded = true;
 
-			// Delay dispatching event so it's run after browser really start expanding the slot
+			// Delay dispatching event so it's run after browser really finish expanding the slot
 			setTimeout(() => {
 				video.ima.dispatchEvent('wikiaSlotExpanded');
-			}, 1500);
+			}, 1000);
 		}
 
 		if (!video.isFloating) {
