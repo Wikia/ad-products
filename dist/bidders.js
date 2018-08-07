@@ -1269,6 +1269,14 @@ module.exports = function (object, names) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+var prebid_helper_namespaceObject = {};
+__webpack_require__.d(prebid_helper_namespaceObject, "setupAdUnits", function() { return setupAdUnits; });
+__webpack_require__.d(prebid_helper_namespaceObject, "getBidByAdId", function() { return getBidByAdId; });
+__webpack_require__.d(prebid_helper_namespaceObject, "getAvailableBidsByAdUnitCode", function() { return getAvailableBidsByAdUnitCode; });
+__webpack_require__.d(prebid_helper_namespaceObject, "getPrebid", function() { return getPrebid; });
+__webpack_require__.d(prebid_helper_namespaceObject, "getTargeting", function() { return getTargeting; });
+__webpack_require__.d(prebid_helper_namespaceObject, "getWinningVideoBidBySlotName", function() { return getWinningVideoBidBySlotName; });
+__webpack_require__.d(prebid_helper_namespaceObject, "pushPrebid", function() { return pushPrebid; });
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/core-js/object/keys.js
 var keys = __webpack_require__(6);
@@ -3020,11 +3028,6 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 			window.pbjs.bidderSettings = getSettings();
 		}
 	}, {
-		key: 'calculatePrices',
-		value: function calculatePrices() {
-			// biddersPerformanceMap = performanceTracker.updatePerformanceMap(biddersPerformanceMap);
-		}
-	}, {
 		key: 'callBids',
 		value: function callBids(bidsBackHandler) {
 			var _this3 = this;
@@ -3167,6 +3170,7 @@ prebid_Prebid.errorResponseStatusCode = 2;
 
 
 
+
 __webpack_require__(67);
 
 var biddersRegistry = {};
@@ -3289,6 +3293,7 @@ var bidders_bidders = {
 	getCurrentSlotPrices: getCurrentSlotPrices,
 	getDfpSlotPrices: getDfpSlotPrices,
 	hasAllResponses: hasAllResponses,
+	prebidHelper: prebid_helper_namespaceObject,
 	requestBids: requestBids,
 	updateSlotTargeting: updateSlotTargeting
 };
