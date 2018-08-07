@@ -20,7 +20,8 @@
             {
                 "allow": [
                     "__useDefault",
-                    "_Q"
+                    "_Q",
+                    "__cmp"
                 ]
             }
         ]

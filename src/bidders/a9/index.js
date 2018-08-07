@@ -10,7 +10,6 @@ export class A9 extends BaseBidder {
 		this.amazonId = this.bidderConfig.amazonId;
 		this.slots = this.bidderConfig.slots;
 		this.slotsVideo = this.bidderConfig.slotsVideo;
-		this.gdpr = this.bidderConfig.gdpr;
 		this.bids = {};
 		this.priceMap = {};
 		this.timeout = timeout;
@@ -25,6 +24,16 @@ export class A9 extends BaseBidder {
 	}
 
 	callBids(onResponse) {
+		if (window.__cmp) {
+			window.__cmp('getConsentData', null, (consentData) => {
+				this.init(onResponse, consentData);
+			});
+		} else {
+			this.init(onResponse);
+		}
+	}
+
+	init(onResponse, consentData = {}) {
 		let a9Slots;
 
 		if (!this.loaded) {
@@ -35,8 +44,8 @@ export class A9 extends BaseBidder {
 				pubID: this.amazonId,
 				videoAdServer: 'DFP',
 				gdpr: this.isCMPEnabled ? {
-					enabled: this.gdpr.enabled,
-					consent: this.gdpr.consent,
+					enabled: consentData.gdprApplies,
+					consent: consentData.consentData,
 					cmpTimeout: 2000
 				} : undefined
 			});
