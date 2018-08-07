@@ -6,8 +6,7 @@ export const IMA_VPAID_INSECURE_MODE = 2;
 
 export class PorvataTemplate {
 	static getName() {
-		// TODO: rename me
-		return 'porvata';
+		return 'porvata3';
 	}
 
 	static getDefaultConfig() {
@@ -20,13 +19,10 @@ export class PorvataTemplate {
 
 	constructor(adSlot) {
 		this.adSlot = adSlot;
-		this.config = context.get('templates.porvata');
+		this.config = context.get('templates.porvata3');
 	}
 
 	init(params) {
-		// TODO: remove me
-		params.theme = 'hivi';
-		///////////
 		const slotName = this.adSlot.getSlotName();
 		const isInsecureMode = params.vpaidMode === IMA_VPAID_INSECURE_MODE;
 
@@ -65,11 +61,13 @@ export class PorvataTemplate {
 		});
 
 		window.addEventListener('resize', () => {
-			// TODO: Make sure floater and resize works
-			// if (!(video.isFloating && video.isFloating())) {
-			const slotWidth = slotElement.clientWidth;
-			video.resize(slotWidth, slotWidth / DEFAULT_VIDEO_ASPECT_RATIO);
+			if (!video.isFloating) {
+				const slotWidth = slotElement.clientWidth;
+				video.resize(slotWidth, slotWidth / DEFAULT_VIDEO_ASPECT_RATIO);
+			}
 		});
+
+		this.handleSlotStatus(video);
 
 		events.once(events.PAGE_CHANGE_EVENT, () => {
 			video.destroy();
@@ -86,6 +84,16 @@ export class PorvataTemplate {
 		return video;
 	}
 
+	handleSlotStatus(video) {
+		video.addEventListener('wikiaAdsManagerLoaded', () => {
+			this.adSlot.success();
+		});
+
+		video.addEventListener('wikiaEmptyAd', () => {
+			this.adSlot.collapse();
+		});
+	}
+
 	adjustVpaidPlayer(video, container) {
 		const videoPlayer = container.querySelector('.video-player');
 
@@ -97,7 +105,6 @@ export class PorvataTemplate {
 				videoPlayer.classList.remove('hide');
 			}
 		});
-
 
 		video.addEventListener('allAdsCompleted', () => {
 			container.classList.add('hide');

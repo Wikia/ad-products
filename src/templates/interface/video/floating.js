@@ -24,6 +24,7 @@ function add(video, container, params) {
 				slotElement.classList.add(FLOATING_CLASS_NAME);
 			}
 
+			video.isFloating = !inViewport;
 			video.resize(videoWrapper.offsetWidth, videoWrapper.offsetHeight);
 		}, {
 			offsetTop: params.inViewportOffsetTop,
@@ -31,6 +32,7 @@ function add(video, container, params) {
 			areaThreshold: 1
 		});
 		const disableFloating = () => {
+			video.isFloating = false;
 			slotElement.classList.remove(FLOATING_CLASS_NAME);
 			utils.viewportObserver.removeListener(observer);
 			video.resize(videoWrapper.offsetWidth, videoWrapper.offsetHeight);

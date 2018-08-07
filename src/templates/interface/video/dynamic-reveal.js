@@ -17,11 +17,10 @@ function add(video, container, params) {
 			}, 1500);
 		}
 
-		// TODO: Make sure floater and resize works
-		// if (!floater.isFloating(slot)) {
-		const slotWidth = slot.getElement().scrollWidth;
-		video.resize(slotWidth, slotWidth / DEFAULT_VIDEO_ASPECT_RATIO);
-		// }
+		if (!video.isFloating) {
+			const slotWidth = slot.getElement().scrollWidth;
+			video.resize(slotWidth, slotWidth / DEFAULT_VIDEO_ASPECT_RATIO);
+		}
 	});
 
 	video.addEventListener('allAdsCompleted', () => {
