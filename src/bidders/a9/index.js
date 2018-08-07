@@ -46,7 +46,7 @@ export class A9 extends BaseBidder {
 				gdpr: this.isCMPEnabled ? {
 					enabled: consentData.gdprApplies,
 					consent: consentData.consentData,
-					cmpTimeout: 2000
+					cmpTimeout: 5000
 				} : undefined
 			});
 
