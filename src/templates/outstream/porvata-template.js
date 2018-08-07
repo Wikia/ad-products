@@ -38,10 +38,7 @@ export class PorvataTemplate {
 		slotTweaker.collapse(this.adSlot);
 
 		return slotTweaker.makeResponsive(this.adSlot, DEFAULT_VIDEO_ASPECT_RATIO)
-			.then(() => {
-				return Porvata.inject(params)
-					.then(video => this.onReady(video, params));
-			});
+			.then(() => Porvata.inject(params).then(video => this.onReady(video, params)));
 	}
 
 	onReady(video, params) {

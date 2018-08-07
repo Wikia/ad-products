@@ -84,7 +84,7 @@ export function selectTemplate(videoSettings) {
 
 	let template = 'default';
 
-	if (params.type.indexOf('porvata') === 0) {
+	if (params.type && params.type.indexOf('porvata') === 0) {
 		template = 'outstream-incontent';
 	} else if (params.theme === 'hivi') {
 		template = 'hivi';
