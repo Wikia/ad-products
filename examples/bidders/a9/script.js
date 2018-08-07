@@ -5,7 +5,7 @@ import { bidders } from '@wikia/bidders';
 import customContext from '../../context';
 import '../../styles.scss';
 
-const optIn = utils.queryString.get('opt-in') !== '0';
+const optIn = utils.queryString.get('tracking-opt-in-status') !== '0';
 
 window.__cmp = function (cmd, param, cb) {
 	if (cmd === 'getConsentData') {
