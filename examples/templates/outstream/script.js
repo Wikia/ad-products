@@ -15,7 +15,7 @@ context.push('listeners.slot', {
 	}
 });
 context.push('listeners.porvata', {
-	onEvent: (eventName, params, data) => {
+	onEvent: (eventName) => {
 		console.log(`🎬 Porvata: %c${eventName}`, 'font-weight: bold');
 	}
 });
