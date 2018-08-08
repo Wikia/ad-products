@@ -1,4 +1,4 @@
-import { createIcon, icons } from './../icons';
+import { createIcon, icons } from '../icons';
 
 const replayOverlayClass = 'replay-overlay';
 

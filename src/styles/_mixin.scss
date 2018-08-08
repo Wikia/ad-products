@@ -5,3 +5,14 @@
 	top: 0;
 	width: 100%;
 }
+
+@mixin transition($property, $duration, $timing, $delay) {
+	transition-property: $property;
+	transition-duration: $duration;
+	transition-timing-function: $timing;
+	transition-delay: $delay;
+	-webkit-transition-property: $property;
+	-webkit-transition-duration: $duration;
+	-webkit-transition-timing-function: $timing;
+	-webkit-transition-delay: $delay;
+}

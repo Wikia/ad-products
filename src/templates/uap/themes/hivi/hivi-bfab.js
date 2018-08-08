@@ -9,7 +9,7 @@ import {
 	CSS_CLASSNAME_FADE_IN_ANIMATION, CSS_CLASSNAME_SLIDE_OUT_ANIMATION,
 	CSS_CLASSNAME_STICKY_BFAB, SLIDE_OUT_TIME, FADE_IN_TIME
 } from '../../constants';
-import { animate } from '../../ui/animate';
+import { animate } from '../../../interface/animate';
 
 export class BfabTheme extends BigFancyAdHiviTheme {
 	constructor(adSlot, params) {
