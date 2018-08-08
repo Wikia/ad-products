@@ -36,10 +36,6 @@ export class Appnexus extends BaseAdapter {
 			position = vertical && this.placements[vertical] ? vertical : 'other';
 		}
 
-		if (this.recPlacements && context.get('custom.rec')) {
-			return this.recPlacements[position];
-		}
-
 		return this.placements[position];
 	}
 }
