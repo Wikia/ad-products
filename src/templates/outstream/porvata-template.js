@@ -24,13 +24,14 @@ export class PorvataTemplate {
 
 	init(params) {
 		const slotName = this.adSlot.getSlotName();
-		const isInsecureMode = params.vpaidMode === IMA_VPAID_INSECURE_MODE;
+
+		this.isInsecureMode = params.vpaidMode === IMA_VPAID_INSECURE_MODE;
 
 		if (!Porvata.isVideoAutoplaySupported()) {
 			return this.adSlot.collapse();
 		}
 
-		if (isInsecureMode) {
+		if (this.isInsecureMode) {
 			params.originalContainer = params.container;
 			params.container = this.createVideoContainer(slotName);
 		}
@@ -44,10 +45,9 @@ export class PorvataTemplate {
 	onReady(video, params) {
 		const slotElement = this.adSlot.getElement();
 		const template = videoUserInterface.selectTemplate(video.videoSettings);
-		const isInsecureMode = params.vpaidMode === IMA_VPAID_INSECURE_MODE;
 		const videoContainer = params.container;
 
-		if (isInsecureMode) {
+		if (this.isInsecureMode) {
 			this.adjustVpaidPlayer(video, videoContainer);
 		}
 
@@ -97,7 +97,7 @@ export class PorvataTemplate {
 		video.addEventListener('loaded', () => {
 			const ad = video.ima.getAdsManager().getCurrentAd();
 
-			if (ad && Porvata.isVpaid(ad.getContentType) || '') {
+			if (ad && Porvata.isVpaid(ad.getContentType() || '')) {
 				container.classList.add('vpaid-enabled');
 				videoPlayer.classList.remove('hide');
 			}

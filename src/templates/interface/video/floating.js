@@ -3,12 +3,14 @@ import CloseButton from '../close-button';
 
 const FLOATING_CLASS_NAME = 'outstream-floating';
 
-function canFloat(params) {
-	return params.isFloatingEnabled;
-}
-
+/**
+ * Makes the video element floating once main container is out of viewport
+ * @param video Porvata video element
+ * @param container Video container
+ * @param params videoSettings parameters
+ */
 function add(video, container, params) {
-	if (!canFloat(params)) {
+	if (!params.isFloatingEnabled) {
 		return;
 	}
 
