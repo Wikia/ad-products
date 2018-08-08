@@ -23,8 +23,7 @@ export class IndexExchange extends BaseAdapter {
 			bids: sizes.map(size => ({
 				bidder: this.bidderName,
 				params: {
-					// ToDo: Recovery detection
-					siteId: this.recPlacements && context.get('targeting.rec') ? this.recPlacements[code] : siteId,
+					siteId: this.recPlacements && context.get('custom.rec') ? this.recPlacements[code] : siteId,
 					size
 				}
 			}))

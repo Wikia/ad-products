@@ -36,8 +36,7 @@ export class Appnexus extends BaseAdapter {
 			position = vertical && this.placements[vertical] ? vertical : 'other';
 		}
 
-		// ToDo: Recovery detection
-		if (this.recPlacements && context.get('targeting.rec')) {
+		if (this.recPlacements && context.get('custom.rec')) {
 			return this.recPlacements[position];
 		}
 
