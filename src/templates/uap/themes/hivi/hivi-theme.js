@@ -1,6 +1,6 @@
-import AdvertisementLabel from '../../ui/advertisement-label';
+import AdvertisementLabel from '../../../interface/advertisement-label';
 import { BigFancyAdTheme } from '../theme';
-import CloseButton from '../../ui/close-button';
+import CloseButton from '../../../interface/close-button';
 import { Stickiness } from './stickiness';
 
 export class BigFancyAdHiviTheme extends BigFancyAdTheme {

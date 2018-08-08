@@ -1,4 +1,4 @@
-import ToggleAnimation from '../../ui/video/toggle-animation';
+import ToggleAnimation from '../../../interface/video/toggle-animation';
 import { BigFancyAdTheme } from '../theme';
 import { universalAdPackage } from '../../universal-ad-package';
 import { VideoSettings } from '../../video-settings';

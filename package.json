@@ -1,13 +1,13 @@
 {
   "name": "@wikia/ad-products",
-  "version": "7.6.2",
+  "version": "7.7.1",
   "description": "Wikia ad products",
   "repository": {
     "type": "git",
     "url": "https://github.com/Wikia/ad-products"
   },
   "dependencies": {
-    "@wikia/ad-engine": "git+https://github.com/Wikia/ad-engine.git#v12.0.12",
+    "@wikia/ad-engine": "git+https://github.com/Wikia/ad-engine.git#v12.1.1",
     "core-decorators": "^0.20.0",
     "events": "^1.1.1",
     "js-cookie": "^2.1.4",

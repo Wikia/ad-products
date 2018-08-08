@@ -1,6 +1,6 @@
 import { throttle } from 'lodash';
 import { btfBlockerService, context, Porvata, slotService, utils } from '@wikia/ad-engine';
-import * as videoUserInterface from './ui/video';
+import * as videoUserInterface from '../interface/video';
 import * as constants from './constants';
 
 let uapId = constants.DEFAULT_UAP_ID;
