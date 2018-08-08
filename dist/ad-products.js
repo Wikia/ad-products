@@ -2088,7 +2088,6 @@ var a9_A9 = function (_BaseBidder) {
 		_this.amazonId = _this.bidderConfig.amazonId;
 		_this.slots = _this.bidderConfig.slots;
 		_this.slotsVideo = _this.bidderConfig.slotsVideo;
-		_this.gdpr = _this.bidderConfig.gdpr;
 		_this.bids = {};
 		_this.priceMap = {};
 		_this.timeout = timeout;
@@ -2109,6 +2108,21 @@ var a9_A9 = function (_BaseBidder) {
 		value: function callBids(onResponse) {
 			var _this3 = this;
 
+			if (window.__cmp) {
+				window.__cmp('getConsentData', null, function (consentData) {
+					_this3.init(onResponse, consentData);
+				});
+			} else {
+				this.init(onResponse);
+			}
+		}
+	}, {
+		key: 'init',
+		value: function init(onResponse) {
+			var _this4 = this;
+
+			var consentData = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
 			var a9Slots = void 0;
 
 			if (!this.loaded) {
@@ -2119,9 +2133,9 @@ var a9_A9 = function (_BaseBidder) {
 					pubID: this.amazonId,
 					videoAdServer: 'DFP',
 					gdpr: this.isCMPEnabled ? {
-						enabled: this.gdpr.enabled,
-						consent: this.gdpr.consent,
-						cmpTimeout: 2000
+						enabled: consentData.gdprApplies,
+						consent: consentData.consentData,
+						cmpTimeout: 5000
 					} : undefined
 				});
 
@@ -2142,7 +2156,7 @@ var a9_A9 = function (_BaseBidder) {
 				timeout: this.timeout
 			}, function (currentBids) {
 				currentBids.forEach(function (bid) {
-					_this3.bids[bid.slotID] = bid;
+					_this4.bids[bid.slotID] = bid;
 				});
 
 				onResponse();
@@ -2151,7 +2165,7 @@ var a9_A9 = function (_BaseBidder) {
 	}, {
 		key: 'configureApstag',
 		value: function configureApstag() {
-			var _this4 = this;
+			var _this5 = this;
 
 			window.apstag = window.apstag || {};
 			window.apstag._Q = window.apstag._Q || [];
@@ -2162,7 +2176,7 @@ var a9_A9 = function (_BaseBidder) {
 						args[_key] = arguments[_key];
 					}
 
-					_this4.configureApstagCommand('i', args);
+					_this5.configureApstagCommand('i', args);
 				};
 			}
 
@@ -2172,7 +2186,7 @@ var a9_A9 = function (_BaseBidder) {
 						args[_key2] = arguments[_key2];
 					}
 
-					_this4.configureApstagCommand('f', args);
+					_this5.configureApstagCommand('f', args);
 				};
 			}
 		}
@@ -2391,8 +2405,7 @@ var appnexus_Appnexus = function (_BaseAdapter) {
 				position = vertical && this.placements[vertical] ? vertical : 'other';
 			}
 
-			// ToDo: Recovery detection
-			if (this.recPlacements && ad_engine_["context"].get('targeting.rec')) {
+			if (this.recPlacements && ad_engine_["context"].get('custom.rec')) {
 				return this.recPlacements[position];
 			}
 
@@ -2647,8 +2660,7 @@ var index_exchange_IndexExchange = function (_BaseAdapter) {
 					return {
 						bidder: _this2.bidderName,
 						params: {
-							// ToDo: Recovery detection
-							siteId: _this2.recPlacements && ad_engine_["context"].get('targeting.rec') ? _this2.recPlacements[code] : siteId,
+							siteId: _this2.recPlacements && ad_engine_["context"].get('custom.rec') ? _this2.recPlacements[code] : siteId,
 							size: size
 						}
 					};
@@ -7241,7 +7253,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v7.6.1');
+set_default()(window, versionField, 'v7.6.2');
 
 
 
