@@ -8,7 +8,6 @@ export class IndexExchange extends BaseAdapter {
 		this.aliases = {
 			ix: [this.bidderName]
 		};
-		this.recPlacements = options.recPlacements;
 	}
 
 	prepareConfigForAdUnit(code, { sizes, siteId }) {

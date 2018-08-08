@@ -7,7 +7,6 @@ export class Appnexus extends BaseAdapter {
 
 		this.bidderName = 'appnexus';
 		this.placements = options.placements;
-		this.recPlacements = options.recPlacements;
 	}
 
 	prepareConfigForAdUnit(code, { sizes, position = 'mobile' }) {

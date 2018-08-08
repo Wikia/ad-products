@@ -1753,7 +1753,6 @@ var appnexus_Appnexus = function (_BaseAdapter) {
 
 		_this.bidderName = 'appnexus';
 		_this.placements = options.placements;
-		_this.recPlacements = options.recPlacements;
 		return _this;
 	}
 
@@ -2015,7 +2014,6 @@ var index_exchange_IndexExchange = function (_BaseAdapter) {
 		_this.aliases = {
 			ix: [_this.bidderName]
 		};
-		_this.recPlacements = options.recPlacements;
 		return _this;
 	}
 
