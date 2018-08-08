@@ -1788,10 +1788,6 @@ var appnexus_Appnexus = function (_BaseAdapter) {
 				position = vertical && this.placements[vertical] ? vertical : 'other';
 			}
 
-			if (this.recPlacements && ad_engine_["context"].get('custom.rec')) {
-				return this.recPlacements[position];
-			}
-
 			return this.placements[position];
 		}
 	}]);
@@ -2007,7 +2003,6 @@ var beachfront_Beachfront = function (_BaseAdapter) {
 
 
 
-
 var index_exchange_IndexExchange = function (_BaseAdapter) {
 	inherits_default()(IndexExchange, _BaseAdapter);
 
@@ -2043,7 +2038,7 @@ var index_exchange_IndexExchange = function (_BaseAdapter) {
 					return {
 						bidder: _this2.bidderName,
 						params: {
-							siteId: _this2.recPlacements && ad_engine_["context"].get('custom.rec') ? _this2.recPlacements[code] : siteId,
+							siteId: siteId,
 							size: size
 						}
 					};
