@@ -18,6 +18,9 @@ utils.setupNpaContext();
 context.push('listeners.slot', {
 	onStatusChanged: (adSlot) => {
 		console.log(`⛳ ${adSlot.getSlotName()}: %c${adSlot.getStatus()}`, 'font-weight: bold');
+	},
+	onImpressionViewable: (adSlot) => {
+		console.log(`⛳ ${adSlot.getSlotName()}: %cviewed`, 'font-weight: bold');
 	}
 });
 
