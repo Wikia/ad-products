@@ -15,7 +15,8 @@ describe('AppnexusAst bidder adapter', () => {
 			enabled: true,
 			slots: {
 				mobile_in_content: {
-					placementId: '11223344'
+					placementId: '11223344',
+					context: 'outstream'
 				}
 			}
 		});
