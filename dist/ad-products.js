@@ -2439,13 +2439,14 @@ var appnexus_ast_AppnexusAst = function (_BaseAdapter) {
 	createClass_default()(AppnexusAst, [{
 		key: 'prepareConfigForAdUnit',
 		value: function prepareConfigForAdUnit(code, _ref) {
-			var placementId = _ref.placementId;
+			var placementId = _ref.placementId,
+			    context = _ref.context;
 
 			return {
 				code: code,
 				mediaTypes: {
 					video: {
-						context: code.toLowerCase() === 'featured' ? 'instream' : 'outstream',
+						context: context,
 						playerSize: [640, 480]
 					}
 				},
