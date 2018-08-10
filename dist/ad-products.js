@@ -2153,9 +2153,11 @@ var a9_A9 = function (_BaseBidder) {
 
 			var disabledSlots = ad_engine_["context"].get('bidders.disabledSlots');
 
-			a9Slots = a9Slots.filter(function (slot) {
-				return disabledSlots.indexOf(slot.slotID) === -1;
-			});
+			if (disabledSlots) {
+				a9Slots = a9Slots.filter(function (slot) {
+					return disabledSlots.indexOf(slot.slotID) === -1;
+				});
+			}
 
 			window.apstag.fetchBids({
 				slots: a9Slots,
@@ -2866,9 +2868,9 @@ var prebid_helper_disabledSlots = ad_engine_["context"].get('bidders.disabledSlo
 var lazyLoadSlots = ['bottom_leaderboard'];
 
 function isSlotAvailable(code, lazyLoad) {
-	var isSlotLazy = lazyLoadSlots.indexOf(code) !== -1;
+	var isSlotLazy = lazyLoadSlots && lazyLoadSlots.indexOf(code) !== -1;
 
-	if (prebid_helper_disabledSlots.indexOf(code) !== -1) {
+	if (prebid_helper_disabledSlots && prebid_helper_disabledSlots.indexOf(code) !== -1) {
 		return false;
 	}
 

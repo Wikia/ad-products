@@ -66,7 +66,9 @@ export class A9 extends BaseBidder {
 
 		const disabledSlots = context.get('bidders.disabledSlots');
 
-		a9Slots = a9Slots.filter(slot => (disabledSlots.indexOf(slot.slotID) === -1));
+		if (disabledSlots) {
+			a9Slots = a9Slots.filter(slot => (disabledSlots.indexOf(slot.slotID) === -1));
+		}
 
 		window.apstag.fetchBids({
 			slots: a9Slots,
