@@ -1,19 +1,23 @@
 import { context } from '@wikia/ad-engine';
 import { getAdapters } from './adapters-registry';
 
+const disabledSlots = context.get('bidders.disabledSlots');
 const lazyLoadSlots = [
 	'bottom_leaderboard'
 ];
 
 function isSlotAvailable(code, lazyLoad) {
-	let available = true;
 	const isSlotLazy = lazyLoadSlots.indexOf(code) !== -1;
 
-	if (lazyLoad !== 'off' && ((lazyLoad === 'pre' && isSlotLazy) || (lazyLoad === 'post' && !isSlotLazy))) {
-		available = false;
+	if (disabledSlots.indexOf(code) !== -1) {
+		return false;
 	}
 
-	return available;
+	if (lazyLoad !== 'off' && ((lazyLoad === 'pre' && isSlotLazy) || (lazyLoad === 'post' && !isSlotLazy))) {
+		return false;
+	}
+
+	return true;
 }
 
 export function setupAdUnits(adaptersConfig, lazyLoad = 'off') {
