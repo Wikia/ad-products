@@ -113,13 +113,6 @@ exports.default = function () {
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(115);
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 
 
@@ -130,6 +123,13 @@ exports.default = function (instance, Constructor) {
     throw new TypeError("Cannot call a class as a function");
   }
 };
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(115);
+
 
 /***/ }),
 /* 4 */
@@ -1916,7 +1916,7 @@ function getAdProductInfo(slotName, loadedTemplate, loadedProduct) {
 // CONCATENATED MODULE: ./src/common/index.js
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/classCallCheck.js
-var classCallCheck = __webpack_require__(3);
+var classCallCheck = __webpack_require__(2);
 var classCallCheck_default = /*#__PURE__*/__webpack_require__.n(classCallCheck);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/createClass.js
@@ -2178,7 +2178,7 @@ var floating_rail_FloatingRail = function () {
 	return FloatingRail;
 }();
 // EXTERNAL MODULE: ./node_modules/babel-runtime/regenerator/index.js
-var regenerator = __webpack_require__(2);
+var regenerator = __webpack_require__(3);
 var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/asyncToGenerator.js
@@ -2193,7 +2193,7 @@ var extends_default = /*#__PURE__*/__webpack_require__.n(helpers_extends);
 var throttle_ = __webpack_require__(83);
 var throttle_default = /*#__PURE__*/__webpack_require__.n(throttle_);
 
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/close-button.js
+// CONCATENATED MODULE: ./src/templates/interface/video/close-button.js
 function add(video, container) {
 	var closeButton = document.createElement('div');
 
@@ -2209,35 +2209,6 @@ function add(video, container) {
 /* harmony default export */ var close_button = ({
 	add: add
 });
-// EXTERNAL MODULE: ./src/templates/uap/ui/icons.json
-var icons = __webpack_require__(41);
-var icons_default = /*#__PURE__*/__webpack_require__.n(icons);
-
-// CONCATENATED MODULE: ./src/templates/uap/ui/icons.js
-
-
-
-var parser = new window.DOMParser();
-
-function createIcon(iconName) {
-	var classNames = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
-	if (icons_default.a[iconName]) {
-		var element = parser.parseFromString(icons_default.a[iconName], 'image/svg+xml').documentElement;
-
-		// IE 11 doesn't support classList nor className on SVG elements
-		element.setAttribute('class', classNames.join(' '));
-
-		return element;
-	}
-
-	return null;
-}
-
-var icons_icons = keys_default()(icons_default.a).reduce(function (map, name) {
-	map[name] = name;
-	return map;
-}, {});
 // CONCATENATED MODULE: ./src/common/translations.js
 var TRANSLATIONS = {
 	labels: {
@@ -2406,7 +2377,441 @@ function getTranslation(category, key) {
 
 	return TRANSLATIONS[category][language][key] || TRANSLATIONS[category][defaultLanguage][key];
 }
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/learn-more.js
+// CONCATENATED MODULE: ./src/templates/outstream/porvata-template.js
+
+
+
+
+
+
+var DEFAULT_VIDEO_ASPECT_RATIO = 640 / 360;
+var IMA_VPAID_INSECURE_MODE = 2;
+
+var porvata_template_PorvataTemplate = function () {
+	createClass_default()(PorvataTemplate, null, [{
+		key: 'getName',
+		value: function getName() {
+			return 'porvata3';
+		}
+	}, {
+		key: 'getDefaultConfig',
+		value: function getDefaultConfig() {
+			return {
+				isFloatingEnabled: true,
+				inViewportOffsetTop: 0,
+				inViewportOffsetBottom: 0
+			};
+		}
+	}]);
+
+	function PorvataTemplate(adSlot) {
+		classCallCheck_default()(this, PorvataTemplate);
+
+		this.adSlot = adSlot;
+		this.config = ad_engine_["context"].get('templates.porvata3');
+	}
+
+	createClass_default()(PorvataTemplate, [{
+		key: 'init',
+		value: function init(params) {
+			var _this = this;
+
+			var slotName = this.adSlot.getSlotName();
+
+			this.adSlot.getElement().classList.add('porvata3');
+			this.adSlot.getElement().setAttribute('data-label', getTranslation('labels', 'advertisement'));
+
+			this.isInsecureMode = params.vpaidMode === IMA_VPAID_INSECURE_MODE;
+
+			if (!ad_engine_["Porvata"].isVideoAutoplaySupported()) {
+				return this.adSlot.collapse();
+			}
+
+			if (this.isInsecureMode) {
+				params.originalContainer = params.container;
+				params.container = this.createVideoContainer(slotName);
+			}
+
+			ad_engine_["slotTweaker"].collapse(this.adSlot);
+
+			return ad_engine_["slotTweaker"].makeResponsive(this.adSlot, DEFAULT_VIDEO_ASPECT_RATIO).then(function () {
+				return ad_engine_["Porvata"].inject(params).then(function (video) {
+					return _this.onReady(video, params);
+				});
+			});
+		}
+	}, {
+		key: 'onReady',
+		value: function onReady(video, params) {
+			var slotElement = this.adSlot.getElement();
+			var template = selectTemplate(video.videoSettings);
+			var videoContainer = params.container;
+
+			if (this.isInsecureMode) {
+				this.adjustVpaidPlayer(video, videoContainer);
+			}
+
+			slotElement.classList.add('porvata-outstream');
+
+			video.addEventListener('loaded', function () {
+				video.container.classList.remove('hide');
+			});
+
+			window.addEventListener('resize', function () {
+				if (!video.isFloating) {
+					var slotWidth = slotElement.clientWidth;
+					video.resize(slotWidth, slotWidth / DEFAULT_VIDEO_ASPECT_RATIO);
+				}
+			});
+
+			this.handleSlotStatus(video);
+
+			ad_engine_["events"].once(ad_engine_["events"].PAGE_CHANGE_EVENT, function () {
+				video.destroy();
+			});
+
+			setup(video, template, {
+				container: videoContainer,
+				inViewportOffsetTop: this.config.inViewportOffsetTop,
+				inViewportOffsetBottom: this.config.inViewportOffsetBottom,
+				isFloatingEnabled: this.config.isFloatingEnabled && params.enableInContentFloating,
+				slotName: params.slotName
+			});
+
+			return video;
+		}
+	}, {
+		key: 'handleSlotStatus',
+		value: function handleSlotStatus(video) {
+			var _this2 = this;
+
+			video.addEventListener('wikiaAdsManagerLoaded', function () {
+				_this2.adSlot.success();
+			});
+
+			video.addEventListener('wikiaEmptyAd', function () {
+				_this2.adSlot.collapse();
+			});
+		}
+	}, {
+		key: 'adjustVpaidPlayer',
+		value: function adjustVpaidPlayer(video, container) {
+			var videoPlayer = container.querySelector('.video-player');
+
+			video.addEventListener('loaded', function () {
+				var ad = video.ima.getAdsManager().getCurrentAd();
+
+				if (ad && ad_engine_["Porvata"].isVpaid(ad.getContentType() || '')) {
+					container.classList.add('vpaid-enabled');
+					videoPlayer.classList.remove('hide');
+				}
+			});
+
+			video.addEventListener('allAdsCompleted', function () {
+				container.classList.add('hide');
+			});
+		}
+	}, {
+		key: 'createVideoContainer',
+		value: function createVideoContainer() {
+			var container = document.createElement('div');
+			var displayWrapper = document.createElement('div');
+
+			container.classList.add('video-overlay');
+			displayWrapper.classList.add('video-display-wrapper');
+
+			container.appendChild(displayWrapper);
+			this.adSlot.getElement().appendChild(container);
+
+			return displayWrapper;
+		}
+	}]);
+
+	return PorvataTemplate;
+}();
+// CONCATENATED MODULE: ./src/templates/interface/video/dynamic-reveal.js
+
+
+
+/**
+ * Add UI animations that expands once video ad starts and collapses the slot once video ad finishes
+ * @param video Porvata video element
+ * @param container Video container
+ * @param params videoSettings parameters
+ */
+function dynamic_reveal_add(video, container, params) {
+	var slot = ad_engine_["slotService"].get(params.slotName);
+
+	var slotExpanded = false;
+
+	video.addEventListener('loaded', function () {
+		if (!slotExpanded) {
+			ad_engine_["slotTweaker"].expand(slot);
+			slotExpanded = true;
+
+			// Delay dispatching event so it's run after browser really finish expanding the slot
+			// Value 1000ms is related to animation defined in _porvata.scss file
+			setTimeout(function () {
+				video.ima.dispatchEvent('wikiaSlotExpanded');
+			}, 1000);
+		}
+
+		if (!video.isFloating) {
+			var slotWidth = slot.getElement().scrollWidth;
+			video.resize(slotWidth, slotWidth / DEFAULT_VIDEO_ASPECT_RATIO);
+		}
+	});
+
+	video.addEventListener('allAdsCompleted', function () {
+		ad_engine_["slotTweaker"].collapse(slot);
+		video.ima.dispatchEvent('wikiaSlotCollapsed');
+	});
+}
+
+/* harmony default export */ var dynamic_reveal = ({
+	add: dynamic_reveal_add
+});
+// EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/toConsumableArray.js
+var toConsumableArray = __webpack_require__(27);
+var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
+
+// EXTERNAL MODULE: ./node_modules/babel-runtime/core-js/object/get-prototype-of.js
+var get_prototype_of = __webpack_require__(4);
+var get_prototype_of_default = /*#__PURE__*/__webpack_require__.n(get_prototype_of);
+
+// EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/possibleConstructorReturn.js
+var possibleConstructorReturn = __webpack_require__(9);
+var possibleConstructorReturn_default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn);
+
+// EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/get.js
+var helpers_get = __webpack_require__(11);
+var helpers_get_default = /*#__PURE__*/__webpack_require__.n(helpers_get);
+
+// EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/inherits.js
+var inherits = __webpack_require__(8);
+var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
+
+// CONCATENATED MODULE: ./src/templates/interface/ui-component.js
+
+
+
+var ui_component_UiComponent = function () {
+	createClass_default()(UiComponent, [{
+		key: "classNames",
+		get: function get() {
+			return this.props.classNames || [];
+		}
+	}]);
+
+	function UiComponent() {
+		var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+		classCallCheck_default()(this, UiComponent);
+
+		this.props = props;
+	}
+
+	createClass_default()(UiComponent, [{
+		key: "render",
+		value: function render() {
+			return document.createDocumentFragment();
+		}
+	}]);
+
+	return UiComponent;
+}();
+
+
+// CONCATENATED MODULE: ./src/templates/interface/button.js
+
+
+
+
+
+
+
+
+
+var button_Button = function (_UiComponent) {
+	inherits_default()(Button, _UiComponent);
+
+	function Button() {
+		classCallCheck_default()(this, Button);
+
+		return possibleConstructorReturn_default()(this, (Button.__proto__ || get_prototype_of_default()(Button)).apply(this, arguments));
+	}
+
+	createClass_default()(Button, [{
+		key: 'render',
+		value: function render() {
+			var _this2 = this;
+
+			var buttonElement = document.createElement('button');
+
+			this.classNames.forEach(function (className) {
+				return buttonElement.classList.add(className);
+			});
+			buttonElement.addEventListener('click', function (event) {
+				return _this2.onClick(event);
+			});
+
+			return buttonElement;
+		}
+	}, {
+		key: 'onClick',
+		value: function onClick(event) {
+			var onClick = this.props.onClick;
+
+
+			if (typeof onClick === 'function') {
+				return onClick(event);
+			}
+
+			return undefined;
+		}
+	}, {
+		key: 'classNames',
+		get: function get() {
+			return ['button-control'].concat(toConsumableArray_default()(helpers_get_default()(Button.prototype.__proto__ || get_prototype_of_default()(Button.prototype), 'classNames', this)));
+		}
+	}]);
+
+	return Button;
+}(ui_component_UiComponent);
+
+
+// EXTERNAL MODULE: ./src/templates/interface/icons.json
+var icons = __webpack_require__(41);
+var icons_default = /*#__PURE__*/__webpack_require__.n(icons);
+
+// CONCATENATED MODULE: ./src/templates/interface/icons.js
+
+
+
+var parser = new window.DOMParser();
+
+function createIcon(iconName) {
+	var classNames = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+	if (icons_default.a[iconName]) {
+		var element = parser.parseFromString(icons_default.a[iconName], 'image/svg+xml').documentElement;
+
+		// IE 11 doesn't support classList nor className on SVG elements
+		element.setAttribute('class', classNames.join(' '));
+
+		return element;
+	}
+
+	return null;
+}
+
+var icons_icons = keys_default()(icons_default.a).reduce(function (map, name) {
+	map[name] = name;
+	return map;
+}, {});
+// CONCATENATED MODULE: ./src/templates/interface/close-button.js
+
+
+
+
+
+
+
+
+
+
+
+var close_button_CloseButton = function (_UiComponent) {
+	inherits_default()(CloseButton, _UiComponent);
+
+	function CloseButton() {
+		classCallCheck_default()(this, CloseButton);
+
+		return possibleConstructorReturn_default()(this, (CloseButton.__proto__ || get_prototype_of_default()(CloseButton)).apply(this, arguments));
+	}
+
+	createClass_default()(CloseButton, [{
+		key: 'render',
+		value: function render() {
+			var onClick = this.props.onClick;
+			var classNames = this.classNames;
+
+			var button = new button_Button({ onClick: onClick, classNames: classNames }).render();
+			var closeIcon = createIcon(icons_icons.CROSS, ['icon']);
+
+			button.appendChild(closeIcon);
+
+			return button;
+		}
+	}, {
+		key: 'classNames',
+		get: function get() {
+			return ['button-close'].concat(toConsumableArray_default()(helpers_get_default()(CloseButton.prototype.__proto__ || get_prototype_of_default()(CloseButton.prototype), 'classNames', this)));
+		}
+	}]);
+
+	return CloseButton;
+}(ui_component_UiComponent);
+
+
+// CONCATENATED MODULE: ./src/templates/interface/video/floating.js
+
+
+
+
+var FLOATING_CLASS_NAME = 'outstream-floating';
+
+/**
+ * Makes the video element floating once main container is out of viewport
+ * @param video Porvata video element
+ * @param container Video container
+ * @param params videoSettings parameters
+ */
+function floating_add(video, container, params) {
+	if (!params.isFloatingEnabled) {
+		return;
+	}
+
+	var slotElement = ad_engine_["slotService"].get(params.slotName).getElement();
+	var videoOverlay = slotElement.querySelector('.video-overlay');
+	var videoWrapper = slotElement.querySelector('.video-display-wrapper');
+
+	video.addEventListener('wikiaSlotExpanded', function () {
+		var observer = ad_engine_["utils"].viewportObserver.addListener(videoOverlay, function (inViewport) {
+			if (inViewport) {
+				slotElement.classList.remove(FLOATING_CLASS_NAME);
+			} else {
+				slotElement.classList.add(FLOATING_CLASS_NAME);
+			}
+
+			video.isFloating = !inViewport;
+			var width = videoWrapper.offsetWidth;
+			video.resize(width, width / DEFAULT_VIDEO_ASPECT_RATIO);
+		}, {
+			offsetTop: params.inViewportOffsetTop,
+			offsetBottom: params.inViewportOffsetBottom,
+			areaThreshold: 1
+		});
+		var disableFloating = function disableFloating() {
+			video.isFloating = false;
+			slotElement.classList.remove(FLOATING_CLASS_NAME);
+			ad_engine_["utils"].viewportObserver.removeListener(observer);
+			var width = videoWrapper.offsetWidth;
+			video.resize(width, width / DEFAULT_VIDEO_ASPECT_RATIO);
+		};
+		var closeButton = new close_button_CloseButton({
+			onClick: disableFloating
+		});
+
+		videoWrapper.appendChild(closeButton.render());
+		video.addEventListener('wikiaAdCompleted', disableFloating);
+	});
+}
+
+/* harmony default export */ var floating = ({
+	add: floating_add
+});
+// CONCATENATED MODULE: ./src/templates/interface/video/learn-more.js
 
 
 
@@ -2430,7 +2835,7 @@ function learn_more_add(video, container, params) {
 /* harmony default export */ var learn_more = ({
 	add: learn_more_add
 });
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/pause-control.js
+// CONCATENATED MODULE: ./src/templates/interface/video/pause-control.js
 
 
 function pause_control_add(video, container) {
@@ -2465,7 +2870,7 @@ function pause_control_add(video, container) {
 /* harmony default export */ var pause_control = ({
 	add: pause_control_add
 });
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/pause-overlay.js
+// CONCATENATED MODULE: ./src/templates/interface/video/pause-overlay.js
 function pause_overlay_add(video, container) {
 	var overlay = document.createElement('div');
 
@@ -2484,7 +2889,7 @@ function pause_overlay_add(video, container) {
 /* harmony default export */ var pause_overlay = ({
 	add: pause_overlay_add
 });
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/progress-bar.js
+// CONCATENATED MODULE: ./src/templates/interface/video/progress-bar.js
 
 
 function progress_bar_add(video, container) {
@@ -2535,7 +2940,7 @@ function progress_bar_add(video, container) {
 /* harmony default export */ var progress_bar = ({
 	add: progress_bar_add
 });
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/replay-overlay.js
+// CONCATENATED MODULE: ./src/templates/interface/video/replay-overlay.js
 
 
 var replayOverlayClass = 'replay-overlay';
@@ -2615,7 +3020,7 @@ function addPlayIcon(overlay) {
 /* harmony default export */ var replay_overlay = ({
 	add: replay_overlay_add
 });
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-animation.js
+// CONCATENATED MODULE: ./src/templates/interface/video/toggle-animation.js
 var toggle_animation_duration = 400,
     onAnimationClassName = 'on-animation';
 
@@ -2661,7 +3066,7 @@ function toggle_animation_add(video, container, params) {
 	add: toggle_animation_add,
 	duration: toggle_animation_duration
 });
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-fullscreen.js
+// CONCATENATED MODULE: ./src/templates/interface/video/toggle-fullscreen.js
 
 
 function toggle_fullscreen_add(video, container) {
@@ -2695,7 +3100,7 @@ function toggle_fullscreen_add(video, container) {
 /* harmony default export */ var toggle_fullscreen = ({
 	add: toggle_fullscreen_add
 });
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-thumbnail.js
+// CONCATENATED MODULE: ./src/templates/interface/video/toggle-thumbnail.js
 function toggle_thumbnail_add(video, container, params) {
 	video.addEventListener('wikiaAdStarted', function () {
 		params.thumbnail.classList.add('hidden-state');
@@ -2709,7 +3114,7 @@ function toggle_thumbnail_add(video, container, params) {
 /* harmony default export */ var toggle_thumbnail = ({
 	add: toggle_thumbnail_add
 });
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-ui.js
+// CONCATENATED MODULE: ./src/templates/interface/video/toggle-ui.js
 
 
 var overlayTimeout = 5000;
@@ -2754,7 +3159,7 @@ function toggle_ui_add(video, container, params) {
 /* harmony default export */ var toggle_ui = ({
 	add: toggle_ui_add
 });
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/toggle-video.js
+// CONCATENATED MODULE: ./src/templates/interface/video/toggle-video.js
 function toggle_video_add(video, container) {
 	video.addEventListener('wikiaAdStarted', function () {
 		container.classList.remove('hide');
@@ -2768,7 +3173,7 @@ function toggle_video_add(video, container) {
 /* harmony default export */ var toggle_video = ({
 	add: toggle_video_add
 });
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/volume-control.js
+// CONCATENATED MODULE: ./src/templates/interface/video/volume-control.js
 
 
 function createVolumeControl(params) {
@@ -2819,7 +3224,7 @@ function volume_control_add(video, container) {
 /* harmony default export */ var volume_control = ({
 	add: volume_control_add
 });
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/panel.js
+// CONCATENATED MODULE: ./src/templates/interface/video/panel.js
 
 
 
@@ -2852,7 +3257,9 @@ var panel_Panel = function () {
 }();
 
 
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/ui-template.js
+// CONCATENATED MODULE: ./src/templates/interface/video/ui-template.js
+
+
 
 
 
@@ -2889,7 +3296,8 @@ var ui_template_getTemplates = function getTemplates(params, videoSettings) {
 		default: [progress_bar, pause_overlay, ui_template_createBottomPanel(params), close_button, toggle_animation],
 		'split-left': [progress_bar, pause_overlay, ui_template_createBottomPanel(params), toggle_video, replay_overlay, !videoSettings.isAutoPlay() ? close_button : null],
 		'split-right': [progress_bar, pause_overlay, ui_template_createBottomPanel(params), toggle_video, replay_overlay, !videoSettings.isAutoPlay() ? close_button : null],
-		hivi: [progress_bar, ui_template_createBottomPanel(params), params.videoPlaceholderElement ? toggle_video : toggle_animation, toggle_thumbnail, toggle_ui, learn_more, params.videoPlaceholderElement ? replay_overlay : null]
+		hivi: [progress_bar, ui_template_createBottomPanel(params), params.videoPlaceholderElement ? toggle_video : toggle_animation, toggle_thumbnail, toggle_ui, learn_more, params.videoPlaceholderElement ? replay_overlay : null],
+		'outstream-incontent': [dynamic_reveal, floating, progress_bar, volume_control]
 	};
 };
 
@@ -2899,7 +3307,9 @@ function selectTemplate(videoSettings) {
 
 	var template = 'default';
 
-	if (params.theme === 'hivi') {
+	if (params.type && params.type.indexOf('porvata') === 0) {
+		template = 'outstream-incontent';
+	} else if (params.theme === 'hivi') {
 		template = 'hivi';
 	} else if (videoSettings.isSplitLayout()) {
 		template = params.splitLayoutVideoPosition === 'right' ? 'split-right' : 'split-left';
@@ -2909,7 +3319,7 @@ function selectTemplate(videoSettings) {
 
 	return templates[template];
 }
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/video-interface.js
+// CONCATENATED MODULE: ./src/templates/interface/video/video-interface.js
 function setup(video, uiElements, params) {
 	uiElements.forEach(function (element) {
 		if (element) {
@@ -2917,7 +3327,7 @@ function setup(video, uiElements, params) {
 		}
 	});
 }
-// CONCATENATED MODULE: ./src/templates/uap/ui/video/index.js
+// CONCATENATED MODULE: ./src/templates/interface/video/index.js
 
 
 // CONCATENATED MODULE: ./src/templates/uap/constants.js
@@ -3183,10 +3593,6 @@ var universalAdPackage = extends_default()({}, constants_namespaceObject, {
 	setType: setType,
 	setUapId: setUapId
 });
-// EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/toConsumableArray.js
-var toConsumableArray = __webpack_require__(27);
-var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
-
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/toArray.js
 var toArray = __webpack_require__(82);
 var toArray_default = /*#__PURE__*/__webpack_require__.n(toArray);
@@ -3398,22 +3804,6 @@ var video_settings_VideoSettings = function () {
 
 	return VideoSettings;
 }();
-// EXTERNAL MODULE: ./node_modules/babel-runtime/core-js/object/get-prototype-of.js
-var get_prototype_of = __webpack_require__(4);
-var get_prototype_of_default = /*#__PURE__*/__webpack_require__.n(get_prototype_of);
-
-// EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/possibleConstructorReturn.js
-var possibleConstructorReturn = __webpack_require__(9);
-var possibleConstructorReturn_default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn);
-
-// EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/get.js
-var helpers_get = __webpack_require__(11);
-var helpers_get_default = /*#__PURE__*/__webpack_require__.n(helpers_get);
-
-// EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/inherits.js
-var inherits = __webpack_require__(8);
-var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
-
 // CONCATENATED MODULE: ./src/templates/uap/themes/theme.js
 
 
@@ -3597,38 +3987,7 @@ var debounce_default = /*#__PURE__*/__webpack_require__.n(debounce_);
 // EXTERNAL MODULE: external "events"
 var external_events_ = __webpack_require__(39);
 
-// CONCATENATED MODULE: ./src/templates/uap/ui/ui-component.js
-
-
-
-var ui_component_UiComponent = function () {
-	createClass_default()(UiComponent, [{
-		key: "classNames",
-		get: function get() {
-			return this.props.classNames || [];
-		}
-	}]);
-
-	function UiComponent() {
-		var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-		classCallCheck_default()(this, UiComponent);
-
-		this.props = props;
-	}
-
-	createClass_default()(UiComponent, [{
-		key: "render",
-		value: function render() {
-			return document.createDocumentFragment();
-		}
-	}]);
-
-	return UiComponent;
-}();
-
-
-// CONCATENATED MODULE: ./src/templates/uap/ui/advertisement-label.js
+// CONCATENATED MODULE: ./src/templates/interface/advertisement-label.js
 
 
 
@@ -3659,109 +4018,6 @@ var advertisement_label_AdvertisementLabel = function (_UiComponent) {
 	}]);
 
 	return AdvertisementLabel;
-}(ui_component_UiComponent);
-
-
-// CONCATENATED MODULE: ./src/templates/uap/ui/button.js
-
-
-
-
-
-
-
-
-
-var button_Button = function (_UiComponent) {
-	inherits_default()(Button, _UiComponent);
-
-	function Button() {
-		classCallCheck_default()(this, Button);
-
-		return possibleConstructorReturn_default()(this, (Button.__proto__ || get_prototype_of_default()(Button)).apply(this, arguments));
-	}
-
-	createClass_default()(Button, [{
-		key: 'render',
-		value: function render() {
-			var _this2 = this;
-
-			var buttonElement = document.createElement('button');
-
-			this.classNames.forEach(function (className) {
-				return buttonElement.classList.add(className);
-			});
-			buttonElement.addEventListener('click', function (event) {
-				return _this2.onClick(event);
-			});
-
-			return buttonElement;
-		}
-	}, {
-		key: 'onClick',
-		value: function onClick(event) {
-			var onClick = this.props.onClick;
-
-
-			if (typeof onClick === 'function') {
-				return onClick(event);
-			}
-
-			return undefined;
-		}
-	}, {
-		key: 'classNames',
-		get: function get() {
-			return ['button-control'].concat(toConsumableArray_default()(helpers_get_default()(Button.prototype.__proto__ || get_prototype_of_default()(Button.prototype), 'classNames', this)));
-		}
-	}]);
-
-	return Button;
-}(ui_component_UiComponent);
-
-
-// CONCATENATED MODULE: ./src/templates/uap/ui/close-button.js
-
-
-
-
-
-
-
-
-
-
-
-var close_button_CloseButton = function (_UiComponent) {
-	inherits_default()(CloseButton, _UiComponent);
-
-	function CloseButton() {
-		classCallCheck_default()(this, CloseButton);
-
-		return possibleConstructorReturn_default()(this, (CloseButton.__proto__ || get_prototype_of_default()(CloseButton)).apply(this, arguments));
-	}
-
-	createClass_default()(CloseButton, [{
-		key: 'render',
-		value: function render() {
-			var onClick = this.props.onClick;
-			var classNames = this.classNames;
-
-			var button = new button_Button({ onClick: onClick, classNames: classNames }).render();
-			var closeIcon = createIcon(icons_icons.CROSS, ['icon']);
-
-			button.appendChild(closeIcon);
-
-			return button;
-		}
-	}, {
-		key: 'classNames',
-		get: function get() {
-			return ['button-close'].concat(toConsumableArray_default()(helpers_get_default()(CloseButton.prototype.__proto__ || get_prototype_of_default()(CloseButton.prototype), 'classNames', this)));
-		}
-	}]);
-
-	return CloseButton;
 }(ui_component_UiComponent);
 
 
@@ -4040,7 +4296,7 @@ var hivi_theme_BigFancyAdHiviTheme = function (_BigFancyAdTheme) {
 	return BigFancyAdHiviTheme;
 }(theme_BigFancyAdTheme);
 hivi_theme_BigFancyAdHiviTheme.DEFAULT_UNSTICK_DELAY = 3000;
-// CONCATENATED MODULE: ./src/templates/uap/ui/animate.js
+// CONCATENATED MODULE: ./src/templates/interface/animate.js
 
 
 
@@ -5212,7 +5468,10 @@ var big_fancy_ad_in_player_BigFancyAdInPlayer = function () {
 
 
 
+// CONCATENATED MODULE: ./src/templates/outstream/index.js
+
 // CONCATENATED MODULE: ./src/templates/index.js
+
 
 
 // CONCATENATED MODULE: ./src/index.js
@@ -5224,6 +5483,9 @@ var big_fancy_ad_in_player_BigFancyAdInPlayer = function () {
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdBelow", function() { return big_fancy_ad_below_BigFancyAdBelow; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdInPlayer", function() { return big_fancy_ad_in_player_BigFancyAdInPlayer; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "universalAdPackage", function() { return universalAdPackage; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "DEFAULT_VIDEO_ASPECT_RATIO", function() { return DEFAULT_VIDEO_ASPECT_RATIO; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "IMA_VPAID_INSECURE_MODE", function() { return IMA_VPAID_INSECURE_MODE; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "PorvataTemplate", function() { return porvata_template_PorvataTemplate; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "utils", function() { return utils_namespaceObject; });
 
 
@@ -5237,7 +5499,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v7.6.1');
+set_default()(window, versionField, 'v7.7.2');
 
 
 

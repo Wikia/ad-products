@@ -134,7 +134,6 @@ export default {
 			}
 		},
 		incontent_boxad: {
-			disabled: true,
 			sizes: [
 				{
 					viewportSize: [768, 0],
@@ -142,6 +141,12 @@ export default {
 				}
 			],
 			defaultSizes: [[300, 250]],
+			targeting: {
+				loc: 'hivi'
+			}
+		},
+		incontent_player: {
+			defaultSizes: [[1, 1]],
 			targeting: {
 				loc: 'hivi'
 			}

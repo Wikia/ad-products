@@ -1,4 +1,6 @@
 import CloseButton from './close-button';
+import DynamicReveal from './dynamic-reveal';
+import Floating from './floating';
 import LearnMore from './learn-more';
 import PauseControl from './pause-control';
 import PauseOverlay from './pause-overlay';
@@ -65,6 +67,12 @@ const getTemplates = (params, videoSettings) => ({
 		ToggleUI,
 		LearnMore,
 		params.videoPlaceholderElement ? ReplayOverlay : null
+	],
+	'outstream-incontent': [
+		DynamicReveal,
+		Floating,
+		ProgressBar,
+		VolumeControl
 	]
 });
 
@@ -74,7 +82,9 @@ export function selectTemplate(videoSettings) {
 
 	let template = 'default';
 
-	if (params.theme === 'hivi') {
+	if (params.type && params.type.indexOf('porvata') === 0) {
+		template = 'outstream-incontent';
+	} else if (params.theme === 'hivi') {
 		template = 'hivi';
 	} else if (videoSettings.isSplitLayout()) {
 		template = params.splitLayoutVideoPosition === 'right' ? 'split-right' : 'split-left';
