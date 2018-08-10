@@ -39,7 +39,8 @@ function add(video, container, params) {
 			video.isFloating = false;
 			slotElement.classList.remove(FLOATING_CLASS_NAME);
 			utils.viewportObserver.removeListener(observer);
-			video.resize(videoWrapper.offsetWidth, videoWrapper.offsetHeight);
+			const width = videoWrapper.offsetWidth;
+			video.resize(width, width / DEFAULT_VIDEO_ASPECT_RATIO);
 		};
 		const closeButton = new CloseButton({
 			onClick: disableFloating
