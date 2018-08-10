@@ -2247,13 +2247,13 @@ var pubmatic_Pubmatic = function (_BaseAdapter) {
 
 
 
-var prebid_helper_disabledSlots = ad_engine_["context"].get('bidders.disabledSlots');
 var lazyLoadSlots = ['bottom_leaderboard'];
 
 function isSlotAvailable(code, lazyLoad) {
+	var disabledSlots = ad_engine_["context"].get('bidders.disabledSlots');
 	var isSlotLazy = lazyLoadSlots && lazyLoadSlots.indexOf(code) !== -1;
 
-	if (prebid_helper_disabledSlots && prebid_helper_disabledSlots.indexOf(code) !== -1) {
+	if (disabledSlots && disabledSlots.indexOf(code) !== -1) {
 		return false;
 	}
 
