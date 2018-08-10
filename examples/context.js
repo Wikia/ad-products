@@ -60,7 +60,6 @@ export default {
 		pushOnScroll: {
 			ids: [
 				'incontent_boxad',
-				'incontent_player',
 				'bottom_leaderboard'
 			],
 			threshold: 100
@@ -135,7 +134,6 @@ export default {
 			}
 		},
 		incontent_boxad: {
-			disabled: true,
 			sizes: [
 				{
 					viewportSize: [768, 0],
