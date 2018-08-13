@@ -4778,10 +4778,6 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 		_this.video = null;
 		_this.isLocked = false;
 		_this.config = ad_engine_["context"].get('templates.bfab');
-
-		if (_this.params.isSticky && _this.config.stickinessAllowed) {
-			_this.addStickinessPlugin();
-		}
 		return _this;
 	}
 
@@ -4789,6 +4785,10 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 		key: 'onAdReady',
 		value: function onAdReady() {
 			helpers_get_default()(BfabTheme.prototype.__proto__ || get_prototype_of_default()(BfabTheme.prototype), 'onAdReady', this).call(this);
+
+			if (this.params.isSticky && this.config.stickinessAllowed) {
+				this.addStickinessPlugin();
+			}
 
 			if (!this.config.defaultStateAllowed) {
 				this.params.resolvedStateForced = true;
@@ -4900,6 +4900,11 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 			var bfaa = ad_engine_["slotService"].get(this.config.bfaaSlotName);
 
 			ad_engine_["scrollListener"].addCallback(function (event, id) {
+				if (_this3.adSlot.isViewed()) {
+					ad_engine_["scrollListener"].removeCallback(id);
+					return;
+				}
+
 				var scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop,
 				    slotPosition = ad_engine_["utils"].getTopOffset(_this3.adSlot.getElement()),
 				    isBfaaSticky = bfaa.getElement().classList.contains('sticky-bfaa'),
@@ -5499,7 +5504,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v8.0.0');
+set_default()(window, versionField, 'v8.0.1');
 
 
 
