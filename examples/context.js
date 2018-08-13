@@ -60,7 +60,6 @@ export default {
 		pushOnScroll: {
 			ids: [
 				'incontent_boxad',
-				'incontent_player',
 				'bottom_leaderboard'
 			],
 			threshold: 100
@@ -135,7 +134,6 @@ export default {
 			}
 		},
 		incontent_boxad: {
-			disabled: true,
 			sizes: [
 				{
 					viewportSize: [768, 0],
@@ -156,10 +154,11 @@ export default {
 		repeatable_boxad_1: {
 			bidderAlias: 'top_boxad',
 			defaultSizes: [[300, 250]],
+			avoidConflictWith: '.repeatable-boxad',
+			insertBeforeSelector: '.main p',
 			repeat: {
 				additionalClasses: 'hide',
 				index: 1,
-				insertBeforeSelector: '.main p',
 				limit: null,
 				slotNamePattern: 'repeatable_boxad_{slotConfig.repeat.index}',
 				updateProperties: {
