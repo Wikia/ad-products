@@ -10,7 +10,6 @@ if (get(window, versionField, null)) {
 
 set(window, versionField, 'v<?= PACKAGE(version) ?>');
 
-export * from './bidders';
 export * from './common';
 export * from './services';
 export * from './templates';

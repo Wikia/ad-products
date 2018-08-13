@@ -2251,7 +2251,7 @@ var lazyLoadSlots = ['bottom_leaderboard'];
 
 function isSlotAvailable(code, lazyLoad) {
 	var disabledSlots = ad_engine_["context"].get('bidders.disabledSlots');
-	var isSlotLazy = lazyLoadSlots && lazyLoadSlots.indexOf(code) !== -1;
+	var isSlotLazy = lazyLoadSlots.indexOf(code) !== -1;
 
 	if (disabledSlots && disabledSlots.indexOf(code) !== -1) {
 		return false;

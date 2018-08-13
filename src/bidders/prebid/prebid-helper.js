@@ -7,7 +7,7 @@ const lazyLoadSlots = [
 
 function isSlotAvailable(code, lazyLoad) {
 	const disabledSlots = context.get('bidders.disabledSlots');
-	const isSlotLazy = lazyLoadSlots && lazyLoadSlots.indexOf(code) !== -1;
+	const isSlotLazy = lazyLoadSlots.indexOf(code) !== -1;
 
 	if (disabledSlots && disabledSlots.indexOf(code) !== -1) {
 		return false;
