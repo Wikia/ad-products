@@ -19,14 +19,14 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 		this.video = null;
 		this.isLocked = false;
 		this.config = context.get('templates.bfab');
-
-		if (this.params.isSticky && this.config.stickinessAllowed) {
-			this.addStickinessPlugin();
-		}
 	}
 
 	onAdReady() {
 		super.onAdReady();
+
+		if (this.params.isSticky && this.config.stickinessAllowed) {
+			this.addStickinessPlugin();
+		}
 
 		if (!this.config.defaultStateAllowed) {
 			this.params.resolvedStateForced = true;
@@ -99,6 +99,11 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 		const bfaa = slotService.get(this.config.bfaaSlotName);
 
 		scrollListener.addCallback((event, id) => {
+			if (this.adSlot.isViewed()) {
+				scrollListener.removeCallback(id);
+				return;
+			}
+
 			const scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop,
 				slotPosition = utils.getTopOffset(this.adSlot.getElement()),
 				isBfaaSticky = bfaa.getElement().classList.contains('sticky-bfaa'),
