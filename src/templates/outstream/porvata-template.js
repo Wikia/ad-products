@@ -26,6 +26,10 @@ export class PorvataTemplate {
 	init(params) {
 		const slotName = this.adSlot.getSlotName();
 
+		if (!this.adSlot.getElement().classList.contains('ad-slot')) {
+			this.adSlot.getElement().classList.add('ad-slot');
+		}
+
 		this.adSlot.getElement().classList.add('porvata3');
 		this.adSlot.getElement().setAttribute('data-label', getTranslation('labels', 'advertisement'));
 
