@@ -2418,6 +2418,10 @@ var porvata_template_PorvataTemplate = function () {
 
 			var slotName = this.adSlot.getSlotName();
 
+			if (!this.adSlot.getElement().classList.contains('ad-slot')) {
+				this.adSlot.getElement().classList.add('ad-slot');
+			}
+
 			this.adSlot.getElement().classList.add('porvata3');
 			this.adSlot.getElement().setAttribute('data-label', getTranslation('labels', 'advertisement'));
 
@@ -5504,7 +5508,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v8.0.1');
+set_default()(window, versionField, 'v8.0.4');
 
 
 
