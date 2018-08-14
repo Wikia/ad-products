@@ -23,6 +23,9 @@ export class Prebid extends BaseBidder {
 			enableSendAllBids: true,
 			bidderSequence: 'random',
 			bidderTimeout: this.timeout,
+			cache: {
+				url: 'https://prebid.adnxs.com/pbc/v1/cache'
+			},
 			userSync: {
 				iframeEnabled: true,
 				enabledBidders: [],
@@ -115,7 +118,8 @@ export class Prebid extends BaseBidder {
 			'hb_bidder',
 			'hb_adid',
 			'hb_pb',
-			'hb_size'
+			'hb_size',
+			'hb_uuid'
 		];
 	}
 
@@ -146,6 +150,9 @@ export class Prebid extends BaseBidder {
 			if (bidParams) {
 				slotParams = bidParams.adserverTargeting;
 			}
+
+			// ADEN-7436: AppNexus hb_uuid fix (adserverTargeting params are being set before cache key is returned)
+			slotParams.hb_uuid = slotParams.hb_uuid || bidParams.videoCacheKey || 'disabled';
 		}
 
 		return slotParams || {};
