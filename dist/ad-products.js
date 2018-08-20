@@ -4950,6 +4950,7 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 										var scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 
 										if (scrollPosition <= _this4.config.unstickInstantlyBelowPosition) {
+											_this4.adSlot.setStatus('top-conflict');
 											ad_engine_["scrollListener"].removeCallback(id);
 											_this4.stickiness.revertStickiness();
 										}
@@ -5011,27 +5012,32 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 								element = this.adSlot.getElement();
 
 								if (isSticky) {
-									_context4.next = 10;
+									_context4.next = 11;
 									break;
 								}
 
-								_context4.next = 4;
+								if (!(this.adSlot.getStatus() !== 'top-conflict')) {
+									_context4.next = 5;
+									break;
+								}
+
+								_context4.next = 5;
 								return animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
 
-							case 4:
+							case 5:
 								element.style.top = null;
 								element.parentNode.style.height = null;
 								element.classList.remove(CSS_CLASSNAME_STICKY_BFAB);
 								animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
-								_context4.next = 13;
+								_context4.next = 14;
 								break;
 
-							case 10:
+							case 11:
 								element.parentNode.style.height = element.offsetHeight + 'px';
 								element.classList.add(CSS_CLASSNAME_STICKY_BFAB);
 								element.style.top = this.config.topThreshold + 'px';
 
-							case 13:
+							case 14:
 							case 'end':
 								return _context4.stop();
 						}

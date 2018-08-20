@@ -134,6 +134,7 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 				const scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 
 				if (scrollPosition <= this.config.unstickInstantlyBelowPosition) {
+					this.adSlot.setStatus('top-conflict');
 					scrollListener.removeCallback(id);
 					this.stickiness.revertStickiness();
 				}
@@ -152,7 +153,9 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 	async onStickinessChange(isSticky) {
 		const element = this.adSlot.getElement();
 		if (!isSticky) {
-			await animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
+			if (this.adSlot.getStatus() !== 'top-conflict') {
+				await animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
+			}
 			element.style.top = null;
 			element.parentNode.style.height = null;
 			element.classList.remove(CSS_CLASSNAME_STICKY_BFAB);
