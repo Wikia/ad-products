@@ -2418,6 +2418,10 @@ var porvata_template_PorvataTemplate = function () {
 
 			var slotName = this.adSlot.getSlotName();
 
+			if (!this.adSlot.getElement().classList.contains('ad-slot')) {
+				this.adSlot.getElement().classList.add('ad-slot');
+			}
+
 			this.adSlot.getElement().classList.add('porvata3');
 			this.adSlot.getElement().setAttribute('data-label', getTranslation('labels', 'advertisement'));
 
@@ -4778,10 +4782,6 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 		_this.video = null;
 		_this.isLocked = false;
 		_this.config = ad_engine_["context"].get('templates.bfab');
-
-		if (_this.params.isSticky && _this.config.stickinessAllowed) {
-			_this.addStickinessPlugin();
-		}
 		return _this;
 	}
 
@@ -4789,6 +4789,10 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 		key: 'onAdReady',
 		value: function onAdReady() {
 			helpers_get_default()(BfabTheme.prototype.__proto__ || get_prototype_of_default()(BfabTheme.prototype), 'onAdReady', this).call(this);
+
+			if (this.params.isSticky && this.config.stickinessAllowed) {
+				this.addStickinessPlugin();
+			}
 
 			if (!this.config.defaultStateAllowed) {
 				this.params.resolvedStateForced = true;
@@ -4900,6 +4904,11 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 			var bfaa = ad_engine_["slotService"].get(this.config.bfaaSlotName);
 
 			ad_engine_["scrollListener"].addCallback(function (event, id) {
+				if (_this3.adSlot.isViewed()) {
+					ad_engine_["scrollListener"].removeCallback(id);
+					return;
+				}
+
 				var scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop,
 				    slotPosition = ad_engine_["utils"].getTopOffset(_this3.adSlot.getElement()),
 				    isBfaaSticky = bfaa.getElement().classList.contains('sticky-bfaa'),
@@ -4941,6 +4950,7 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 										var scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
 
 										if (scrollPosition <= _this4.config.unstickInstantlyBelowPosition) {
+											_this4.adSlot.setStatus('top-conflict');
 											ad_engine_["scrollListener"].removeCallback(id);
 											_this4.stickiness.revertStickiness();
 										}
@@ -5002,27 +5012,32 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 								element = this.adSlot.getElement();
 
 								if (isSticky) {
-									_context4.next = 10;
+									_context4.next = 11;
 									break;
 								}
 
-								_context4.next = 4;
+								if (!(this.adSlot.getStatus() !== 'top-conflict')) {
+									_context4.next = 5;
+									break;
+								}
+
+								_context4.next = 5;
 								return animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
 
-							case 4:
+							case 5:
 								element.style.top = null;
 								element.parentNode.style.height = null;
 								element.classList.remove(CSS_CLASSNAME_STICKY_BFAB);
 								animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
-								_context4.next = 13;
+								_context4.next = 14;
 								break;
 
-							case 10:
+							case 11:
 								element.parentNode.style.height = element.offsetHeight + 'px';
 								element.classList.add(CSS_CLASSNAME_STICKY_BFAB);
 								element.style.top = this.config.topThreshold + 'px';
 
-							case 13:
+							case 14:
 							case 'end':
 								return _context4.stop();
 						}
@@ -5499,7 +5514,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v7.7.2');
+set_default()(window, versionField, 'v8.1.2');
 
 
 
