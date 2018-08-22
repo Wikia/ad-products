@@ -5012,7 +5012,7 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 								element = this.adSlot.getElement();
 
 								if (isSticky) {
-									_context4.next = 11;
+									_context4.next = 12;
 									break;
 								}
 
@@ -5025,19 +5025,21 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 								return animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
 
 							case 5:
+								this.adSlot.setStatus(ad_engine_["AdSlot"].SLOT_UNSTICKED_STATE);
 								element.style.top = null;
 								element.parentNode.style.height = null;
 								element.classList.remove(CSS_CLASSNAME_STICKY_BFAB);
 								animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
-								_context4.next = 14;
+								_context4.next = 16;
 								break;
 
-							case 11:
+							case 12:
+								this.adSlot.setStatus(ad_engine_["AdSlot"].SLOT_STICKED_STATE);
 								element.parentNode.style.height = element.offsetHeight + 'px';
 								element.classList.add(CSS_CLASSNAME_STICKY_BFAB);
 								element.style.top = this.config.topThreshold + 'px';
 
-							case 14:
+							case 16:
 							case 'end':
 								return _context4.stop();
 						}
