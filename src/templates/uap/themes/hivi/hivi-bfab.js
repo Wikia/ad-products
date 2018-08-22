@@ -1,4 +1,4 @@
-import { context, scrollListener, slotService, slotTweaker, utils } from '@wikia/ad-engine';
+import { AdSlot, context, scrollListener, slotService, slotTweaker, utils } from '@wikia/ad-engine';
 import { mapValues } from 'lodash';
 
 import { BigFancyAdHiviTheme } from './hivi-theme';
@@ -156,11 +156,13 @@ export class BfabTheme extends BigFancyAdHiviTheme {
 			if (this.adSlot.getStatus() !== 'top-conflict') {
 				await animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
 			}
+			this.adSlot.setStatus(AdSlot.SLOT_UNSTICKED_STATE);
 			element.style.top = null;
 			element.parentNode.style.height = null;
 			element.classList.remove(CSS_CLASSNAME_STICKY_BFAB);
 			animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
 		} else {
+			this.adSlot.setStatus(AdSlot.SLOT_STICKED_STATE);
 			element.parentNode.style.height = `${element.offsetHeight}px`;
 			element.classList.add(CSS_CLASSNAME_STICKY_BFAB);
 			element.style.top = `${this.config.topThreshold}px`;
