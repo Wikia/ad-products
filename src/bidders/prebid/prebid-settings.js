@@ -19,7 +19,7 @@ export function getSettings() {
 					key: 'hb_pb',
 					val: (bidResponse) => {
 						let maxCpm = DEFAULT_MAX_CPM;
-						if (['appnexusAst', 'rubicon'].includes(bidResponse.bidderCode)) {
+						if (['appnexusAst', 'rubicon', 'wikiaVideo'].includes(bidResponse.bidderCode)) {
 							maxCpm = 50;
 						}
 						return transformPriceFromCpm(bidResponse.cpm, maxCpm);
