@@ -1,4 +1,4 @@
-import { context, buildVastUrl, utils } from '@wikia/ad-engine';
+import { context, utils } from '@wikia/ad-engine';
 import { BaseAdapter } from './base-adapter';
 
 export class WikiaVideo extends BaseAdapter {
@@ -59,15 +59,6 @@ export class WikiaVideo extends BaseAdapter {
 			bidResponse.mediaType = 'video';
 			bidResponse.width = width;
 			bidResponse.height = height;
-			bidResponse.vastUrl = buildVastUrl(
-				bidResponse.width / bidResponse.height,
-				bid.adUnitCode,
-				{
-					src: 'test',
-					pos: 'outstream',
-					passback: 'wikiaVideo'
-				}
-			);
 
 			addBidResponse(bid.adUnitCode, bidResponse);
 		});

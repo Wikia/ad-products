@@ -1,5 +1,6 @@
 import { slotService, utils } from '@wikia/ad-engine';
 import CloseButton from '../close-button';
+import { DEFAULT_VIDEO_ASPECT_RATIO } from '../../outstream/porvata-template';
 
 const FLOATING_CLASS_NAME = 'outstream-floating';
 
@@ -27,7 +28,8 @@ function add(video, container, params) {
 			}
 
 			video.isFloating = !inViewport;
-			video.resize(videoWrapper.offsetWidth, videoWrapper.offsetHeight);
+			const width = videoWrapper.offsetWidth;
+			video.resize(width, width / DEFAULT_VIDEO_ASPECT_RATIO);
 		}, {
 			offsetTop: params.inViewportOffsetTop,
 			offsetBottom: params.inViewportOffsetBottom,
@@ -37,7 +39,8 @@ function add(video, container, params) {
 			video.isFloating = false;
 			slotElement.classList.remove(FLOATING_CLASS_NAME);
 			utils.viewportObserver.removeListener(observer);
-			video.resize(videoWrapper.offsetWidth, videoWrapper.offsetHeight);
+			const width = videoWrapper.offsetWidth;
+			video.resize(width, width / DEFAULT_VIDEO_ASPECT_RATIO);
 		};
 		const closeButton = new CloseButton({
 			onClick: disableFloating

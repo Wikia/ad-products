@@ -2315,6 +2315,181 @@ var base_adapter_BaseAdapter = function () {
 
 
 
+<<<<<<< HEAD
+=======
+/* harmony default export */ var close_button = ({
+	add: add
+});
+// CONCATENATED MODULE: ./src/common/translations.js
+var TRANSLATIONS = {
+	labels: {
+		en: {
+			advertisement: 'Advertisement',
+			'learn-more': 'Learn More'
+		},
+		ar: {
+			advertisement: 'إعلان'
+		},
+		bn: {
+			advertisement: 'বিজ্ঞাপন'
+		},
+		br: {
+			advertisement: 'Bomm bruderezh'
+		},
+		ca: {
+			advertisement: 'Anunci'
+		},
+		cs: {
+			advertisement: 'Reklama'
+		},
+		de: {
+			advertisement: 'Anzeige',
+			'learn-more': 'Erfahre mehr'
+		},
+		es: {
+			advertisement: 'Anuncio',
+			'learn-more': 'Conoce más'
+		},
+		eu: {
+			advertisement: 'Iragarkia'
+		},
+		fa: {
+			advertisement: 'تبلیغات'
+		},
+		fo: {
+			advertisement: 'Lýsing'
+		},
+		fr: {
+			advertisement: 'Publicité',
+			'learn-more': 'En savoir plus'
+		},
+		fy: {
+			advertisement: 'Advertinsje'
+		},
+		gl: {
+			advertisement: 'Anuncio'
+		},
+		gv: {
+			advertisement: 'Soilsheen'
+		},
+		he: {
+			advertisement: 'פרסומת'
+		},
+		hu: {
+			advertisement: 'Hirdetés'
+		},
+		id: {
+			advertisement: 'Iklan',
+			'learn-more': 'Baca Selengkapnya'
+		},
+		inh: {
+			advertisement: 'дебат'
+		},
+		it: {
+			advertisement: 'Pubblicità',
+			'learn-more': 'Ulteriori informazioni'
+		},
+		ja: {
+			advertisement: '広告',
+			'learn-more': 'もっと見る'
+		},
+		ko: {
+			advertisement: '광고'
+		},
+		krc: {
+			advertisement: 'Pеклама'
+		},
+		lb: {
+			advertisement: 'Reklamm'
+		},
+		mk: {
+			advertisement: 'Pеклама'
+		},
+		mr: {
+			advertisement: 'जाहिरात'
+		},
+		ms: {
+			advertisement: 'Iklan'
+		},
+		nl: {
+			advertisement: 'Advertentie',
+			'learn-more': 'Meer te weten komen'
+		},
+		no: {
+			advertisement: 'Reklame'
+		},
+		pl: {
+			advertisement: 'Reklama',
+			'learn-more': 'Czytaj więcej'
+		},
+		ps: {
+			advertisement: 'خبرتيا'
+		},
+		pt: {
+			advertisement: 'Anúncio',
+			'learn-more': 'Saiba Mais'
+		},
+		'roa-tara': {
+			advertisement: 'Pubblecetà'
+		},
+		ru: {
+			advertisement: 'Pеклама',
+			'learn-more': 'Узнать больше'
+		},
+		si: {
+			advertisement: 'ප්‍රචාරක දැන්වීම'
+		},
+		sl: {
+			advertisement: 'Oglas'
+		},
+		'sr-ec': {
+			advertisement: 'Pеклама'
+		},
+		sv: {
+			advertisement: 'Annons'
+		},
+		te: {
+			advertisement: 'వాణిజ్య ప్రకటన'
+		},
+		th: {
+			advertisement: 'การโฆษณา'
+		},
+		tr: {
+			advertisement: 'Reklam'
+		},
+		'tt-cyrl': {
+			advertisement: 'Pеклама'
+		},
+		uk: {
+			advertisement: 'Pеклама'
+		},
+		vi: {
+			advertisement: 'Quảng cáo'
+		},
+		'zh-hans': {
+			advertisement: '广告',
+			'learn-more': '了解更多'
+		},
+		'zh-hant': {
+			advertisement: '廣告',
+			'learn-more': '閱讀更多'
+		}
+	}
+};
+// CONCATENATED MODULE: ./src/common/i18n.js
+
+
+
+var defaultLanguage = 'en';
+
+function getTranslation(category, key) {
+	var lang = ad_engine_["context"].get('options.contentLanguage'),
+	    language = lang && typeof TRANSLATIONS[category][lang] !== 'undefined' ? lang : defaultLanguage;
+
+	return TRANSLATIONS[category][language][key] || TRANSLATIONS[category][defaultLanguage][key];
+}
+// CONCATENATED MODULE: ./src/templates/outstream/porvata-template.js
+>>>>>>> origin/dev
 
 var aol_Aol = function (_BaseAdapter) {
 	inherits_default()(Aol, _BaseAdapter);
@@ -2329,6 +2504,7 @@ var aol_Aol = function (_BaseAdapter) {
 		return _this;
 	}
 
+<<<<<<< HEAD
 	createClass_default()(Aol, [{
 		key: 'prepareConfigForAdUnit',
 		value: function prepareConfigForAdUnit(code, _ref) {
@@ -2336,6 +2512,11 @@ var aol_Aol = function (_BaseAdapter) {
 			    placement = _ref.placement,
 			    alias = _ref.alias,
 			    sizeId = _ref.sizeId;
+=======
+
+var DEFAULT_VIDEO_ASPECT_RATIO = 640 / 360;
+var IMA_VPAID_INSECURE_MODE = 2;
+>>>>>>> origin/dev
 
 			return {
 				code: code,
@@ -2364,6 +2545,17 @@ var aol_Aol = function (_BaseAdapter) {
 
 
 
+<<<<<<< HEAD
+=======
+			if (!this.adSlot.getElement().classList.contains('ad-slot')) {
+				this.adSlot.getElement().classList.add('ad-slot');
+			}
+
+			this.adSlot.getElement().classList.add('porvata3');
+			this.adSlot.getElement().setAttribute('data-label', getTranslation('labels', 'advertisement'));
+
+			this.isInsecureMode = params.vpaidMode === IMA_VPAID_INSECURE_MODE;
+>>>>>>> origin/dev
 
 
 
@@ -2866,9 +3058,14 @@ var pubmatic_Pubmatic = function (_BaseAdapter) {
 
 var lazyLoadSlots = ['bottom_leaderboard'];
 
+<<<<<<< HEAD
 function isSlotAvailable(code, lazyLoad) {
 	var disabledSlots = ad_engine_["context"].get('bidders.disabledSlots');
 	var isSlotLazy = lazyLoadSlots.indexOf(code) !== -1;
+=======
+
+var FLOATING_CLASS_NAME = 'outstream-floating';
+>>>>>>> origin/dev
 
 	if (disabledSlots && disabledSlots.indexOf(code) !== -1) {
 		return false;
@@ -2881,6 +3078,7 @@ function isSlotAvailable(code, lazyLoad) {
 	return true;
 }
 
+<<<<<<< HEAD
 function setupAdUnits(adaptersConfig) {
 	var lazyLoad = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'off';
 
@@ -2933,12 +3131,32 @@ function getAvailableBidsByAdUnitCode(adUnitCode) {
 		bids = window.pbjs.getBidResponsesForAdUnitCode(adUnitCode).bids || [];
 		bids = bids.filter(function (bid) {
 			return bid.status !== 'rendered';
+=======
+			video.isFloating = !inViewport;
+			var width = videoWrapper.offsetWidth;
+			video.resize(width, width / DEFAULT_VIDEO_ASPECT_RATIO);
+		}, {
+			offsetTop: params.inViewportOffsetTop,
+			offsetBottom: params.inViewportOffsetBottom,
+			areaThreshold: 1
+		});
+		var disableFloating = function disableFloating() {
+			video.isFloating = false;
+			slotElement.classList.remove(FLOATING_CLASS_NAME);
+			ad_engine_["utils"].viewportObserver.removeListener(observer);
+			var width = videoWrapper.offsetWidth;
+			video.resize(width, width / DEFAULT_VIDEO_ASPECT_RATIO);
+		};
+		var closeButton = new close_button_CloseButton({
+			onClick: disableFloating
+>>>>>>> origin/dev
 		});
 	}
 
 	return bids;
 }
 
+<<<<<<< HEAD
 function getPrebid() {
 	return window.pbjs;
 }
@@ -2976,6 +3194,12 @@ function pushPrebid(callback) {
 	window.pbjs.que.push(callback);
 }
 // CONCATENATED MODULE: ./src/bidders/prebid/adapters/rubicon.js
+=======
+/* harmony default export */ var floating = ({
+	add: floating_add
+});
+// CONCATENATED MODULE: ./src/templates/interface/video/learn-more.js
+>>>>>>> origin/dev
 
 
 
@@ -5125,14 +5349,24 @@ function toggle_thumbnail_add(video, container, params) {
 	});
 }
 
+<<<<<<< HEAD
 /* harmony default export */ var toggle_thumbnail = ({
 	add: toggle_thumbnail_add
 });
 // CONCATENATED MODULE: ./src/templates/interface/video/toggle-ui.js
 
+=======
+		_this.stickiness = null;
+		_this.video = null;
+		_this.isLocked = false;
+		_this.config = ad_engine_["context"].get('templates.bfab');
+		return _this;
+	}
+>>>>>>> origin/dev
 
 var overlayTimeout = 5000;
 
+<<<<<<< HEAD
 function toggle_ui_add(video, container, params) {
 	var timeout = null;
 
@@ -5142,6 +5376,22 @@ function toggle_ui_add(video, container, params) {
 		timeout = setTimeout(function () {
 			if (video.isPlaying()) {
 				video.container.classList.remove('ui-visible');
+=======
+			if (this.params.isSticky && this.config.stickinessAllowed) {
+				this.addStickinessPlugin();
+			}
+
+			if (!this.config.defaultStateAllowed) {
+				this.params.resolvedStateForced = true;
+			}
+
+			if (resolvedState.isResolvedState(this.params)) {
+				this.setResolvedState();
+			} else {
+				resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
+				this.updateAdSizes();
+				ad_engine_["slotTweaker"].makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
+>>>>>>> origin/dev
 			}
 		}, overlayTimeout);
 	};
@@ -5151,6 +5401,7 @@ function toggle_ui_add(video, container, params) {
 		overlay.addEventListener('click', function () {
 			video.container.classList.toggle('ui-visible');
 
+<<<<<<< HEAD
 			clearTimeout(timeout);
 			setAutomaticToggle();
 		});
@@ -5169,6 +5420,51 @@ function toggle_ui_add(video, container, params) {
 
 	container.appendChild(overlay);
 }
+=======
+			this.video = video;
+			video.addEventListener('wikiaAdStarted', function () {
+				return _this2.updateAdSizes();
+			});
+			video.addEventListener('wikiaAdCompleted', function () {
+				return _this2.setResolvedState();
+			});
+			video.addEventListener('wikiaFullscreenChange', function () {
+				if (video.isFullscreen()) {
+					_this2.stickiness.blockRevertStickiness();
+					_this2.container.classList.add('theme-video-fullscreen');
+				} else {
+					_this2.stickiness.unblockRevertStickiness();
+					_this2.container.classList.remove('theme-video-fullscreen');
+					_this2.updateAdSizes();
+				}
+			});
+		}
+	}, {
+		key: 'updateAdSizes',
+		value: function updateAdSizes() {
+			var state = resolvedState.isResolvedState(this.params) ? 'resolved' : 'default';
+			var stateHeight = this.params.config.state.height[state];
+			var relativeHeight = this.params.container.offsetHeight * (stateHeight / 100);
+
+			this.adjustVideoSize(relativeHeight);
+
+			if (this.params.thumbnail) {
+				this.setThumbnailStyle(state);
+			}
+		}
+	}, {
+		key: 'adjustVideoSize',
+		value: function adjustVideoSize(relativeHeight) {
+			if (this.video && !this.video.isFullscreen()) {
+				this.video.container.style.width = this.params.videoAspectRatio * relativeHeight + 'px';
+			}
+		}
+	}, {
+		key: 'setResolvedState',
+		value: function () {
+			var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee() {
+				var _params, config, image2;
+>>>>>>> origin/dev
 
 /* harmony default export */ var toggle_ui = ({
 	add: toggle_ui_add
@@ -5190,16 +5486,23 @@ function toggle_video_add(video, container) {
 // CONCATENATED MODULE: ./src/templates/interface/video/volume-control.js
 
 
+<<<<<<< HEAD
 function createVolumeControl(params) {
 	var iconPrefix = params.theme === 'hivi' ? 'HIVI_' : '',
 	    volume = document.createElement('div'),
 	    offIcon = createIcon(icons_icons[iconPrefix + 'VOLUME_OFF'], ['volume-off-icon', 'porvata-icon', 'porvata-off-icon']),
 	    onIcon = createIcon(icons_icons[iconPrefix + 'VOLUME_ON'], ['volume-on-icon', 'porvata-icon', 'porvata-on-icon']);
+=======
+								if (this.params.thumbnail) {
+									this.setThumbnailStyle('resolved');
+								}
+>>>>>>> origin/dev
 
 	volume.className = 'volume-button porvata-switchable-icon hidden';
 	volume.appendChild(offIcon);
 	volume.appendChild(onIcon);
 
+<<<<<<< HEAD
 	return volume;
 }
 
@@ -5209,6 +5512,19 @@ function updateCurrentState(video, volumeControl) {
 	} else {
 		volumeControl.classList.remove('is-on');
 	}
+=======
+			function setResolvedState() {
+				return _ref.apply(this, arguments);
+			}
+
+			return setResolvedState;
+		}()
+	}, {
+		key: 'setThumbnailStyle',
+		value: function setThumbnailStyle() {
+			var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+			var thumbnail = this.params.thumbnail;
+>>>>>>> origin/dev
 
 	if (!video.isMobilePlayerMuted() && video.mobileVideoAd && video.mobileVideoAd.muted) {
 		video.updateVideoDOMElement(video.defaultVolume);
@@ -5218,9 +5534,20 @@ function updateCurrentState(video, volumeControl) {
 function volume_control_add(video, container) {
 	var volumeControl = createVolumeControl(video.params);
 
+<<<<<<< HEAD
 	video.addEventListener('wikiaVolumeChange', function () {
 		updateCurrentState(video, volumeControl);
 	});
+=======
+			if (this.video) {
+				assign_default()(this.video.container.style, style);
+			}
+		}
+	}, {
+		key: 'waitForScrollAndUnstickedBfaa',
+		value: function waitForScrollAndUnstickedBfaa() {
+			var _this3 = this;
+>>>>>>> origin/dev
 
 	video.addEventListener('wikiaAdStarted', function () {
 		updateCurrentState(video, volumeControl);
@@ -5232,8 +5559,21 @@ function volume_control_add(video, container) {
 		e.preventDefault();
 	});
 
+<<<<<<< HEAD
 	container.appendChild(volumeControl);
 }
+=======
+			ad_engine_["scrollListener"].addCallback(function (event, id) {
+				if (_this3.adSlot.isViewed()) {
+					ad_engine_["scrollListener"].removeCallback(id);
+					return;
+				}
+
+				var scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop,
+				    slotPosition = ad_engine_["utils"].getTopOffset(_this3.adSlot.getElement()),
+				    isBfaaSticky = bfaa.getElement().classList.contains('sticky-bfaa'),
+				    bfaaHeight = bfaa.getElement().offsetHeight;
+>>>>>>> origin/dev
 
 /* harmony default export */ var volume_control = ({
 	add: volume_control_add
@@ -5256,6 +5596,7 @@ var panel_Panel = function () {
 		value: function add(video, container, params) {
 			var _this = this;
 
+<<<<<<< HEAD
 			this.panelContainer = document.createElement('div');
 			this.panelContainer.className = this.className;
 			this.uiElements.forEach(function (uiElement) {
@@ -5266,6 +5607,15 @@ var panel_Panel = function () {
 			container.appendChild(this.panelContainer);
 		}
 	}]);
+=======
+										if (scrollPosition <= _this4.config.unstickInstantlyBelowPosition) {
+											_this4.adSlot.setStatus('top-conflict');
+											ad_engine_["scrollListener"].removeCallback(id);
+											_this4.stickiness.revertStickiness();
+										}
+									});
+								}
+>>>>>>> origin/dev
 
 	return Panel;
 }();
@@ -5277,11 +5627,51 @@ var panel_Panel = function () {
 
 
 
+<<<<<<< HEAD
 
 
 
 
 
+=======
+								if (isSticky) {
+									_context4.next = 11;
+									break;
+								}
+
+								if (!(this.adSlot.getStatus() !== 'top-conflict')) {
+									_context4.next = 5;
+									break;
+								}
+
+								_context4.next = 5;
+								return animate(this.adSlot, CSS_CLASSNAME_SLIDE_OUT_ANIMATION, SLIDE_OUT_TIME);
+
+							case 5:
+								element.style.top = null;
+								element.parentNode.style.height = null;
+								element.classList.remove(CSS_CLASSNAME_STICKY_BFAB);
+								animate(this.adSlot, CSS_CLASSNAME_FADE_IN_ANIMATION, FADE_IN_TIME);
+								_context4.next = 14;
+								break;
+
+							case 11:
+								element.parentNode.style.height = element.offsetHeight + 'px';
+								element.classList.add(CSS_CLASSNAME_STICKY_BFAB);
+								element.style.top = this.config.topThreshold + 'px';
+
+							case 14:
+							case 'end':
+								return _context4.stop();
+						}
+					}
+				}, _callee4, this);
+			}));
+
+			function onStickinessChange(_x2) {
+				return _ref4.apply(this, arguments);
+			}
+>>>>>>> origin/dev
 
 
 
@@ -5725,6 +6115,7 @@ function isResolvedState(params) {
 	return result;
 }
 
+<<<<<<< HEAD
 var resolvedState = {
 	// This method is used by classic UAP only (not-HiVi)
 	// UAP:HiVi template does not support srcPropertyNames like defaultStateSrc
@@ -5732,6 +6123,10 @@ var resolvedState = {
 	// TODO: Remove this code once we get rid of old (classic) UAP
 	setImage: function setImage(videoSettings) {
 		var params = videoSettings.getParams();
+=======
+set_default()(window, versionField, 'v8.3.0');
+
+>>>>>>> origin/dev
 
 		if (templateSupportsResolvedState(params)) {
 			if (videoSettings.isResolvedState()) {

@@ -2706,11 +2706,6 @@ var wikia_video_WikiaVideo = function (_BaseAdapter) {
 				bidResponse.mediaType = 'video';
 				bidResponse.width = width;
 				bidResponse.height = height;
-				bidResponse.vastUrl = Object(ad_engine_["buildVastUrl"])(bidResponse.width / bidResponse.height, bid.adUnitCode, {
-					src: 'test',
-					pos: 'outstream',
-					passback: 'wikiaVideo'
-				});
 
 				addBidResponse(bid.adUnitCode, bidResponse);
 			});
@@ -2884,6 +2879,10 @@ function transformPriceFromCpm(cpm) {
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/dev
 function getSettings() {
 	return {
 		standard: {
