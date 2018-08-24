@@ -2863,6 +2863,8 @@ function transformPriceFromCpm(cpm, maxCpm) {
 
 
 
+var videoBiddersCap50 = ['appnexusAst', 'rubicon', 'wikiaVideo']; // bidders with $50 cap
+
 function getSettings() {
 	return {
 		standard: {
@@ -2883,7 +2885,7 @@ function getSettings() {
 				key: 'hb_pb',
 				val: function val(bidResponse) {
 					var maxCpm = DEFAULT_MAX_CPM;
-					if (['appnexusAst', 'rubicon', 'wikiaVideo'].includes(bidResponse.bidderCode)) {
+					if (videoBiddersCap50.includes(bidResponse.bidderCode)) {
 						maxCpm = 50;
 					}
 					return transformPriceFromCpm(bidResponse.cpm, maxCpm);
