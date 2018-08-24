@@ -2807,6 +2807,8 @@ function isValidPrice(bid) {
 	return bid.getStatusCode && bid.getStatusCode() === prebid_Prebid.validResponseStatusCode;
 }
 
+var DEFAULT_MAX_CPM = 20;
+
 function getPrebidBestPrice(slotName) {
 	var bestPrices = {};
 
@@ -2832,13 +2834,10 @@ function getPrebidBestPrice(slotName) {
 	return bestPrices;
 }
 
-function transformPriceFromCpm(cpm) {
-	var maxCpm = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 20;
-
-	var defaultCpm = 20;
-
-	if (maxCpm < defaultCpm) {
-		maxCpm = defaultCpm;
+function transformPriceFromCpm(cpm, maxCpm) {
+	maxCpm = maxCpm || DEFAULT_MAX_CPM;
+	if (maxCpm < DEFAULT_MAX_CPM) {
+		maxCpm = DEFAULT_MAX_CPM;
 	}
 
 	var result = Math.floor(maxCpm).toFixed(2);
@@ -2864,6 +2863,8 @@ function transformPriceFromCpm(cpm) {
 
 
 
+var videoBiddersCap50 = ['appnexusAst', 'rubicon', 'wikiaVideo']; // bidders with $50 cap
+
 function getSettings() {
 	return {
 		standard: {
@@ -2883,7 +2884,11 @@ function getSettings() {
 			}, {
 				key: 'hb_pb',
 				val: function val(bidResponse) {
-					return transformPriceFromCpm(bidResponse.cpm);
+					var maxCpm = DEFAULT_MAX_CPM;
+					if (videoBiddersCap50.includes(bidResponse.bidderCode)) {
+						maxCpm = 50;
+					}
+					return transformPriceFromCpm(bidResponse.cpm, maxCpm);
 				}
 			}, {
 				key: 'hb_size',

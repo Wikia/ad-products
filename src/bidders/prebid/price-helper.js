@@ -5,6 +5,8 @@ function isValidPrice(bid) {
 	return bid.getStatusCode && bid.getStatusCode() === Prebid.validResponseStatusCode;
 }
 
+export const DEFAULT_MAX_CPM = 20;
+
 export function getPrebidBestPrice(slotName) {
 	const bestPrices = {};
 
@@ -28,11 +30,10 @@ export function getPrebidBestPrice(slotName) {
 	return bestPrices;
 }
 
-export function transformPriceFromCpm(cpm, maxCpm = 20) {
-	const defaultCpm = 20;
-
-	if (maxCpm < defaultCpm) {
-		maxCpm = defaultCpm;
+export function transformPriceFromCpm(cpm, maxCpm) {
+	maxCpm = maxCpm || DEFAULT_MAX_CPM;
+	if (maxCpm < DEFAULT_MAX_CPM) {
+		maxCpm = DEFAULT_MAX_CPM;
 	}
 
 	let result = Math.floor(maxCpm).toFixed(2);
