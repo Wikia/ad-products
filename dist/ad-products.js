@@ -4801,8 +4801,8 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 			if (resolvedState.isResolvedState(this.params)) {
 				this.setResolvedState();
 			} else {
-				this.setThumbnailStyle();
 				resolvedStateSwitch.updateInformationAboutSeenDefaultStateAd();
+				this.updateAdSizes();
 				ad_engine_["slotTweaker"].makeResponsive(this.adSlot, this.params.config.aspectRatio.default);
 			}
 		}
@@ -4813,31 +4813,48 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 
 			helpers_get_default()(BfabTheme.prototype.__proto__ || get_prototype_of_default()(BfabTheme.prototype), 'onVideoReady', this).call(this, video);
 
-			var setThumbnailStyle = function setThumbnailStyle() {
-				if (resolvedState.isResolvedState(_this2.params)) {
-					_this2.setResolvedState(video);
-				} else {
-					_this2.setThumbnailStyle(video);
-				}
-			};
-
-			video.addEventListener('wikiaAdStarted', setThumbnailStyle);
+			this.video = video;
+			video.addEventListener('wikiaAdStarted', function () {
+				return _this2.updateAdSizes();
+			});
 			video.addEventListener('wikiaAdCompleted', function () {
-				return _this2.setResolvedState(video);
+				return _this2.setResolvedState();
 			});
 			video.addEventListener('wikiaFullscreenChange', function () {
 				if (video.isFullscreen()) {
+					_this2.stickiness.blockRevertStickiness();
 					_this2.container.classList.add('theme-video-fullscreen');
 				} else {
+					_this2.stickiness.unblockRevertStickiness();
 					_this2.container.classList.remove('theme-video-fullscreen');
-					setThumbnailStyle();
+					_this2.updateAdSizes();
 				}
 			});
 		}
 	}, {
+		key: 'updateAdSizes',
+		value: function updateAdSizes() {
+			var state = resolvedState.isResolvedState(this.params) ? 'resolved' : 'default';
+			var stateHeight = this.params.config.state.height[state];
+			var relativeHeight = this.params.container.offsetHeight * (stateHeight / 100);
+
+			this.adjustVideoSize(relativeHeight);
+
+			if (this.params.thumbnail) {
+				this.setThumbnailStyle(state);
+			}
+		}
+	}, {
+		key: 'adjustVideoSize',
+		value: function adjustVideoSize(relativeHeight) {
+			if (this.video && !this.video.isFullscreen()) {
+				this.video.container.style.width = this.params.videoAspectRatio * relativeHeight + 'px';
+			}
+		}
+	}, {
 		key: 'setResolvedState',
 		value: function () {
-			var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(video) {
+			var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee() {
 				var _params, config, image2;
 
 				return regenerator_default.a.wrap(function _callee$(_context) {
@@ -4855,7 +4872,7 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 							case 5:
 
 								if (this.params.thumbnail) {
-									this.setThumbnailStyle(video, 'resolved');
+									this.setThumbnailStyle('resolved');
 								}
 
 							case 6:
@@ -4866,7 +4883,7 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 				}, _callee, this);
 			}));
 
-			function setResolvedState(_x) {
+			function setResolvedState() {
 				return _ref.apply(this, arguments);
 			}
 
@@ -4874,8 +4891,8 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 		}()
 	}, {
 		key: 'setThumbnailStyle',
-		value: function setThumbnailStyle(video) {
-			var state = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+		value: function setThumbnailStyle() {
+			var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
 			var thumbnail = this.params.thumbnail;
 
 			var style = mapValues_default()(this.params.config.state, function (styleProperty) {
@@ -4884,11 +4901,8 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 
 			assign_default()(thumbnail.style, style);
 
-			if (video) {
-				assign_default()(video.container.style, style);
-				window.requestAnimationFrame(function () {
-					video.resize(thumbnail.offsetWidth, thumbnail.offsetHeight);
-				});
+			if (this.video) {
+				assign_default()(this.video.container.style, style);
 			}
 		}
 	}, {
@@ -5047,7 +5061,7 @@ var hivi_bfab_BfabTheme = function (_BigFancyAdHiviTheme) {
 				}, _callee4, this);
 			}));
 
-			function onStickinessChange(_x3) {
+			function onStickinessChange(_x2) {
 				return _ref4.apply(this, arguments);
 			}
 
@@ -5516,7 +5530,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v8.2.0');
+set_default()(window, versionField, 'v8.3.0');
 
 
 
