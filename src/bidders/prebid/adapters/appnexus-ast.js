@@ -13,12 +13,12 @@ export class AppnexusAst extends BaseAdapter {
 		this.isDebugMode = utils.queryString.get('appnexusast_debug_mode') === '1';
 	}
 
-	prepareConfigForAdUnit(code, { placementId }) {
+	prepareConfigForAdUnit(code, { placementId, context }) {
 		return {
 			code,
 			mediaTypes: {
 				video: {
-					context: 'outstream',
+					context,
 					playerSize: [640, 480]
 				}
 			},

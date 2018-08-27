@@ -1,6 +1,7 @@
 import { context, events, utils } from '@wikia/ad-engine';
 import { A9 } from './a9/index';
 import { Prebid } from './prebid/index';
+import * as prebidHelper from './prebid/prebid-helper';
 
 require('./../../lib/prebid.min');
 
@@ -93,6 +94,7 @@ function requestBids({ responseListener = null }) {
 		if (!events.PREBID_LAZY_CALL) {
 			events.registerEvent('PREBID_LAZY_CALL');
 		}
+
 		biddersRegistry.prebid = new Prebid(config.prebid, config.timeout);
 	}
 
@@ -122,12 +124,15 @@ function updateSlotTargeting(slotName) {
 	applyTargetingParams(slotName, bidderTargeting);
 
 	utils.logger(logGroup, 'updateSlotTargeting', slotName, bidderTargeting);
+
+	return bidderTargeting;
 }
 
 export const bidders = {
 	getCurrentSlotPrices,
 	getDfpSlotPrices,
 	hasAllResponses,
+	prebidHelper,
 	requestBids,
 	updateSlotTargeting
 };

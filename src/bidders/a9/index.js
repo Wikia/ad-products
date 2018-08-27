@@ -64,6 +64,12 @@ export class A9 extends BaseBidder {
 			a9Slots = a9Slots.concat(this.slotsVideo.map(this.createVideoSlotDefinition));
 		}
 
+		const disabledSlots = context.get('bidders.disabledSlots');
+
+		if (disabledSlots) {
+			a9Slots = a9Slots.filter(slot => (disabledSlots.indexOf(slot.slotID) === -1));
+		}
+
 		window.apstag.fetchBids({
 			slots: a9Slots,
 			timeout: this.timeout

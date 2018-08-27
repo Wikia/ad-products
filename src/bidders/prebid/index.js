@@ -64,10 +64,6 @@ export class Prebid extends BaseBidder {
 		window.pbjs.bidderSettings = getSettings();
 	}
 
-	calculatePrices() {
-		// biddersPerformanceMap = performanceTracker.updatePerformanceMap(biddersPerformanceMap);
-	}
-
 	callBids(bidsBackHandler) {
 		if (!this.adUnits) {
 			this.adUnits = setupAdUnits(this.bidderConfig, this.isLazyLoadingEnabled ? 'pre' : 'off');

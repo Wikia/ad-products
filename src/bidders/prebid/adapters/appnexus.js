@@ -7,11 +7,6 @@ export class Appnexus extends BaseAdapter {
 
 		this.bidderName = 'appnexus';
 		this.placements = options.placements;
-		/* this.recoveryPlacements = {
-			atf: '11823778',
-			btf: '11823724',
-			hivi: '11823799'
-		} */
 	}
 
 	prepareConfigForAdUnit(code, { sizes, position = 'mobile' }) {

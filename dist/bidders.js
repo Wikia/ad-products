@@ -1269,6 +1269,14 @@ module.exports = function (object, names) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+var prebid_helper_namespaceObject = {};
+__webpack_require__.d(prebid_helper_namespaceObject, "setupAdUnits", function() { return setupAdUnits; });
+__webpack_require__.d(prebid_helper_namespaceObject, "getBidByAdId", function() { return getBidByAdId; });
+__webpack_require__.d(prebid_helper_namespaceObject, "getAvailableBidsByAdUnitCode", function() { return getAvailableBidsByAdUnitCode; });
+__webpack_require__.d(prebid_helper_namespaceObject, "getPrebid", function() { return getPrebid; });
+__webpack_require__.d(prebid_helper_namespaceObject, "getTargeting", function() { return getTargeting; });
+__webpack_require__.d(prebid_helper_namespaceObject, "getWinningVideoBidBySlotName", function() { return getWinningVideoBidBySlotName; });
+__webpack_require__.d(prebid_helper_namespaceObject, "pushPrebid", function() { return pushPrebid; });
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/core-js/object/keys.js
 var keys = __webpack_require__(6);
@@ -1526,6 +1534,14 @@ var a9_A9 = function (_BaseBidder) {
 				a9Slots = a9Slots.concat(this.slotsVideo.map(this.createVideoSlotDefinition));
 			}
 
+			var disabledSlots = ad_engine_["context"].get('bidders.disabledSlots');
+
+			if (disabledSlots) {
+				a9Slots = a9Slots.filter(function (slot) {
+					return disabledSlots.indexOf(slot.slotID) === -1;
+				});
+			}
+
 			window.apstag.fetchBids({
 				slots: a9Slots,
 				timeout: this.timeout
@@ -1745,11 +1761,6 @@ var appnexus_Appnexus = function (_BaseAdapter) {
 
 		_this.bidderName = 'appnexus';
 		_this.placements = options.placements;
-		/* this.recoveryPlacements = {
-  	atf: '11823778',
-  	btf: '11823724',
-  	hivi: '11823799'
-  } */
 		return _this;
 	}
 
@@ -1819,13 +1830,14 @@ var appnexus_ast_AppnexusAst = function (_BaseAdapter) {
 	createClass_default()(AppnexusAst, [{
 		key: 'prepareConfigForAdUnit',
 		value: function prepareConfigForAdUnit(code, _ref) {
-			var placementId = _ref.placementId;
+			var placementId = _ref.placementId,
+			    context = _ref.context;
 
 			return {
 				code: code,
 				mediaTypes: {
 					video: {
-						context: 'outstream',
+						context: context,
 						playerSize: [640, 480]
 					}
 				},
@@ -2238,14 +2250,18 @@ var pubmatic_Pubmatic = function (_BaseAdapter) {
 var lazyLoadSlots = ['bottom_leaderboard'];
 
 function isSlotAvailable(code, lazyLoad) {
-	var available = true;
+	var disabledSlots = ad_engine_["context"].get('bidders.disabledSlots');
 	var isSlotLazy = lazyLoadSlots.indexOf(code) !== -1;
 
-	if (lazyLoad !== 'off' && (lazyLoad === 'pre' && isSlotLazy || lazyLoad === 'post' && !isSlotLazy)) {
-		available = false;
+	if (disabledSlots && disabledSlots.indexOf(code) !== -1) {
+		return false;
 	}
 
-	return available;
+	if (lazyLoad !== 'off' && (lazyLoad === 'pre' && isSlotLazy || lazyLoad === 'post' && !isSlotLazy)) {
+		return false;
+	}
+
+	return true;
 }
 
 function setupAdUnits(adaptersConfig) {
@@ -2862,7 +2878,6 @@ function transformPriceFromCpm(cpm, maxCpm) {
 
 
 
-
 var videoBiddersCap50 = ['appnexusAst', 'rubicon', 'wikiaVideo']; // bidders with $50 cap
 
 function getSettings() {
@@ -3031,11 +3046,6 @@ var prebid_Prebid = (_dec = Object(external_core_decorators_["decorate"])(prebid
 			window.pbjs.bidderSettings = getSettings();
 		}
 	}, {
-		key: 'calculatePrices',
-		value: function calculatePrices() {
-			// biddersPerformanceMap = performanceTracker.updatePerformanceMap(biddersPerformanceMap);
-		}
-	}, {
 		key: 'callBids',
 		value: function callBids(bidsBackHandler) {
 			var _this3 = this;
@@ -3178,6 +3188,7 @@ prebid_Prebid.errorResponseStatusCode = 2;
 
 
 
+
 __webpack_require__(67);
 
 var biddersRegistry = {};
@@ -3262,6 +3273,7 @@ function requestBids(_ref) {
 		if (!ad_engine_["events"].PREBID_LAZY_CALL) {
 			ad_engine_["events"].registerEvent('PREBID_LAZY_CALL');
 		}
+
 		biddersRegistry.prebid = new prebid_Prebid(config.prebid, config.timeout);
 	}
 
@@ -3291,12 +3303,15 @@ function updateSlotTargeting(slotName) {
 	applyTargetingParams(slotName, bidderTargeting);
 
 	ad_engine_["utils"].logger(logGroup, 'updateSlotTargeting', slotName, bidderTargeting);
+
+	return bidderTargeting;
 }
 
 var bidders_bidders = {
 	getCurrentSlotPrices: getCurrentSlotPrices,
 	getDfpSlotPrices: getDfpSlotPrices,
 	hasAllResponses: hasAllResponses,
+	prebidHelper: prebid_helper_namespaceObject,
 	requestBids: requestBids,
 	updateSlotTargeting: updateSlotTargeting
 };
