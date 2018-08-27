@@ -108,8 +108,7 @@ const environments = {
 		],
 		resolve: {
 			alias: {
-				[pkg.name]: path.join(__dirname, 'src'),
-				'@wikia/bidders': path.join(__dirname, 'src/bidders')
+				[pkg.name]: path.join(__dirname, 'src')
 			}
 		}
 	},
@@ -194,56 +193,6 @@ const geoTargets = {
 	},
 };
 
-const bidderEnvironments = {
-	production: {
-		mode: 'production',
-		entry: {
-			'bidders': './src/bidders/index.js'
-		},
-		output: {
-			path: path.resolve(__dirname, 'dist'),
-		}
-	}
-};
-
-const bidderTargets = {
-	amd: {
-		externals: {
-			'@wikia/ad-engine': {
-				amd: 'ext.wikia.adEngine3'
-			}
-		},
-		output: {
-			filename: '[name].amd.js',
-			library: 'ext.wikia.adEngine.[name]',
-			libraryTarget: 'amd'
-		}
-	},
-	commonjs: {
-		externals: Object.keys(pkg.dependencies).map(key => new RegExp(`^${key}`)),
-		output: {
-			filename: '[name].js',
-			library: 'bidders',
-			libraryTarget: 'commonjs2'
-		},
-		optimization: {
-			minimize: false
-		}
-	},
-	window: {
-		externals: {
-			'@wikia/ad-engine': {
-				window: ['Wikia', 'adEngine']
-			}
-		},
-		output: {
-			filename: '[name].global.js',
-			library: ['Wikia', 'adProductsBidders'],
-			libraryTarget: 'window'
-		}
-	},
-};
-
 module.exports = function (env) {
 	const isProduction = (process.env.NODE_ENV === 'production') || (env && env.production);
 	const isTest = (env && env.test);
@@ -255,10 +204,7 @@ module.exports = function (env) {
 			merge(common, environments.production, targets.commonjs),
 			merge(common, geoEnvironments.production, geoTargets.amd),
 			merge(common, geoEnvironments.production, geoTargets.window),
-			merge(common, geoEnvironments.production, geoTargets.commonjs),
-			merge(common, bidderEnvironments.production, bidderTargets.amd),
-			merge(common, bidderEnvironments.production, bidderTargets.window),
-			merge(common, bidderEnvironments.production, bidderTargets.commonjs)
+			merge(common, geoEnvironments.production, geoTargets.commonjs)
 		];
 	} else if (isTest) {
 		return merge(common, environments.test);

@@ -1,5 +1,5 @@
 import { AdEngine, btfBlockerService, context, events, utils } from '@wikia/ad-engine';
-import { bidders } from '@wikia/bidders';
+import { bidders } from '@wikia/ad-products';
 import adContext from '../../context';
 
 const contentTemplate = document.querySelector('.content-template').innerHTML;
