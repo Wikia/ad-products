@@ -1,5 +1,7 @@
 import { context } from '@wikia/ad-engine';
-import { transformPriceFromCpm } from './price-helper';
+import { transformPriceFromCpm, DEFAULT_MAX_CPM } from './price-helper';
+
+const videoBiddersCap50 = ['appnexusAst', 'rubicon', 'wikiaVideo']; // bidders with $50 cap
 
 export function getSettings() {
 	return {
@@ -16,7 +18,13 @@ export function getSettings() {
 				},
 				{
 					key: 'hb_pb',
-					val: bidResponse => transformPriceFromCpm(bidResponse.cpm)
+					val: (bidResponse) => {
+						let maxCpm = DEFAULT_MAX_CPM;
+						if (videoBiddersCap50.includes(bidResponse.bidderCode)) {
+							maxCpm = 50;
+						}
+						return transformPriceFromCpm(bidResponse.cpm, maxCpm);
+					}
 				},
 				{
 					key: 'hb_size',
