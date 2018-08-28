@@ -7,7 +7,9 @@ let uapId = constants.DEFAULT_UAP_ID;
 let uapType = constants.DEFAULT_UAP_TYPE;
 
 function getVideoSize(slot, params, videoSettings) {
-	const width = videoSettings.isSplitLayout() ? params.videoPlaceholderElement.offsetWidth : slot.clientWidth;
+	const width = videoSettings.isSplitLayout() ?
+		Math.floor(params.videoPlaceholderElement.offsetWidth) :
+		Math.floor(slot.clientWidth);
 	const height = width / params.videoAspectRatio;
 
 	return {
@@ -19,7 +21,6 @@ function getVideoSize(slot, params, videoSettings) {
 function adjustVideoAdContainer(params) {
 	if (params.splitLayoutVideoPosition) {
 		const videoAdContainer = params.container.querySelector('.video-player');
-
 		videoAdContainer.classList.add(`video-player-${params.splitLayoutVideoPosition}`);
 	}
 }
@@ -70,7 +71,9 @@ async function loadVideoAd(videoSettings) {
 	function recalculateVideoSize(video) {
 		return () => {
 			const currentSize = getVideoSize(params.container, params, videoSettings);
+			const videoAdContainer = params.container.querySelector('.video-player');
 			video.resize(currentSize.width, currentSize.height);
+			videoAdContainer.style.width = currentSize.width;
 		};
 	}
 
