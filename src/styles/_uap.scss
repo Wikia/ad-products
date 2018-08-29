@@ -125,6 +125,10 @@ $ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
 		z-index: -1;
 	}
 
+	& .porvata-video {
+		background-color: transparent !important;
+	}
+
 	.button-unstick {
 		padding: $hivi-uap-button-border-space;
 		position: absolute;
