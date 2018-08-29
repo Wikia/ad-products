@@ -68,10 +68,7 @@ export class Prebid extends BaseBidder {
 	}
 
 	callBids(bidsBackHandler) {
-		if (!this.insertScript()) {
-			return;
-		}
-
+		this.insertScript();
 		if (!this.adUnits) {
 			this.adUnits = setupAdUnits(this.bidderConfig, this.isLazyLoadingEnabled ? 'pre' : 'off');
 		}
@@ -94,20 +91,18 @@ export class Prebid extends BaseBidder {
 		const libraryUrl = context.get('bidders.prebid.libraryUrl');
 
 		if (!libraryUrl) {
-			return false;
+			return;
 		}
 
 		const script = document.createElement('script');
 
 		script.type = 'text/javascript';
 		script.async = true;
-		script.src = context.get('bidders.a9.libraryUrl');
+		script.src = libraryUrl;
 
 		const node = document.getElementsByTagName('script')[0];
 
 		node.parentNode.insertBefore(script, node);
-
-		return true;
 	}
 
 	lazyCall(bidsBackHandler) {
