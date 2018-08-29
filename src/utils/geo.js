@@ -200,11 +200,33 @@ export function isProperGeo(countryList = [], name = undefined) {
 	);
 }
 
-export default {
+/**
+ * Select Instant Globals to send them to DFP (aka Ad Manager).
+ *
+ * @param {string[] | undefined} keyVals mapping of Instant Globals (to send) to value in DFP
+ * @returns {string[]}
+ */
+export function getDfpLabradorKeyvals(keyVals) {
+	if (!keyVals || !keyVals.length) {
+		return [];
+	}
+
+	const labradorVariables = module.getSamplingResults();
+
+	return keyVals
+		.map(keyVal => keyVal.split(':'))
+		.filter(keyVal => labradorVariables.indexOf(keyVal[0]) !== -1)
+		.map(keyVal => keyVal[1]);
+}
+
+const module = {
 	getContinentCode,
 	getCountryCode,
 	getRegionCode,
 	getSamplingResults,
 	isProperGeo,
-	resetSamplingCache
+	resetSamplingCache,
+	getDfpLabradorKeyvals,
 };
+
+export default module;

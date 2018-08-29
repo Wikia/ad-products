@@ -1606,6 +1606,7 @@ __webpack_require__.d(utils_namespaceObject, "isProperContinent", function() { r
 __webpack_require__.d(utils_namespaceObject, "resetSamplingCache", function() { return resetSamplingCache; });
 __webpack_require__.d(utils_namespaceObject, "getSamplingResults", function() { return getSamplingResults; });
 __webpack_require__.d(utils_namespaceObject, "isProperGeo", function() { return isProperGeo; });
+__webpack_require__.d(utils_namespaceObject, "getDfpLabradorKeyvals", function() { return getDfpLabradorKeyvals; });
 __webpack_require__.d(utils_namespaceObject, "setupNpaContext", function() { return setupNpaContext; });
 var prebid_helper_namespaceObject = {};
 __webpack_require__.d(prebid_helper_namespaceObject, "setupAdUnits", function() { return setupAdUnits; });
@@ -1877,14 +1878,38 @@ function isProperGeo() {
 	return !!(countryList && countryList.indexOf && !isGeoExcluded(countryList) && (isProperContinent(countryList, name) || isProperCountry(countryList, name) || isProperRegion(countryList, name)));
 }
 
-/* harmony default export */ var geo = ({
+/**
+ * Select Instant Globals to send them to DFP (aka Ad Manager).
+ *
+ * @param {string[] | undefined} wfKeyVals mapping of Instant Globals (to send) to value in DFP
+ */
+function getDfpLabradorKeyvals(wfKeyVals) {
+	if (!wfKeyVals || !wfKeyVals.length) {
+		return '';
+	}
+
+	var labradorVariables = geo_module.getSamplingResults();
+
+	return wfKeyVals.map(function (keyVal) {
+		return keyVal.split(':');
+	}).filter(function (keyVal) {
+		return labradorVariables.indexOf(keyVal[0]) !== -1;
+	}).map(function (keyVal) {
+		return keyVal[1];
+	}).join(',');
+}
+
+var geo_module = {
 	getContinentCode: getContinentCode,
 	getCountryCode: getCountryCode,
 	getRegionCode: getRegionCode,
 	getSamplingResults: getSamplingResults,
 	isProperGeo: isProperGeo,
-	resetSamplingCache: resetSamplingCache
-});
+	resetSamplingCache: resetSamplingCache,
+	getDfpLabradorKeyvals: getDfpLabradorKeyvals
+};
+
+/* harmony default export */ var geo = (geo_module);
 // EXTERNAL MODULE: external "@wikia/ad-engine"
 var ad_engine_ = __webpack_require__(0);
 
