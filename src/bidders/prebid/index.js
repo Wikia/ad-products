@@ -91,7 +91,7 @@ export class Prebid extends BaseBidder {
 	}
 
 	insertScript() {
-		const libraryUrl = context.get('bidders.a9.libraryUrl');
+		const libraryUrl = context.get('bidders.prebid.libraryUrl');
 
 		if (!libraryUrl) {
 			return false;

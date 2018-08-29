@@ -5,7 +5,6 @@ export default {
 		timeout: 2000,
 		a9: {
 			enabled: true,
-			libraryUrl: '../../vendor/dist/prebid.min.js',
 			videoEnabled: false,
 			amazonId: '3115',
 			slots: {
@@ -20,6 +19,7 @@ export default {
 		},
 		prebid: {
 			enabled: true,
+			libraryUrl: '../../vendor/dist/prebid.min.js',
 			lazyLoadingEnabled: false,
 			bidsRefreshing: {
 				enabled: true,
