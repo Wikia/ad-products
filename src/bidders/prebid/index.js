@@ -8,6 +8,8 @@ import { getAvailableBidsByAdUnitCode, setupAdUnits } from './prebid-helper';
 
 export const prebidLazyRun = method => (...args) => window.pbjs.que.push(() => method.apply(this, args));
 
+const logGroup = 'prebid';
+
 window.pbjs = window.pbjs || {};
 window.pbjs.que = window.pbjs.que || [];
 
@@ -91,6 +93,7 @@ export class Prebid extends BaseBidder {
 		const libraryUrl = context.get('bidders.prebid.libraryUrl');
 
 		if (!libraryUrl) {
+			utils.logger(logGroup, 'Prebid library URL not defined. Assuming that window.pbjs will be loaded.');
 			return;
 		}
 
