@@ -54,6 +54,7 @@
   },
   "files": [
     "dist/",
+    "lib/",
     "src/",
     "jsconfig.json",
     "README.md"
