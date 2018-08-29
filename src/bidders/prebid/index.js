@@ -8,6 +8,9 @@ import { getAvailableBidsByAdUnitCode, setupAdUnits } from './prebid-helper';
 
 export const prebidLazyRun = method => (...args) => window.pbjs.que.push(() => method.apply(this, args));
 
+window.pbjs = window.pbjs || {};
+window.pbjs.que = window.pbjs.que || [];
+
 export class Prebid extends BaseBidder {
 	constructor(bidderConfig, timeout = 2000) {
 		super('prebid', bidderConfig, timeout);
@@ -65,6 +68,10 @@ export class Prebid extends BaseBidder {
 	}
 
 	callBids(bidsBackHandler) {
+		if (!this.insertScript()) {
+			return;
+		}
+
 		if (!this.adUnits) {
 			this.adUnits = setupAdUnits(this.bidderConfig, this.isLazyLoadingEnabled ? 'pre' : 'off');
 		}
@@ -81,6 +88,26 @@ export class Prebid extends BaseBidder {
 				this.lazyCall(bidsBackHandler);
 			});
 		}
+	}
+
+	insertScript() {
+		const libraryUrl = context.get('bidders.a9.libraryUrl');
+
+		if (!libraryUrl) {
+			return false;
+		}
+
+		const script = document.createElement('script');
+
+		script.type = 'text/javascript';
+		script.async = true;
+		script.src = context.get('bidders.a9.libraryUrl');
+
+		const node = document.getElementsByTagName('script')[0];
+
+		node.parentNode.insertBefore(script, node);
+
+		return true;
 	}
 
 	lazyCall(bidsBackHandler) {
@@ -163,19 +190,21 @@ export class Prebid extends BaseBidder {
 	}
 
 	registerBidsRefreshing() {
-		window.pbjs.onEvent('bidWon', (winningBid) => {
-			if (this.bidsRefreshing.slots.indexOf(winningBid.adUnitCode) !== -1) {
-				const adUnitsToRefresh = this.adUnits.filter(
-					adUnit => (
-						adUnit.code === winningBid.adUnitCode &&
-						adUnit.bids &&
-						adUnit.bids[0] &&
-						adUnit.bids[0].bidder === winningBid.bidderCode
-					)
-				);
+		window.pbjs.que.push(() => {
+			window.pbjs.onEvent('bidWon', (winningBid) => {
+				if (this.bidsRefreshing.slots.indexOf(winningBid.adUnitCode) !== -1) {
+					const adUnitsToRefresh = this.adUnits.filter(
+						adUnit => (
+							adUnit.code === winningBid.adUnitCode &&
+							adUnit.bids &&
+							adUnit.bids[0] &&
+							adUnit.bids[0].bidder === winningBid.bidderCode
+						)
+					);
 
-				this.requestBids(adUnitsToRefresh);
-			}
+					this.requestBids(adUnitsToRefresh);
+				}
+			});
 		});
 	}
 
