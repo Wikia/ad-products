@@ -3,8 +3,6 @@ import { A9 } from './a9/index';
 import { Prebid } from './prebid/index';
 import * as prebidHelper from './prebid/prebid-helper';
 
-require('./../../lib/prebid.min');
-
 const biddersRegistry = {};
 const realSlotPrices = {};
 const logGroup = 'bidders';
