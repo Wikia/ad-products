@@ -58,11 +58,6 @@ context.set('targeting.artid', '266');
 context.set('options.maxDelayTimeout', 1000);
 context.push('delayModules', biddersDelay);
 
-window.pbjs.onEvent('auctionInit', () => {
-	if (randomPrice) {
-		context.set('bidders.prebid.wikia.price', Math.floor(Math.random() * 2000));
-	}
-});
 bidders.requestBids({
 	responseListener: () => {
 		if (bidders.hasAllResponses()) {
@@ -70,6 +65,12 @@ bidders.requestBids({
 				resolveBidders();
 				resolveBidders = null;
 			}
+
+			window.pbjs.onEvent('auctionInit', () => {
+				if (randomPrice) {
+					context.set('bidders.prebid.wikia.price', (Math.floor(Math.random() * 20) * 100));
+				}
+			});
 		}
 	}
 });

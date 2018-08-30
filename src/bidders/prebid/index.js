@@ -17,6 +17,8 @@ export class Prebid extends BaseBidder {
 	constructor(bidderConfig, timeout = 2000) {
 		super('prebid', bidderConfig, timeout);
 
+		this.insertScript();
+
 		this.loaded = false;
 		this.lazyLoaded = false;
 		this.isLazyLoadingEnabled = this.bidderConfig.lazyLoadingEnabled;
@@ -70,7 +72,6 @@ export class Prebid extends BaseBidder {
 	}
 
 	callBids(bidsBackHandler) {
-		this.insertScript();
 		if (!this.adUnits) {
 			this.adUnits = setupAdUnits(this.bidderConfig, this.isLazyLoadingEnabled ? 'pre' : 'off');
 		}
