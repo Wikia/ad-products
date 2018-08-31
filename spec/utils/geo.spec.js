@@ -356,15 +356,15 @@ describe('Geo', () => {
 		assert.deepEqual(geo.getSamplingResults(), ['TEST_A_99.999999']);
 	});
 
-	describe('getDfpLabradorKeyvals', () => {
+	describe('mapSamplingResults', () => {
 		it('returns empty string if argument is undefined', () => {
-			const result = geo.getDfpLabradorKeyvals();
+			const result = geo.mapSamplingResults();
 			assert(Array.isArray(result));
 			assert.equal(result.length, 0);
 		});
 
 		it('returns empty string if argument is an empty array', () => {
-			const result = geo.getDfpLabradorKeyvals([]);
+			const result = geo.mapSamplingResults([]);
 			assert(Array.isArray(result));
 			assert.equal(result.length, 0);
 		});
@@ -378,7 +378,7 @@ describe('Geo', () => {
 			sinon.stub(geo.default, 'getSamplingResults').returns(
 				['FOO_A_1', 'BAR_B_99'],
 			);
-			assert.equal(geo.getDfpLabradorKeyvals(wfKeyVals), 'foo_a,bar_b');
+			assert.equal(geo.mapSamplingResults(wfKeyVals), 'foo_a,bar_b');
 		});
 	})
 });

@@ -201,12 +201,12 @@ export function isProperGeo(countryList = [], name = undefined) {
 }
 
 /**
- * Select Instant Globals to send them to DFP (aka Ad Manager).
+ * Transform sampling results using supplied key-values map.
  *
- * @param {string[] | undefined} keyVals mapping of Instant Globals (to send) to value in DFP
+ * @param {string[] | undefined} keyVals mapping
  * @returns {string[]}
  */
-export function getDfpLabradorKeyvals(keyVals) {
+export function mapSamplingResults(keyVals) {
 	if (!keyVals || !keyVals.length) {
 		return [];
 	}
@@ -226,7 +226,7 @@ const module = {
 	getSamplingResults,
 	isProperGeo,
 	resetSamplingCache,
-	getDfpLabradorKeyvals,
+	mapSamplingResults,
 };
 
 export default module;
