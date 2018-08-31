@@ -690,7 +690,7 @@ function getRandom() {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resetSamplingCache", function() { return resetSamplingCache; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSamplingResults", function() { return getSamplingResults; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isProperGeo", function() { return isProperGeo; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDfpLabradorKeyvals", function() { return getDfpLabradorKeyvals; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapSamplingResults", function() { return mapSamplingResults; });
 
 
 
@@ -901,24 +901,25 @@ function isProperGeo() {
 }
 
 /**
- * Select Instant Globals to send them to DFP (aka Ad Manager).
+ * Transform sampling results using supplied key-values map.
  *
- * @param {string[] | undefined} wfKeyVals mapping of Instant Globals (to send) to value in DFP
+ * @param {string[] | undefined} keyVals mapping
+ * @returns {string[]}
  */
-function getDfpLabradorKeyvals(wfKeyVals) {
-	if (!wfKeyVals || !wfKeyVals.length) {
-		return '';
+function mapSamplingResults(keyVals) {
+	if (!keyVals || !keyVals.length) {
+		return [];
 	}
 
 	var labradorVariables = geo_module.getSamplingResults();
 
-	return wfKeyVals.map(function (keyVal) {
+	return keyVals.map(function (keyVal) {
 		return keyVal.split(':');
 	}).filter(function (keyVal) {
 		return labradorVariables.indexOf(keyVal[0]) !== -1;
 	}).map(function (keyVal) {
 		return keyVal[1];
-	}).join(',');
+	});
 }
 
 var geo_module = {
@@ -928,7 +929,7 @@ var geo_module = {
 	getSamplingResults: getSamplingResults,
 	isProperGeo: isProperGeo,
 	resetSamplingCache: resetSamplingCache,
-	getDfpLabradorKeyvals: getDfpLabradorKeyvals
+	mapSamplingResults: mapSamplingResults
 };
 
 /* harmony default export */ var geo = __webpack_exports__["default"] = (geo_module);

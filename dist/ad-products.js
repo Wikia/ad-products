@@ -1606,7 +1606,7 @@ __webpack_require__.d(utils_namespaceObject, "isProperContinent", function() { r
 __webpack_require__.d(utils_namespaceObject, "resetSamplingCache", function() { return resetSamplingCache; });
 __webpack_require__.d(utils_namespaceObject, "getSamplingResults", function() { return getSamplingResults; });
 __webpack_require__.d(utils_namespaceObject, "isProperGeo", function() { return isProperGeo; });
-__webpack_require__.d(utils_namespaceObject, "getDfpLabradorKeyvals", function() { return getDfpLabradorKeyvals; });
+__webpack_require__.d(utils_namespaceObject, "mapSamplingResults", function() { return mapSamplingResults; });
 __webpack_require__.d(utils_namespaceObject, "setupNpaContext", function() { return setupNpaContext; });
 var prebid_helper_namespaceObject = {};
 __webpack_require__.d(prebid_helper_namespaceObject, "setupAdUnits", function() { return setupAdUnits; });
@@ -1879,24 +1879,25 @@ function isProperGeo() {
 }
 
 /**
- * Select Instant Globals to send them to DFP (aka Ad Manager).
+ * Transform sampling results using supplied key-values map.
  *
- * @param {string[] | undefined} wfKeyVals mapping of Instant Globals (to send) to value in DFP
+ * @param {string[] | undefined} keyVals mapping
+ * @returns {string[]}
  */
-function getDfpLabradorKeyvals(wfKeyVals) {
-	if (!wfKeyVals || !wfKeyVals.length) {
-		return '';
+function mapSamplingResults(keyVals) {
+	if (!keyVals || !keyVals.length) {
+		return [];
 	}
 
 	var labradorVariables = geo_module.getSamplingResults();
 
-	return wfKeyVals.map(function (keyVal) {
+	return keyVals.map(function (keyVal) {
 		return keyVal.split(':');
 	}).filter(function (keyVal) {
 		return labradorVariables.indexOf(keyVal[0]) !== -1;
 	}).map(function (keyVal) {
 		return keyVal[1];
-	}).join(',');
+	});
 }
 
 var geo_module = {
@@ -1906,7 +1907,7 @@ var geo_module = {
 	getSamplingResults: getSamplingResults,
 	isProperGeo: isProperGeo,
 	resetSamplingCache: resetSamplingCache,
-	getDfpLabradorKeyvals: getDfpLabradorKeyvals
+	mapSamplingResults: mapSamplingResults
 };
 
 /* harmony default export */ var geo = (geo_module);
