@@ -2151,13 +2151,9 @@ var a9_A9 = function (_BaseBidder) {
 				a9Slots = a9Slots.concat(this.slotsVideo.map(this.createVideoSlotDefinition));
 			}
 
-			var disabledSlots = ad_engine_["context"].get('bidders.disabledSlots');
-
-			if (disabledSlots) {
-				a9Slots = a9Slots.filter(function (slot) {
-					return disabledSlots.indexOf(slot.slotID) === -1;
-				});
-			}
+			a9Slots = a9Slots.filter(function (slot) {
+				return ad_engine_["slotService"].getState(slot.slotID);
+			});
 
 			window.apstag.fetchBids({
 				slots: a9Slots,
@@ -2866,11 +2862,10 @@ var pubmatic_Pubmatic = function (_BaseAdapter) {
 
 var lazyLoadSlots = ['bottom_leaderboard'];
 
-function isSlotAvailable(code, lazyLoad) {
-	var disabledSlots = ad_engine_["context"].get('bidders.disabledSlots');
+function isSlotApplicable(code, lazyLoad) {
 	var isSlotLazy = lazyLoadSlots.indexOf(code) !== -1;
 
-	if (disabledSlots && disabledSlots.indexOf(code) !== -1) {
+	if (!ad_engine_["slotService"].getState(code)) {
 		return false;
 	}
 
@@ -2892,7 +2887,7 @@ function setupAdUnits(adaptersConfig) {
 			var adapterAdUnits = adapter.prepareAdUnits();
 
 			adapterAdUnits.forEach(function (adUnit) {
-				if (adUnit && isSlotAvailable(adUnit.code, lazyLoad)) {
+				if (adUnit && isSlotApplicable(adUnit.code, lazyLoad)) {
 					adUnits.push(adUnit);
 				}
 			});

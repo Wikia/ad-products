@@ -1,4 +1,4 @@
-import { context } from '@wikia/ad-engine';
+import { context, slotService } from '@wikia/ad-engine';
 import { BaseBidder } from './../base-bidder';
 
 export class A9 extends BaseBidder {
@@ -64,11 +64,7 @@ export class A9 extends BaseBidder {
 			a9Slots = a9Slots.concat(this.slotsVideo.map(this.createVideoSlotDefinition));
 		}
 
-		const disabledSlots = context.get('bidders.disabledSlots');
-
-		if (disabledSlots) {
-			a9Slots = a9Slots.filter(slot => (disabledSlots.indexOf(slot.slotID) === -1));
-		}
+		a9Slots = a9Slots.filter(slot => (slotService.getState(slot.slotID)));
 
 		window.apstag.fetchBids({
 			slots: a9Slots,
