@@ -19,6 +19,21 @@ describe('Bill the Lizard service', () => {
 			models: [
 				'ctp_desktop'
 			],
+			projects: {
+				queen_of_hearts: [
+					{
+						name: 'ctp_desktop:1.0.0',
+						countries: ['XX' ],
+						on_0: ['logResult'],
+						on_1: [ 'logResult' ]
+					},
+					{
+						name: 'queen_of_hearts:0.0.1',
+						countries: [ 'XX' ],
+						on_1: [ 'logResult' ]
+					}
+				]
+			},
 			parameters: {
 				foo: 1,
 				bar: 'test',
@@ -88,6 +103,7 @@ describe('Bill the Lizard service', () => {
 	});
 
 	it('should call service with built url', () => {
+		billTheLizard.projects.enable('queen_of_hearts');
 		billTheLizard.call();
 
 		const url = requests[0].url;

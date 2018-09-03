@@ -1,4 +1,6 @@
 import { context, utils } from '@wikia/ad-engine';
+import { Executor } from './executor';
+import { ProjectsHandler } from './projects-handler';
 
 const logGroup = 'bill-the-lizard';
 
@@ -46,7 +48,7 @@ function getQueryParameters(models, parameters) {
 	const day = now.getDay() - 1;
 
 	return Object.assign({}, {
-		models,
+		models: models.map(model => model.name),
 		h: now.getHours(),
 		dow: day === -1 ? 6 : day
 	}, parameters);
@@ -54,6 +56,8 @@ function getQueryParameters(models, parameters) {
 
 class BillTheLizard {
 	constructor() {
+		this.executor = new Executor();
+		this.projects = new ProjectsHandler();
 		this.predictions = {};
 	}
 
@@ -65,9 +69,9 @@ class BillTheLizard {
 
 		const host = context.get('services.billTheLizard.host');
 		const endpoint = context.get('services.billTheLizard.endpoint');
-		const models = context.get('services.billTheLizard.models');
 		const parameters = context.get('services.billTheLizard.parameters');
 		const timeout = context.get('services.billTheLizard.timeout');
+		const models = this.projects.getEnabledModels();
 
 		if (!models || models.length < 1) {
 			utils.logger(logGroup, 'no models to predict');
@@ -78,14 +82,20 @@ class BillTheLizard {
 		utils.logger(logGroup, 'calling service', host, endpoint, queryParameters);
 
 		return httpRequest(host, endpoint, queryParameters, timeout)
-			.then(response => this.parsePredictions(response));
+			.then((response) => {
+				const predictions = this.parsePredictions(response);
+
+				this.executor.executeActions(models, response);
+
+				return predictions;
+			});
 	}
 
 	parsePredictions(response) {
 		this.predictions = {};
 		Object.keys(response).forEach((key) => {
 			const { result, version } = response[key];
-			const suffix = key.indexOf('version') > 0 ? '' : `:${version}`;
+			const suffix = key.indexOf(version) > 0 ? '' : `:${version}`;
 
 			if (typeof result !== 'undefined') {
 				this.predictions[`${key}${suffix}`] = result;
