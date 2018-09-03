@@ -3991,7 +3991,131 @@ function getAdProductInfo(slotName, loadedTemplate, loadedProduct) {
 var object_assign = __webpack_require__(14);
 var assign_default = /*#__PURE__*/__webpack_require__.n(object_assign);
 
+// CONCATENATED MODULE: ./src/services/bill-the-lizard/executor.js
+
+
+
+
+
+var executor_logGroup = 'executor';
+
+var executor_Executor = function () {
+	function Executor() {
+		classCallCheck_default()(this, Executor);
+
+		this.methods = {};
+	}
+
+	createClass_default()(Executor, [{
+		key: 'register',
+		value: function register(name, callback) {
+			ad_engine_["utils"].logger(executor_logGroup, 'method ' + name + ' registered');
+			this.methods[name] = callback;
+		}
+	}, {
+		key: 'execute',
+		value: function execute(methodName, model, prediction) {
+			var callback = this.methods[methodName];
+
+			if (typeof callback !== 'function') {
+				throw Error(methodName + ' is not executable');
+			}
+
+			ad_engine_["utils"].logger(executor_logGroup, 'executing ' + methodName + ' method', model.name, prediction);
+			callback(model, prediction);
+		}
+	}, {
+		key: 'executeActions',
+		value: function executeActions(models, response) {
+			var _this = this;
+
+			keys_default()(response).forEach(function (modelName) {
+				var result = response[modelName].result;
+
+
+				var executableModel = models.find(function (model) {
+					return model.name === modelName && model.executable;
+				});
+				if (!executableModel) {
+					return;
+				}
+
+				var actions = executableModel['on_' + result];
+				if (!actions) {
+					return;
+				}
+
+				actions.forEach(function (methodName) {
+					return _this.execute(methodName, executableModel, result);
+				});
+			});
+		}
+	}]);
+
+	return Executor;
+}();
+// CONCATENATED MODULE: ./src/services/bill-the-lizard/projects-handler.js
+
+
+
+
+
+
+var projects_handler_logGroup = 'project-handler';
+
+var projects_handler_ProjectsHandler = function () {
+	function ProjectsHandler() {
+		classCallCheck_default()(this, ProjectsHandler);
+
+		this.list = {};
+	}
+
+	createClass_default()(ProjectsHandler, [{
+		key: 'enable',
+		value: function enable(name) {
+			ad_engine_["utils"].logger(projects_handler_logGroup, 'project ' + name + ' enabled');
+			this.list[name] = true;
+		}
+	}, {
+		key: 'isEnabled',
+		value: function isEnabled(name) {
+			return !!this.list[name];
+		}
+	}, {
+		key: 'getEnabledModels',
+		value: function getEnabledModels() {
+			var _this = this;
+
+			var projects = ad_engine_["context"].get('services.billTheLizard.projects');
+			var enabledProjectNames = keys_default()(projects).filter(function (name) {
+				return _this.isEnabled(name);
+			});
+			var models = [];
+
+			enabledProjectNames.forEach(function (name) {
+				// Only first enabled model in project is executable
+				var isNextModelExecutable = true;
+
+				projects[name].forEach(function (model) {
+					if (isProperGeo(model.countries, model.name)) {
+						model.executable = isNextModelExecutable;
+						isNextModelExecutable = false;
+						models.push(model);
+					} else {
+						model.executable = false;
+					}
+				});
+			});
+
+			return models;
+		}
+	}]);
+
+	return ProjectsHandler;
+}();
 // CONCATENATED MODULE: ./src/services/bill-the-lizard/index.js
+
+
 
 
 
@@ -4050,16 +4174,32 @@ function getQueryParameters(models, parameters) {
 	var day = now.getDay() - 1;
 
 	return assign_default()({}, {
-		models: models,
+		models: models.map(function (model) {
+			return model.name;
+		}),
 		h: now.getHours(),
 		dow: day === -1 ? 6 : day
 	}, parameters);
+}
+
+function overridePredictions(response) {
+	keys_default()(response).forEach(function (name) {
+		var newValue = ad_engine_["utils"].queryString.get('bill.' + name);
+
+		if (newValue) {
+			response[name].result = parseInt(newValue, 10);
+		}
+	});
+
+	return response;
 }
 
 var bill_the_lizard_BillTheLizard = function () {
 	function BillTheLizard() {
 		classCallCheck_default()(this, BillTheLizard);
 
+		this.executor = new executor_Executor();
+		this.projects = new projects_handler_ProjectsHandler();
 		this.predictions = {};
 	}
 
@@ -4077,9 +4217,9 @@ var bill_the_lizard_BillTheLizard = function () {
 
 			var host = ad_engine_["context"].get('services.billTheLizard.host');
 			var endpoint = ad_engine_["context"].get('services.billTheLizard.endpoint');
-			var models = ad_engine_["context"].get('services.billTheLizard.models');
 			var parameters = ad_engine_["context"].get('services.billTheLizard.parameters');
 			var timeout = ad_engine_["context"].get('services.billTheLizard.timeout');
+			var models = this.projects.getEnabledModels();
 
 			if (!models || models.length < 1) {
 				ad_engine_["utils"].logger(bill_the_lizard_logGroup, 'no models to predict');
@@ -4092,7 +4232,13 @@ var bill_the_lizard_BillTheLizard = function () {
 			ad_engine_["utils"].logger(bill_the_lizard_logGroup, 'calling service', host, endpoint, queryParameters);
 
 			return httpRequest(host, endpoint, queryParameters, timeout).then(function (response) {
-				return _this.parsePredictions(response);
+				return overridePredictions(response);
+			}).then(function (response) {
+				var predictions = _this.parsePredictions(response);
+
+				_this.executor.executeActions(models, response);
+
+				return predictions;
 			});
 		}
 	}, {
@@ -4106,7 +4252,7 @@ var bill_the_lizard_BillTheLizard = function () {
 				    result = _response$key.result,
 				    version = _response$key.version;
 
-				var suffix = key.indexOf('version') > 0 ? '' : ':' + version;
+				var suffix = key.indexOf(version) > 0 ? '' : ':' + version;
 
 				if (typeof result !== 'undefined') {
 					_this2.predictions['' + key + suffix] = result;
