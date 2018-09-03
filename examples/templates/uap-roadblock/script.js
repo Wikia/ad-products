@@ -5,6 +5,7 @@ import customContext from '../../context';
 import '../../styles.scss';
 
 customContext.targeting.post_id = '1210636';
+customContext.slots.top_boxad.aboveTheFold = false;
 
 context.extend(customContext);
 
