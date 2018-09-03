@@ -54,6 +54,18 @@ function getQueryParameters(models, parameters) {
 	}, parameters);
 }
 
+function overridePredictions(response) {
+	Object.keys(response).forEach((name) => {
+		const newValue = utils.queryString.get(`bill.${name}`);
+
+		if (newValue) {
+			response[name].result = parseInt(newValue, 10);
+		}
+	});
+
+	return response;
+}
+
 class BillTheLizard {
 	constructor() {
 		this.executor = new Executor();
@@ -82,6 +94,7 @@ class BillTheLizard {
 		utils.logger(logGroup, 'calling service', host, endpoint, queryParameters);
 
 		return httpRequest(host, endpoint, queryParameters, timeout)
+			.then(response => overridePredictions(response))
 			.then((response) => {
 				const predictions = this.parsePredictions(response);
 
