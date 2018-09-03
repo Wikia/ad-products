@@ -1606,6 +1606,7 @@ __webpack_require__.d(utils_namespaceObject, "isProperContinent", function() { r
 __webpack_require__.d(utils_namespaceObject, "resetSamplingCache", function() { return resetSamplingCache; });
 __webpack_require__.d(utils_namespaceObject, "getSamplingResults", function() { return getSamplingResults; });
 __webpack_require__.d(utils_namespaceObject, "isProperGeo", function() { return isProperGeo; });
+__webpack_require__.d(utils_namespaceObject, "mapSamplingResults", function() { return mapSamplingResults; });
 __webpack_require__.d(utils_namespaceObject, "setupNpaContext", function() { return setupNpaContext; });
 var prebid_helper_namespaceObject = {};
 __webpack_require__.d(prebid_helper_namespaceObject, "setupAdUnits", function() { return setupAdUnits; });
@@ -1877,14 +1878,39 @@ function isProperGeo() {
 	return !!(countryList && countryList.indexOf && !isGeoExcluded(countryList) && (isProperContinent(countryList, name) || isProperCountry(countryList, name) || isProperRegion(countryList, name)));
 }
 
-/* harmony default export */ var geo = ({
+/**
+ * Transform sampling results using supplied key-values map.
+ *
+ * @param {string[] | undefined} keyVals mapping
+ * @returns {string[]}
+ */
+function mapSamplingResults(keyVals) {
+	if (!keyVals || !keyVals.length) {
+		return [];
+	}
+
+	var labradorVariables = geo_module.getSamplingResults();
+
+	return keyVals.map(function (keyVal) {
+		return keyVal.split(':');
+	}).filter(function (keyVal) {
+		return labradorVariables.indexOf(keyVal[0]) !== -1;
+	}).map(function (keyVal) {
+		return keyVal[1];
+	});
+}
+
+var geo_module = {
 	getContinentCode: getContinentCode,
 	getCountryCode: getCountryCode,
 	getRegionCode: getRegionCode,
 	getSamplingResults: getSamplingResults,
 	isProperGeo: isProperGeo,
-	resetSamplingCache: resetSamplingCache
-});
+	resetSamplingCache: resetSamplingCache,
+	mapSamplingResults: mapSamplingResults
+};
+
+/* harmony default export */ var geo = (geo_module);
 // EXTERNAL MODULE: external "@wikia/ad-engine"
 var ad_engine_ = __webpack_require__(0);
 
@@ -7579,7 +7605,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v9.0.0');
+set_default()(window, versionField, 'v9.0.1');
 
 
 
