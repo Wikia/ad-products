@@ -69,7 +69,7 @@ function overridePredictions(response) {
 class BillTheLizard {
 	constructor() {
 		this.executor = new Executor();
-		this.projects = new ProjectsHandler();
+		this.projectsHandler = new ProjectsHandler();
 		this.predictions = {};
 	}
 
@@ -83,7 +83,7 @@ class BillTheLizard {
 		const endpoint = context.get('services.billTheLizard.endpoint');
 		const parameters = context.get('services.billTheLizard.parameters');
 		const timeout = context.get('services.billTheLizard.timeout');
-		const models = this.projects.getEnabledModels();
+		const models = this.projectsHandler.getEnabledModels();
 
 		if (!models || models.length < 1) {
 			utils.logger(logGroup, 'no models to predict');
@@ -98,7 +98,7 @@ class BillTheLizard {
 			.then((response) => {
 				const predictions = this.parsePredictions(response);
 
-				this.executor.executeActions(models, response);
+				this.executor.executeMethods(models, response);
 
 				return predictions;
 			});

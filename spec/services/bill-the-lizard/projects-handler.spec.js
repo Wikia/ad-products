@@ -5,7 +5,7 @@ import {ProjectsHandler} from '../../../src/services/bill-the-lizard/projects-ha
 describe('Bill the Lizard projects handler', () => {
 	let projects;
 
-	beforeEach(function () {
+	beforeEach(() => {
 		projects = new ProjectsHandler();
 
 		context.set('services.billTheLizard.projects', {

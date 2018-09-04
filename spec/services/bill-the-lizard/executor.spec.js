@@ -7,7 +7,7 @@ describe('Bill the Lizard projects handler', () => {
 	let executor;
 	let sandbox;
 
-	beforeEach(function () {
+	beforeEach(() => {
 		executor = new Executor();
 		executor.register('incorrectType', 'string');
 		executor.register('correct', () => 'executed');
@@ -39,7 +39,7 @@ describe('Bill the Lizard projects handler', () => {
 		sinon.spy(executor.methods, 'correct');
 	});
 
-	afterEach(function () {
+	afterEach(() => {
 		sandbox.restore();
 	});
 
@@ -55,13 +55,13 @@ describe('Bill the Lizard projects handler', () => {
 		}).to.throw('incorrectType is not executable');
 	});
 
-	it('incorrect type throws an error', () => {
+	it('correct method can be executed', () => {
 		executor.execute('correct', 'foo', 0);
 
 		expect(executor.methods.correct.calledOnce).to.equal(true);
 	});
 
-	it('execute actions on executable models', () => {
+	it('execute methods on executable models', () => {
 		executor.register('onFooFailure', () => {});
 		executor.register('onFooSuccess', () => {});
 		executor.register('onBarFailure', () => {});
@@ -72,7 +72,7 @@ describe('Bill the Lizard projects handler', () => {
 		sinon.spy(executor.methods, 'onBarFailure');
 		sinon.spy(executor.methods, 'onBarSuccess');
 
-		executor.executeActions([
+		executor.executeMethods([
 			{
 				name: 'foo',
 				executable: true,

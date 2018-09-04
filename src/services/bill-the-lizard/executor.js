@@ -23,7 +23,7 @@ export class Executor {
 		callback(model, prediction);
 	}
 
-	executeActions(models, response) {
+	executeMethods(models, response) {
 		Object.keys(response).forEach((modelName) => {
 			const { result } = response[modelName];
 
@@ -32,12 +32,12 @@ export class Executor {
 				return;
 			}
 
-			const actions = executableModel[`on_${result}`];
-			if (!actions) {
+			const definedMethods = executableModel[`on_${result}`];
+			if (!definedMethods) {
 				return;
 			}
 
-			actions.forEach(methodName => this.execute(methodName, executableModel, result));
+			definedMethods.forEach(methodName => this.execute(methodName, executableModel, result));
 		});
 	}
 }

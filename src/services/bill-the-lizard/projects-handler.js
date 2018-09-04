@@ -5,16 +5,16 @@ const logGroup = 'project-handler';
 
 export class ProjectsHandler {
 	constructor() {
-		this.list = {};
+		this.projects = {};
 	}
 
 	enable(name) {
 		utils.logger(logGroup, `project ${name} enabled`);
-		this.list[name] = true;
+		this.projects[name] = true;
 	}
 
 	isEnabled(name) {
-		return !!this.list[name];
+		return !!this.projects[name];
 	}
 
 	getEnabledModels() {

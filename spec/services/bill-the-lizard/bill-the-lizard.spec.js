@@ -6,7 +6,7 @@ import {billTheLizard} from '../../../src/services/bill-the-lizard';
 describe('Bill the Lizard service', () => {
 	let requests = [];
 
-	beforeEach(function () {
+	beforeEach(() => {
 		requests = [];
 		window.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
 		window.XMLHttpRequest.onCreate = (req) => {
@@ -16,34 +16,31 @@ describe('Bill the Lizard service', () => {
 			enabled: true,
 			host: 'http://service.com',
 			endpoint: 'predict',
-			models: [
-				'ctp_desktop'
-			],
 			projects: {
 				queen_of_hearts: [
 					{
 						name: 'ctp_desktop:1.0.0',
-						countries: ['XX' ],
+						countries: ['XX'],
 						on_0: ['logResult'],
-						on_1: [ 'logResult' ]
+						on_1: ['logResult']
 					},
 					{
 						name: 'queen_of_hearts:0.0.1',
-						countries: [ 'XX' ],
-						on_1: [ 'logResult' ]
+						countries: [ 'XX'],
+						on_1: ['logResult']
 					}
 				]
 			},
 			parameters: {
 				foo: 1,
 				bar: 'test',
-				echo: [ 'one', 'two' ]
+				echo: ['one', 'two']
 			},
 			timeout: 2000
 		});
 	});
 
-	afterEach(function () {
+	afterEach(() => {
 		window.XMLHttpRequest.restore();
 	});
 
@@ -103,7 +100,7 @@ describe('Bill the Lizard service', () => {
 	});
 
 	it('should call service with built url', () => {
-		billTheLizard.projects.enable('queen_of_hearts');
+		billTheLizard.projectsHandler.enable('queen_of_hearts');
 		billTheLizard.call();
 
 		const url = requests[0].url;

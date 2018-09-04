@@ -9,9 +9,9 @@ const enabledProjects = utils.queryString.get('enabled-project');
 context.extend(adContext);
 
 if (enabledProjects) {
-	enabledProjects.split(',').forEach(name => billTheLizard.projects.enable(name));
+	enabledProjects.split(',').forEach(name => billTheLizard.projectsHandler.enable(name));
 } else {
-	billTheLizard.projects.enable('queen_of_hearts');
+	billTheLizard.projectsHandler.enable('queen_of_hearts');
 }
 
 billTheLizard.executor.register('logResult', (model, prediction) => {
