@@ -2,8 +2,23 @@ import { context, utils } from '@wikia/ad-engine';
 import { Executor } from './executor';
 import { ProjectsHandler } from './projects-handler';
 
+/**
+ * @typedef {Object} ModelDefinition
+ * @property {boolean|undefined} executable
+ * @property {string[]} countries
+ * @property {string} name
+ * @property {function} on_*
+ */
+
 const logGroup = 'bill-the-lizard';
 
+/**
+ * Builds endpoint url
+ * @param {string} host
+ * @param {string} endpoint
+ * @param {Object} queryParameters (key-value pairs for query parameters)
+ * @returns {string}
+ */
 function buildUrl(host, endpoint, queryParameters = {}) {
 	const params = [];
 
@@ -14,6 +29,14 @@ function buildUrl(host, endpoint, queryParameters = {}) {
 	return `${host}/${endpoint}?${encodeURI(params.join('&'))}`;
 }
 
+/**
+ * Requests service
+ * @param {string} host
+ * @param {string} endpoint
+ * @param {Object} queryParameters (key-value pairs for query parameters)
+ * @param {number} timeout
+ * @returns {Promise}
+ */
 function httpRequest(host, endpoint, queryParameters = {}, timeout = 0) {
 	const request = new window.XMLHttpRequest();
 	const url = buildUrl(host, endpoint, queryParameters);
@@ -43,6 +66,12 @@ function httpRequest(host, endpoint, queryParameters = {}, timeout = 0) {
 	});
 }
 
+/**
+ * Builds key-value pairs for query parameters
+ * @param {ModelDefinition[]} models
+ * @param {Object} parameters (key-value pairs)
+ * @returns {Object}
+ */
 function getQueryParameters(models, parameters) {
 	const now = new Date();
 	const day = now.getDay() - 1;
@@ -54,6 +83,11 @@ function getQueryParameters(models, parameters) {
 	}, parameters);
 }
 
+/**
+ * Overrides predictions based on response
+ * @param {Object} response
+ * @returns {Object}
+ */
 function overridePredictions(response) {
 	Object.keys(response).forEach((name) => {
 		const newValue = utils.queryString.get(`bill.${name}`);
@@ -66,6 +100,9 @@ function overridePredictions(response) {
 	return response;
 }
 
+/**
+ * Bill the Lizard service handler
+ */
 class BillTheLizard {
 	constructor() {
 		this.executor = new Executor();
@@ -73,6 +110,10 @@ class BillTheLizard {
 		this.predictions = {};
 	}
 
+	/**
+	 * Requests service, executes defined methods and parses response
+	 * @returns {Promise}
+	 */
 	call() {
 		if (!context.get('services.billTheLizard.enabled')) {
 			utils.logger(logGroup, 'disabled');
@@ -104,6 +145,11 @@ class BillTheLizard {
 			});
 	}
 
+	/**
+	 * Parses predictions based on response
+	 * @param {Object} response
+	 * @returns {Object}
+	 */
 	parsePredictions(response) {
 		this.predictions = {};
 		Object.keys(response).forEach((key) => {
@@ -120,14 +166,27 @@ class BillTheLizard {
 		return this.predictions;
 	}
 
+	/**
+	 * Returns prediction for given model name
+	 * @param {string} modelName
+	 * @returns {number|undefined}
+	 */
 	getPrediction(modelName) {
 		return this.predictions[modelName];
 	}
 
+	/**
+	 * Returns all (parsed) predictions
+	 * @returns {Object}
+	 */
 	getPredictions() {
 		return this.predictions;
 	}
 
+	/**
+	 * Serializes all predictions
+	 * @returns {string}
+	 */
 	serialize() {
 		return Object.keys(this.predictions).map(key => `${key}=${this.predictions[key]}`).join(';');
 	}

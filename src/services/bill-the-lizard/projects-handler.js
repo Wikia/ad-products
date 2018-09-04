@@ -3,20 +3,36 @@ import { isProperGeo } from '../../utils';
 
 const logGroup = 'project-handler';
 
+/**
+ * Bill the Lizard projects handler
+ */
 export class ProjectsHandler {
 	constructor() {
 		this.projects = {};
 	}
 
+	/**
+	 * Enables project by name
+	 * @param {string} name
+	 */
 	enable(name) {
 		utils.logger(logGroup, `project ${name} enabled`);
 		this.projects[name] = true;
 	}
 
+	/**
+	 * Checks whether project is enabled
+	 * @param {string} name
+	 * @returns {boolean}
+	 */
 	isEnabled(name) {
 		return !!this.projects[name];
 	}
 
+	/**
+	 * Returns all geo-enabled models' definitions based on enabled projects
+	 * @returns {ModelDefinition[]}
+	 */
 	getEnabledModels() {
 		const projects = context.get('services.billTheLizard.projects');
 		const enabledProjectNames = Object.keys(projects).filter(name => this.isEnabled(name));
