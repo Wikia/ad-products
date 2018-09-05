@@ -1,3 +1,11 @@
+import { slotService, utils } from '@wikia/ad-engine';
+
+const disabledSlots = utils.queryString.get('disabled-slots');
+
+if (disabledSlots) {
+	disabledSlots.split(',').forEach(slotName => slotService.disable(slotName));
+}
+
 export default {
 	src: 'test',
 	adUnitId: '/5441/wka.life/_project43//{custom.namespace}/{slotConfig.targeting.src}/{slotConfig.slotName}',
