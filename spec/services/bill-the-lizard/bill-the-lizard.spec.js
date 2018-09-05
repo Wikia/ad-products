@@ -26,7 +26,7 @@ describe('Bill the Lizard service', () => {
 					},
 					{
 						name: 'queen_of_hearts:0.0.1',
-						countries: [ 'XX'],
+						countries: ['XX'],
 						on_1: ['logResult']
 					}
 				]
@@ -45,14 +45,14 @@ describe('Bill the Lizard service', () => {
 	});
 
 	it('should return empty array of predictions if nothing was parsed', () => {
-		billTheLizard.parsePredictions({});
+		billTheLizard.parsePredictions({}, {});
 
 		expect(JSON.stringify(billTheLizard.getPredictions())).to.equal('{}');
 		expect(billTheLizard.serialize()).to.equal('');
 	});
 
 	it('should return parsed prediction', () => {
-		billTheLizard.parsePredictions({
+		billTheLizard.parsePredictions([], {
 			foo: {
 				result: 1,
 				version: '1.0.0'
@@ -65,7 +65,7 @@ describe('Bill the Lizard service', () => {
 	});
 
 	it('should return parsed predictions', () => {
-		billTheLizard.parsePredictions({
+		billTheLizard.parsePredictions([], {
 			foo: {
 				result: 1,
 				version: '1.0.0'
@@ -81,6 +81,27 @@ describe('Bill the Lizard service', () => {
 		expect(billTheLizard.getPredictions()['bar:0.0.0']).to.equal(0);
 		expect(billTheLizard.getPrediction('bar:0.0.0')).to.equal(0);
 		expect(billTheLizard.serialize()).to.equal('foo:1.0.0=1;bar:0.0.0=0');
+	});
+
+	it('dfp targeting should be set after parsing predictions', () => {
+		billTheLizard.parsePredictions([
+			{
+				name: 'foo',
+				dfpTargeting: true
+			}
+		], {
+			foo: {
+				result: 1,
+				version: '1.0.0'
+			},
+			bar: {
+				result: 0,
+				version: '0.0.0'
+			}
+		});
+
+		expect(context.get('targeting.btl').length).to.equal(1);
+		expect(context.get('targeting.btl.0')).to.equal('foo:1.0.0_1');
 	});
 
 	it('should not call service if it is disabled in context', () => {

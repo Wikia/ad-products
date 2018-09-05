@@ -137,7 +137,7 @@ class BillTheLizard {
 		return httpRequest(host, endpoint, queryParameters, timeout)
 			.then(response => overridePredictions(response))
 			.then((response) => {
-				const predictions = this.parsePredictions(response);
+				const predictions = this.parsePredictions(models, response);
 
 				this.executor.executeMethods(models, response);
 
@@ -147,19 +147,31 @@ class BillTheLizard {
 
 	/**
 	 * Parses predictions based on response
+	 * @param {ModelDefinition[]} models
 	 * @param {Object} response
 	 * @returns {Object}
 	 */
-	parsePredictions(response) {
+	parsePredictions(models, response) {
+		const targeting = [];
 		this.predictions = {};
+
 		Object.keys(response).forEach((key) => {
+			const model = models.find(definition => definition.name === key);
 			const { result, version } = response[key];
 			const suffix = key.indexOf(version) > 0 ? '' : `:${version}`;
 
 			if (typeof result !== 'undefined') {
 				this.predictions[`${key}${suffix}`] = result;
+
+				if (model && model.dfpTargeting) {
+					targeting.push(`${key}${suffix}_${result}`);
+				}
 			}
 		});
+
+		if (targeting.length > 0) {
+			context.set('targeting.btl', targeting);
+		}
 
 		utils.logger(logGroup, 'predictions', this.predictions);
 
