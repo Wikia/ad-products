@@ -87,7 +87,7 @@ describe('Bill the Lizard service', () => {
 		billTheLizard.parsePredictions([
 			{
 				name: 'foo',
-				dfpTargeting: true
+				dfp_targeting: true
 			}
 		], {
 			foo: {

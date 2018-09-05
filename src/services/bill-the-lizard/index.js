@@ -163,7 +163,7 @@ class BillTheLizard {
 			if (typeof result !== 'undefined') {
 				this.predictions[`${key}${suffix}`] = result;
 
-				if (model && model.dfpTargeting) {
+				if (model && model.dfp_targeting) {
 					targeting.push(`${key}${suffix}_${result}`);
 				}
 			}
