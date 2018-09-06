@@ -24,9 +24,6 @@ export class Roadblock {
 	init(params) {
 		this.params = params;
 		this.params.adProduct = 'ruap';
-
-		universalAdPackage.setUapId(params.uap);
-		universalAdPackage.setType('ruap');
 		universalAdPackage.init(this.params, this.config.slotsToEnable, this.config.slotsToDisable);
 	}
 }
