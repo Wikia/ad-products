@@ -4,6 +4,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 const get = require('lodash/get');
@@ -104,7 +105,10 @@ const environments = {
 		},
 		plugins: [
 			new MiniCssExtractPlugin({ filename: '[name]/dist/styles.css' }),
-			new StringReplacePlugin()
+			new StringReplacePlugin(),
+			new CopyWebpackPlugin([
+				{ from: path.resolve(__dirname, 'lib/prebid.min.js'), to: 'vendor/dist/prebid.min.js' }
+			])
 		],
 		resolve: {
 			alias: {

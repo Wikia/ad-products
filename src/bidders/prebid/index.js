@@ -8,9 +8,16 @@ import { getAvailableBidsByAdUnitCode, setupAdUnits } from './prebid-helper';
 
 export const prebidLazyRun = method => (...args) => window.pbjs.que.push(() => method.apply(this, args));
 
+const logGroup = 'prebid';
+
+window.pbjs = window.pbjs || {};
+window.pbjs.que = window.pbjs.que || [];
+
 export class Prebid extends BaseBidder {
 	constructor(bidderConfig, timeout = 2000) {
 		super('prebid', bidderConfig, timeout);
+
+		this.insertScript();
 
 		this.loaded = false;
 		this.lazyLoaded = false;
@@ -81,6 +88,25 @@ export class Prebid extends BaseBidder {
 				this.lazyCall(bidsBackHandler);
 			});
 		}
+	}
+
+	insertScript() {
+		const libraryUrl = context.get('bidders.prebid.libraryUrl');
+
+		if (!libraryUrl) {
+			utils.logger(logGroup, 'Prebid library URL not defined. Assuming that window.pbjs will be loaded.');
+			return;
+		}
+
+		const script = document.createElement('script');
+
+		script.type = 'text/javascript';
+		script.async = true;
+		script.src = libraryUrl;
+
+		const node = document.getElementsByTagName('script')[0];
+
+		node.parentNode.insertBefore(script, node);
 	}
 
 	lazyCall(bidsBackHandler) {
@@ -163,19 +189,21 @@ export class Prebid extends BaseBidder {
 	}
 
 	registerBidsRefreshing() {
-		window.pbjs.onEvent('bidWon', (winningBid) => {
-			if (this.bidsRefreshing.slots.indexOf(winningBid.adUnitCode) !== -1) {
-				const adUnitsToRefresh = this.adUnits.filter(
-					adUnit => (
-						adUnit.code === winningBid.adUnitCode &&
-						adUnit.bids &&
-						adUnit.bids[0] &&
-						adUnit.bids[0].bidder === winningBid.bidderCode
-					)
-				);
+		window.pbjs.que.push(() => {
+			window.pbjs.onEvent('bidWon', (winningBid) => {
+				if (this.bidsRefreshing.slots.indexOf(winningBid.adUnitCode) !== -1) {
+					const adUnitsToRefresh = this.adUnits.filter(
+						adUnit => (
+							adUnit.code === winningBid.adUnitCode &&
+							adUnit.bids &&
+							adUnit.bids[0] &&
+							adUnit.bids[0].bidder === winningBid.bidderCode
+						)
+					);
 
-				this.requestBids(adUnitsToRefresh);
-			}
+					this.requestBids(adUnitsToRefresh);
+				}
+			});
 		});
 	}
 

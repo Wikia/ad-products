@@ -1,13 +1,13 @@
 {
   "name": "@wikia/ad-products",
-  "version": "8.5.1",
+  "version": "9.0.3",
   "description": "Wikia ad products",
   "repository": {
     "type": "git",
     "url": "https://github.com/Wikia/ad-products"
   },
   "dependencies": {
-    "@wikia/ad-engine": "git+https://github.com/Wikia/ad-engine.git#v13.1.2",
+    "@wikia/ad-engine": "git+https://github.com/Wikia/ad-engine.git#435b8e402f512f0b8578157b0073eb78307e6a3e",
     "core-decorators": "^0.20.0",
     "events": "^1.1.1",
     "js-cookie": "^2.1.4",
@@ -26,6 +26,7 @@
     "babel-plugin-transform-runtime": "6.23.0",
     "babel-preset-env": "1.7.0",
     "chai": "^4.1.2",
+    "copy-webpack-plugin": "4.5.2",
     "css-loader": "^0.28.7",
     "eslint": "4.19.1",
     "eslint-config-airbnb": "16.1.0",
@@ -53,6 +54,7 @@
   },
   "files": [
     "dist/",
+    "lib/",
     "src/",
     "jsconfig.json",
     "README.md"

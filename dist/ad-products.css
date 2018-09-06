@@ -207,9 +207,14 @@
     position: absolute;
     width: 100%;
     top: 0; }
+  .gpt-ad.bfaa-template.porvata .video-player > iframe,
   .gpt-ad.bfaa-template.mobile-porvata .video-player > iframe,
+  .gpt-ad.bfab-template.porvata .video-player > iframe,
   .gpt-ad.bfab-template.mobile-porvata .video-player > iframe {
     z-index: -1; }
+  .gpt-ad.bfaa-template .porvata-video,
+  .gpt-ad.bfab-template .porvata-video {
+    background-color: transparent !important; }
   .gpt-ad.bfaa-template .button-unstick,
   .gpt-ad.bfab-template .button-unstick {
     padding: 6px;
