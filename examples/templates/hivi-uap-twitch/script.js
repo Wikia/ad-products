@@ -10,7 +10,7 @@ templateService.register(BigFancyAdAbove);
 
 new AdEngine(customContext).init();
 
-// UAP Twitch experiments
+// ===== UAP Twitch experiments =====
 const identifier = 'UAPTwitchTest';
 const options = {
 	width: 854,
@@ -18,3 +18,5 @@ const options = {
 	channel: 'dallas',
 };
 const player = new TwitchPlayer(identifier, options);
+
+player.setVolume(0.75);
