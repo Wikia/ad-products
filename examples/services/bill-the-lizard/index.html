@@ -6,16 +6,44 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
 		<link rel="stylesheet" href="../../vendor/dist/styles.css" type="text/css" />
 		<script type="text/javascript" src="../../vendor/dist/vendor.js"></script>
+		<script type="text/javascript">
+			var googletag = window.googletag || {};
+			googletag.cmd = googletag.cmd || [];
+
+			(function() {
+				var gads = document.createElement('script'),
+					useSSL = 'https:' == document.location.protocol,
+					node = document.getElementsByTagName('script')[0];
+
+				gads.async = true;
+				gads.type = 'text/javascript';
+				gads.src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/gpt.js';
+				node.parentNode.insertBefore(gads, node);
+			})();
+		</script>
 	</head>
 	<body>
+		<script>
+			window.adsQueue = window.adsQueue || [];
+		</script>
 		<div class="wrapper">
 			<header class="header">
 				<div id="top_leaderboard" class="top-leaderboard"></div>
+				<script>
+					window.adsQueue.push({
+						id: 'top_leaderboard'
+					});
+				</script>
 			</header>
 			<article class="main">
+				<strong>Enable project by:</strong>
+				<pre>?enabled-project=project_name,foo,...</pre>
+				<strong>Override requested predictions:</strong>
+				<pre>?bill.queen_of_hearts:0.0.1=0</pre>
+				<hr />
 				<strong>Bill the Lizard predictions:</strong>
 				<pre id="predictions">Waiting...</pre>
-				<strong>serialized:</strong>
+				<strong>Serialized:</strong>
 				<pre id="serialized">Waiting...</pre>
 				<p>Lorem ipsum dolor sit amet, vix esse repudiandae et, cu vis etiam falli. Illud exerci aliquip ei his. Quis iudicabit in quo, vis et minim noster deseruisse. Eius vidisse repudiare in duo, possim audiam eu has. Eum an iudico mandamus dissentiunt.</p>
 				<p>Te veniam conceptam qui, per no case feugait. Affert iriure nonumes no eos, est minimum recteque ea, ei mea nibh consetetur. Ubique salutatus adversarium at sed. Ex erroribus sententiae reprimique sed, qui no viderer inimicus pericula, ei eam delicata concludaturque. Pri te nemore constituam.</p>

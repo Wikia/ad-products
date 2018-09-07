@@ -99,16 +99,33 @@ export default {
 			enabled: true,
 			host: 'https://services.wikia-dev.pl',
 			endpoint: 'bill-the-lizard/predict',
-			models: [
-				'ctp_desktop'
-			],
+			projects: {
+				queen_of_hearts: [
+					{
+						name: 'ctp_desktop:1.0.0',
+						countries: ['XX/50'],
+						on_0: ['logResult'],
+						on_1: ['logResult']
+					},
+					{
+						name: 'queen_of_hearts:0.0.1',
+						countries: ['XX'],
+						dfp_targeting: true,
+						on_1: ['logResult']
+					}
+				]
+			},
 			parameters: {
 				device: 'tablet',
 				v1: 'Fgas3ooM',
 				geo: 'PL',
 				wiki_id: 245424,
 				vtags: 'Twin Peaks',
-				esrb: 'mature'
+				esrb: 'mature',
+				s0v: 'tv',
+				ref: 'direct',
+				top_1k: 0,
+				s2: 'article',
 			},
 			timeout: 2000
 		}

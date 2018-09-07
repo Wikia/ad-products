@@ -6,7 +6,7 @@ import {billTheLizard} from '../../../src/services/bill-the-lizard';
 describe('Bill the Lizard service', () => {
 	let requests = [];
 
-	beforeEach(function () {
+	beforeEach(() => {
 		requests = [];
 		window.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
 		window.XMLHttpRequest.onCreate = (req) => {
@@ -16,31 +16,43 @@ describe('Bill the Lizard service', () => {
 			enabled: true,
 			host: 'http://service.com',
 			endpoint: 'predict',
-			models: [
-				'ctp_desktop'
-			],
+			projects: {
+				queen_of_hearts: [
+					{
+						name: 'ctp_desktop:1.0.0',
+						countries: ['XX'],
+						on_0: ['logResult'],
+						on_1: ['logResult']
+					},
+					{
+						name: 'queen_of_hearts:0.0.1',
+						countries: ['XX'],
+						on_1: ['logResult']
+					}
+				]
+			},
 			parameters: {
 				foo: 1,
 				bar: 'test',
-				echo: [ 'one', 'two' ]
+				echo: ['one', 'two']
 			},
 			timeout: 2000
 		});
 	});
 
-	afterEach(function () {
+	afterEach(() => {
 		window.XMLHttpRequest.restore();
 	});
 
 	it('should return empty array of predictions if nothing was parsed', () => {
-		billTheLizard.parsePredictions({});
+		billTheLizard.parsePredictions({}, {});
 
 		expect(JSON.stringify(billTheLizard.getPredictions())).to.equal('{}');
 		expect(billTheLizard.serialize()).to.equal('');
 	});
 
 	it('should return parsed prediction', () => {
-		billTheLizard.parsePredictions({
+		billTheLizard.parsePredictions([], {
 			foo: {
 				result: 1,
 				version: '1.0.0'
@@ -53,7 +65,7 @@ describe('Bill the Lizard service', () => {
 	});
 
 	it('should return parsed predictions', () => {
-		billTheLizard.parsePredictions({
+		billTheLizard.parsePredictions([], {
 			foo: {
 				result: 1,
 				version: '1.0.0'
@@ -69,6 +81,27 @@ describe('Bill the Lizard service', () => {
 		expect(billTheLizard.getPredictions()['bar:0.0.0']).to.equal(0);
 		expect(billTheLizard.getPrediction('bar:0.0.0')).to.equal(0);
 		expect(billTheLizard.serialize()).to.equal('foo:1.0.0=1;bar:0.0.0=0');
+	});
+
+	it('dfp targeting should be set after parsing predictions', () => {
+		billTheLizard.parsePredictions([
+			{
+				name: 'foo',
+				dfp_targeting: true
+			}
+		], {
+			foo: {
+				result: 1,
+				version: '1.0.0'
+			},
+			bar: {
+				result: 0,
+				version: '0.0.0'
+			}
+		});
+
+		expect(context.get('targeting.btl').length).to.equal(1);
+		expect(context.get('targeting.btl.0')).to.equal('foo:1.0.0_1');
 	});
 
 	it('should not call service if it is disabled in context', () => {
@@ -88,6 +121,7 @@ describe('Bill the Lizard service', () => {
 	});
 
 	it('should call service with built url', () => {
+		billTheLizard.projectsHandler.enable('queen_of_hearts');
 		billTheLizard.call();
 
 		const url = requests[0].url;
