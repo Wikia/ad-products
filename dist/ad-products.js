@@ -4346,7 +4346,7 @@ var bill_the_lizard_BillTheLizard = function () {
 			return httpRequest(host, endpoint, queryParameters, timeout).then(function (response) {
 				return overridePredictions(response);
 			}).then(function (response) {
-				var predictions = _this.parsePredictions(response);
+				var predictions = _this.parsePredictions(models, response);
 
 				_this.executor.executeMethods(models, response);
 
@@ -4356,17 +4356,23 @@ var bill_the_lizard_BillTheLizard = function () {
 
 		/**
    * Parses predictions based on response
+   * @param {ModelDefinition[]} models
    * @param {Object} response
    * @returns {Object}
    */
 
 	}, {
 		key: 'parsePredictions',
-		value: function parsePredictions(response) {
+		value: function parsePredictions(models, response) {
 			var _this2 = this;
 
+			var targeting = [];
 			this.predictions = {};
+
 			keys_default()(response).forEach(function (key) {
+				var model = models.find(function (definition) {
+					return definition.name === key;
+				});
 				var _response$key = response[key],
 				    result = _response$key.result,
 				    version = _response$key.version;
@@ -4375,8 +4381,16 @@ var bill_the_lizard_BillTheLizard = function () {
 
 				if (typeof result !== 'undefined') {
 					_this2.predictions['' + key + suffix] = result;
+
+					if (model && model.dfp_targeting) {
+						targeting.push('' + key + suffix + '_' + result);
+					}
 				}
 			});
+
+			if (targeting.length > 0) {
+				ad_engine_["context"].set('targeting.btl', targeting);
+			}
 
 			ad_engine_["utils"].logger(bill_the_lizard_logGroup, 'predictions', this.predictions);
 
@@ -7863,7 +7877,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v9.1.0');
+set_default()(window, versionField, 'v9.2.0');
 
 
 
