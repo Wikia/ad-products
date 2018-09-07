@@ -6,11 +6,34 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
 		<link rel="stylesheet" href="../../vendor/dist/styles.css" type="text/css" />
 		<script type="text/javascript" src="../../vendor/dist/vendor.js"></script>
+		<script type="text/javascript">
+			var googletag = window.googletag || {};
+			googletag.cmd = googletag.cmd || [];
+
+			(function() {
+				var gads = document.createElement('script'),
+					useSSL = 'https:' == document.location.protocol,
+					node = document.getElementsByTagName('script')[0];
+
+				gads.async = true;
+				gads.type = 'text/javascript';
+				gads.src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/gpt.js';
+				node.parentNode.insertBefore(gads, node);
+			})();
+		</script>
 	</head>
 	<body>
+		<script>
+			window.adsQueue = window.adsQueue || [];
+		</script>
 		<div class="wrapper">
 			<header class="header">
 				<div id="top_leaderboard" class="top-leaderboard"></div>
+				<script>
+					window.adsQueue.push({
+						id: 'top_leaderboard'
+					});
+				</script>
 			</header>
 			<article class="main">
 				<strong>Enable project by:</strong>

@@ -1,4 +1,4 @@
-import { context, utils } from '@wikia/ad-engine';
+import { AdEngine, context, utils } from '@wikia/ad-engine';
 import { billTheLizard } from '@wikia/ad-products';
 import adContext from '../../context';
 
@@ -27,3 +27,7 @@ billTheLizard.call()
 		predictionsElement.innerText = response.message;
 		serializedElement.innerText = billTheLizard.serialize();
 	});
+
+setTimeout(() => {
+	new AdEngine(context).init();
+}, 1000);

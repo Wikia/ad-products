@@ -110,6 +110,7 @@ export default {
 					{
 						name: 'queen_of_hearts:0.0.1',
 						countries: ['XX'],
+						dfp_targeting: true,
 						on_1: ['logResult']
 					}
 				]
