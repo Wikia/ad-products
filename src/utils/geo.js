@@ -200,11 +200,33 @@ export function isProperGeo(countryList = [], name = undefined) {
 	);
 }
 
-export default {
+/**
+ * Transform sampling results using supplied key-values map.
+ *
+ * @param {string[] | undefined} keyVals mapping
+ * @returns {string[]}
+ */
+export function mapSamplingResults(keyVals) {
+	if (!keyVals || !keyVals.length) {
+		return [];
+	}
+
+	const labradorVariables = module.getSamplingResults();
+
+	return keyVals
+		.map(keyVal => keyVal.split(':'))
+		.filter(keyVal => labradorVariables.indexOf(keyVal[0]) !== -1)
+		.map(keyVal => keyVal[1]);
+}
+
+const module = {
 	getContinentCode,
 	getCountryCode,
 	getRegionCode,
 	getSamplingResults,
 	isProperGeo,
-	resetSamplingCache
+	resetSamplingCache,
+	mapSamplingResults,
 };
+
+export default module;

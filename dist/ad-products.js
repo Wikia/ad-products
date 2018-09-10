@@ -1606,6 +1606,7 @@ __webpack_require__.d(utils_namespaceObject, "isProperContinent", function() { r
 __webpack_require__.d(utils_namespaceObject, "resetSamplingCache", function() { return resetSamplingCache; });
 __webpack_require__.d(utils_namespaceObject, "getSamplingResults", function() { return getSamplingResults; });
 __webpack_require__.d(utils_namespaceObject, "isProperGeo", function() { return isProperGeo; });
+__webpack_require__.d(utils_namespaceObject, "mapSamplingResults", function() { return mapSamplingResults; });
 __webpack_require__.d(utils_namespaceObject, "setupNpaContext", function() { return setupNpaContext; });
 var prebid_helper_namespaceObject = {};
 __webpack_require__.d(prebid_helper_namespaceObject, "setupAdUnits", function() { return setupAdUnits; });
@@ -1877,14 +1878,39 @@ function isProperGeo() {
 	return !!(countryList && countryList.indexOf && !isGeoExcluded(countryList) && (isProperContinent(countryList, name) || isProperCountry(countryList, name) || isProperRegion(countryList, name)));
 }
 
-/* harmony default export */ var geo = ({
+/**
+ * Transform sampling results using supplied key-values map.
+ *
+ * @param {string[] | undefined} keyVals mapping
+ * @returns {string[]}
+ */
+function mapSamplingResults(keyVals) {
+	if (!keyVals || !keyVals.length) {
+		return [];
+	}
+
+	var labradorVariables = geo_module.getSamplingResults();
+
+	return keyVals.map(function (keyVal) {
+		return keyVal.split(':');
+	}).filter(function (keyVal) {
+		return labradorVariables.indexOf(keyVal[0]) !== -1;
+	}).map(function (keyVal) {
+		return keyVal[1];
+	});
+}
+
+var geo_module = {
 	getContinentCode: getContinentCode,
 	getCountryCode: getCountryCode,
 	getRegionCode: getRegionCode,
 	getSamplingResults: getSamplingResults,
 	isProperGeo: isProperGeo,
-	resetSamplingCache: resetSamplingCache
-});
+	resetSamplingCache: resetSamplingCache,
+	mapSamplingResults: mapSamplingResults
+};
+
+/* harmony default export */ var geo = (geo_module);
 // EXTERNAL MODULE: external "@wikia/ad-engine"
 var ad_engine_ = __webpack_require__(0);
 
@@ -2151,13 +2177,9 @@ var a9_A9 = function (_BaseBidder) {
 				a9Slots = a9Slots.concat(this.slotsVideo.map(this.createVideoSlotDefinition));
 			}
 
-			var disabledSlots = ad_engine_["context"].get('bidders.disabledSlots');
-
-			if (disabledSlots) {
-				a9Slots = a9Slots.filter(function (slot) {
-					return disabledSlots.indexOf(slot.slotID) === -1;
-				});
-			}
+			a9Slots = a9Slots.filter(function (slot) {
+				return ad_engine_["slotService"].getState(slot.slotID);
+			});
 
 			window.apstag.fetchBids({
 				slots: a9Slots,
@@ -2866,11 +2888,10 @@ var pubmatic_Pubmatic = function (_BaseAdapter) {
 
 var lazyLoadSlots = ['bottom_leaderboard'];
 
-function isSlotAvailable(code, lazyLoad) {
-	var disabledSlots = ad_engine_["context"].get('bidders.disabledSlots');
+function isSlotApplicable(code, lazyLoad) {
 	var isSlotLazy = lazyLoadSlots.indexOf(code) !== -1;
 
-	if (disabledSlots && disabledSlots.indexOf(code) !== -1) {
+	if (!ad_engine_["slotService"].getState(code)) {
 		return false;
 	}
 
@@ -2892,7 +2913,7 @@ function setupAdUnits(adaptersConfig) {
 			var adapterAdUnits = adapter.prepareAdUnits();
 
 			adapterAdUnits.forEach(function (adUnit) {
-				if (adUnit && isSlotAvailable(adUnit.code, lazyLoad)) {
+				if (adUnit && isSlotApplicable(adUnit.code, lazyLoad)) {
 					adUnits.push(adUnit);
 				}
 			});
@@ -3991,6 +4012,175 @@ function getAdProductInfo(slotName, loadedTemplate, loadedProduct) {
 var object_assign = __webpack_require__(14);
 var assign_default = /*#__PURE__*/__webpack_require__.n(object_assign);
 
+// CONCATENATED MODULE: ./src/services/bill-the-lizard/executor.js
+
+
+
+
+
+var executor_logGroup = 'executor';
+
+/**
+ * Bill the Lizard methods executor
+ */
+var executor_Executor = function () {
+	function Executor() {
+		classCallCheck_default()(this, Executor);
+
+		this.methods = {};
+	}
+
+	/**
+  * Registeres new method
+  * @param {string} name
+  * @param {function} callback
+  */
+
+
+	createClass_default()(Executor, [{
+		key: 'register',
+		value: function register(name, callback) {
+			ad_engine_["utils"].logger(executor_logGroup, 'method ' + name + ' registered');
+			this.methods[name] = callback;
+		}
+
+		/**
+   * Executes method by name
+   * @param {string} methodName
+   * @param {ModelDefinition} model
+   * @param {number|undefined} prediction
+   */
+
+	}, {
+		key: 'execute',
+		value: function execute(methodName, model, prediction) {
+			var callback = this.methods[methodName];
+
+			if (typeof callback !== 'function') {
+				throw Error(methodName + ' is not executable');
+			}
+
+			ad_engine_["utils"].logger(executor_logGroup, 'executing ' + methodName + ' method', model.name, prediction);
+			callback(model, prediction);
+		}
+
+		/**
+   * Executes all methods defined in given model based on service response
+   * @param {ModelDefinition[]} models
+   * @param {Object} response
+   */
+
+	}, {
+		key: 'executeMethods',
+		value: function executeMethods(models, response) {
+			var _this = this;
+
+			keys_default()(response).forEach(function (modelName) {
+				var result = response[modelName].result;
+
+
+				var executableModel = models.find(function (model) {
+					return model.name === modelName && model.executable;
+				});
+				if (!executableModel) {
+					return;
+				}
+
+				var definedMethods = executableModel['on_' + result];
+				if (!definedMethods) {
+					return;
+				}
+
+				definedMethods.forEach(function (methodName) {
+					return _this.execute(methodName, executableModel, result);
+				});
+			});
+		}
+	}]);
+
+	return Executor;
+}();
+// CONCATENATED MODULE: ./src/services/bill-the-lizard/projects-handler.js
+
+
+
+
+
+
+var projects_handler_logGroup = 'project-handler';
+
+/**
+ * Bill the Lizard projects handler
+ */
+var projects_handler_ProjectsHandler = function () {
+	function ProjectsHandler() {
+		classCallCheck_default()(this, ProjectsHandler);
+
+		this.projects = {};
+	}
+
+	/**
+  * Enables project by name
+  * @param {string} name
+  */
+
+
+	createClass_default()(ProjectsHandler, [{
+		key: 'enable',
+		value: function enable(name) {
+			ad_engine_["utils"].logger(projects_handler_logGroup, 'project ' + name + ' enabled');
+			this.projects[name] = true;
+		}
+
+		/**
+   * Checks whether project is enabled
+   * @param {string} name
+   * @returns {boolean}
+   */
+
+	}, {
+		key: 'isEnabled',
+		value: function isEnabled(name) {
+			return !!this.projects[name];
+		}
+
+		/**
+   * Returns all geo-enabled models' definitions based on enabled projects
+   * @returns {ModelDefinition[]}
+   */
+
+	}, {
+		key: 'getEnabledModels',
+		value: function getEnabledModels() {
+			var _this = this;
+
+			var projects = ad_engine_["context"].get('services.billTheLizard.projects');
+			var enabledProjectNames = keys_default()(projects).filter(function (name) {
+				return _this.isEnabled(name);
+			});
+			var models = [];
+
+			enabledProjectNames.forEach(function (name) {
+				// Only first enabled model in project is executable
+				var isNextModelExecutable = true;
+
+				projects[name].forEach(function (model) {
+					if (isProperGeo(model.countries, model.name)) {
+						model.executable = isNextModelExecutable;
+						isNextModelExecutable = false;
+						models.push(model);
+					} else {
+						model.executable = false;
+					}
+				});
+			});
+
+			return models;
+		}
+	}]);
+
+	return ProjectsHandler;
+}();
 // CONCATENATED MODULE: ./src/services/bill-the-lizard/index.js
 
 
@@ -3999,8 +4189,25 @@ var assign_default = /*#__PURE__*/__webpack_require__.n(object_assign);
 
 
 
+
+
+/**
+ * @typedef {Object} ModelDefinition
+ * @property {boolean|undefined} executable
+ * @property {string[]} countries
+ * @property {string} name
+ * @property {function} on_*
+ */
+
 var bill_the_lizard_logGroup = 'bill-the-lizard';
 
+/**
+ * Builds endpoint url
+ * @param {string} host
+ * @param {string} endpoint
+ * @param {Object} queryParameters (key-value pairs for query parameters)
+ * @returns {string}
+ */
 function buildUrl(host, endpoint) {
 	var queryParameters = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -4013,6 +4220,14 @@ function buildUrl(host, endpoint) {
 	return host + '/' + endpoint + '?' + encodeURI(params.join('&'));
 }
 
+/**
+ * Requests service
+ * @param {string} host
+ * @param {string} endpoint
+ * @param {Object} queryParameters (key-value pairs for query parameters)
+ * @param {number} timeout
+ * @returns {Promise}
+ */
 function httpRequest(host, endpoint) {
 	var queryParameters = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 	var timeout = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
@@ -4045,23 +4260,60 @@ function httpRequest(host, endpoint) {
 	});
 }
 
+/**
+ * Builds key-value pairs for query parameters
+ * @param {ModelDefinition[]} models
+ * @param {Object} parameters (key-value pairs)
+ * @returns {Object}
+ */
 function getQueryParameters(models, parameters) {
 	var now = new Date();
 	var day = now.getDay() - 1;
 
 	return assign_default()({}, {
-		models: models,
+		models: models.map(function (model) {
+			return model.name;
+		}),
 		h: now.getHours(),
 		dow: day === -1 ? 6 : day
 	}, parameters);
 }
 
+/**
+ * Overrides predictions based on response
+ * @param {Object} response
+ * @returns {Object}
+ */
+function overridePredictions(response) {
+	keys_default()(response).forEach(function (name) {
+		var newValue = ad_engine_["utils"].queryString.get('bill.' + name);
+
+		if (newValue) {
+			response[name].result = parseInt(newValue, 10);
+		}
+	});
+
+	return response;
+}
+
+/**
+ * Bill the Lizard service handler
+ */
+
 var bill_the_lizard_BillTheLizard = function () {
 	function BillTheLizard() {
 		classCallCheck_default()(this, BillTheLizard);
 
+		this.executor = new executor_Executor();
+		this.projectsHandler = new projects_handler_ProjectsHandler();
 		this.predictions = {};
 	}
+
+	/**
+  * Requests service, executes defined methods and parses response
+  * @returns {Promise}
+  */
+
 
 	createClass_default()(BillTheLizard, [{
 		key: 'call',
@@ -4077,9 +4329,9 @@ var bill_the_lizard_BillTheLizard = function () {
 
 			var host = ad_engine_["context"].get('services.billTheLizard.host');
 			var endpoint = ad_engine_["context"].get('services.billTheLizard.endpoint');
-			var models = ad_engine_["context"].get('services.billTheLizard.models');
 			var parameters = ad_engine_["context"].get('services.billTheLizard.parameters');
 			var timeout = ad_engine_["context"].get('services.billTheLizard.timeout');
+			var models = this.projectsHandler.getEnabledModels();
 
 			if (!models || models.length < 1) {
 				ad_engine_["utils"].logger(bill_the_lizard_logGroup, 'no models to predict');
@@ -4092,41 +4344,87 @@ var bill_the_lizard_BillTheLizard = function () {
 			ad_engine_["utils"].logger(bill_the_lizard_logGroup, 'calling service', host, endpoint, queryParameters);
 
 			return httpRequest(host, endpoint, queryParameters, timeout).then(function (response) {
-				return _this.parsePredictions(response);
+				return overridePredictions(response);
+			}).then(function (response) {
+				var predictions = _this.parsePredictions(models, response);
+
+				_this.executor.executeMethods(models, response);
+
+				return predictions;
 			});
 		}
+
+		/**
+   * Parses predictions based on response
+   * @param {ModelDefinition[]} models
+   * @param {Object} response
+   * @returns {Object}
+   */
+
 	}, {
 		key: 'parsePredictions',
-		value: function parsePredictions(response) {
+		value: function parsePredictions(models, response) {
 			var _this2 = this;
 
+			var targeting = [];
 			this.predictions = {};
+
 			keys_default()(response).forEach(function (key) {
+				var model = models.find(function (definition) {
+					return definition.name === key;
+				});
 				var _response$key = response[key],
 				    result = _response$key.result,
 				    version = _response$key.version;
 
-				var suffix = key.indexOf('version') > 0 ? '' : ':' + version;
+				var suffix = key.indexOf(version) > 0 ? '' : ':' + version;
 
 				if (typeof result !== 'undefined') {
 					_this2.predictions['' + key + suffix] = result;
+
+					if (model && model.dfp_targeting) {
+						targeting.push('' + key + suffix + '_' + result);
+					}
 				}
 			});
+
+			if (targeting.length > 0) {
+				ad_engine_["context"].set('targeting.btl', targeting);
+			}
 
 			ad_engine_["utils"].logger(bill_the_lizard_logGroup, 'predictions', this.predictions);
 
 			return this.predictions;
 		}
+
+		/**
+   * Returns prediction for given model name
+   * @param {string} modelName
+   * @returns {number|undefined}
+   */
+
 	}, {
 		key: 'getPrediction',
 		value: function getPrediction(modelName) {
 			return this.predictions[modelName];
 		}
+
+		/**
+   * Returns all (parsed) predictions
+   * @returns {Object}
+   */
+
 	}, {
 		key: 'getPredictions',
 		value: function getPredictions() {
 			return this.predictions;
 		}
+
+		/**
+   * Serializes all predictions
+   * @returns {string}
+   */
+
 	}, {
 		key: 'serialize',
 		value: function serialize() {
@@ -4236,6 +4534,108 @@ var floating_rail_FloatingRail = function () {
 	}]);
 
 	return FloatingRail;
+}();
+// CONCATENATED MODULE: ./src/templates/skin.js
+
+
+
+
+var skin_Skin = function () {
+	createClass_default()(Skin, null, [{
+		key: 'getName',
+		value: function getName() {
+			return 'skin';
+		}
+	}, {
+		key: 'getDefaultConfig',
+		value: function getDefaultConfig() {
+			return {
+				wrapperSelector: '#ad-skin',
+				zIndex: 1
+			};
+		}
+	}]);
+
+	function Skin() {
+		classCallCheck_default()(this, Skin);
+
+		this.config = ad_engine_["context"].get('templates.skin');
+		this.adSkin = document.querySelector(this.config.wrapperSelector);
+	}
+
+	/**
+  * Initializes the Skin unit
+  *
+  * @param {Object} params
+  * @param {string} params.destUrl - URL to go when the background is clicked
+  * @param {string} params.skinImage - URL of the 1700x800 image to show in the background
+  * @param {string} params.backgroundColor - background color to use (rrggbb, without leading #)
+  * @param {string} [params.middleColor] - color to use in the middle (rrggbb, without leading #)
+  * @param {Array} params.pixels - URLs of tracking pixels to append when showing the skin
+  */
+
+
+	createClass_default()(Skin, [{
+		key: 'init',
+		value: function init(params) {
+			this.params = params;
+			this.params.adProduct = 'skin';
+
+			this.setAdSkinStyle(params.skinImage, params.backgroundColor);
+
+			this.adSkin.onclick = function () {
+				window.open(params.destUrl);
+			};
+
+			if (params.pixels) {
+				this.setTrackingPixels(params.pixels);
+			}
+
+			this.adSkin.classList.remove('hide');
+		}
+
+		/**
+   * Sets styles for ad skin wrapper
+   *
+   * @param params
+   */
+
+	}, {
+		key: 'setAdSkinStyle',
+		value: function setAdSkinStyle(image, color) {
+			this.adSkin.style.position = 'fixed';
+			this.adSkin.style.height = '100%';
+			this.adSkin.style.width = '100%';
+			this.adSkin.style.left = 0;
+			this.adSkin.style.top = 0;
+			this.adSkin.style.zIndex = this.config.zIndex;
+			this.adSkin.style.cursor = 'pointer';
+			this.adSkin.style.background = 'url("' + image + '") no-repeat top center #' + color;
+		}
+
+		/**
+   * Goes through pixels array and adds 1x1 pixel images
+   *
+   * @param pixels
+   */
+
+	}, {
+		key: 'setTrackingPixels',
+		value: function setTrackingPixels(pixels) {
+			for (var i = 0, len = pixels.length; i < len; i += 1) {
+				var pixelUrl = pixels[i];
+				if (pixelUrl) {
+					var pixelElement = document.createElement('img');
+					pixelElement.src = pixelUrl;
+					pixelElement.width = 1;
+					pixelElement.height = 1;
+					this.adSkin.appendChild(pixelElement);
+				}
+			}
+		}
+	}]);
+
+	return Skin;
 }();
 // EXTERNAL MODULE: ./node_modules/babel-runtime/regenerator/index.js
 var regenerator = __webpack_require__(6);
@@ -7540,7 +7940,53 @@ var big_fancy_ad_in_player_BigFancyAdInPlayer = function () {
 
 	return BigFancyAdInPlayer;
 }();
+// CONCATENATED MODULE: ./src/templates/uap/roadblock.js
+
+
+
+
+
+
+var roadblock_Roadblock = function () {
+	createClass_default()(Roadblock, null, [{
+		key: 'getName',
+		value: function getName() {
+			return 'roadblock';
+		}
+	}, {
+		key: 'getDefaultConfig',
+		value: function getDefaultConfig() {
+			return {
+				slotsToEnable: [],
+				slotsToDisable: []
+			};
+		}
+	}]);
+
+	function Roadblock() {
+		classCallCheck_default()(this, Roadblock);
+
+		this.config = ad_engine_["context"].get('templates.roadblock');
+	}
+
+	/**
+  * Initializes the Roadblock unit
+  */
+
+
+	createClass_default()(Roadblock, [{
+		key: 'init',
+		value: function init(params) {
+			this.params = params;
+			this.params.adProduct = 'ruap';
+			universalAdPackage.init(this.params, this.config.slotsToEnable, this.config.slotsToDisable);
+		}
+	}]);
+
+	return Roadblock;
+}();
 // CONCATENATED MODULE: ./src/templates/uap/index.js
+
 
 
 
@@ -7553,15 +7999,18 @@ var big_fancy_ad_in_player_BigFancyAdInPlayer = function () {
 
 
 
+
 // CONCATENATED MODULE: ./src/index.js
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "bidders", function() { return bidders_bidders; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getAdProductInfo", function() { return getAdProductInfo; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "billTheLizard", function() { return billTheLizard; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "FloatingRail", function() { return floating_rail_FloatingRail; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "Skin", function() { return skin_Skin; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "resolvedState", function() { return resolvedState; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdAbove", function() { return big_fancy_ad_above_BigFancyAdAbove; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdBelow", function() { return big_fancy_ad_below_BigFancyAdBelow; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdInPlayer", function() { return big_fancy_ad_in_player_BigFancyAdInPlayer; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "Roadblock", function() { return roadblock_Roadblock; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "universalAdPackage", function() { return universalAdPackage; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "DEFAULT_VIDEO_ASPECT_RATIO", function() { return DEFAULT_VIDEO_ASPECT_RATIO; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "IMA_VPAID_INSECURE_MODE", function() { return IMA_VPAID_INSECURE_MODE; });
@@ -7579,7 +8028,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v9.0.0');
+set_default()(window, versionField, 'v9.2.1');
 
 
 

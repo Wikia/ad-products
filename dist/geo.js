@@ -690,6 +690,7 @@ function getRandom() {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resetSamplingCache", function() { return resetSamplingCache; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSamplingResults", function() { return getSamplingResults; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isProperGeo", function() { return isProperGeo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapSamplingResults", function() { return mapSamplingResults; });
 
 
 
@@ -899,14 +900,39 @@ function isProperGeo() {
 	return !!(countryList && countryList.indexOf && !isGeoExcluded(countryList) && (isProperContinent(countryList, name) || isProperCountry(countryList, name) || isProperRegion(countryList, name)));
 }
 
-/* harmony default export */ var geo = __webpack_exports__["default"] = ({
+/**
+ * Transform sampling results using supplied key-values map.
+ *
+ * @param {string[] | undefined} keyVals mapping
+ * @returns {string[]}
+ */
+function mapSamplingResults(keyVals) {
+	if (!keyVals || !keyVals.length) {
+		return [];
+	}
+
+	var labradorVariables = geo_module.getSamplingResults();
+
+	return keyVals.map(function (keyVal) {
+		return keyVal.split(':');
+	}).filter(function (keyVal) {
+		return labradorVariables.indexOf(keyVal[0]) !== -1;
+	}).map(function (keyVal) {
+		return keyVal[1];
+	});
+}
+
+var geo_module = {
 	getContinentCode: getContinentCode,
 	getCountryCode: getCountryCode,
 	getRegionCode: getRegionCode,
 	getSamplingResults: getSamplingResults,
 	isProperGeo: isProperGeo,
-	resetSamplingCache: resetSamplingCache
-});
+	resetSamplingCache: resetSamplingCache,
+	mapSamplingResults: mapSamplingResults
+};
+
+/* harmony default export */ var geo = __webpack_exports__["default"] = (geo_module);
 
 /***/ }),
 /* 33 */

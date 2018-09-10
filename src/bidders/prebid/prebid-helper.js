@@ -1,15 +1,14 @@
-import { context } from '@wikia/ad-engine';
+import { context, slotService } from '@wikia/ad-engine';
 import { getAdapters } from './adapters-registry';
 
 const lazyLoadSlots = [
 	'bottom_leaderboard'
 ];
 
-function isSlotAvailable(code, lazyLoad) {
-	const disabledSlots = context.get('bidders.disabledSlots');
+function isSlotApplicable(code, lazyLoad) {
 	const isSlotLazy = lazyLoadSlots.indexOf(code) !== -1;
 
-	if (disabledSlots && disabledSlots.indexOf(code) !== -1) {
+	if (!slotService.getState(code)) {
 		return false;
 	}
 
@@ -29,7 +28,7 @@ export function setupAdUnits(adaptersConfig, lazyLoad = 'off') {
 			const adapterAdUnits = adapter.prepareAdUnits();
 
 			adapterAdUnits.forEach((adUnit) => {
-				if (adUnit && isSlotAvailable(adUnit.code, lazyLoad)) {
+				if (adUnit && isSlotApplicable(adUnit.code, lazyLoad)) {
 					adUnits.push(adUnit);
 				}
 			});
