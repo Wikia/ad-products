@@ -30,7 +30,9 @@ pre {
 	margin: 0 auto;
 	max-width: 1024px;
 	padding-bottom: 1em;
+	position: relative;
 	text-align: center;
+	z-index: 10;
 }
 
 .wrapper > * {
@@ -49,6 +51,8 @@ pre {
 
 .header {
 	height: auto;
+	position: relative;
+	z-index: 10;
 }
 
 .navigation {
@@ -77,6 +81,10 @@ pre {
 
 .top-leaderboard {
 	margin: 15px auto;
+}
+
+.invisible_skin {
+	display: none !important;
 }
 
 .incontent-boxad {
