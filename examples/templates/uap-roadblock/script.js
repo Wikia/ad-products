@@ -1,5 +1,5 @@
 import { AdEngine, context, templateService } from '@wikia/ad-engine';
-import { Roadblock, utils } from '@wikia/ad-products';
+import { Roadblock, Skin, utils } from '@wikia/ad-products';
 
 import customContext from '../../context';
 import '../../styles.scss';
@@ -16,6 +16,7 @@ if (document.body.offsetWidth < 728) {
 
 utils.setupNpaContext();
 
+templateService.register(Skin);
 templateService.register(Roadblock, {
 	slotsToDisable: [
 	],
