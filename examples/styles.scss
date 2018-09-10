@@ -30,9 +30,7 @@ pre {
 	margin: 0 auto;
 	max-width: 1024px;
 	padding-bottom: 1em;
-	position: relative;
 	text-align: center;
-	z-index: 10;
 }
 
 .wrapper > * {
@@ -51,8 +49,6 @@ pre {
 
 .header {
 	height: auto;
-	position: relative;
-	z-index: 10;
 }
 
 .navigation {
@@ -211,4 +207,10 @@ footer {
 
 .bfaa-template {
 	margin: 0;
+}
+
+body.has-background-ad .wrapper,
+body.has-background-ad .header {
+	position: relative;
+	z-index: 10;
 }

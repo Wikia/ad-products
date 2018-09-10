@@ -7,6 +7,8 @@ export class Skin {
 
 	static getDefaultConfig() {
 		return {
+			bodyAdClass: 'has-background-ad',
+			onInit: () => {},
 			wrapperSelector: '#ad-skin',
 			zIndex: 1
 		};
@@ -31,6 +33,7 @@ export class Skin {
 		this.params = params;
 		this.params.adProduct = 'skin';
 
+		document.body.classList.add(this.config.bodyAdClass);
 		this.setAdSkinStyle(params.skinImage, params.backgroundColor);
 
 		this.adSkin.onclick = function () {
@@ -42,6 +45,8 @@ export class Skin {
 		}
 
 		this.adSkin.classList.remove('hide');
+
+		this.config.onInit(this.params);
 	}
 
 	/**
