@@ -79,6 +79,10 @@ pre {
 	margin: 15px auto;
 }
 
+.invisible_skin {
+	display: none !important;
+}
+
 .incontent-boxad {
 	margin-top: 15px;
 	position: fixed;
@@ -203,4 +207,10 @@ footer {
 
 .bfaa-template {
 	margin: 0;
+}
+
+body.has-background-ad .wrapper,
+body.has-background-ad .header {
+	position: relative;
+	z-index: 10;
 }

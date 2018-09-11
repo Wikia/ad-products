@@ -4534,6 +4534,113 @@ var floating_rail_FloatingRail = function () {
 
 	return FloatingRail;
 }();
+// CONCATENATED MODULE: ./src/templates/skin.js
+
+
+
+
+var skin_Skin = function () {
+	createClass_default()(Skin, null, [{
+		key: 'getName',
+		value: function getName() {
+			return 'skin';
+		}
+	}, {
+		key: 'getDefaultConfig',
+		value: function getDefaultConfig() {
+			return {
+				bodyAdClass: 'has-background-ad',
+				onInit: function onInit() {},
+				wrapperSelector: '#ad-skin',
+				zIndex: 1
+			};
+		}
+	}]);
+
+	function Skin() {
+		classCallCheck_default()(this, Skin);
+
+		this.config = ad_engine_["context"].get('templates.skin');
+		this.adSkin = document.querySelector(this.config.wrapperSelector);
+	}
+
+	/**
+  * Initializes the Skin unit
+  *
+  * @param {Object} params
+  * @param {string} params.destUrl - URL to go when the background is clicked
+  * @param {string} params.skinImage - URL of the 1700x800 image to show in the background
+  * @param {string} params.backgroundColor - background color to use (rrggbb, without leading #)
+  * @param {string} [params.middleColor] - color to use in the middle (rrggbb, without leading #)
+  * @param {Array} params.pixels - URLs of tracking pixels to append when showing the skin
+  */
+
+
+	createClass_default()(Skin, [{
+		key: 'init',
+		value: function init(params) {
+			this.params = params;
+			this.params.adProduct = 'skin';
+
+			document.body.classList.add(this.config.bodyAdClass);
+			this.setAdSkinStyle(params.skinImage, params.backgroundColor);
+
+			this.adSkin.onclick = function () {
+				window.open(params.destUrl);
+			};
+
+			if (params.pixels) {
+				this.setTrackingPixels(params.pixels);
+			}
+
+			this.adSkin.classList.remove('hide');
+
+			this.config.onInit(this.params);
+		}
+
+		/**
+   * Sets styles for ad skin wrapper
+   *
+   * @param params
+   */
+
+	}, {
+		key: 'setAdSkinStyle',
+		value: function setAdSkinStyle(image, color) {
+			this.adSkin.style.position = 'fixed';
+			this.adSkin.style.height = '100%';
+			this.adSkin.style.width = '100%';
+			this.adSkin.style.left = 0;
+			this.adSkin.style.top = 0;
+			this.adSkin.style.zIndex = this.config.zIndex;
+			this.adSkin.style.cursor = 'pointer';
+			this.adSkin.style.background = 'url("' + image + '") no-repeat top center #' + color;
+		}
+
+		/**
+   * Goes through pixels array and adds 1x1 pixel images
+   *
+   * @param pixels
+   */
+
+	}, {
+		key: 'setTrackingPixels',
+		value: function setTrackingPixels(pixels) {
+			for (var i = 0, len = pixels.length; i < len; i += 1) {
+				var pixelUrl = pixels[i];
+				if (pixelUrl) {
+					var pixelElement = document.createElement('img');
+					pixelElement.src = pixelUrl;
+					pixelElement.width = 1;
+					pixelElement.height = 1;
+					this.adSkin.appendChild(pixelElement);
+				}
+			}
+		}
+	}]);
+
+	return Skin;
+}();
 // EXTERNAL MODULE: ./node_modules/babel-runtime/regenerator/index.js
 var regenerator = __webpack_require__(6);
 var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
@@ -7837,7 +7944,53 @@ var big_fancy_ad_in_player_BigFancyAdInPlayer = function () {
 
 	return BigFancyAdInPlayer;
 }();
+// CONCATENATED MODULE: ./src/templates/uap/roadblock.js
+
+
+
+
+
+
+var roadblock_Roadblock = function () {
+	createClass_default()(Roadblock, null, [{
+		key: 'getName',
+		value: function getName() {
+			return 'roadblock';
+		}
+	}, {
+		key: 'getDefaultConfig',
+		value: function getDefaultConfig() {
+			return {
+				slotsToEnable: [],
+				slotsToDisable: []
+			};
+		}
+	}]);
+
+	function Roadblock() {
+		classCallCheck_default()(this, Roadblock);
+
+		this.config = ad_engine_["context"].get('templates.roadblock');
+	}
+
+	/**
+  * Initializes the Roadblock unit
+  */
+
+
+	createClass_default()(Roadblock, [{
+		key: 'init',
+		value: function init(params) {
+			this.params = params;
+			this.params.adProduct = 'ruap';
+			universalAdPackage.init(this.params, this.config.slotsToEnable, this.config.slotsToDisable);
+		}
+	}]);
+
+	return Roadblock;
+}();
 // CONCATENATED MODULE: ./src/templates/uap/index.js
+
 
 
 
@@ -7850,15 +8003,18 @@ var big_fancy_ad_in_player_BigFancyAdInPlayer = function () {
 
 
 
+
 // CONCATENATED MODULE: ./src/index.js
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "bidders", function() { return bidders_bidders; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "getAdProductInfo", function() { return getAdProductInfo; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "billTheLizard", function() { return billTheLizard; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "FloatingRail", function() { return floating_rail_FloatingRail; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "Skin", function() { return skin_Skin; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "resolvedState", function() { return resolvedState; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdAbove", function() { return big_fancy_ad_above_BigFancyAdAbove; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdBelow", function() { return big_fancy_ad_below_BigFancyAdBelow; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "BigFancyAdInPlayer", function() { return big_fancy_ad_in_player_BigFancyAdInPlayer; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "Roadblock", function() { return roadblock_Roadblock; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "universalAdPackage", function() { return universalAdPackage; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "DEFAULT_VIDEO_ASPECT_RATIO", function() { return DEFAULT_VIDEO_ASPECT_RATIO; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "IMA_VPAID_INSECURE_MODE", function() { return IMA_VPAID_INSECURE_MODE; });

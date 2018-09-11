@@ -177,6 +177,15 @@ export default {
 				loc: 'hivi'
 			}
 		},
+		invisible_skin: {
+			sizes: [
+				{
+					viewportSize: [768, 0],
+					sizes: [[1000, 1000]]
+				}
+			],
+			defaultSizes: [[1000, 1000]]
+		},
 		repeatable_boxad_1: {
 			bidderAlias: 'top_boxad',
 			defaultSizes: [[300, 250]],
