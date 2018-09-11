@@ -2469,14 +2469,13 @@ var appnexus_ast_AppnexusAst = function (_BaseAdapter) {
 	createClass_default()(AppnexusAst, [{
 		key: 'prepareConfigForAdUnit',
 		value: function prepareConfigForAdUnit(code, _ref) {
-			var placementId = _ref.placementId,
-			    context = _ref.context;
+			var placementId = _ref.placementId;
 
 			return {
 				code: code,
 				mediaTypes: {
 					video: {
-						context: context,
+						context: 'instream',
 						playerSize: [640, 480]
 					}
 				},
@@ -4550,6 +4549,8 @@ var skin_Skin = function () {
 		key: 'getDefaultConfig',
 		value: function getDefaultConfig() {
 			return {
+				bodyAdClass: 'has-background-ad',
+				onInit: function onInit() {},
 				wrapperSelector: '#ad-skin',
 				zIndex: 1
 			};
@@ -4581,6 +4582,7 @@ var skin_Skin = function () {
 			this.params = params;
 			this.params.adProduct = 'skin';
 
+			document.body.classList.add(this.config.bodyAdClass);
 			this.setAdSkinStyle(params.skinImage, params.backgroundColor);
 
 			this.adSkin.onclick = function () {
@@ -4592,6 +4594,8 @@ var skin_Skin = function () {
 			}
 
 			this.adSkin.classList.remove('hide');
+
+			this.config.onInit(this.params);
 		}
 
 		/**
@@ -8028,7 +8032,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v9.2.1');
+set_default()(window, versionField, 'v9.2.2');
 
 
 
