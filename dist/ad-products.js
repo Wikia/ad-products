@@ -2469,14 +2469,13 @@ var appnexus_ast_AppnexusAst = function (_BaseAdapter) {
 	createClass_default()(AppnexusAst, [{
 		key: 'prepareConfigForAdUnit',
 		value: function prepareConfigForAdUnit(code, _ref) {
-			var placementId = _ref.placementId,
-			    context = _ref.context;
+			var placementId = _ref.placementId;
 
 			return {
 				code: code,
 				mediaTypes: {
 					video: {
-						context: context,
+						context: 'instream',
 						playerSize: [640, 480]
 					}
 				},
@@ -7877,7 +7876,7 @@ if (get_default()(window, versionField, null)) {
 	window.console.warn('Multiple @wikia/ad-products initializations. This may cause issues.');
 }
 
-set_default()(window, versionField, 'v9.2.1');
+set_default()(window, versionField, 'v9.2.2');
 
 
 
