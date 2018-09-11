@@ -15,8 +15,7 @@ describe('AppnexusAst bidder adapter', () => {
 			enabled: true,
 			slots: {
 				mobile_in_content: {
-					placementId: '11223344',
-					context: 'outstream'
+					placementId: '11223344'
 				}
 			}
 		});
@@ -26,7 +25,7 @@ describe('AppnexusAst bidder adapter', () => {
 				code: 'mobile_in_content',
 				mediaTypes: {
 					video: {
-						context: 'outstream',
+						context: 'instream',
 						playerSize: [640, 480]
 					}
 				},
