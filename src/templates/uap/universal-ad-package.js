@@ -24,26 +24,31 @@ function adjustVideoAdContainer(params) {
 	}
 }
 
-async function loadTwitchAd(iframe, params) {
-	this.params = params;
-	const twitchContainer = iframe.contentWindow.document.getElementById('twitchContainer');
+async function loadTwitchPlayer(iframe, params) {
+	const area = Object.keys(params.creative)[0] === 'twitch' ? 'area1' : 'area2';
+	const twitchContainer = iframe.contentWindow.document.getElementById(area);
 	const containerHeight = twitchContainer.clientHeight;
-	const containerWidth = params.twitchAspectRatio * containerHeight;
+
 	const options = {
-		height: containerHeight,
-		width: containerWidth,
+		height: '100%',
+		width: '100%',
 		channel: params.channelName,
 	};
 	const player = new TwitchPlayer(twitchContainer, options);
+	twitchContainer.style.width = `${containerHeight * params.twitchAspectRatio}px`;
+	return player;
+}
 
-/*	function recalculateTwitchSize(player) {
+async function loadTwitchAd(iframe, params) {
+	this.params = params;
+	const twitch = await loadTwitchPlayer(iframe, params);
+
+	function recalculateTwitchSize(twitchPlayer) {
 		return () => {
-			const newWidth = player.identifier.clientHeight * params.twitchAspectRatio;
-			var div = player.identifier;
-			div.clientWidth = newWidth;
+			twitchPlayer.identifier.style.width = `${twitchPlayer.identifier.clientHeight * params.twitchAspectRatio}px`;
 		};
 	}
-	window.addEventListener('resize', throttle(recalculateTwitchSize(player), 250));*/
+	window.addEventListener('resize', throttle(recalculateTwitchSize(twitch), 250));
 }
 
 async function loadPorvata(videoSettings, slotContainer, imageContainer) {
