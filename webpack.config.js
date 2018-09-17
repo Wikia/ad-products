@@ -84,6 +84,7 @@ const environments = {
 			'templates/hivi-uap-static': './examples/templates/hivi-uap-static/script.js',
 			'templates/hivi-uap-jwp': './examples/templates/hivi-uap-jwp/script.js',
 			'templates/hivi-uap-sticky-bfab': './examples/templates/hivi-uap-sticky-bfab/script.js',
+			'templates/hivi-uap-twitch': './examples/templates/hivi-uap-twitch/script.js',
 			'templates/outstream': './examples/templates/outstream/script.js',
 			'templates/uap-roadblock': './examples/templates/uap-roadblock/script.js',
 			'templates/vuap': './examples/templates/vuap/script.js'

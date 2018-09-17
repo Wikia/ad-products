@@ -1,5 +1,5 @@
 import { throttle } from 'lodash';
-import { btfBlockerService, context, Porvata, slotService, utils } from '@wikia/ad-engine';
+import { btfBlockerService, context, Porvata, slotService, utils, TwitchPlayer } from '@wikia/ad-engine';
 import * as videoUserInterface from '../interface/video';
 import * as constants from './constants';
 
@@ -22,6 +22,33 @@ function adjustVideoAdContainer(params) {
 
 		videoAdContainer.classList.add(`video-player-${params.splitLayoutVideoPosition}`);
 	}
+}
+
+async function loadTwitchPlayer(iframe, params) {
+	const area = Object.keys(params.creative)[0] === 'twitch' ? 'area1' : 'area2';
+	const twitchContainer = iframe.contentWindow.document.getElementById(area);
+	const containerHeight = twitchContainer.clientHeight;
+
+	const options = {
+		height: '100%',
+		width: '100%',
+		channel: params.channelName,
+	};
+	const player = new TwitchPlayer(twitchContainer, options);
+	twitchContainer.style.width = `${containerHeight * params.twitchAspectRatio}px`;
+	return player;
+}
+
+async function loadTwitchAd(iframe, params) {
+	this.params = params;
+	const twitch = await loadTwitchPlayer(iframe, params);
+
+	function recalculateTwitchSize(twitchPlayer) {
+		return () => {
+			twitchPlayer.identifier.style.width = `${twitchPlayer.identifier.clientHeight * params.twitchAspectRatio}px`;
+		};
+	}
+	window.addEventListener('resize', throttle(recalculateTwitchSize(twitch), 250));
 }
 
 async function loadPorvata(videoSettings, slotContainer, imageContainer) {
@@ -182,6 +209,7 @@ export const universalAdPackage = {
 		return !!params.videoAspectRatio && (params.videoPlaceholderElement || triggersArrayIsNotEmpty);
 	},
 	loadVideoAd,
+	loadTwitchAd,
 	reset,
 	setType,
 	setUapId
