@@ -1,3 +1,7 @@
+# Wikia/ad-products is deprecated
+
+Code has been merged to [Wikia/ad-engine](https://github.com/Wikia/ad-engine) and it is avaialable as a submodule.
+
 # AdProducts
 
 ## Dependencies
